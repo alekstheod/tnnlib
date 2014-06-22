@@ -29,7 +29,6 @@
 
 #ifndef BEPNeuralLayerH
 #define BEPNeuralLayerH
-#include <NeuralNetwork/Config.h>
 #include <NeuralNetwork/LearningAlgorithm/BackPropagation/BPNeuron.h>
 #include <NeuralNetwork/INeuralLayer.h>
 #include <tuple>
@@ -52,7 +51,7 @@ public:
     typedef typename NeuralLayer::const_iterator const_iterator;
     typedef typename NeuralLayer::iterator iterator;
 
-	NN_DEFINE_CONST(unsigned int, CONST_NEURONS_NUMBER, NeuralLayerType::CONST_NEURONS_NUMBER);
+	BOOST_STATIC_CONSTEXPR unsigned int CONST_NEURONS_NUMBER = NeuralLayerType::CONST_NEURONS_NUMBER;
 
 private:
     void calculateWeight ( Var learningRate, Neuron& neuron) {
