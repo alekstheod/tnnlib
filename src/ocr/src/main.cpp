@@ -6,6 +6,7 @@
 #include <NeuralNetwork/Neuron/ActivationFunction/SoftmaxFunction.h>
 #include <NeuralNetwork/Neuron/ActivationFunction/BiopolarSigmoidFunction.h>
 #include <NeuralNetwork/LearningAlgorithm/BackPropagation/BepAlgorithm.h>
+#include <NeuralNetwork/Config.h>
 
 #ifndef BOOST_SYSTEM_NO_DEPRECATED
 #define BOOST_SYSTEM_NO_DEPRECATED 1
@@ -20,6 +21,13 @@
 
 #define png_infopp_NULL (png_infopp)NULL
 #define int_p_NULL (int*)NULL
+
+#if defined(NN_CC_MSVC)
+# pragma warning(push)
+// This function or variable may be unsafe
+# pragma warning(disable:4996)
+#endif
+
 #include <boost/gil/gil_all.hpp>
 #include <boost/gil/channel_algorithm.hpp>
 #include <boost/gil/channel.hpp>
@@ -30,6 +38,11 @@
 #include <boost/gil/extension/dynamic_image/dynamic_image_all.hpp>
 #include "gil/extension/numeric/sampler.hpp"
 #include "gil/extension/numeric/resample.hpp"
+
+#if defined(NN_CC_MSVC)
+# pragma warning(pop)
+#endif
+
 #include "Var.h"
 
 

@@ -165,7 +165,10 @@ public:
         do {
             error = 0;
             auto seed = std::chrono::system_clock::now().time_since_epoch().count();
-            std::shuffle( prototypes.begin(), prototypes.end(), std::default_random_engine(seed) );
+            std::shuffle(
+				prototypes.begin(),
+				prototypes.end(),
+				std::default_random_engine(static_cast<unsigned int>(seed)));
             error = std::accumulate(prototypes.begin(), prototypes.end(),  error, [&]( Var& init, Prototype& first )->Var {
                 return init+executeTrainingStep(first, momentum);
             });
