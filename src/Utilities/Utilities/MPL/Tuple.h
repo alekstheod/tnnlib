@@ -62,20 +62,6 @@ struct get<T, N, U, Args...>
     static const auto value = get<T, N + 1, Args...>::value;
 };
 
-template< template<class> class C, typename Tuple, unsigned int index>
-struct rebind_tuple{
-  typedef C<typename std::tuple_element<index, Tuple>::type> cur_type;
-  typedef typename rebind_tuple<C, Tuple, index-1>::type next_type;
-  cur_type* first = nullptr;
-  next_type* second = nullptr;
-  typedef decltype( std::tuple_cat( *second , std::tuple<cur_type>(*first)) ) type;
-};
-
-template< template<class> class C, typename Tuple>
-struct rebind_tuple<C, Tuple, 0>{
-  typedef std::tuple< C< typename std::tuple_element<0, Tuple>::type > > type;
-};
-
 } // namespace detail
 
 
@@ -97,9 +83,13 @@ void for_each_c( const std::tuple<ArgsT...>& t, Functor func )
     detail::for_each_t_c<sizeof...(ArgsT)>::exec( t, func );
 }
 
-template< template<class> class C, typename Tuple>
-struct rebind_tuple{
-  typedef typename detail::rebind_tuple<C, Tuple, std::tuple_size<Tuple>::value - 1 >::type type;
+template<template<typename> class E, typename Tuple>
+struct rebind_tuple;
+
+template<template<typename> class E, typename... Args>
+struct rebind_tuple<E, std::tuple<Args...>>
+{
+   typedef std::tuple<E<Args>...> type;
 };
 
 }
