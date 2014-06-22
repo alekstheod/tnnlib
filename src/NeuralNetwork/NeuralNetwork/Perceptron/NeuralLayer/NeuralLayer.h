@@ -30,6 +30,7 @@
 #ifndef NeuralLayerH
 #define NeuralLayerH
 
+#include <NeuralNetwork/Config.h>
 #include <NeuralNetwork/Neuron/INeuron.h>
 #include <NeuralNetwork/Serialization/NeuralLayerMemento.h>
 #include <NeuralNetwork/INeuralLayer.h>
@@ -40,6 +41,7 @@
 #include <boost/bind/placeholders.hpp>
 #include <algorithm>
 #include <vector>
+#include <array>
 
 namespace nn
 {
@@ -71,7 +73,8 @@ public:
         typedef NeuralLayer< NewType, neuronsNumber > type;
     };
 
-    static constexpr unsigned int CONST_NEURONS_NUMBER = neuronsNumber;
+	NN_DEFINE_CONST(unsigned int, CONST_NEURONS_NUMBER, neuronsNumber);
+
 private:
     /**
      * A list of the neurons.

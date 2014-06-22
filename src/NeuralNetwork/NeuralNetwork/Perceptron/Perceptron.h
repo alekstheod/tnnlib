@@ -30,6 +30,7 @@
 #ifndef PerceptronH
 #define PerceptronH
 
+#include <NeuralNetwork/Config.h>
 #include <NeuralNetwork/Serialization/PerceptronMemento.h>
 #include <NeuralNetwork/INeuralLayer.h>
 #include <NeuralNetwork/NNException.h>
@@ -51,12 +52,14 @@ template<typename VarType, typename LayerTypes>
 class Perceptron {
 public:
     typedef LayerTypes Layers;
-    constexpr static unsigned int CONST_LAYERS_NUMBER = std::tuple_size< Layers >::value;
-    using InputLayerType = typename std::tuple_element<0, Layers>::type;
-    constexpr static unsigned int CONST_INPUTS_NUMBER = InputLayerType::CONST_NEURONS_NUMBER;
 
-    using OutputLayerType = typename std::tuple_element< CONST_LAYERS_NUMBER - 1 , Layers>::type;
-    constexpr static unsigned int CONST_OUTPUTS_NUMBER = OutputLayerType::CONST_NEURONS_NUMBER;
+	NN_DEFINE_CONST(unsigned int, CONST_LAYERS_NUMBER, std::tuple_size<Layers>::value);
+	using InputLayerType = typename std::tuple_element<0, Layers>::type;
+
+	NN_DEFINE_CONST(unsigned int, CONST_INPUTS_NUMBER, InputLayerType::CONST_NEURONS_NUMBER);
+    using OutputLayerType = typename std::tuple_element<CONST_LAYERS_NUMBER - 1, Layers>::type;
+
+	NN_DEFINE_CONST(unsigned int, CONST_OUTPUTS_NUMBER, OutputLayerType::CONST_NEURONS_NUMBER);
 
     typedef VarType Var;
     template<template <class> class Layer>
@@ -116,7 +119,8 @@ private:
     template<unsigned int index>
     void calculate(Layers& layers, bool) {
         std::get<index>(layers).calculateOutputs( std::get<index+1>(layers) );
-        constexpr bool enable = index < CONST_LAYERS_NUMBER - 2;
+
+		enum { enable = (index < CONST_LAYERS_NUMBER - 2) };
         typedef typename std::conditional< enable, bool, int >::type ArgType;
         calculate<index+1>( layers,  ArgType(0));
     }

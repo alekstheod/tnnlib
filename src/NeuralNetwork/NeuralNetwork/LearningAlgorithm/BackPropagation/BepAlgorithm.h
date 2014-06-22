@@ -29,6 +29,7 @@
 
 #ifndef BEPTrainerH
 #define BEPTrainerH
+#include <NeuralNetwork/Config.h>
 #include <NeuralNetwork/Perceptron/Perceptron.h>
 #include <NeuralNetwork/LearningAlgorithm/BackPropagation/BPNeuralLayer.h>
 #include <NeuralNetwork/LearningAlgorithm/BackPropagation/ErrorFunction.h>
@@ -56,8 +57,10 @@ template<
 class BepAlgorithm {
 private:
     typedef typename PerceptronType::Var Var;
-    constexpr static unsigned int inputsNumber = PerceptronType::CONST_INPUTS_NUMBER;
-    constexpr static unsigned int outputsNumber = PerceptronType::CONST_OUTPUTS_NUMBER;
+
+	NN_DEFINE_CONST(unsigned int, inputsNumber, PerceptronType::CONST_INPUTS_NUMBER);
+	NN_DEFINE_CONST(unsigned int, outputsNumber, PerceptronType::CONST_OUTPUTS_NUMBER);
+
 public:
     typedef typename std::tuple< std::array<Var, inputsNumber>, std::array<Var, outputsNumber> > Prototype;
 
@@ -93,7 +96,8 @@ private:
     template<unsigned int index, typename MomentumFunc>
     void calculateDelta(Layers& layers, MomentumFunc momentum, bool) {
         std::get<index-1>(layers).calculateLayerDeltas( std::get<index>(layers), momentum );
-        constexpr bool enable = (index > 1);
+
+		enum { enable = (index > 1) };
         typedef typename std::conditional< enable, bool, int >::type ArgType;
         calculateDelta<index-1>( layers, momentum, ArgType(0));
     }

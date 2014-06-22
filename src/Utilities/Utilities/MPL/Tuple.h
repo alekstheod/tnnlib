@@ -11,7 +11,7 @@ namespace utils
 namespace detail
 {
 
-template < uint N >
+template < unsigned int N >
 struct for_each_t {
     template < typename Functor, typename... ArgsT >
     static void exec ( std::tuple<ArgsT...>& t, Functor func ) {
@@ -27,7 +27,7 @@ struct for_each_t<0> {
     }
 };
 
-template < uint N >
+template < unsigned int N >
 struct for_each_t_c {
     template < typename Functor, typename... ArgsT >
     static void exec ( const std::tuple<ArgsT...>& t, Functor func ) {
@@ -62,6 +62,15 @@ struct get<T, N, U, Args...>
     static const auto value = get<T, N + 1, Args...>::value;
 };
 
+template<template<typename> class C, typename Tuple>
+struct rebind_tuple;
+
+template<template<typename> class C, typename... Args>
+struct rebind_tuple<C, std::tuple<Args...>>
+{
+	typedef typename std::tuple<C<Args>...> type;
+};
+
 } // namespace detail
 
 
@@ -83,13 +92,9 @@ void for_each_c( const std::tuple<ArgsT...>& t, Functor func )
     detail::for_each_t_c<sizeof...(ArgsT)>::exec( t, func );
 }
 
-template<template<typename> class E, typename Tuple>
-struct rebind_tuple;
-
-template<template<typename> class E, typename... Args>
-struct rebind_tuple<E, std::tuple<Args...>>
+template< template<class> class C, typename Tuple>
+struct rebind_tuple : detail::rebind_tuple<C, Tuple>
 {
-   typedef std::tuple<E<Args>...> type;
 };
 
 }
