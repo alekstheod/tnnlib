@@ -5,12 +5,12 @@ template neural network library v3
 
 Flexible interface which allows to define a neural network with a different types of layers, Neurons and Activation functions:
 
-
-typedef nn::Perceptron< float,
-                        nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, inputsNumber>, 
-                        nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, 300>, 
-                        nn::NeuralLayer<nn::Neuron, nn::LogScaleSoftmaxFunction, 10>
-                       > Perceptron;
+                        
+    typedef nn::Perceptron<float, 
+                           nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, 2>, 
+	   nn::NeuralLayer<nn::Neuron, nn::TanhFunction, 20>, 
+                           nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, 1>
+                           > Perceptron;
 
 typedef nn::bp::BepAlgorithm< Perceptron, nn::bp::CrossEntropyError> Algo;
 
