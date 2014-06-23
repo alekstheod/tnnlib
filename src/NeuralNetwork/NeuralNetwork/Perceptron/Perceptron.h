@@ -46,31 +46,39 @@ namespace nn {
 /*! \class Perceptron
  *  \briefs Contains an input neurons layer one output and one or more hidden layers.
  */
-namespace detail{
+namespace detail {
+
+template<typename Var, typename T>
+struct rebindVar;
+
+template<typename Var, typename... T>
+struct rebindVar<Var, std::tuple<T...> >{
+  typedef typename std::tuple< typename T::template rebindVar<Var>::type... > type;
+};
   
 template<typename VarType, typename LayerTypes>
 class Perceptron {
 public:
-    typedef LayerTypes Layers;
+    typedef typename rebindVar<VarType, LayerTypes>::type Layers;
 
-	NN_DEFINE_CONST(unsigned int, CONST_LAYERS_NUMBER, std::tuple_size<Layers>::value);
-	using InputLayerType = typename std::tuple_element<0, Layers>::type;
+    NN_DEFINE_CONST(unsigned int, CONST_LAYERS_NUMBER, std::tuple_size<Layers>::value);
+    using InputLayerType = typename std::tuple_element<0, Layers>::type;
 
-	NN_DEFINE_CONST(unsigned int, CONST_INPUTS_NUMBER, InputLayerType::CONST_NEURONS_NUMBER);
+    NN_DEFINE_CONST(unsigned int, CONST_INPUTS_NUMBER, InputLayerType::CONST_NEURONS_NUMBER);
     using OutputLayerType = typename std::tuple_element<CONST_LAYERS_NUMBER - 1, Layers>::type;
 
-	NN_DEFINE_CONST(unsigned int, CONST_OUTPUTS_NUMBER, OutputLayerType::CONST_NEURONS_NUMBER);
+    NN_DEFINE_CONST(unsigned int, CONST_OUTPUTS_NUMBER, OutputLayerType::CONST_NEURONS_NUMBER);
 
     typedef VarType Var;
     template<template <class> class Layer>
     struct wrap {
-	typedef typename utils::rebind_tuple<Layer, Layers>::type NewLayers;
+        typedef typename utils::rebind_tuple<Layer, Layers>::type NewLayers;
         typedef detail::Perceptron<VarType, NewLayers > type;
     };
 
     /// @brief Memento type.
     typedef PerceptronMemento<Var> Memento;
-    
+
 private:
     /*!
      * Hidden layers.
@@ -120,7 +128,7 @@ private:
     void calculate(Layers& layers, bool) {
         std::get<index>(layers).calculateOutputs( std::get<index+1>(layers) );
 
-		enum { enable = (index < CONST_LAYERS_NUMBER - 2) };
+        enum { enable = (index < CONST_LAYERS_NUMBER - 2) };
         typedef typename std::conditional< enable, bool, int >::type ArgType;
         calculate<index+1>( layers,  ArgType(0));
     }
@@ -136,15 +144,15 @@ public:
         CreateLayer creator(inputsNumber);
         utils::for_each(m_layers, creator );
     }
-    
-    Layers& layers(){
-      return m_layers;
+
+    Layers& layers() {
+        return m_layers;
     }
-    
+
     void setMemento( const Memento& memento )
     {
         auto layers = memento.getLayers();
-	int position = 0;
+        int position = 0;
         utils::for_each(m_layers, SetMemento(position, layers) );
     }
 

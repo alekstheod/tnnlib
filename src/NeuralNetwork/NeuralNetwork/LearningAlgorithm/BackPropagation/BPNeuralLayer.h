@@ -53,7 +53,12 @@ public:
     typedef typename NeuralLayer::iterator iterator;
 
 	NN_DEFINE_CONST(unsigned int, CONST_NEURONS_NUMBER, NeuralLayerType::CONST_NEURONS_NUMBER);
-
+	
+    template<typename VarType>
+    struct rebindVar{
+      typedef BPNeuralLayer< typename NeuralLayerType::template rebindVar<VarType>::type > type;
+    };
+    
 private:
     void calculateWeight ( Var learningRate, Neuron& neuron) {
         unsigned int inputsNumber =neuron->size();

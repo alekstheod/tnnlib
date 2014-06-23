@@ -43,8 +43,12 @@ template<typename VarType>
 class BiopolarSigmoidFunction
 {
 public:
-  typedef VarType Var;
-  
+    typedef VarType Var;
+    template<typename V>
+    struct rebindVar {
+        typedef BiopolarSigmoidFunction<V> type;
+    };
+
 public:
     template<typename Iterator>
     Var calculateEquation ( const Var& sum, Iterator begin, Iterator end )const {
@@ -55,10 +59,10 @@ public:
     Var calculateDelta ( const Var& output , const Var& expectedOutput)const {
         return ( output - expectedOutput )* calculateDerivate(output);
     }
-    
+
     template<typename Iterator>
-    Var calculateSum(Iterator begin, Iterator end, const Var& start)const{
-	return std::accumulate( begin, end, start );
+    Var calculateSum(Iterator begin, Iterator end, const Var& start)const {
+        return std::accumulate( begin, end, start );
     }
 
     Var calculateDerivate ( const Var& output)const {

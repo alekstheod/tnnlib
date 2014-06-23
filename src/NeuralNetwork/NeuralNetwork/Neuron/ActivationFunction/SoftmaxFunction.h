@@ -46,7 +46,11 @@ class SoftmaxFunction
 {
 public:
     typedef VarType Var;
-
+    template<typename V>
+    struct rebindVar {
+        typedef SoftmaxFunction<V> type;
+    };
+    
 public:
     SoftmaxFunction() {}
     ~SoftmaxFunction() {}

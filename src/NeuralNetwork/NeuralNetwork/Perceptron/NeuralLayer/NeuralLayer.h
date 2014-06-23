@@ -39,6 +39,7 @@
 #include <functional>
 #include <boost/bind.hpp>
 #include <boost/bind/placeholders.hpp>
+#include <boost/graph/graph_concepts.hpp>
 #include <algorithm>
 #include <vector>
 #include <array>
@@ -73,7 +74,12 @@ public:
         typedef NeuralLayer< NewType, neuronsNumber > type;
     };
 
-	NN_DEFINE_CONST(unsigned int, CONST_NEURONS_NUMBER, neuronsNumber);
+    template<typename VarType>
+    struct rebindVar{
+      typedef NeuralLayer< typename NeuronType::template rebindVar<VarType>::type , neuronsNumber > type;
+    };
+    
+    NN_DEFINE_CONST(unsigned int, CONST_NEURONS_NUMBER, neuronsNumber);
 
 private:
     /**
@@ -268,8 +274,8 @@ public:
 template<
 	 template<template<class> class, class> class NeuronType,
          template<class> class ActivationFunctionType,
-	 typename Var,
-         unsigned int size
+	 unsigned int size, 
+	 typename Var = float
          >
 using NeuralLayer = detail::NeuralLayer<NeuronType<ActivationFunctionType, Var >, size >;
 

@@ -55,6 +55,11 @@ public:
     struct rebindNeuron {
         typedef MockedNeuralLayer type;
     };
+    
+    template<typename V>
+    struct rebindVar{
+      typedef MockedNeuralLayer< V, Iterator > type;
+    };
 
 public:
     /// Need this because the googlemock does not allow to copy the mock objects.

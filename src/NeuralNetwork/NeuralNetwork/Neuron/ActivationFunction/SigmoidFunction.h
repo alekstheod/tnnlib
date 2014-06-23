@@ -48,7 +48,11 @@ template<class VarType>
 class SigmoidFunction {
 public:
     typedef VarType Var;
-
+    template<typename V>
+    struct rebindVar {
+        typedef SigmoidFunction<V> type;
+    };
+    
 private:
     /**
      * Slope value.

@@ -61,9 +61,9 @@ using namespace utils;
 int main ( int argc, char** argv )
 {
     typedef nn::Perceptron<float, 
-			   nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, float, 2>, 
-			   nn::NeuralLayer<nn::Neuron, nn::TanhFunction, float, 20>, 
-			   nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, float, 1>
+			   nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, 2>, 
+			   nn::NeuralLayer<nn::Neuron, nn::TanhFunction, 20>, 
+			   nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, 1>
 			  > Perceptron;
 			  
     typedef BepAlgorithm< Perceptron > Algo;

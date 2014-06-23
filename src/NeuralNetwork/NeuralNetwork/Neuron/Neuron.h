@@ -61,6 +61,10 @@ public:
     typedef typename std::vector< Input > Inputs;
     typedef typename Inputs::const_iterator iterator;
 
+    template<typename VarType>
+    struct rebindVar{
+      typedef Neuron< typename OutputFunctionType::template rebindVar<VarType>::type > type;
+    };    
 private:
     /**
      * @brief Instance of output calculation equation.

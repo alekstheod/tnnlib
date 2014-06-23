@@ -6,6 +6,7 @@
 #include <NeuralNetwork/Neuron/ActivationFunction/SoftmaxFunction.h>
 #include <NeuralNetwork/Neuron/ActivationFunction/BiopolarSigmoidFunction.h>
 #include <NeuralNetwork/LearningAlgorithm/BackPropagation/BepAlgorithm.h>
+#include <NeuralNetwork/Neuron/ActivationFunction/LogScaleSoftmaxFunction.h>
 #include <NeuralNetwork/Config.h>
 
 #ifndef BOOST_SYSTEM_NO_DEPRECATED
@@ -56,9 +57,9 @@ static const unsigned int height = 14;
 static const unsigned int inputsNumber = width * height;
 
 typedef nn::Perceptron< float,
-			nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, float, inputsNumber>, 
-			nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, float, 30>, 
-			nn::NeuralLayer<nn::Neuron, nn::SoftmaxFunction, float, 10>
+			nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, inputsNumber>, 
+			nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, 30>, 
+			nn::NeuralLayer<nn::Neuron, nn::SoftmaxFunction, 10>
 		       > Perceptron;
 
 typedef nn::bp::BepAlgorithm< Perceptron, nn::bp::CrossEntropyError> Algo;
@@ -193,7 +194,7 @@ void calculateWeights(std::string imagesPath) {
         }
     }
 
-    Algo algorithm (0.35f, 0.01f );
+    Algo algorithm (0.3f, 0.01f );
     std::vector<Algo::Prototype> prototypes;
     for( auto i = files.begin(); i != files.end(); i++ ) {
         if( !boost::filesystem::is_directory( *i ) ) {
