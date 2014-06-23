@@ -8,7 +8,7 @@ Flexible interface which allows to define a neural network with a different type
                         
     typedef nn::Perceptron<float, 
                            nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, 2>, 
-	   nn::NeuralLayer<nn::Neuron, nn::TanhFunction, 20>, 
+	   		   nn::NeuralLayer<nn::Neuron, nn::TanhFunction, 20>, 
                            nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, 1>
                            > Perceptron;
 
