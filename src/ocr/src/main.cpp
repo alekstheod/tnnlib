@@ -8,7 +8,6 @@
 #include <NeuralNetwork/LearningAlgorithm/BackPropagation/BepAlgorithm.h>
 #include <NeuralNetwork/Neuron/ActivationFunction/LogScaleSoftmaxFunction.h>
 #include <NeuralNetwork/Config.h>
-#include <boost/predef.h>
 
 #ifndef BOOST_SYSTEM_NO_DEPRECATED
 #define BOOST_SYSTEM_NO_DEPRECATED 1

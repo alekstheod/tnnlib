@@ -37,7 +37,6 @@
 #include <boost/iterator/transform_iterator.hpp>
 #include <functional>
 #include <boost/bind.hpp>
-#include <boost/predef.h>
 #include <boost/bind/placeholders.hpp>
 #include <boost/graph/graph_concepts.hpp>
 #include <algorithm>
