@@ -127,12 +127,8 @@ private:
     void calculate(Layers& layers, bool) {
         std::get<index>(layers).calculateOutputs( std::get<index+1>(layers) );
 
-        <<<<<<< HEAD
         enum { enable = (index < CONST_LAYERS_NUMBER - 2) };
         typedef typename std::conditional< enable, bool, int >::type ArgType;
-        =======
-            typedef typename std::conditional< (index < CONST_LAYERS_NUMBER - 2), bool, int >::type ArgType;
-        >>>>>>> e1065e9d5a0fba0b5199dc058442b6e173d35e3d
         calculate<index+1>( layers,  ArgType(0));
     }
 

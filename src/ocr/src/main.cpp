@@ -6,12 +6,9 @@
 #include <NeuralNetwork/Neuron/ActivationFunction/SoftmaxFunction.h>
 #include <NeuralNetwork/Neuron/ActivationFunction/BiopolarSigmoidFunction.h>
 #include <NeuralNetwork/LearningAlgorithm/BackPropagation/BepAlgorithm.h>
-<<<<<<< HEAD
 #include <NeuralNetwork/Neuron/ActivationFunction/LogScaleSoftmaxFunction.h>
 #include <NeuralNetwork/Config.h>
-=======
 #include <boost/predef.h>
->>>>>>> e1065e9d5a0fba0b5199dc058442b6e173d35e3d
 
 #ifndef BOOST_SYSTEM_NO_DEPRECATED
 #define BOOST_SYSTEM_NO_DEPRECATED 1
@@ -27,7 +24,7 @@
 #define png_infopp_NULL (png_infopp)NULL
 #define int_p_NULL (int*)NULL
 
-#if defined(BOOST_COMP_MSVC)
+#if defined(NN_CC_MSVC)
 # pragma warning(push)
 // This function or variable may be unsafe
 # pragma warning(disable:4996)
@@ -44,7 +41,7 @@
 #include "gil/extension/numeric/sampler.hpp"
 #include "gil/extension/numeric/resample.hpp"
 
-#if defined(BOOST_COMP_MSVC)
+#if defined(NN_CC_MSVC)
 # pragma warning(pop)
 #endif
 

@@ -15,6 +15,7 @@ add_library(NeuralNetwork
 	  ./NeuralNetwork/NeuralNetwork.cpp
 	  ./NeuralNetwork/INeuralLayer.h
 	  ./NeuralNetwork/NNException.h
+	  ./NeuralNetwork/Config.h
 	  ./NeuralNetwork/LearningAlgorithm/BackPropagation/BepAlgorithm.h
 	  ./NeuralNetwork/LearningAlgorithm/BackPropagation/BPNeuralLayer.h
 	  ./NeuralNetwork/LearningAlgorithm/BackPropagation/BPNeuron.h
