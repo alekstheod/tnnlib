@@ -29,7 +29,6 @@
 
 #ifndef BEPNeuralLayerH
 #define BEPNeuralLayerH
-#include <NeuralNetwork/Config.h>
 #include <NeuralNetwork/LearningAlgorithm/BackPropagation/BPNeuron.h>
 #include <NeuralNetwork/INeuralLayer.h>
 #include <tuple>
@@ -45,90 +44,90 @@ namespace bp
 template<typename NeuralLayerType>
 class BPNeuralLayer : public nn::INeuralLayer<typename NeuralLayerType::template rebind<BPNeuron>::type>
 {
-public:
+    public:
     typedef INeuralLayer< typename NeuralLayerType::template rebind<BPNeuron>::type > NeuralLayer;
     typedef typename NeuralLayer::Neuron Neuron;
     typedef typename NeuralLayer::Var Var;
     typedef typename NeuralLayer::const_iterator const_iterator;
     typedef typename NeuralLayer::iterator iterator;
 
-	NN_DEFINE_CONST(unsigned int, CONST_NEURONS_NUMBER, NeuralLayerType::CONST_NEURONS_NUMBER);
-	
     template<typename VarType>
-    struct rebindVar{
-      typedef BPNeuralLayer< typename NeuralLayerType::template rebindVar<VarType>::type > type;
+    struct rebindVar {
+        typedef BPNeuralLayer< typename NeuralLayerType::template rebindVar<VarType>::type > type;
     };
-    
-private:
-    void calculateWeight ( Var learningRate, Neuron& neuron) {
-        unsigned int inputsNumber =neuron->size();
-        Var delta = neuron->getDelta();
-        for ( unsigned int i = 0; i < inputsNumber; i++ ) {
-            Var input = neuron[i].second;
-            Var weight = neuron.getWeight ( i );
-            Var newWeight = weight - learningRate * input * delta;
-            neuron.setWeight ( i, newWeight );
-        }
 
-        Var weight = neuron->getBias();
-        Var newWeight = weight - learningRate * delta;
-        neuron->setBias ( newWeight );
+    BOOST_STATIC_CONSTEXPR unsigned int CONST_NEURONS_NUMBER = NeuralLayerType::CONST_NEURONS_NUMBER;
+
+    private:
+void calculateWeight ( Var learningRate, Neuron& neuron) {
+    unsigned int inputsNumber =neuron->size();
+    Var delta = neuron->getDelta();
+    for ( unsigned int i = 0; i < inputsNumber; i++ ) {
+        Var input = neuron[i].second;
+        Var weight = neuron.getWeight ( i );
+        Var newWeight = weight - learningRate * input * delta;
+        neuron.setWeight ( i, newWeight );
     }
+
+    Var weight = neuron->getBias();
+    Var newWeight = weight - learningRate * delta;
+    neuron->setBias ( newWeight );
+}
 
 public:
-    BPNeuralLayer(unsigned int inputsNumber = 1) : NeuralLayer(inputsNumber)  {}
+BPNeuralLayer(unsigned int inputsNumber = 1) : NeuralLayer(inputsNumber)  {}
 
-    BPNeuralLayer ( unsigned int inputsNumber, unsigned int neuronsNumber ) : NeuralLayer ( inputsNumber, neuronsNumber ) {}
+BPNeuralLayer ( unsigned int inputsNumber, unsigned int neuronsNumber ) : NeuralLayer ( inputsNumber, neuronsNumber ) {}
 
-    /**
-     * @brief Will calculate the deltas for the current leyer. This method must be called for the hidden layers.
-     * @param affectedLayer the next affected layer.
-     * @param current data set based on which the deltas will be calculated.
-     */
-    template<typename Layer, typename MomentumFunc>
-    void calculateLayerDeltas ( Layer& affectedLayer, MomentumFunc momentum  ) {
-        unsigned int curNeuronId = 0;
-        for ( auto curNeuron = NeuralLayer::begin(); curNeuron != NeuralLayer::end(); curNeuron++ ) {
-            Var sum = 0.0f; //sum(aDelta*aWeight)
-            for ( unsigned int i = 0; i < affectedLayer.size(); i++ ) {
-                Var affectedDelta = affectedLayer.getDelta ( i );
-                Var affectedWeight = affectedLayer.getInputWeight ( i, curNeuronId );
-                sum += affectedDelta * affectedWeight;
-                //sum += affectedDelta * affectedLayer->getBias(i);
-            }
-
-            (*curNeuron)->setDelta( momentum( (*curNeuron)->getDelta(), sum * (*curNeuron)->calculateDerivate() ) );
-            curNeuronId++;
-        }
-    }
-
-    /**
-    * @brief Will calculate the deltas for the current layer. This method must be called for the output layer layers.
-    * @param current data set based on which the deltas will be calculated.
-    */
-    template<typename Prototype, typename MomentumFunc>
-    void calculateOutputDeltas ( const Prototype& prototype, MomentumFunc momentum ) {
-        unsigned int neuronId = 0;
-        for ( auto curNeuron = NeuralLayer::begin(); curNeuron != NeuralLayer::end(); curNeuron++ ) {
-            ( *curNeuron )->calculateDelta( std::get<1>(prototype)[neuronId], momentum );
-            neuronId++;
-        }
-    }
-
-    void calculateLayerWeights ( Var learningRate ) {
-        std::for_each ( NeuralLayer::begin(), NeuralLayer::end(), std::bind(&BPNeuralLayer::calculateWeight, this, learningRate, std::placeholders::_1) );
-    }
-
-    const  Var& getDelta ( unsigned int neuronId ) const {
-        if ( neuronId >= NeuralLayer::size() ) {
-            throw NNException ( "Wrong neuronId", __FILE__, __LINE__ );
+/**
+ * @brief Will calculate the deltas for the current leyer. This method must be called for the hidden layers.
+ * @param affectedLayer the next affected layer.
+ * @param current data set based on which the deltas will be calculated.
+ */
+template<typename Layer, typename MomentumFunc>
+void calculateLayerDeltas ( Layer& affectedLayer, MomentumFunc momentum  ) {
+    unsigned int curNeuronId = 0;
+    for ( auto curNeuron = NeuralLayer::begin(); curNeuron != NeuralLayer::end(); curNeuron++ ) {
+        Var sum = 0.0f; //sum(aDelta*aWeight)
+        for ( unsigned int i = 0; i < affectedLayer.size(); i++ ) {
+            Var affectedDelta = affectedLayer.getDelta ( i );
+            Var affectedWeight = affectedLayer.getInputWeight ( i, curNeuronId );
+            sum += affectedDelta * affectedWeight;
+            //sum += affectedDelta * affectedLayer->getBias(i);
         }
 
-        return NeuralLayer::operator[] ( neuronId )->getDelta();
+        (*curNeuron)->setDelta( momentum( (*curNeuron)->getDelta(), sum * (*curNeuron)->calculateDerivate() ) );
+        curNeuronId++;
+    }
+}
+
+/**
+* @brief Will calculate the deltas for the current layer. This method must be called for the output layer layers.
+* @param current data set based on which the deltas will be calculated.
+*/
+template<typename Prototype, typename MomentumFunc>
+void calculateOutputDeltas ( const Prototype& prototype, MomentumFunc momentum ) {
+    unsigned int neuronId = 0;
+    for ( auto curNeuron = NeuralLayer::begin(); curNeuron != NeuralLayer::end(); curNeuron++ ) {
+        ( *curNeuron )->calculateDelta( std::get<1>(prototype)[neuronId], momentum );
+        neuronId++;
+    }
+}
+
+void calculateLayerWeights ( Var learningRate ) {
+    std::for_each ( NeuralLayer::begin(), NeuralLayer::end(), std::bind(&BPNeuralLayer::calculateWeight, this, learningRate, std::placeholders::_1) );
+}
+
+const  Var& getDelta ( unsigned int neuronId ) const {
+    if ( neuronId >= NeuralLayer::size() ) {
+        throw NNException ( "Wrong neuronId", __FILE__, __LINE__ );
     }
 
-    ~BPNeuralLayer() {
-    }
+    return NeuralLayer::operator[] ( neuronId )->getDelta();
+}
+
+~BPNeuralLayer() {
+}
 };
 
 }

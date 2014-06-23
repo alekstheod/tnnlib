@@ -30,7 +30,6 @@
 #ifndef PerceptronH
 #define PerceptronH
 
-#include <NeuralNetwork/Config.h>
 #include <NeuralNetwork/Serialization/PerceptronMemento.h>
 #include <NeuralNetwork/INeuralLayer.h>
 #include <NeuralNetwork/NNException.h>
@@ -52,22 +51,22 @@ template<typename Var, typename T>
 struct rebindVar;
 
 template<typename Var, typename... T>
-struct rebindVar<Var, std::tuple<T...> >{
-  typedef typename std::tuple< typename T::template rebindVar<Var>::type... > type;
+struct rebindVar<Var, std::tuple<T...> > {
+    typedef typename std::tuple< typename T::template rebindVar<Var>::type... > type;
 };
-  
+
 template<typename VarType, typename LayerTypes>
 class Perceptron {
 public:
     typedef typename rebindVar<VarType, LayerTypes>::type Layers;
 
-    NN_DEFINE_CONST(unsigned int, CONST_LAYERS_NUMBER, std::tuple_size<Layers>::value);
+    BOOST_STATIC_CONSTEXPR unsigned int CONST_LAYERS_NUMBER = std::tuple_size<Layers>::value;
     using InputLayerType = typename std::tuple_element<0, Layers>::type;
 
-    NN_DEFINE_CONST(unsigned int, CONST_INPUTS_NUMBER, InputLayerType::CONST_NEURONS_NUMBER);
+    BOOST_STATIC_CONSTEXPR unsigned int CONST_INPUTS_NUMBER = InputLayerType::CONST_NEURONS_NUMBER;
     using OutputLayerType = typename std::tuple_element<CONST_LAYERS_NUMBER - 1, Layers>::type;
 
-    NN_DEFINE_CONST(unsigned int, CONST_OUTPUTS_NUMBER, OutputLayerType::CONST_NEURONS_NUMBER);
+    BOOST_STATIC_CONSTEXPR unsigned int CONST_OUTPUTS_NUMBER = OutputLayerType::CONST_NEURONS_NUMBER;
 
     typedef VarType Var;
     template<template <class> class Layer>
@@ -128,8 +127,12 @@ private:
     void calculate(Layers& layers, bool) {
         std::get<index>(layers).calculateOutputs( std::get<index+1>(layers) );
 
+        <<<<<<< HEAD
         enum { enable = (index < CONST_LAYERS_NUMBER - 2) };
         typedef typename std::conditional< enable, bool, int >::type ArgType;
+        =======
+            typedef typename std::conditional< (index < CONST_LAYERS_NUMBER - 2), bool, int >::type ArgType;
+        >>>>>>> e1065e9d5a0fba0b5199dc058442b6e173d35e3d
         calculate<index+1>( layers,  ArgType(0));
     }
 

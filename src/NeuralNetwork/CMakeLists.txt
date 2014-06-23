@@ -1,7 +1,7 @@
 project(NeuralNetwork)
 cmake_minimum_required(VERSION 2.8)
 
-set( BOOST_COMPONENTS_NEEDED serialization )
+set( BOOST_COMPONENTS_NEEDED serialization)
 SET(BOOST_MIN_VERSION "1.46.0")
 find_package(Boost ${BOOST_MIN_VERSION} COMPONENTS ${BOOST_COMPONENTS_NEEDED} REQUIRED) 
 if(Boost_FOUND)
