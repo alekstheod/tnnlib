@@ -85,7 +85,7 @@ BPNeuralLayer ( unsigned int inputsNumber, unsigned int neuronsNumber ) : Neural
  * @param current data set based on which the deltas will be calculated.
  */
 template<typename Layer, typename MomentumFunc>
-void calculateLayerDeltas ( Layer& affectedLayer, MomentumFunc momentum  ) {
+void calculateHiddenDeltas ( Layer& affectedLayer, MomentumFunc momentum  ) {
     unsigned int curNeuronId = 0;
     for ( auto curNeuron = NeuralLayer::begin(); curNeuron != NeuralLayer::end(); curNeuron++ ) {
         Var sum = 0.0f; //sum(aDelta*aWeight)
@@ -93,7 +93,7 @@ void calculateLayerDeltas ( Layer& affectedLayer, MomentumFunc momentum  ) {
             Var affectedDelta = affectedLayer.getDelta ( i );
             Var affectedWeight = affectedLayer.getInputWeight ( i, curNeuronId );
             sum += affectedDelta * affectedWeight;
-            //sum += affectedDelta * affectedLayer->getBias(i);
+            sum += affectedDelta * affectedLayer->getBias(i);
         }
 
         (*curNeuron)->setDelta( momentum( (*curNeuron)->getDelta(), sum * (*curNeuron)->calculateDerivate() ) );
@@ -106,7 +106,7 @@ void calculateLayerDeltas ( Layer& affectedLayer, MomentumFunc momentum  ) {
 * @param current data set based on which the deltas will be calculated.
 */
 template<typename Prototype, typename MomentumFunc>
-void calculateOutputDeltas ( const Prototype& prototype, MomentumFunc momentum ) {
+void calculateDeltas ( const Prototype& prototype, MomentumFunc momentum ) {
     unsigned int neuronId = 0;
     for ( auto curNeuron = NeuralLayer::begin(); curNeuron != NeuralLayer::end(); curNeuron++ ) {
         ( *curNeuron )->calculateDelta( std::get<1>(prototype)[neuronId], momentum );
@@ -114,7 +114,7 @@ void calculateOutputDeltas ( const Prototype& prototype, MomentumFunc momentum )
     }
 }
 
-void calculateLayerWeights ( Var learningRate ) {
+void calculateWeights ( Var learningRate ) {
     std::for_each ( NeuralLayer::begin(), NeuralLayer::end(), std::bind(&BPNeuralLayer::calculateWeight, this, learningRate, std::placeholders::_1) );
 }
 

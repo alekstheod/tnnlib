@@ -89,6 +89,10 @@ public:
     void setDelta ( const Var& delta ) {
         m_delta = delta;
     }
+    
+    void setMemento( NeuronMemento<Var> memento ){
+      (*this)->setMemento(memento);
+    }
 
     /*!
     *  Will calculate the differential value.

@@ -73,25 +73,6 @@ struct halfdiff_cast_channels {
 };
 
 template <typename SrcView, typename DstView>
-void x_gradient(const SrcView& src, const DstView& dst) {
-    typedef typename boost::gil::channel_type<DstView>::type dst_channel_t;
-
-    for (int y=0; y<src.height(); ++y) {
-        typename SrcView::x_iterator src_it = src.row_begin(y);
-        typename DstView::x_iterator dst_it = dst.row_begin(y);
-
-        for (int x=1; x<src.width()-1; ++x) {
-            boost::gil::static_transform(src_it[x-1], src_it[x+1], dst_it[x], halfdiff_cast_channels<dst_channel_t>());
-        }
-    }
-}
-
-template <typename SrcView, typename DstView>
-void y_gradient(const SrcView& src, const DstView& dst) {
-    x_gradient(boost::gil::rotated90ccw_view(src), boost::gil::rotated90ccw_view(dst));
-}
-
-template <typename SrcView, typename DstView>
 void convert_color(const SrcView& src, const DstView& dst) {
     typedef typename channel_type<DstView>::type d_channel_t;
     typedef typename channel_convert_to_unsigned<d_channel_t>::type channel_t;
@@ -132,17 +113,19 @@ void readImage(std::string fileName, InputIterator input) {
 
 Perceptron readPerceptron(std::string fileName) {
     Perceptron perceptron;
-    std::ifstream file(fileName);
-    if( file.is_open() ) {
-        Perceptron::Memento memento;
-        boost::archive::xml_iarchive ia ( file );
-        ia  >> BOOST_SERIALIZATION_NVP ( memento );
+    if( boost::filesystem::exists(fileName.c_str()) ){
+      std::ifstream file(fileName);
+      if( file.good() ) {
+	  Perceptron::Memento memento;
+	  boost::archive::xml_iarchive ia ( file );
+	  ia  >> BOOST_SERIALIZATION_NVP ( memento );
 
-        perceptron.setMemento ( memento );
-    } else {
-        throw nn::NNException("Invalid perceptron file name", __FILE__, __LINE__);
+	  perceptron.setMemento ( memento );
+      } else {
+	  throw nn::NNException("Invalid perceptron file name", __FILE__, __LINE__);
+      }
     }
-
+    
     return perceptron;
 }
 
@@ -194,7 +177,10 @@ void calculateWeights(std::string imagesPath) {
         }
     }
 
-    Algo algorithm (0.3f, 0.01f );
+    Perceptron tmp = readPerceptron("perceptron.xml");
+    Algo algorithm (0.04f, 0.01f );
+    algorithm.setMemento( tmp.getMemento() );
+    
     std::vector<Algo::Prototype> prototypes;
     for( auto i = files.begin(); i != files.end(); i++ ) {
         if( !boost::filesystem::is_directory( *i ) ) {

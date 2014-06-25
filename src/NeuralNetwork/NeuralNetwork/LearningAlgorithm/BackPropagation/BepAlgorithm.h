@@ -94,7 +94,7 @@ private:
     
     template<unsigned int index, typename MomentumFunc>
     void calculateDelta(Layers& layers, MomentumFunc momentum, bool) {
-        std::get<index-1>(layers).calculateLayerDeltas( std::get<index>(layers), momentum );
+        std::get<index-1>(layers).calculateHiddenDeltas( std::get<index>(layers), momentum );
 
         typedef typename std::conditional< (index > 1), bool, int >::type ArgType;
         calculateDelta<index-1>( layers, momentum, ArgType(0));
@@ -105,7 +105,7 @@ private:
       CalculateWeights(Var& learningRate):m_learningRate(learningRate){}
       template<typename Layer>
       void operator()(Layer& layer){
-	layer.calculateLayerWeights(m_learningRate);
+	layer.calculateWeights(m_learningRate);
       }
     };
 public:
@@ -125,7 +125,7 @@ public:
         m_perceptron.calculate( std::get<0>(prototype).begin(),  std::get<0>(prototype).end(), m_outputs.begin() );
 
         //Calculate deltas
-        std::get< Perceptron::CONST_LAYERS_NUMBER - 1 >(m_perceptron.layers()).calculateOutputDeltas(prototype, momentum);
+        std::get< Perceptron::CONST_LAYERS_NUMBER - 1 >(m_perceptron.layers()).calculateDeltas(prototype, momentum);
 	calculateDelta<Perceptron::CONST_LAYERS_NUMBER - 1>(m_perceptron.layers(), momentum, true);
 
 	//Calculate weights
@@ -142,6 +142,10 @@ public:
                                          unsigned int maxNumberOfEpochs = std::numeric_limits< unsigned int >::max()
                                        ) {
         return calculatePerceptron(begin, end, func, maxNumberOfEpochs, DummyMomentum() );
+    }
+    
+    void setMemento( PerceptronMemento<Var> memento ){
+      m_perceptron.setMemento(memento);
     }
 
     /// @brief will calculate a perceptron with appropriate weights.
