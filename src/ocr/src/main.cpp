@@ -225,7 +225,7 @@ int main(int argc, char** argv)
         std::cout << "./ocr [folder] where  [folder] is a directory with your samples, this command will generate a perceptron.xml file" << std::endl << std::endl;
         std::cout << "./ocr perceptron.xml [file] where [file] is a png image which has to be recognized" << std::endl << std::endl;
     }
- 
+  
     return result;
 }
 
