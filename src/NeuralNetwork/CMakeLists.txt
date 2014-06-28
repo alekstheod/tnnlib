@@ -50,7 +50,7 @@ target_include_directories(NeuralNetwork
 			../Utilities
 			${Boost_INCLUDE_DIRS})
 	
-target_link_libraries(NeuralNetwork
+target_link_libraries(NeuralNetwork 
 		      Utilities
 		      ${Boost_LIBRARIES})
 
