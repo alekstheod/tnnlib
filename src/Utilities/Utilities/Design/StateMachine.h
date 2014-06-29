@@ -27,55 +27,67 @@
 *  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE
 */
 
- /** Example
-  class State2;
-  class State1;
+/** Example
+class State2;
+class State1;
 
-  struct finished{};
-  struct repeat{};
-  struct working{};
+struct finished{};
+struct repeat{};
+struct working{};
 
-  typedef utils::Entry<State1, finished, State2> Transition1;
-  typedef utils::Entry<State2, finished, State1> Transition2;
-  typedef utils::Entry<State1, repeat, State1> Transition3;
-  typedef utils::Entry<State2, working, State2> Transition4;
-  typedef TYPELIST_4( Transition1, Transition2, Transition3, Transition4 ) TransitionList;
-  typedef utils::StateMachine<utils::Transitions< TransitionList >, bool, true > StateMachine;
- */
+typedef utils::StateMachine<
+			    utils::Transition< State1, finished, State2 >, 
+			    utils::Transition< State2, finished, State1 >,
+			    utils::Transition< State2, repeat, State2 >,
+			    utils::Transition< State1, repeat, State1 >
+			    > StateMachine;
+*/
 
 #ifndef STATEMACHINE_H
 #define STATEMACHINE_H
 #include <memory>
-#include <Utilities/MPL/TypeList.h>
 
 namespace utils
 {
 
-namespace priv
+template<typename CurState, typename EventType, typename NextState>
+struct Transition;
+  
+namespace detail
 {
 
-template<typename RetType,typename Transitions>
+template<typename... Transitions>
 class StateHolder;
 
-template<typename RetType,typename Transitions>
+template<typename... Transitions>
 class StateMachine;
+
+template<typename CurState, typename Event, typename Unknown, typename... Transitions>
+struct NextState{
+  typedef typename NextState<CurState, Event, Transitions...>::type type;
+};
+
+template<typename CurState, typename Event, typename Unknown, typename... Transitions>
+struct NextState<CurState, Event, Transition<CurState, Event, Unknown>, Transitions... >{
+  typedef Unknown type;
+};
 
 
 /// @brief the state interface.
-template<typename RetType, typename Transitions>
+template<typename... Transitions>
 class IState
 {
 private:
-    StateHolder<RetType,Transitions>& m_owner;
+    StateHolder<Transitions...>& m_owner;
 
 private:
-    virtual RetType ExecuteStepImpl ( StateHolder<RetType,Transitions>& stateMachine ) = 0;
+    virtual void ExecuteStepImpl ( StateHolder<Transitions...>& stateMachine ) = 0;
 
 protected:
-    IState ( StateHolder<RetType, Transitions>& stateHolder ) : m_owner ( stateHolder ) {};
+    IState ( StateHolder<Transitions...>& stateHolder ) : m_owner ( stateHolder ) {};
 
 public:
-    RetType ExecuteStep ( StateHolder<RetType,Transitions>& stateMachine ) {
+    void ExecuteStep ( StateHolder<Transitions...>& stateMachine ) {
         return ExecuteStepImpl ( stateMachine );
     }
 
@@ -84,16 +96,15 @@ public:
 
 
 /// @brief the state holder class which keeps the current state of the state machine.
-template<typename RetType,class Transitions >
+template<typename... Transitions >
 class StateHolder
 {
 private:
     /// @brief the type of the state.
-    typedef IState<RetType, Transitions> State;
-    typedef RetType ReturnType;
+    typedef IState<Transitions...> State;
 
 private:
-    template<class, bool> friend class Executor;
+    template<typename> friend class Executor;
     std::unique_ptr< State > m_currentState;
 
 public:
@@ -103,43 +114,22 @@ public:
     }
 
     ~StateHolder() {}
-
-    /// @brief will set a new state to the state machine.
-    /// @param newState instance of the new state.
-    /// @return bool true is the given state is not NULL, false otherwise.
-    template< class EventType, class StateType>
-    void SendEvent (StateType* state) {
-        typedef typename Transitions::template NextState<StateType, EventType>::Result NextState;
-        m_currentState.reset ( new NextState(*this) );
-    }
     
     /// @brief will set a new state to the state machine.
     /// @param newState instance of the new state.
     /// @return bool true is the given state is not NULL, false otherwise.
-    template< class EventType, class StateType, typename Arg1>
-    void SendEvent (StateType* state, Arg1 arg1 ) {
-        typedef typename Transitions::template NextState<StateType, EventType>::Result NextState;
-        m_currentState.reset ( new NextState ( *this, arg1 ) );
-    }
-    
-    /// @brief will set a new state to the state machine.
-    /// @param newState instance of the new state.
-    /// @return bool true is the given state is not NULL, false otherwise.
-    template< typename EventType, class StateType, typename Arg1, typename Arg2>
-    void SendEvent (StateType* state, Arg1 arg1, Arg2 arg2) {
-        typedef typename Transitions::template NextState<StateType, EventType>::Result NextState;
-        m_currentState.reset ( new NextState(*this, arg1, arg2) );
+    template< class EventType, class StateType, typename... Args>
+    void SendEvent (StateType* state, Args... args ) {
+        typedef typename detail::NextState<StateType, EventType, Transitions...>::type NextState;
+        m_currentState.reset ( new NextState ( *this, std::forward<Args>(args)... ) );
     }
 };
 
 
-template<typename StateHolder, bool includeExecutor>
-class Executor {};
-
 template<typename StateHolder>
-class Executor<StateHolder, false >
+class Executor
 {
-protected:
+private:
     StateHolder m_stateHolder;
 
 protected:
@@ -149,42 +139,27 @@ public:
     template< typename StateCreator>
     Executor( StateCreator creator) : m_stateHolder( creator) {
     }
-};
-
-
-template<typename StateHolder>
-class Executor<StateHolder, true> : public Executor<StateHolder, false>
-{
-protected:
-    typedef typename StateHolder::ReturnType RetType;
-    typedef Executor<StateHolder, false> NullExecutor;
-
-protected:
-    ~Executor() {}
-
-public:
-    template< typename StateCreator >
-    Executor( StateCreator creator) : NullExecutor( creator) {
-    }
-
-    RetType ExecuteStep() {
-        return Executor<StateHolder, false>::m_stateHolder.m_currentState->ExecuteStep ( NullExecutor::m_stateHolder );
+    
+    void ExecuteStep() {
+        return m_stateHolder.m_currentState->ExecuteStep( m_stateHolder );
     }
 };
 
 }
 
-/// @brief Generic state machine implementation.
-template<class Transitions, typename RetType = void, bool includeExecutor = false>
-class StateMachine : public priv::Executor< priv::StateHolder<RetType,Transitions>, includeExecutor >
+
+template<typename CurState, typename EventType, typename NextState>
+struct Transition{};
+
+template< typename... Transitions >
+class StateMachine: public detail::Executor< detail::StateHolder<Transitions...> >
 {
 private:
-    typedef priv::Executor< priv::StateHolder<RetType,Transitions>, includeExecutor > Executor;
+    typedef detail::Executor< detail::StateHolder<Transitions...> > Executor;
 
 public:
-    typedef priv::IState<RetType, Transitions> State;
-    typedef priv::StateHolder<RetType, Transitions> StateHolder;
-    typedef RetType ReturnType;
+    typedef detail::IState<Transitions...> State;
+    typedef detail::StateHolder<Transitions...> StateHolder;
 
 public:
     /// @brief Constructor will initialize the object.
@@ -192,45 +167,6 @@ public:
     template< typename StateCreator>
     StateMachine(StateCreator creator) : Executor(creator) {}
     ~StateMachine() { }
-};
-
-template<typename CurState, typename EventType, typename NextStateType>
-struct Entry
-{
-  typedef CurState CurrentState;
-  typedef NextStateType Result;
-  typedef EventType Event;
-};
-
-template<class TList, class CurState, class EventType>
-struct FindNextStep;
-
-template<class TList, class CurState, class EventType>
-struct FindNextStep
-{
-  typedef typename FindNextStep<typename TList::Tail, CurState, EventType>::Result Result;
-};
-
-template<class TList>
-struct FindNextStep<TList, typename TList::Head::CurrentState, typename TList::Head::Event>
-{
-  typedef typename TList::Head::Result Result;
-};
-
-template<class CurState, class EventType>
-struct FindNextStep<utils::NullType, CurState, EventType>
-{
-  typedef NullType Result;
-};
-
-template<class ListType>
-struct Transitions 
-{ 
-  template< typename CurState, typename EventType>
-  struct NextState
-  {
-    typedef typename FindNextStep<ListType, CurState, EventType>::Result Result;
-  };
 };
 
 }
