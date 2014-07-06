@@ -43,7 +43,6 @@ struct for_each_t_c<0> {
     }
 };
 
-
 template <class T, std::size_t N, class... Args>
 struct get
 {
@@ -68,11 +67,10 @@ struct rebind_tuple;
 template<template<typename> class C, typename... Args>
 struct rebind_tuple<C, std::tuple<Args...>>
 {
-	typedef typename std::tuple<C<Args>...> type;
+  typedef typename std::tuple<C<Args>...> type;
 };
 
 } // namespace detail
-
 
 template <class T, class... Args>
 T& get(std::tuple<Args...>& t)
@@ -95,6 +93,15 @@ void for_each_c( const std::tuple<ArgsT...>& t, Functor func )
 template< template<class> class C, typename Tuple>
 struct rebind_tuple : detail::rebind_tuple<C, Tuple>
 {
+};
+
+template<typename LastElement, typename... Elements>
+struct push_back;
+
+template<typename LastElement, typename... Elements>
+struct push_back<LastElement, std::tuple<Elements...> >
+{
+    typedef typename std::tuple<Elements..., LastElement> type;
 };
 
 }

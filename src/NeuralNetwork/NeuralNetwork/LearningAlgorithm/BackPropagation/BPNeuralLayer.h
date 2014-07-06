@@ -58,8 +58,12 @@ class BPNeuralLayer : public nn::INeuralLayer<typename NeuralLayerType::template
 
     BOOST_STATIC_CONSTEXPR unsigned int CONST_NEURONS_NUMBER = NeuralLayerType::CONST_NEURONS_NUMBER;
 
-    private:
-void calculateWeight ( Var learningRate, Neuron& neuron) {
+    template< unsigned int inputs>
+    struct rebindInputs{
+      typedef BPNeuralLayer< typename NeuralLayerType::template rebindInputs<inputs>::type > type;
+    };
+private:
+ void calculateWeight ( Var learningRate, Neuron& neuron) {
     unsigned int inputsNumber =neuron->size();
     Var delta = neuron->getDelta();
     for ( unsigned int i = 0; i < inputsNumber; i++ ) {
@@ -75,9 +79,7 @@ void calculateWeight ( Var learningRate, Neuron& neuron) {
 }
 
 public:
-BPNeuralLayer(unsigned int inputsNumber = 1) : NeuralLayer(inputsNumber)  {}
-
-BPNeuralLayer ( unsigned int inputsNumber, unsigned int neuronsNumber ) : NeuralLayer ( inputsNumber, neuronsNumber ) {}
+BPNeuralLayer() {}
 
 /**
  * @brief Will calculate the deltas for the current leyer. This method must be called for the hidden layers.

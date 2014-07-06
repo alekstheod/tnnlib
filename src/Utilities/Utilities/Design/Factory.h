@@ -38,7 +38,7 @@ struct NewAllocator {
 };
 
 
-template<typename BaseType, template <typename> class Allocator, typename... T>
+template<typename BaseType, template <typename> class Allocator = NewAllocator, typename... T>
 class StaticFactory {
 public:
     template<typename Type, typename... Args>

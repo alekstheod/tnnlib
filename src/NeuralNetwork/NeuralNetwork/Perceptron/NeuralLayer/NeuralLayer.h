@@ -50,11 +50,11 @@ namespace detail {
 /**
  * Represent the NeuralLayer in perceptron.
  */
-template<class NeuronType,unsigned int neuronsNumber>
+template<class NeuronType,unsigned int neuronsNumber, unsigned int inputsNumber>
 class NeuralLayer
 {
 public:
-    typedef INeuron<NeuronType> Neuron;
+    typedef INeuron<typename NeuronType::template rebindInputs<inputsNumber>::type> Neuron;
     typedef typename Neuron::Var Var;
     typedef typename Neuron::Memento NeuronMemento;
     typedef NeuralLayerMemento<Var> Memento;
@@ -65,17 +65,22 @@ public:
 
     template<template <class> class NewType>
     struct rebind {
-        typedef NeuralLayer< NewType<NeuronType>, neuronsNumber > type;
+        typedef NeuralLayer< NewType<NeuronType>, neuronsNumber, inputsNumber > type;
     };
 
-    template<typename NewType>
+    template<typename NewType, unsigned int inputs>
     struct rebindNeuron {
-        typedef NeuralLayer< NewType, neuronsNumber > type;
+        typedef NeuralLayer< NewType, neuronsNumber, inputs > type;
+    };
+    
+    template< unsigned int inputs>
+    struct rebindInputs{
+      typedef NeuralLayer<NeuronType, neuronsNumber, inputs> type;
     };
 
     template<typename VarType>
     struct rebindVar{
-      typedef NeuralLayer< typename NeuronType::template rebindVar<VarType>::type , neuronsNumber > type;
+      typedef NeuralLayer< typename NeuronType::template rebindVar<VarType>::type , neuronsNumber, inputsNumber > type;
     };
     
     BOOST_STATIC_CONSTEXPR unsigned int CONST_NEURONS_NUMBER = neuronsNumber;
@@ -86,23 +91,13 @@ private:
      */
     typename std::array< Neuron, neuronsNumber > m_neurons;
 
-    /**
-     * Number of available inputs for the current layer.
-     */
-    unsigned int m_inputsNumber;
 public:
+    NeuralLayer(){}
+  
     /**
      * Constructor will initialize the layer by the given inputs number and neurons number.
-     * @param inputsNumber the number of inputs of the layer.
-     * @param neuronsNumber the number of the neurons in the layer.
-     * @throw NNException in case of invalid arguments.
      */
-    NeuralLayer (unsigned int inputsNumber = 1) : m_inputsNumber(inputsNumber) {
-        static_assert(neuronsNumber > 0, "Invalid template argument neuronsNumber == 0");
-        std::generate ( m_neurons.begin(), m_neurons.end(), [inputsNumber]() {
-            return Neuron ( inputsNumber );
-        } );
-    }
+    static_assert(neuronsNumber > 0, "Invalid template argument neuronsNumber == 0");
 
     /**
     * @see {INeuralLayer}
@@ -144,13 +139,6 @@ public:
     */
     const Neuron& operator [] ( unsigned int id ) const {
         return m_neurons[id];
-    }
-
-    /**
-     * @see {INeuralLayer}
-     */
-    unsigned int getInputsNumber() const {
-        return m_inputsNumber;
     }
 
     reverse_iterator rbegin() {
@@ -218,7 +206,7 @@ public:
         auto neurons=memento.getNeurons();
         std::vector< Neuron > internalNeurons;
         std::transform ( neurons.begin(), neurons.end(), std::back_inserter ( internalNeurons ), [] ( NeuronMemento& m ) {
-            Neuron neuron ( m.getInputsNumber() );
+            Neuron neuron;
             neuron->setMemento ( m );
             return neuron;
         } );
@@ -271,12 +259,13 @@ public:
 }
 
 template<
-	 template<template<class> class, class> class NeuronType,
+	 template<template<class> class, class, unsigned int> class NeuronType,
          template<class> class ActivationFunctionType,
-	 unsigned int size, 
+	 unsigned int size,
+	 unsigned int inputsNumber = 1,
 	 typename Var = float
          >
-using NeuralLayer = detail::NeuralLayer<NeuronType<ActivationFunctionType, Var >, size >;
+using NeuralLayer = detail::NeuralLayer< NeuronType<ActivationFunctionType, Var, inputsNumber >, size, inputsNumber >;
 
 }
 

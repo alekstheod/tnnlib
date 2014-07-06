@@ -36,7 +36,7 @@
 #include <NeuralNetwork/INeuralLayer.h>
 #include <memory>
 
-template<typename VarType, typename Iterator>
+template<typename VarType, typename Iterator, std::size_t neurons, std::size_t inputs = 1>
 class MockedNeuralLayer
 {
 public:
@@ -50,6 +50,7 @@ public:
     typedef typename std::vector<Neuron>::reverse_iterator reverse_iterator;
     typedef typename std::vector<Neuron>::const_reverse_iterator const_reverse_iterator;
     typedef typename nn::INeuralLayer<MockedNeuralLayer>& INeuralLayer;
+    BOOST_STATIC_CONSTEXPR std::size_t CONST_NEURONS_NUMBER = neurons;
 
     template<typename NewType>
     struct rebindNeuron {
@@ -58,8 +59,13 @@ public:
     
     template<typename V>
     struct rebindVar{
-      typedef MockedNeuralLayer< V, Iterator > type;
+      typedef MockedNeuralLayer< V, Iterator, neurons, inputs > type;
     };
+    
+    template< std::size_t new_inputs>
+    struct rebindInputs{
+      typedef MockedNeuralLayer<VarType, iterator, neurons, new_inputs> type;
+    };    
 
 public:
     /// Need this because the googlemock does not allow to copy the mock objects.

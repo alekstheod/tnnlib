@@ -34,13 +34,6 @@
 #include <NeuralNetwork/Neuron/MockedNeuron.h>
 #include <array>
 
-
-typedef std::array<int, 4>::iterator Iterator;
-typedef MockedNeuralLayer<float, Iterator> NeuralLayer;
-typedef nn::Perceptron< float, NeuralLayer, NeuralLayer > Perceptron;
-typedef NeuralLayer::Neuron Neuron;
-typedef Neuron::NeuronType::Mock NeuronMock;
-  
 class PerceptronTest : public ::testing::Test
 {
 public:
@@ -52,7 +45,6 @@ public:
 public:
   std::vector< float > m_outputs;
   std::vector< float> m_inputs;
-  std::vector<Neuron> m_neurons;
   unsigned int m_inputsNumber;
   unsigned int m_outputsNumber;
 };

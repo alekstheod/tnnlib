@@ -54,6 +54,10 @@ public:
         typedef BPNeuron< typename NeuronType::template rebind<EquationType>::type > type;
     };
 
+    template< unsigned int inputs>
+    struct rebindInputs{
+      typedef BPNeuron<typename NeuronType::template rebindInputs< inputs >::type > type;
+    };
 private:
     /**
     * Neurons error delta

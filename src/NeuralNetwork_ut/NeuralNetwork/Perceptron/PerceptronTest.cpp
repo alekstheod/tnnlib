@@ -30,7 +30,7 @@
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
 #include <Utilities/GMockUtils.h>
-
+/*
 using ::testing::Return;
 using ::testing::Ref;
 using ::testing::_;
@@ -50,11 +50,17 @@ void PerceptronTest::SetUp() {
 }
 
 void PerceptronTest::TearDown() {
-    m_neurons.clear();
 }
 
 USING_SUPPORT_TEST_T_NN(PerceptronTest, TestCalculateOutputsForOneLayerPerceptron, nn, detail, Perceptron)
 TEST_F(PerceptronTest, TestCalculateOutputsForOneLayerPerceptron) {
+  typedef std::array<int, 4>::iterator Iterator;
+  typedef MockedNeuralLayer<float, Iterator, 5> NeuralLayer1;
+  typedef MockedNeuralLayer<float, Iterator, 2> NeuralLayer2;
+  typedef nn::Perceptron< float, NeuralLayer1, NeuralLayer2 > Perceptron;
+  typedef NeuralLayer::Neuron Neuron;
+  typedef Neuron::NeuronType::Mock NeuronMock;
+  
   Perceptron perceptron;
   perceptron.supportTest(*this);
   m_outputs.push_back(1.0);
@@ -64,16 +70,16 @@ TEST_F(PerceptronTest, TestCalculateOutputsForOneLayerPerceptron) {
 }
 
 SUPPORT_TEST_T(PerceptronTest, TestCalculateOutputsForOneLayerPerceptron, Perceptron){
-  test.m_neurons = std::vector< Neuron >(1,Neuron(test.m_inputsNumber));
+  std::array< Neuron, 1 > neurons = { Neuron(2)};
   
   InSequence dummy;
   EXPECT_CALL( *std::get<0>(m_layers),  setInput(0, test.m_inputs[0] ) ).Times(1);
   EXPECT_CALL( *std::get<0>(m_layers),  setInput(1, test.m_inputs[1] ) ).Times(1);
   EXPECT_CALL( *std::get<0>(m_layers),  calculateOutputs( Ref(std::get<1>(m_layers)) ) ).Times(1);
   EXPECT_CALL( *std::get<1>(m_layers), calculateOutputs() ).Times(1);
-  EXPECT_CALL( *std::get<1>(m_layers), end() ).WillOnce( Return(test.m_neurons.end()) );
-  EXPECT_CALL( *std::get<1>(m_layers), begin() ).WillOnce( Return(test.m_neurons.begin()) );
-  EXPECT_CALL( **test.m_neurons[0],  getOutput() ).Times(1).WillRepeatedly(Return(test.m_outputs[0]) );
+  EXPECT_CALL( *std::get<1>(m_layers), end() ).WillOnce( Return(neurons.end()) );
+  EXPECT_CALL( *std::get<1>(m_layers), begin() ).WillOnce( Return(neurons.begin()) );
+  EXPECT_CALL( **neurons[0],  getOutput() ).Times(1).WillRepeatedly(Return(test.m_outputs[0]) );
 }
 
 
@@ -91,17 +97,21 @@ SUPPORT_TEST_T(PerceptronTest, TestCalculateOutputsForTwoLayersPerceptron, Perce
 {
     const unsigned int inputsNumber = 2;
     const unsigned int outputsNumber = 1;
-    std::get<0>(m_layers) = NeuralLayer(2);
-    std::get<1>(m_layers) = NeuralLayer(5);
     
-    test.m_neurons = std::vector< Neuron >(5,Neuron(inputsNumber));
+    std::array< Neuron, 5 > neurons = { Neuron(inputsNumber),
+					Neuron(inputsNumber),
+					Neuron(inputsNumber),
+					Neuron(inputsNumber),
+					Neuron(inputsNumber)
+				      };
 
     InSequence dummy;
     EXPECT_CALL( *std::get<0>(m_layers),  setInput(0, test.m_inputs[0] ) ).Times(1);
     EXPECT_CALL( *std::get<0>(m_layers),  setInput(1, test.m_inputs[1] ) ).Times(1);
     EXPECT_CALL( *std::get<0>(m_layers),  calculateOutputs( Ref(std::get<1>(m_layers)) ) ).Times(1);
     EXPECT_CALL( *std::get<1>(m_layers),  calculateOutputs() ).Times(1);
-    EXPECT_CALL( *std::get<1>(m_layers),  end() ).Times(1).WillOnce(Return(test.m_neurons.begin()+1) );
-    EXPECT_CALL( *std::get<1>(m_layers),  begin() ).Times(1).WillOnce(Return(test.m_neurons.begin()) );
-    EXPECT_CALL( **test.m_neurons[0],   getOutput() ).Times(1).WillOnce(Return( 1.f ) );
+    EXPECT_CALL( *std::get<1>(m_layers),  end() ).Times(1).WillOnce(Return(neurons.begin()+1) );
+    EXPECT_CALL( *std::get<1>(m_layers),  begin() ).Times(1).WillOnce(Return(neurons.begin()) );
+    EXPECT_CALL( **neurons[0],   getOutput() ).Times(1).WillOnce(Return( 1.f ) );
 }
+*/

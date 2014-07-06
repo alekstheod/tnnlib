@@ -49,7 +49,19 @@ namespace nn {
  * and list of accepted inputs.
  */
 namespace detail{
-template<typename OutputFunctionType>
+  
+/// @brief will create an vector with the initialized inputs.
+/// @param inputsNumber the number of inputs.
+/// @return a vector of initialized inputs.
+template<typename Var, typename Iterator>
+void rand_inputs(Iterator begin, Iterator end){
+    while( begin != end){
+      *begin = std::make_pair( utils::createRandom<Var>(1) , utils::createRandom<Var>(1) );
+      begin++;
+    }
+}
+  
+template<typename OutputFunctionType, unsigned int inputsNumber>
 class Neuron {
 public:
     typedef IActivationFunction< OutputFunctionType > OutputFunction;
@@ -58,13 +70,18 @@ public:
 
     typedef typename std::pair<Var, Var> Input;
     /// @brief a list of the inputs first is the weight, second is the value
-    typedef typename std::vector< Input > Inputs;
+    typedef typename std::array< Input, inputsNumber > Inputs;
     typedef typename Inputs::const_iterator iterator;
 
     template<typename VarType>
     struct rebindVar{
-      typedef Neuron< typename OutputFunctionType::template rebindVar<VarType>::type > type;
+      typedef Neuron< typename OutputFunctionType::template rebindVar<VarType>::type, inputsNumber > type;
     };    
+    
+    template< std::size_t inputs>
+    struct rebindInputs{
+      typedef Neuron< OutputFunctionType, inputs > type;
+    };
 private:
     /**
      * @brief Instance of output calculation equation.
@@ -94,19 +111,6 @@ private:
      */
     Var m_sum;
 
-    /// @brief will create an vector with the initialized inputs.
-    /// @param inputsNumber the number of inputs.
-    /// @return a vector of initialized inputs.
-    std::vector< std::pair< Var, Var> > initInputs(unsigned int inputsNumber)const {
-        std::vector< std::pair< Var, Var> > result;
-        result.reserve(inputsNumber);
-        for( unsigned int i = 0; i < inputsNumber; i++ ) {
-            result.push_back( std::pair<Var, Var>(utils::createRandom<Var>(1) , utils::createRandom<Var>(1)) );
-        }
-
-        return result;
-    }
-
     /// @brief needed in order to calculate the neurons output.
     Var sumInput(const Input& input)const {
         return input.first * input.second;
@@ -118,14 +122,11 @@ public:
      * @param inputsNumber the number of inputs for current neuron.
      * @exception NNException thrown on object initialization failure.
      */
-    Neuron ( unsigned int inputsNumber = 1 ) :  m_bias( utils::createRandom<Var>(1) ),
-                                                m_output( boost::numeric_cast<Var>(0) ),
-                                                m_sum( boost::numeric_cast<Var>(0) ),
-                                                m_inputs(initInputs(inputsNumber)) 
-    {
-        if ( inputsNumber == 0 ) {
-            throw NNException ( "Wrong argument inputsNumber==0", __FILE__, __LINE__ );
-        }
+    Neuron () :  m_bias( utils::createRandom<Var>(1) ),
+                         m_output( boost::numeric_cast<Var>(0) ),
+                         m_sum( boost::numeric_cast<Var>(0) ){  
+        static_assert(inputsNumber > 0,"Invalid number of inputs");
+        rand_inputs<Var>(m_inputs.begin(), m_inputs.end());
     }
 
     /// @brief see @ref INeuron
@@ -176,7 +177,8 @@ public:
     /// @brief see @ref INeuron
     const Memento getMemento() const {
         Memento memento;
-        memento.setInputs ( m_inputs );
+        std::vector< Input > inputs( m_inputs.begin(), m_inputs.end() );
+        memento.setInputs ( inputs );
         memento.setOutput ( m_output );
         memento.setBias ( m_bias );
         memento.setSum ( m_sum );
@@ -189,7 +191,8 @@ public:
             throw NNException ( "Wrong argument memento, invalid number of inputs", __FILE__, __LINE__ );
         }
 
-        m_inputs=memento.getInputs();
+        auto inputs = memento.getInputs();
+        std::copy(inputs.begin(), inputs.end(), m_inputs.begin() );
         m_output=memento.getOutput();
         m_bias=memento.getBias();
         m_sum=memento.getSum();
@@ -249,8 +252,8 @@ public:
 };
 }
 
-template<template<class> class OutputFunctionType, typename VarType>
-using Neuron = detail::Neuron< OutputFunctionType<VarType> >;
+template<template<class> class OutputFunctionType, typename VarType, unsigned int inputsNumber>
+using Neuron = detail::Neuron< OutputFunctionType<VarType>, inputsNumber >;
 
 }
 

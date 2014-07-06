@@ -21,6 +21,8 @@ private:
 public:
     template<typename... Args>
     INeuralLayer ( Args... args ) :m_neuralLayer ( args... ) {}
+    
+    INeuralLayer (){}
 
     INeuralLayer ( const NeuralLayer& neuralLayer ) : m_neuralLayer ( neuralLayer ) {
     }

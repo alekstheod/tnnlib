@@ -85,6 +85,7 @@ private:
 
 protected:
     IState ( StateHolder<Transitions...>& stateHolder ) : m_owner ( stateHolder ) {};
+    IState (IState&)=delete;
 
 public:
     void ExecuteStep ( StateHolder<Transitions...>& stateMachine ) {

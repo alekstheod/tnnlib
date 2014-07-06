@@ -52,21 +52,50 @@ struct rebindVar;
 
 template<typename Var, typename... T>
 struct rebindVar<Var, std::tuple<T...> > {
-    typedef typename std::tuple< typename T::template rebindVar<Var>::type... > type;
+  typedef typename std::tuple< typename T::template rebindVar<Var>::type... > type;
 };
+
+template<std::size_t FirstInputs, typename RebindedTuple, typename Tuple>
+struct RebindInputsHelper;
+
+template<std::size_t FirstInputs, typename RebindedTuple, typename FirstLayer, typename... Layers>
+struct RebindInputsHelper<FirstInputs, RebindedTuple, std::tuple<FirstLayer, Layers...>>
+{                           
+    typedef typename utils::push_back<typename FirstLayer::template rebindInputs<FirstInputs>::type, RebindedTuple>::type CurrentRebindedTuple;            
+    typedef typename std::conditional<sizeof...(Layers) == 0,
+	    CurrentRebindedTuple,
+	    typename RebindInputsHelper<FirstLayer::CONST_NEURONS_NUMBER, CurrentRebindedTuple, std::tuple<Layers...>>::type>::type type;
+};
+
+template<std::size_t FirstInputs, typename RebindedTuple, typename... Layers>
+struct RebindInputsHelper<FirstInputs, RebindedTuple, std::tuple<Layers...>>
+{
+    typedef RebindedTuple type;
+};
+
+template<std::size_t FirstInputs, typename Tuple>
+struct rebindInputs
+{
+    static_assert(std::tuple_size<Tuple>::value >= 1, "Invalid");
+    typedef typename RebindInputsHelper<FirstInputs, std::tuple<>, Tuple>::type type;
+};
+
+
 
 template<typename VarType, typename LayerTypes>
 class Perceptron {
+private:
+    typedef typename rebindVar<VarType, LayerTypes>::type TmplLayers;
+
 public:
-    typedef typename rebindVar<VarType, LayerTypes>::type Layers;
+    BOOST_STATIC_CONSTEXPR std::size_t CONST_LAYERS_NUMBER = std::tuple_size<TmplLayers>::value;
+    using InputLayerType = typename std::tuple_element<0, TmplLayers>::type;
 
-    BOOST_STATIC_CONSTEXPR unsigned int CONST_LAYERS_NUMBER = std::tuple_size<Layers>::value;
-    using InputLayerType = typename std::tuple_element<0, Layers>::type;
-
-    BOOST_STATIC_CONSTEXPR unsigned int CONST_INPUTS_NUMBER = InputLayerType::CONST_NEURONS_NUMBER;
+    BOOST_STATIC_CONSTEXPR std::size_t CONST_INPUTS_NUMBER = InputLayerType::CONST_NEURONS_NUMBER;
+    using Layers = typename rebindInputs< CONST_INPUTS_NUMBER, TmplLayers >::type;
     using OutputLayerType = typename std::tuple_element<CONST_LAYERS_NUMBER - 1, Layers>::type;
 
-    BOOST_STATIC_CONSTEXPR unsigned int CONST_OUTPUTS_NUMBER = OutputLayerType::CONST_NEURONS_NUMBER;
+    BOOST_STATIC_CONSTEXPR std::size_t CONST_OUTPUTS_NUMBER = OutputLayerType::CONST_NEURONS_NUMBER;
 
     typedef VarType Var;
     template<template <class> class Layer>
@@ -92,22 +121,6 @@ private:
         void operator()(T& layer) {
             layer.setMemento(m_layers[m_position]);
             m_position++;
-        }
-    };
-
-    struct CreateLayer {
-        unsigned int& m_inputsNumber;
-        CreateLayer(unsigned int& inputsNumber): m_inputsNumber(inputsNumber) {}
-
-        template<typename T>
-        void operator()(T& layer) {
-            if(m_inputsNumber == 0 ) {
-                m_inputsNumber = layer.size();
-                layer = T(m_inputsNumber);
-            } else {
-                layer = T(m_inputsNumber);
-                m_inputsNumber = layer.size();
-            }
         }
     };
 
@@ -140,8 +153,10 @@ public:
     {
         static_assert( std::tuple_size< Layers >::value > 1 , "Invalid number of layers, at least two layers need to be set" );
         unsigned int inputsNumber = 0;
-        CreateLayer creator(inputsNumber);
-        utils::for_each(m_layers, creator );
+	unsigned int num = std::get<0>(m_layers).CONST_NEURONS_NUMBER;
+	unsigned int num2 = std::get<1>(m_layers).CONST_NEURONS_NUMBER;
+	unsigned int num3 = std::get<2>(m_layers).CONST_NEURONS_NUMBER;
+	unsigned int num4 = 0;
     }
 
     Layers& layers() {

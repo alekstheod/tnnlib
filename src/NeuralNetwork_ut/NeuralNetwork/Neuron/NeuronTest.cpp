@@ -36,18 +36,12 @@ typedef nn::SigmoidFunction<float> Equation;
 typedef std::pair<float, float> Input;
 typedef std::vector< Input > Inputs;
 typedef Inputs::const_iterator InputIterator;
-typedef nn::detail::Neuron<MockedActivationFunction<float, Iterator> > Neuron;
+typedef nn::detail::Neuron<MockedActivationFunction<float, Iterator>, 5 > Neuron;
  
-
-TEST_F(NeuronTest, TestConstructor) {
-    nn::detail::Neuron< nn::SigmoidFunction<float> > neuron( 5 );
-    ASSERT_EQ( 5, neuron.getInputsNumber());
-}
-
 
 TEST_F(NeuronTest, TestSetInputWeight) {
     const unsigned int inputsNumber =  rand()%1000 + 1;
-    Neuron neuron( inputsNumber);
+    Neuron neuron;
     ASSERT_EQ( inputsNumber, neuron.getInputsNumber());
 
     for( unsigned int i =0; i< inputsNumber; i++) {
@@ -60,9 +54,8 @@ TEST_F(NeuronTest, TestSetInputWeight) {
 
 
 TEST_F(NeuronTest, TestSetInputWeightWithInvalidInputIdShouldReturnFalse) {
-    const unsigned int inputsNumber = rand()%1000 + 1;
-    Neuron neuron( inputsNumber);
-    ASSERT_EQ( inputsNumber, neuron.getInputsNumber());
+    const unsigned int inputsNumber = rand()%5;
+    Neuron neuron;
     ASSERT_FALSE(neuron.setWeight(inputsNumber+1, 0.0f));
 }
 
@@ -70,7 +63,7 @@ TEST_F(NeuronTest, TestSetInputWeightWithInvalidInputIdShouldReturnFalse) {
 USING_SUPPORT_TEST_T_NN(NeuronTest, TestCalculateOutput, nn, detail, Neuron)
 TEST_F(NeuronTest, TestCalculateOutput) {
     const unsigned int inputsNumber =  rand()%1000 + 1;
-    Neuron neuron( inputsNumber);
+    Neuron neuron;
     m_result = 3.f;
     neuron.supportTest(*this);
     std::array<float, 4> neurons;
@@ -87,7 +80,7 @@ SUPPORT_TEST_T(NeuronTest, TestCalculateOutput, Neuron){
 
 TEST_F(NeuronTest, setInputTest) {
     const unsigned int inputsNumber =  rand()%1000 + 1;
-    Neuron neuron( inputsNumber);
+    Neuron neuron;
     const float result = boost::numeric_cast<float>(rand()%1000);
     neuron.setInput(0, result);
     ASSERT_EQ(result, neuron.begin()->second);
@@ -95,7 +88,7 @@ TEST_F(NeuronTest, setInputTest) {
 
 TEST_F(NeuronTest, sizeTest) {
     const unsigned int inputsNumber =  rand()%1000 + 1;
-    Neuron neuron( inputsNumber);
+    Neuron neuron;
     ASSERT_EQ( inputsNumber, neuron.size() );
 }
 
