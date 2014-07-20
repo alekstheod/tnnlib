@@ -50,20 +50,18 @@ public:
     struct rebindVar {
         typedef SoftmaxFunction<V> type;
     };
-    
+
 public:
     SoftmaxFunction() {}
     ~SoftmaxFunction() {}
 
     template<typename Iterator>
     Var calculateEquation ( const Var& sum, Iterator begin, Iterator end )const {
-        Var sum2 = boost::numeric_cast<Var>(0.f);
-        while(begin != end ) {
-            sum2 += utils::exp(*begin) ;
-            begin++;
-        }
-
-        return utils::exp(sum)/sum2;
+        return utils::exp(sum)/std::accumulate(begin,
+                                               end,
+                                               boost::numeric_cast<Var>(0.f),
+                                               [](Var init, Var next)->Var {return init + utils::exp(next);}
+                                              );
     }
 
     template<typename Iterator>

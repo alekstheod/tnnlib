@@ -121,14 +121,6 @@ public:
         return &m_neuron;
     }
 
-    Neuron& operator *() {
-        return m_neuron;
-    }
-
-    operator Neuron&() {
-        return &m_neuron;
-    }
-
     Neuron* operator->() {
         return &m_neuron;
     }

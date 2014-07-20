@@ -33,14 +33,12 @@
 #include <NeuralNetwork/Neuron/INeuron.h>
 #include <NeuralNetwork/Serialization/NeuralLayerMemento.h>
 #include <NeuralNetwork/INeuralLayer.h>
-#include <NeuralNetwork/NNException.h>
 #include <boost/iterator/transform_iterator.hpp>
 #include <functional>
 #include <boost/bind.hpp>
 #include <boost/bind/placeholders.hpp>
-#include <boost/graph/graph_concepts.hpp>
+#include <boost/config/suffix.hpp>
 #include <algorithm>
-#include <vector>
 #include <array>
 
 namespace nn
@@ -199,18 +197,19 @@ public:
      * @see {INeuralLayer}
      */
     void setMemento ( const NeuralLayerMemento<Var>& memento ) {
-        if ( memento.getNeuronsNumber() < 1 ) {
+        if ( memento.getNeuronsNumber() != m_neurons.size() ) {
             throw nn::NNException("Invalid argument memento", __FILE__, __LINE__ );
         }
 
         auto neurons=memento.getNeurons();
-        std::vector< Neuron > internalNeurons;
-        std::transform ( neurons.begin(), neurons.end(), std::back_inserter ( internalNeurons ), [] ( NeuronMemento& m ) {
+        std::array< Neuron, neuronsNumber > internalNeurons;
+        std::transform ( neurons.begin(), neurons.end(), internalNeurons.begin(), [] ( NeuronMemento& m ) {
             Neuron neuron;
             neuron->setMemento ( m );
             return neuron;
         } );
 
+	
 	/// TODO no exception guarantee, please fix as soon as possible.
         //std::swap(m_neurons, internalNeurons);
 	std::copy(internalNeurons.begin(), internalNeurons.end(), m_neurons.begin() );
@@ -232,9 +231,9 @@ public:
      */
     template<typename Layer>
     void calculateOutputs ( Layer& nextLayer ) {
+	auto begin = boost::make_transform_iterator(m_neurons.begin(), std::bind(&Neuron::calcDotProduct, std::placeholders::_1));
+        auto end = boost::make_transform_iterator(m_neurons.end(), std::bind(&Neuron::calcDotProduct, std::placeholders::_1) );
         for ( unsigned int i = 0; i < m_neurons.size(); i++ ) {
-            auto begin = boost::make_transform_iterator(m_neurons.begin(), std::bind(&Neuron::calcDotProduct, std::placeholders::_1));
-            auto end = boost::make_transform_iterator(m_neurons.end(), std::bind(&Neuron::calcDotProduct, std::placeholders::_1) );
             nextLayer.setInput ( i, m_neurons[i].calculateOutput( begin ,end ) );
         }
     }

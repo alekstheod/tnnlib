@@ -11,7 +11,7 @@ if(NOT MSVC)
   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 endif()
 
-add_library(NeuralNetwork 
+add_library(NeuralNetwork
 	  ./NeuralNetwork/NeuralNetwork.cpp
 	  ./NeuralNetwork/INeuralLayer.h
 	  ./NeuralNetwork/NNException.h
