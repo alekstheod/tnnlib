@@ -48,7 +48,7 @@ namespace detail {
 /**
  * Represent the NeuralLayer in perceptron.
  */
-template<class NeuronType,unsigned int neuronsNumber, unsigned int inputsNumber>
+template<class NeuronType,size_t neuronsNumber, size_t inputsNumber, bool isDynamic>
 class NeuralLayer
 {
 public:
@@ -56,41 +56,67 @@ public:
     typedef typename Neuron::Var Var;
     typedef typename Neuron::Memento NeuronMemento;
     typedef NeuralLayerMemento<Var> Memento;
-    typedef typename std::array< Neuron, neuronsNumber >::const_iterator const_iterator;
-    typedef typename std::array< Neuron, neuronsNumber>::iterator iterator;
-    typedef typename std::array< Neuron, neuronsNumber>::reverse_iterator reverse_iterator;
-    typedef typename std::array< Neuron, neuronsNumber>::const_reverse_iterator const_reverse_iterator;
+    typedef typename std::conditional<isDynamic,  
+				      std::vector<Neuron>, 
+				      std::array<Neuron, neuronsNumber> >::type Container;
+				      
+    typedef typename Container::const_iterator const_iterator;
+    typedef typename Container::iterator iterator;
+    typedef typename Container::reverse_iterator reverse_iterator;
+    typedef typename Container::const_reverse_iterator const_reverse_iterator;
 
     template<template <class> class NewType>
     struct rebind {
-        typedef NeuralLayer< NewType<NeuronType>, neuronsNumber, inputsNumber > type;
+        typedef NeuralLayer< NewType<NeuronType>, neuronsNumber, inputsNumber, isDynamic > type;
     };
 
     template<typename NewType, unsigned int inputs>
     struct rebindNeuron {
-        typedef NeuralLayer< NewType, neuronsNumber, inputs > type;
+        typedef NeuralLayer< NewType, neuronsNumber, inputs, isDynamic > type;
     };
     
     template< unsigned int inputs>
     struct rebindInputs{
-      typedef NeuralLayer<NeuronType, neuronsNumber, inputs> type;
+      typedef NeuralLayer<NeuronType, neuronsNumber, inputs, isDynamic> type;
     };
 
     template<typename VarType>
     struct rebindVar{
-      typedef NeuralLayer< typename NeuronType::template rebindVar<VarType>::type , neuronsNumber, inputsNumber > type;
+      typedef NeuralLayer< typename NeuronType::template rebindVar<VarType>::type , neuronsNumber, inputsNumber, isDynamic > type;
     };
     
     BOOST_STATIC_CONSTEXPR unsigned int CONST_NEURONS_NUMBER = neuronsNumber;
-
+    typedef typename std::conditional<isDynamic, std::true_type, std::false_type>::type IsDynamic;
+    
 private:
     /**
      * A list of the neurons.
      */
-    typename std::array< Neuron, neuronsNumber > m_neurons;
-
+    Container m_neurons;
+    
+    struct Initializer{
+      Container operator()(size_t inputs, size_t neurons){
+	Container container;
+	container.reserve(neurons);
+	for( size_t i = 0; i < neurons; i++ ){
+	  container.emplace_back(inputs);
+	}
+	
+	return container;
+      }
+    };
+    
+    struct Dummy{
+      Container operator()(size_t inputs, size_t neurons){
+	return Container();
+      }
+    };
+    
+    typedef typename std::conditional<isDynamic, Initializer, Dummy>::type Init;
+    Init init;
 public:
-    NeuralLayer(){}
+    NeuralLayer():m_neurons(init(inputsNumber, neuronsNumber)){}
+    NeuralLayer(size_t inputs, size_t nNumber):m_neurons(init( inputs, nNumber )){}
   
     /**
      * Constructor will initialize the layer by the given inputs number and neurons number.
@@ -258,13 +284,14 @@ public:
 }
 
 template<
-	 template<template<class> class, class, unsigned int> class NeuronType,
+	 template<template<class> class, class, unsigned int, bool> class NeuronType,
          template<class> class ActivationFunctionType,
 	 unsigned int size,
+	 bool isDynamic = false,
 	 unsigned int inputsNumber = 1,
 	 typename Var = float
          >
-using NeuralLayer = detail::NeuralLayer< NeuronType<ActivationFunctionType, Var, inputsNumber >, size, inputsNumber >;
+using NeuralLayer = detail::NeuralLayer< NeuronType<ActivationFunctionType, Var, inputsNumber, isDynamic >, size, inputsNumber, isDynamic >;
 
 }
 

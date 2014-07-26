@@ -61,7 +61,7 @@ void rand_inputs(Iterator begin, Iterator end){
     }
 }
   
-template<typename OutputFunctionType, unsigned int inputsNumber>
+template<typename OutputFunctionType, unsigned int inputsNumber, bool isDynamic>
 class Neuron {
 public:
     typedef IActivationFunction< OutputFunctionType > OutputFunction;
@@ -69,18 +69,23 @@ public:
     typedef NeuronMemento<Var> Memento;
 
     typedef typename std::pair<Var, Var> Input;
+    
+    typedef typename std::conditional<isDynamic, 
+                                      std::vector< Input >, 
+                                      std::array< Input, inputsNumber > >::type Container;
+                                      
     /// @brief a list of the inputs first is the weight, second is the value
-    typedef typename std::array< Input, inputsNumber > Inputs;
+    typedef Container Inputs;
     typedef typename Inputs::const_iterator iterator;
 
     template<typename VarType>
     struct rebindVar{
-      typedef Neuron< typename OutputFunctionType::template rebindVar<VarType>::type, inputsNumber > type;
+      typedef Neuron< typename OutputFunctionType::template rebindVar<VarType>::type, inputsNumber , isDynamic> type;
     };    
     
     template< std::size_t inputs>
     struct rebindInputs{
-      typedef Neuron< OutputFunctionType, inputs > type;
+      typedef Neuron< OutputFunctionType, inputs, isDynamic > type;
     };
 private:
     /**
@@ -115,6 +120,14 @@ private:
     Var sumInput(const Input& input)const {
         return input.first * input.second;
     }
+    
+    template<bool dynamic>
+    Container init(size_t inputs){
+      static_assert(dynamic, "Available only for dynamic type of neuron");
+      Container in(inputs, Input());
+      rand_inputs<Var>(in.begin(), in.end());
+      return in;
+    }
 
 public:
     /**
@@ -127,6 +140,9 @@ public:
                          m_sum( boost::numeric_cast<Var>(0) ){  
         static_assert(inputsNumber > 0,"Invalid number of inputs");
         rand_inputs<Var>(m_inputs.begin(), m_inputs.end());
+    }
+    
+    Neuron(size_t inputs):m_inputs( init<inputsNumber>(inputs) ){
     }
 
     /// @brief see @ref INeuron
@@ -252,8 +268,8 @@ public:
 };
 }
 
-template<template<class> class OutputFunctionType, typename VarType, unsigned int inputsNumber>
-using Neuron = detail::Neuron< OutputFunctionType<VarType>, inputsNumber >;
+template<template<class> class OutputFunctionType, typename VarType, unsigned int inputsNumber, bool isDynamic = false >
+using Neuron = detail::Neuron< OutputFunctionType<VarType>, inputsNumber, isDynamic >;
 
 }
 

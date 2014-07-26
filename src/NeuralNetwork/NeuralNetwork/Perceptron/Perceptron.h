@@ -152,13 +152,10 @@ public:
     Perceptron()
     {
         static_assert( std::tuple_size< Layers >::value > 1 , "Invalid number of layers, at least two layers need to be set" );
-        unsigned int inputsNumber = 0;
-	unsigned int num = std::get<0>(m_layers).CONST_NEURONS_NUMBER;
-	unsigned int num2 = std::get<1>(m_layers).CONST_NEURONS_NUMBER;
-	unsigned int num3 = std::get<2>(m_layers).CONST_NEURONS_NUMBER;
-	unsigned int num4 = 0;
     }
-
+    
+    Perceptron( const Layers& layers ):m_layers(layers){}
+    
     Layers& layers() {
         return m_layers;
     }
