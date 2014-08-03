@@ -11,4 +11,6 @@ add_subdirectory(gmock)
 add_subdirectory(NeuralNetwork_ut)
 
 
-add_subdirectory(ocr) 
+IF(NOT DEFINED ENV{DISABLE_OCR})
+add_subdirectory(ocr)
+ENDIF()
