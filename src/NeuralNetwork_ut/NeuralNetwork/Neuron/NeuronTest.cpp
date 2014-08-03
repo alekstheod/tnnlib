@@ -40,8 +40,9 @@ typedef nn::detail::Neuron<MockedActivationFunction<float, Iterator>, 5, false >
  
 
 TEST_F(NeuronTest, TestSetInputWeight) {
-    const unsigned int inputsNumber =  rand()%1000 + 1;
+    const unsigned int inputsNumber =  5;
     Neuron neuron;
+    
     ASSERT_EQ( inputsNumber, neuron.getInputsNumber());
 
     for( unsigned int i =0; i< inputsNumber; i++) {
@@ -54,9 +55,8 @@ TEST_F(NeuronTest, TestSetInputWeight) {
 
 
 TEST_F(NeuronTest, TestSetInputWeightWithInvalidInputIdShouldReturnFalse) {
-    const unsigned int inputsNumber = rand()%5;
     Neuron neuron;
-    ASSERT_FALSE(neuron.setWeight(inputsNumber+1, 0.0f));
+    ASSERT_FALSE(neuron.setWeight(7, 0.0f));
 }
 
 
@@ -87,9 +87,8 @@ TEST_F(NeuronTest, setInputTest) {
 }
 
 TEST_F(NeuronTest, sizeTest) {
-    const unsigned int inputsNumber =  rand()%1000 + 1;
     Neuron neuron;
-    ASSERT_EQ( inputsNumber, neuron.size() );
+    ASSERT_EQ( 5, neuron.size() );
 }
 
 // kate: indent-mode cstyle; replace-tabs on; 
