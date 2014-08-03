@@ -142,7 +142,7 @@ public:
         rand_inputs<Var>(m_inputs.begin(), m_inputs.end());
     }
     
-    Neuron(size_t inputs):m_inputs( init<inputsNumber>(inputs) ){
+    Neuron(size_t inputs):m_inputs( init<isDynamic>(inputs) ){
     }
 
     /// @brief see @ref INeuron
