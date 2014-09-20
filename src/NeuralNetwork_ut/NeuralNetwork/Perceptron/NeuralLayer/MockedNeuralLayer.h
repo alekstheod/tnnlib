@@ -35,8 +35,9 @@
 #include <NeuralNetwork/Neuron/ActivationFunction/MockedActivationFunction.h>
 #include <NeuralNetwork/INeuralLayer.h>
 #include <memory>
+#include <boost/bind.hpp>
 
-template<typename VarType, typename Iterator, std::size_t neurons, std::size_t inputs = 1>
+template<typename VarType, std::size_t neurons, std::size_t inputs = 1>
 class MockedNeuralLayer
 {
 public:
@@ -44,11 +45,11 @@ public:
     typedef VarType Var;
     typedef typename std::vector<Var>::const_iterator VarIterator;
     typedef typename std::vector< std::pair<Var, Var> >::const_iterator NeuronInputIterator;
-    typedef typename nn::INeuron< MockedNeuron< MockedActivationFunction<Var, Iterator> > > Neuron;
-    typedef typename std::vector<Neuron>::const_iterator const_iterator;
-    typedef typename std::vector<Neuron>::iterator iterator;
-    typedef typename std::vector<Neuron>::reverse_iterator reverse_iterator;
-    typedef typename std::vector<Neuron>::const_reverse_iterator const_reverse_iterator;
+    typedef typename nn::INeuron< MockedNeuron< MockedActivationFunction<Var> > > Neuron;
+    typedef typename std::array<Neuron, neurons>::const_iterator const_iterator;
+    typedef typename std::array<Neuron, neurons>::iterator iterator;
+    typedef typename std::array<Neuron, neurons>::reverse_iterator reverse_iterator;
+    typedef typename std::array<Neuron, neurons>::const_reverse_iterator const_reverse_iterator;
     typedef typename nn::INeuralLayer<MockedNeuralLayer>& INeuralLayer;
     BOOST_STATIC_CONSTEXPR std::size_t CONST_NEURONS_NUMBER = neurons;
 
@@ -59,12 +60,12 @@ public:
     
     template<typename V>
     struct rebindVar{
-      typedef MockedNeuralLayer< V, Iterator, neurons, inputs > type;
+      typedef MockedNeuralLayer< V, neurons, inputs > type;
     };
     
     template< std::size_t new_inputs>
     struct rebindInputs{
-      typedef MockedNeuralLayer<VarType, iterator, neurons, new_inputs> type;
+      typedef MockedNeuralLayer<VarType, neurons, new_inputs> type;
     };    
 
 public:
@@ -86,7 +87,7 @@ public:
         MOCK_CONST_METHOD2_T(getInputWeight, const Var& ( unsigned int, unsigned int ) );
         MOCK_CONST_METHOD0_T(getMemento, const Memento() );
         MOCK_METHOD1_T( setMemento, void ( const Memento& ) );
-        MOCK_METHOD1_T( calculateOutputs, void ( MockedNeuralLayer& ) );
+        MOCK_METHOD1_T( calculateOutputs, void ( int ) );
         MOCK_METHOD0_T( calculateOutputs, void () );
     };
 
@@ -164,8 +165,9 @@ public:
         m_mock->setInput(inputId, value);
     }
 
-    void calculateOutputs ( MockedNeuralLayer& nextLayer ) {
-        return m_mock->calculateOutputs(nextLayer);
+    template<typename Layer>
+    void calculateOutputs ( Layer& nextLayer ) {
+        return m_mock->calculateOutputs(0);
     }
 
     void calculateOutputs () {

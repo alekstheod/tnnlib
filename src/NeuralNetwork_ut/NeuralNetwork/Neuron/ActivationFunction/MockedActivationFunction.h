@@ -4,14 +4,14 @@
 #include <gmock/gmock.h>
 #include <vector>
 
-template<typename VarType, typename Iterator>
+template<typename VarType>
 class MockedActivationFunction{
 public:
   typedef VarType Var;
   
 public:
     MockedActivationFunction(){}
-    MOCK_CONST_METHOD3_T( calculateEquation, Var ( const Var& sum, Iterator, Iterator) );
+    MOCK_CONST_METHOD0_T( calcEquation, Var () );
     MOCK_CONST_METHOD1_T( calculateDerivate, Var ( const Var& input ) );
     MOCK_CONST_METHOD1_T( calcSum, Var ( const Var& start ) );
     
@@ -20,8 +20,12 @@ public:
       return calcSum(start);
     }
     
+    template<typename It>
+    Var calculateEquation(const Var& sum, It begin, It end)const{
+      return calcEquation();
+    }
     ~MockedActivationFunction(){}
 };
 
 #endif
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+

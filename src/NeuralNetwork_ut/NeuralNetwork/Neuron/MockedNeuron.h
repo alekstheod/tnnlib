@@ -68,6 +68,11 @@ public:
         return m_intpusNumber;
     }
 
+    MockedNeuron<OutputFunctionType>& operator = (MockedNeuron<OutputFunctionType> other){
+      m_mock = other.m_mock;
+      return *this;
+    }    
+    
     void setInput( unsigned int id, const Var& value ) {
         m_mock->setInput( id, value );
     }
@@ -85,6 +90,10 @@ public:
         return (*m_mock.get());
     }
 
+    void clear(){
+      m_mock.reset();
+    }
+    
     MockedNeuron(unsigned int inputsNumber):m_intpusNumber(inputsNumber), m_mock(new Mock) {}
     ~MockedNeuron() {}
 };

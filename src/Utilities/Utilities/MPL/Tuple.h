@@ -91,8 +91,9 @@ void for_each_c( const std::tuple<ArgsT...>& t, Functor func )
 }
 
 template< template<class> class C, typename Tuple>
-struct rebind_tuple : detail::rebind_tuple<C, Tuple>
+struct rebind_tuple
 {
+  typedef typename detail::rebind_tuple<C, Tuple>::type type;
 };
 
 template<typename LastElement, typename... Elements>

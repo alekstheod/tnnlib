@@ -48,7 +48,7 @@ public:
     INeuron() {}
 
     INeuron ( Neuron neuron ) :m_neuron ( neuron ) {}
-
+    
     /**
      * @brief will calculate the output of the neuron.
      * @return the calculated value.
@@ -117,6 +117,14 @@ public:
         return m_neuron.getMemento();
     }
 
+    Neuron& operator*(){
+      return m_neuron;
+    }
+    
+    const Neuron& operator*()const{
+      return m_neuron;
+    }
+    
     const Neuron* operator->() const {
         return &m_neuron;
     }

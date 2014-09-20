@@ -36,7 +36,7 @@ typedef nn::SigmoidFunction<float> Equation;
 typedef std::pair<float, float> Input;
 typedef std::vector< Input > Inputs;
 typedef Inputs::const_iterator InputIterator;
-typedef nn::detail::Neuron<MockedActivationFunction<float, Iterator>, 5, false > Neuron;
+typedef nn::detail::Neuron<MockedActivationFunction<float>, 5, false > Neuron;
  
 
 TEST_F(NeuronTest, TestSetInputWeight) {
@@ -74,7 +74,7 @@ TEST_F(NeuronTest, TestCalculateOutput) {
 SUPPORT_TEST_T(NeuronTest, TestCalculateOutput, Neuron){
   const int result = rand()%1000;
   EXPECT_CALL( **m_activationFunction,  calcSum( _) ).Times(1).WillRepeatedly(Return(10.f));
-  EXPECT_CALL( **m_activationFunction,  calculateEquation( _, _, _) ).Times(1).WillRepeatedly(Return(test.m_result));
+  EXPECT_CALL( **m_activationFunction,  calcEquation() ).Times(1).WillRepeatedly(Return(test.m_result));
 }
 
 
