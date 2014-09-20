@@ -18,7 +18,7 @@ Flexible interface which allows to define a neural network with a different type
 
 
 
-Calculating perceptrong by using BEP algorithm:
+Calculating perceptron by using BEP algorithm:
 
     typedef BepAlgorithm< Perceptron > Algo;
     Algo algorithm (0.09f, 0.01f );
