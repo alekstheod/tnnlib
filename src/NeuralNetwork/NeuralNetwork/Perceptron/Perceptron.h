@@ -184,7 +184,7 @@ public:
      * @param out the output iterator where the results of the calculation will be stored.
      */
     template<typename Iterator, typename OutputIterator>
-    void clculate(Iterator begin, Iterator end, OutputIterator out)
+    void calculate(Iterator begin, Iterator end, OutputIterator out)
     {
         unsigned int inputId = 0;
         while( begin != end ) {
