@@ -14,3 +14,4 @@ add_subdirectory(NeuralNetwork_ut)
 IF(NOT DEFINED ENV{DISABLE_OCR})
 add_subdirectory(ocr)
 ENDIF()
+ 
