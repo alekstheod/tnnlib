@@ -226,6 +226,7 @@ public:
 template<typename VarType, typename... NeuralLayers>
 using Perceptron = detail::Perceptron<VarType, std::tuple<NeuralLayers...> >;
 
+
 }
 
 #endif
