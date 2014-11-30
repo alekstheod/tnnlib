@@ -47,12 +47,16 @@ namespace nn {
  */
 namespace detail {
 
+/// workaround for VS++ compilation.
+template <typename Var, typename T>
+struct rebindOne { typedef typename T::template rebindVar<Var>::type type; };
+
 template<typename Var, typename T>
 struct rebindVar;
 
 template<typename Var, typename... T>
 struct rebindVar<Var, std::tuple<T...> > {
-  typedef typename std::tuple< typename T::template rebindVar<Var>::type... > type;
+  typedef typename std::tuple< typename rebindOne<Var, T>::type... > type;
 };
 
 template<std::size_t FirstInputs, typename RebindedTuple, typename Tuple>

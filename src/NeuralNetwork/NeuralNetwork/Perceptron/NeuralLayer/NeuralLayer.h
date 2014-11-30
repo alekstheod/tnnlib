@@ -257,8 +257,11 @@ public:
      */
     template<typename Layer>
     void calculateOutputs ( Layer& nextLayer ) {
-	auto begin = boost::make_transform_iterator(m_neurons.begin(), std::bind(&Neuron::calcDotProduct, std::placeholders::_1));
-        auto end = boost::make_transform_iterator(m_neurons.end(), std::bind(&Neuron::calcDotProduct, std::placeholders::_1) );
+	auto begin = boost::make_transform_iterator(m_neurons.begin(), boost::bind(&Neuron::calcDotProduct, _1));
+	auto end = boost::make_transform_iterator(m_neurons.end(), boost::bind(&Neuron::calcDotProduct, _1));
+        for ( unsigned int i = 0; i < m_neurons.size(); i++ ) {
+            nextLayer.setInput ( i, m_neurons[i].calculateOutput( begin ,end ) );
+        }
         for ( unsigned int i = 0; i < m_neurons.size(); i++ ) {
             nextLayer.setInput ( i, m_neurons[i].calculateOutput( begin ,end ) );
         }
