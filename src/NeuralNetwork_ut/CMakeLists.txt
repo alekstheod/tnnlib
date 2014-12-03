@@ -11,11 +11,6 @@ if(NOT MSVC)
 	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 endif()
 
-if(MSVC)
-	SET(CMAKE_CXX_FLAGS_DEBUG "/MTd /DWIN32 /D_WINDOWS /EHsc" CACHE STRING "Debug compiler flags" FORCE)
-	SET(CMAKE_CXX_FLAGS_RELEASE "/MT /DWIN32 /D_WINDOWS /EHsc" CACHE STRING "Debug compiler flags" FORCE)
-endif()
-
 add_executable(NeuralNetwork_ut
 	main.cpp
 	NeuralNetwork/Neuron/NeuronTest.cpp
@@ -27,12 +22,12 @@ include_directories(.
 	${Boost_INCLUDE_DIRS}
 )
 
-	target_link_libraries(NeuralNetwork_ut
-		NeuralNetwork
-		gtest
-		gmock
-		Utilities
-		${Boost_LIBRARIES}
+target_link_libraries(NeuralNetwork_ut
+	NeuralNetwork
+	gtest
+	gmock
+	Utilities
+	${Boost_LIBRARIES}
 )
 
 endif() 
