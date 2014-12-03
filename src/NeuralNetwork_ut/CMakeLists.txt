@@ -17,8 +17,8 @@ add_executable(NeuralNetwork_ut
 	NeuralNetwork/Perceptron/PerceptronTest.cpp)
 
 include_directories(.
-	../gmock/include
-	../gmock/gtest/include
+	../gmock-1.7.0/include
+	../gmock-1.7.0/gtest/include
 	${Boost_INCLUDE_DIRS}
 )
 
