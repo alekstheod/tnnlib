@@ -39,3 +39,4 @@ Calculating perceptron by using BEP algorithm:
                                                                 std::cout << error << std::endl;
                                                             },
                                                             numOfEpochs);
+
