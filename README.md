@@ -39,3 +39,10 @@ Calculating perceptron by using BEP algorithm:
                                                                 std::cout << error << std::endl;
                                                             },
                                                             numOfEpochs);
+                                                
+In order to generate a VS solution please use a CMake with the following options:
+
+cmake -DBoost_USE_STATIC_LIBS=ON -DZLIB_INCLUDE_DIR="C:\Program Files (x86)\GnuWin32\include" -DPNG_LIBRARY_DEBUG="C:/Program Files (x86)/GnuWin32/lib/libpng.lib" -DPNG_LIBRARY_RELEASE="C:/Program Files (x86)/GnuWin32/lib/libpng.lib" -DPNG_PNG_INCLUDE_DIR="C:\Program Files (x86)\GnuWin32\include" -DCMAKE_MODULE_LINKER_FLAGS="/machine:X86 /LIBPATH:C:\local\boost_1_57_0\lib32-msvc-12.0/" -DBoost_SERIALIZATION_LIBRARY_DEBUG="C:\local\boost_1_57_0\lib32-msvc-12.0/libboost_serialization-vc120-mt-sgd-1_57.lib" -DBoost_SERIALIZATION_LIBRARY_RELEASE="C:\local\boost_1_57_0\lib32-msvc-12.0/libboost_serialization-vc120-mt-s-1_57.lib" -DBoost_SYSTEM_LIBRARY_DEBUG="C:\local\boost_1_57_0\lib32-msvc-12.0/libboost_system-vc120-mt-sgd-1_57.lib" -DBoost_SYSTEM_LIBRARY_RELEASE="C:\local\boost_1_57_0\lib32-msvc-12.0/libboost_system-vc120-mt-s-1_57.lib" -DBoost_FILESYSTEM_LIBRARY_RELEASE="C:\local\boost_1_57_0\lib32-msvc-12.0/libboost_filesystem-vc120-mt-s-1_57.lib" -DBoost_FILESYSTEM_LIBRARY_DEBUG="C:\local\boost_1_57_0\lib32-msvc-12.0\libboost_filesystem-vc120-mt-sgd-1_57.lib" -DCMAKE_SHARED_LINKER_FLAGS="/machine:X86 /LIBPATH:C:\local\boost_1_57_0\lib32-msvc-12.0" -DCMAKE_EXE_LINKER_FLAGS="/machine:X86 /LIBPATH:C:\local\boost_1_57_0\lib32-msvc-12.0" -DCMAKE_CXX_FLAGS="/DWIN32 /D_WINDOWS /W3 /GR /EHsc" -DCMAKE_CXX_FLAGS_DEBUG="/D_DEBUG /MTd /Zi /Ob0 /Od /RTC1" .
+
+You have to define your boost libraries, libpng and zlib. In this case we have boost_1_57 and libpng + zlib as a binary distributions.
+
