@@ -87,7 +87,7 @@ int main ( int argc, char** argv )
     typedef BepAlgorithm< Perceptron > Algo;
     Algo algorithm (0.09f, 0.01f );
 
-    testDeepNN();
+    //testDeepNN();
     std::array< Algo::Prototype, 4> prototypes= { Algo::Prototype{{0.f, 1.f}, {1.f}} ,
         Algo::Prototype{{1.f, 0.f}, {1.f}} ,
         Algo::Prototype{{1.f, 1.f}, {0.f}} ,
