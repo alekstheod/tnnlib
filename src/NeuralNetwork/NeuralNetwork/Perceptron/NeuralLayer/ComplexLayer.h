@@ -94,7 +94,7 @@ public:
      * @see {INeuralLayer}
      */
     void setInput ( std::size_t inputId, const Var& value ) {
-        std::get<0>(m_perceptron.layers()).setInput(inputId, value);
+	m_inputs[inputId]=value;
     }
 
     ~ComplexLayer() {}
