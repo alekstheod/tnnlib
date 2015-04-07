@@ -126,7 +126,7 @@ public:
      * Constructor will initialize the layer by the given inputs number and neurons number.
      */
     static_assert(neuronsNumber > 0, "Invalid template argument neuronsNumber == 0");
-    static_assert(inputsNumber > 1, "Invalid template argument inputsNumber <= 1");
+    static_assert(inputsNumber > 0, "Invalid template argument inputsNumber <= 1");
 
     /**
     * @see {INeuralLayer}
