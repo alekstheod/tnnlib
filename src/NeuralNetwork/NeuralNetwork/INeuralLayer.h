@@ -1,5 +1,6 @@
 #ifndef INEURALLAYER_H
 #define INEURALLAYER_H
+#include <boost/config/suffix.hpp>
 
 namespace nn {
 
@@ -14,6 +15,7 @@ public:
     typedef typename NeuralLayer::iterator iterator;
     typedef typename NeuralLayer::reverse_iterator reverse_iterator;
     typedef typename NeuralLayer::const_reverse_iterator const_reverse_iterator;
+    BOOST_STATIC_CONSTEXPR std::size_t CONST_INPUTS_NUMBER = NeuralLayer::CONST_INPUTS_NUMBER;
   
 private:
     NeuralLayer m_neuralLayer;
@@ -31,7 +33,7 @@ public:
 
     INeuralLayer ( NeuralLayer neuralLayer ) :m_neuralLayer ( neuralLayer ) {}
 
-    const_iterator find ( unsigned int neuronId ) const {
+    const_iterator find ( std::size_t neuronId ) const {
         return m_neuralLayer.find ( neuronId );
     }
 
@@ -67,7 +69,7 @@ public:
       return m_neuralLayer.rend();
     }
    
-    unsigned int size()const {
+    std::size_t size()const {
         return m_neuralLayer.size();
     }
 
@@ -76,11 +78,11 @@ public:
      * @param inputId the id of the input.
      * @param value the value which has to be set.
      */
-    void setInput ( unsigned int inputId, const Var& value ) {
+    void setInput ( std::size_t inputId, const Var& value ) {
         m_neuralLayer.setInput ( inputId, value );
     }
 
-    Var getOutput ( unsigned int outputId ) const {
+    Var getOutput ( std::size_t outputId ) const {
         return m_neuralLayer.getOutput ( outputId );
     }
 
@@ -91,7 +93,7 @@ public:
     /**
     * @see {INeuralLayer}
     */
-    const Neuron& operator [] ( unsigned int id ) const {
+    const Neuron& operator [] ( std::size_t id ) const {
         return m_neuralLayer[id];
     }
 
@@ -99,7 +101,7 @@ public:
         return &m_neuralLayer;
     }
     
-    const Var& getBias( unsigned int neuronId )const{
+    const Var& getBias( std::size_t neuronId )const{
       return m_neuralLayer.getBias(neuronId);
     }
 

@@ -49,26 +49,45 @@
 #include <sstream>
 #include <array>
 #include <Utilities/Design/Factory.h>
+#include <NeuralNetwork/Perceptron/NeuralLayer/ComplexLayer.h>
 
 using namespace nn;
 using namespace bp;
 using namespace std;
 using namespace utils;
 
+void testDeepNN() {
+    typedef nn::Perceptron<float,
+            nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, 20, 2>,
+            nn::NeuralLayer<nn::Neuron, nn::TanhFunction, 5>,
+            nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, 2>
+            > AutoEncoder;
+
+    typedef nn::Perceptron<float,
+            nn::ComplexLayer<AutoEncoder>,
+            nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, 2>> Perceptron;
+
+    Perceptron p2;
+    std::array<float, 2> out {0};
+    std::array< float, 2 > in {0, 0};
+    p2.calculate(in.begin(), in.end(), out.begin());
+}
+
 /*
  *
  */
 int main ( int argc, char** argv )
 {
-    typedef nn::Perceptron<float, 
-			   nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, 2>, 
-			   nn::NeuralLayer<nn::Neuron, nn::TanhFunction, 20>, 
-			   nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, 1>
-			  > Perceptron;
+    typedef nn::Perceptron<float,
+            nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, 2, 2>,
+            nn::NeuralLayer<nn::Neuron, nn::TanhFunction, 20>,
+            nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, 1>
+            > Perceptron;
 
     typedef BepAlgorithm< Perceptron > Algo;
     Algo algorithm (0.09f, 0.01f );
 
+    testDeepNN();
     std::array< Algo::Prototype, 4> prototypes= { Algo::Prototype{{0.f, 1.f}, {1.f}} ,
         Algo::Prototype{{1.f, 0.f}, {1.f}} ,
         Algo::Prototype{{1.f, 1.f}, {0.f}} ,
@@ -76,10 +95,10 @@ int main ( int argc, char** argv )
     };
 
     unsigned int numOfEpochs = std::numeric_limits< unsigned int >::max();
-    if( argc == 2 ){
-      numOfEpochs = utils::lexical_cast< unsigned int >(argv[1]);
+    if( argc == 2 ) {
+        numOfEpochs = utils::lexical_cast< unsigned int >(argv[1]);
     }
-    
+
     Perceptron perceptron = algorithm.calculatePerceptron ( prototypes.begin(), prototypes.end(),
     [] ( float error ) {
         std::cout << error << std::endl;
@@ -119,7 +138,7 @@ int main ( int argc, char** argv )
     std::array< float, 2 > input4 {0, 1};
     perceptron2.calculate(input4.begin(), input4.end(), outputs.begin());
     std::cout << "0 1 "<<  outputs[0] << std::endl;
-  
+
     /// Kohonen map implementation
     typedef kohonen::K2DPosition< float, 5 > Position;
     typedef kohonen::K2DNeighbourhood<kohonen::KNode< Position > > Neighbourhood;

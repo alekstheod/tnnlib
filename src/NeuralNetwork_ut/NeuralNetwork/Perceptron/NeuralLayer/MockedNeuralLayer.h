@@ -52,6 +52,7 @@ public:
     typedef typename std::array<Neuron, neurons>::const_reverse_iterator const_reverse_iterator;
     typedef typename nn::INeuralLayer<MockedNeuralLayer>& INeuralLayer;
     BOOST_STATIC_CONSTEXPR std::size_t CONST_NEURONS_NUMBER = neurons;
+    BOOST_STATIC_CONSTEXPR std::size_t CONST_INPUTS_NUMBER = neurons;
 
     template<typename NewType>
     struct rebindNeuron {

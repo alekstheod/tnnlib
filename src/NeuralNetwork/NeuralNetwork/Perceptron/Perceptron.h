@@ -48,17 +48,21 @@ namespace detail {
 /*! \class Perceptron
  *  \briefs Contains an input neurons layer one output and one or more hidden layers.
  */  
-template<typename VarType, typename LayerTypes>
+template<typename VarType, 
+	 typename LayerTypes,
+	 std::size_t inputs = 1>
 class Perceptron {
 private:
-    typedef typename rebindVar<VarType, LayerTypes>::type TmplLayers;
+    typedef typename mpl::rebindVar<VarType, LayerTypes>::type TmplLayers;
 
 public:
     BOOST_STATIC_CONSTEXPR std::size_t CONST_LAYERS_NUMBER = std::tuple_size<TmplLayers>::value;
     using InputLayerType = typename std::tuple_element<0, TmplLayers>::type;
 
-    BOOST_STATIC_CONSTEXPR std::size_t CONST_INPUTS_NUMBER = InputLayerType::CONST_NEURONS_NUMBER;
-    using Layers = typename rebindInputs< CONST_INPUTS_NUMBER, TmplLayers >::type;
+    /// @brief the number of inputs is taken out of the argument if and only if
+    /// it is bigger than 1, otherwise the number of inputs from the input layer is used.
+    BOOST_STATIC_CONSTEXPR std::size_t CONST_INPUTS_NUMBER = (inputs > 1)?inputs: InputLayerType::CONST_INPUTS_NUMBER;
+    using Layers = typename mpl::rebindInputs< CONST_INPUTS_NUMBER, TmplLayers >::type;
     using OutputLayerType = typename std::tuple_element<CONST_LAYERS_NUMBER - 1, Layers>::type;
 
     BOOST_STATIC_CONSTEXPR std::size_t CONST_OUTPUTS_NUMBER = OutputLayerType::CONST_NEURONS_NUMBER;
@@ -73,6 +77,15 @@ public:
     /// @brief Memento type.
     typedef PerceptronMemento<Var> Memento;
 
+    template<typename T>
+    struct rebindVar{
+      typedef Perceptron<T, LayerTypes> type;
+    };
+    
+    template<std::size_t in>
+    struct rebindInputs{
+      typedef Perceptron<VarType, LayerTypes, in> type;
+    };
 private:
     /*!
      * Hidden layers.

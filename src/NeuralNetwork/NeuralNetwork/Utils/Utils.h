@@ -5,6 +5,8 @@
 namespace nn {
 
 namespace detail {
+  
+namespace mpl{
 
 /// workaround for VS++ compilation.
 template <typename Var, typename T>
@@ -44,6 +46,8 @@ struct rebindInputs
     static_assert(std::tuple_size<Tuple>::value >= 1, "Invalid");
     typedef typename RebindInputsHelper<FirstInputs, std::tuple<>, Tuple>::type type;
 };
+
+}
 
 }
 

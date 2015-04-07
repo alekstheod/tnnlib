@@ -48,7 +48,10 @@ namespace detail {
 /**
  * Represent the NeuralLayer in perceptron.
  */
-template<class NeuronType,size_t neuronsNumber, size_t inputsNumber, bool isDynamic>
+template<class NeuronType,
+	 std::size_t neuronsNumber, 
+	 std::size_t inputsNumber, 
+	 bool isDynamic>
 class NeuralLayer
 {
 public:
@@ -86,6 +89,7 @@ public:
     };
     
     BOOST_STATIC_CONSTEXPR unsigned int CONST_NEURONS_NUMBER = neuronsNumber;
+    BOOST_STATIC_CONSTEXPR unsigned int CONST_INPUTS_NUMBER = inputsNumber;
     typedef typename std::conditional<isDynamic, std::true_type, std::false_type>::type IsDynamic;
     
 private:
@@ -122,6 +126,7 @@ public:
      * Constructor will initialize the layer by the given inputs number and neurons number.
      */
     static_assert(neuronsNumber > 0, "Invalid template argument neuronsNumber == 0");
+    static_assert(inputsNumber > 1, "Invalid template argument inputsNumber <= 1");
 
     /**
     * @see {INeuralLayer}
@@ -290,8 +295,8 @@ template<
 	 template<template<class> class, class, unsigned int, bool> class NeuronType,
          template<class> class ActivationFunctionType,
 	 unsigned int size,
+	 unsigned int inputsNumber = 2,
 	 bool isDynamic = false,
-	 unsigned int inputsNumber = 1,
 	 typename Var = float
          >
 using NeuralLayer = detail::NeuralLayer< NeuronType<ActivationFunctionType, Var, inputsNumber, isDynamic >, size, inputsNumber, isDynamic >;
