@@ -58,9 +58,9 @@ using namespace utils;
 
 void testDeepNN() {
     typedef nn::Perceptron<float,
-            nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, 20, 2>,
+            nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, 20, 20>,
             nn::NeuralLayer<nn::Neuron, nn::TanhFunction, 5>,
-            nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, 2>
+            nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, 20>
             > AutoEncoder;
 
     typedef nn::Perceptron<float,
@@ -68,8 +68,8 @@ void testDeepNN() {
             nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, 2>> Perceptron;
 
     Perceptron p2;
-    std::array<float, 2> out {0};
-    std::array< float, 2 > in {0, 0};
+    std::array<float, 20> out {0};
+    std::array< float, 20 > in {0, 0};
     p2.calculate(in.begin(), in.end(), out.begin());
 }
 
@@ -87,7 +87,7 @@ int main ( int argc, char** argv )
     typedef BepAlgorithm< Perceptron > Algo;
     Algo algorithm (0.09f, 0.01f );
 
-    //testDeepNN();
+    testDeepNN();
     std::array< Algo::Prototype, 4> prototypes= { Algo::Prototype{{0.f, 1.f}, {1.f}} ,
         Algo::Prototype{{1.f, 0.f}, {1.f}} ,
         Algo::Prototype{{1.f, 1.f}, {0.f}} ,
