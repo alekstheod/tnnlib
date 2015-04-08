@@ -7,14 +7,10 @@ if ("${CMAKE_CXX_COMPILER_ID}" STREQUAL "MSVC")
 endif()
 
 add_subdirectory(Utilities)
-
 add_subdirectory(NeuralNetwork)
-
 add_subdirectory(Test)
-
 add_subdirectory(gmock-1.7.0)
 add_subdirectory(NeuralNetwork_ut)
-
 
 IF(NOT DEFINED ENV{DISABLE_OCR})
 add_subdirectory(ocr)
@@ -22,4 +18,9 @@ ENDIF()
 
 enable_testing()
 add_test(NeuralNetwork_ut NeuralNetwork_ut/NeuralNetwork_ut)
+
+find_program(plantuml_cmd NAMES plantuml)
+if(NOT ${plantuml} EQUAL "plantuml-NOTFOUND")
+add_custom_target(uml ALL ${plantuml_cmd} "${CMAKE_CURRENT_LIST_DIR}/doc/structural/*.uml")
+endif()
  
