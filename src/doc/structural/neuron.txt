@@ -1,0 +1,22 @@
+=== Neuron
+The uml diagram of an neuron is shown below.
+
+[plantuml]
+---------------------------------------------------------------------
+@startuml
+class Neuron< T >
+Neuron *-- IActivationFunction
+Neuron ..> NeuronMemento
+Neuron ..|> INeuron
+
+IActivationFunction <|.. TahnFunction
+IActivationFunction <|.. SigmoidFunction
+IActivationFunction <|.. SoftmaxFunction
+IActivationFunction <|.. LogScaleSoftmaxFunction
+IActivationFunction <|.. BiopolarSigmoidFunction
+@enduml
+---------------------------------------------------------------------
+
+
+Neuron is a basic brick of any artificial neural network, since we have it we can construct any type of the nn
+just by reusing this class. 

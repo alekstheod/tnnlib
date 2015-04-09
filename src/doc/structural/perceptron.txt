@@ -1,0 +1,64 @@
+=== Perceptron
+Now lets take a look on one possible model of an artificial neural network, called 
+perceptron. Perceptron consists of the layers. Each layer has more than 0 neurons and amount of neurons in each
+level strongly depends on the problem definition. For instance if we want to solve a simple XOR problem so that
+teach our network to recognize a different types of inputs and output the particular output like in the following
+table:
+
+.Xor problem
+[width="10%",frame="topbot",options="header"]
+|======================
+|Input1   |Input2 | Output
+|0        |0	  |0
+|0        |1      |1
+|1        |1      |0
+|1        |0      |1
+|======================
+
+Then we need two inputs in the input layer and one output (neuron) in the output layer. In tnnlib we don't really
+have an input layer instead the number of inputs for a layer is defined as a template argument. So perceptron in
+tnnlib starts with the hidden layer.
+
+Neural network example
+
+There are three different types of the layers in perceptron. 
+
+---------------------------------------------------------------------
+** InputLayer
+** HiddenLayer
+** OutputLayer
+---------------------------------------------------------------------
+
+The only difference between the layers is the place where these layers are placed in a perceptron. 
+
+example with the code:
+[source, c]
+---------------------------------------------------------------------
+typedef nn::Perceptron<float,
+	nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, 3, 2>,
+	nn::NeuralLayer<nn::Neuron, nn::TanhFunction, 20>,
+	nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, 1>
+	> Perceptron;
+---------------------------------------------------------------------
+
+Here we have a definition of a three (2 hidden - one output) layers perceptron. The number of inputs
+is 2 see the third template argument of the first hidden layer. Thun number of neurons in a first
+hidden layer is 3. The second hidden layer consists of 20 neurons and tnnlib will magically calculate
+the amount of inputs needed for the second hidden layer based on the number of the neurons in a first hidden layer ;)
+Finally we have an output layer which consists only on one neuron. This neuron is rosponsible to provide the final
+result - decision for the given input.
+
+The definition of the perceptron class is available in a Perceptron.h file
+[source, c]
+---------------------------------------------------------------------
+template<typename VarType, typename... NeuralLayers>
+using Perceptron = detail::Perceptron<VarType, std::tuple<NeuralLayers...> >;
+---------------------------------------------------------------------
+
+---------------------------------------------------------------------
+** VarType : the type of the internal variable representing the data - usually float or any other type with the floatin point and possibility to initialize by float.
+** NeuralLayers a list of the neural layers. Each entry in this list should conform the INeuralLayer interface.
+---------------------------------------------------------------------
+
+image:perceptron.png[perceptron]
+

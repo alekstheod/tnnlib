@@ -1,9 +1,73 @@
-= tnnlib
+=== class diagram
 
-== Motivation
+[plantuml]
+---------------------------------------------------------------------
+@startuml
 
-== Design decisions
+interface INeuralLayer< T >
+interface INeuron < T >
+interface IActivationFunction< T >
+class Perceptron
+class PerceptronMemento
+class NeuralLayer<T>
+class NeuralLayerMemento
+class Neuron<T>
+class NeuronMemento
+class ComplexLayer
 
-== Implementation
+class BPNeuralLayer
+class BPNeuron
 
-== Next steps
+class TahnFunction
+class SigmoidFunction
+class SoftmaxFunction
+class LogScaleSoftmaxFunction
+class BiopolarSigmoidFunction
+
+Neuron *-- IActivationFunction
+Neuron ..> NeuronMemento
+Neuron ..|> INeuron
+NeuralLayer ..|> INeuralLayer
+NeuralLayer ..> NeuralLayerMemento
+Perceptron *-- "many" INeuralLayer
+Perceptron ..> PerceptronMemento
+NeuralLayer *-- "many" INeuron
+ComplexLayer *-- Perceptron
+
+BPNeuralLayer --|> NeuralLayer
+BPNeuron --|> Neuron
+
+BepAlgorithm ..> Perceptron
+BepAlgorithm ..> BPNeuralLayer
+BepAlgorithm ..> BPNeuron
+BepAlgorithm ..> ErrorFunction
+
+IActivationFunction <|.. TahnFunction
+IActivationFunction <|.. SigmoidFunction
+IActivationFunction <|.. SoftmaxFunction
+IActivationFunction <|.. LogScaleSoftmaxFunction
+IActivationFunction <|.. BiopolarSigmoidFunction
+
+@enduml
+---------------------------------------------------------------------
+
+=== Component diagram
+[plantuml]
+---------------------------------------------------------------------
+@startuml
+
+package "tnnlib"{
+[NeuralNetwork] --> [Utilities]
+[Utilities] --> [boost]
+[ocr] --> [boost]
+[ocr] --> [NeuralNetwork]
+[ocr] --> [libPng] 
+[libPng] --> [zlib]
+[Test] --> [NeuralNetwork]
+[NeuralNetwork_ut] --> [NeuralNetwork]
+[NeuralNetwork_ut] --> [gmock-1.7.0]
+
+}
+
+@enduml
+---------------------------------------------------------------------

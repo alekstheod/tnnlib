@@ -1,0 +1,107 @@
+The Article Title
+=================
+Alex Theodoridis <alekstheod@gmail.com>
+v1.0, April 2015:
+Version 1 release
+
+:imagesdir: ./images
+:iconsdir: ./icons
+:stylesdir: ./styles
+:scriptsdir: ./js
+
+Introduction
+-------------
+By browsing through the web we realized that there are not so many neural network libraries
+with an simple and intuitive user interface available. We thought that it 
+would be very interesting to construct a neural network in an easy way by 
+defining the types of the basic components a typical neural network consists of. 
+The main goal of this project actually is to provide a modern c++ framework, 
+flexible enough to reconstruct different neural network topologies in just few lines of code.
+
+Spending some time in investigation and reading the basic ideas around the artifical
+neural networks we came to a conclusion that a typical neural network is not something
+monolythic but it consists of the smaller parts. Which are these small parts in this case? 
+Well the most known to us (and biology scinetists) is a neuron. This is the point where it all 
+begins from :). I am about to grab some images from the google to show how the neuron looks like
+in a nature and how we represent it in a software.
+
+here it is:
+
+image:neuron_bio.png[bio neuron]
+
+I intentially selected an image which is showing a data flow through the biological neuron. 
+How would you design this thing in a software? Well lets do some OOA first. Which parts of
+the neuron are interested for us? So from the image above we can see at least 3 different parts
+of the physical neuron. 
+
+* Dendrites
+* Cell body
+* Axon
+
+Then lets take a look how the neuron is designed as a mathematical model
+
+here we are:
+
+image:neuron_math.png[math_neuron]
+
+== Design
+So lets do some mapping between the mathematical representation and biological instance of an neuron.
+Dendrites are the Inputs for a neuron. So Input class.
+Cell body is an actuall body of a neuron therefore can be represented as a Neuron class.
+Axon is represented as an activation function in a neuron. Activation function should be exchangable
+because different activation functions are more or less suitable on solving different types of problems.
+
+include::neuron.txt[]
+include::neurallayer.txt[]
+include::perceptron.txt[]
+include::tnnlib.txt[]
+
+=== Template based intefaces
+Since in c++ we still don't have an official support for a concepts we decided to use the 
+CRTP - http://en.wikipedia.org/wiki/Curiously_recurring_template_pattern in order to create a conceptial interfaces in our implementation. 
+An example of a neuron interface is following
+[source, c]
+---------------------------------------------------------------------
+template<class Neuron>
+class INeuron {
+public:
+    typedef typename Neuron::Var Var;
+    typedef typename Neuron::OutputFunction OutputFunction;
+    typedef typename Neuron::Memento Memento;
+    typedef typename Neuron::Input Input;
+    typedef Neuron NeuronType;
+
+private:
+    Neuron m_neuron;
+
+public:
+    INeuron();
+    INeuron ( Neuron neuron ) :m_neuron ( neuron );
+    template<typename Iterator>
+    const Var& calculateOutput (Iterator begin, Iterator end);
+    std::size_t size ( ) const;
+    Input& operator [] (std::size_t id);
+    Var getOutput() const;
+    Var calcDotProduct()const;
+    void setInput ( std::size_t inputId, const Var& value );
+    bool setWeight ( std::size_t weightId, const Var& weight );
+    const Var& getBias () const;
+    void setBias ( Var weight );
+    const Var& getWeight (std::size_t weightId) const;
+    const Memento getMemento() const;
+    Neuron& operator*();
+    const Neuron& operator*()const;
+    const Neuron* operator->() const;
+    Neuron* operator->();
+    ~INeuron() {}
+};
+---------------------------------------------------------------------
+
+The interface simply wraps the template argument and propagate all the call into it.
+This concept is used all over the place in a tnn library. 
+
+== Architecture
+include::design.txt[]
+
+== Next steps
+
