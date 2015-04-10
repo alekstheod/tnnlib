@@ -58,7 +58,7 @@ static const unsigned int height = 14;
 static const unsigned int inputsNumber = width * height;
 
 typedef nn::Perceptron< float,
-			nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, inputsNumber>, 
+			nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, inputsNumber, inputsNumber>, 
 			nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, 30>, 
 			nn::NeuralLayer<nn::Neuron, nn::SoftmaxFunction, 10>
 		       > Perceptron;
