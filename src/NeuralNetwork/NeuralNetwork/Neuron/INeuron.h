@@ -62,11 +62,11 @@ public:
     * @brief Will return the number of inputs for current neuron.
     * @return the number of inputs.
     */
-    unsigned int size ( ) const {
+    std::size_t size ( ) const {
         return m_neuron.size();
     }
 
-    Input& operator [] (unsigned int id) {
+    Input& operator [] (std::size_t id) {
         return m_neuron[id];
     }
 
@@ -97,8 +97,9 @@ public:
      *	@param weightId the inputs identifier to set the new weight value.
      *	@param weigh a new weight value.
      */
-    bool setWeight ( unsigned int weightId, const Var& weight ) {
-        return m_neuron.setWeight ( weightId, weight );
+    void setWeight ( unsigned int weightId, 
+		     const Var& weight ) {
+        m_neuron.setWeight ( weightId, weight );
     }
 
     const Var& getBias () const {

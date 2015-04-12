@@ -56,20 +56,20 @@ class BPNeuralLayer : public nn::INeuralLayer<typename NeuralLayerType::template
         typedef BPNeuralLayer< typename NeuralLayerType::template rebindVar<VarType>::type > type;
     };
 
-    BOOST_STATIC_CONSTEXPR unsigned int CONST_NEURONS_NUMBER = NeuralLayerType::CONST_NEURONS_NUMBER;
+    BOOST_STATIC_CONSTEXPR std::size_t CONST_NEURONS_NUMBER = NeuralLayerType::CONST_NEURONS_NUMBER;
 
-    template< unsigned int inputs>
+    template< std::size_t inputs>
     struct rebindInputs{
       typedef BPNeuralLayer< typename NeuralLayerType::template rebindInputs<inputs>::type > type;
     };
 private:
  void calculateWeight ( Var learningRate, Neuron& neuron) {
-    unsigned int inputsNumber =neuron->size();
+    std::size_t inputsNumber =neuron->size();
     Var delta = neuron->getDelta();
-    for ( unsigned int i = 0; i < inputsNumber; i++ ) {
+    for ( std::size_t i = 0; i < inputsNumber; i++ ) {
         Var input = neuron[i].second;
-        Var weight = neuron.getWeight ( i );
-        Var newWeight = weight - learningRate * input * delta;
+        Var weight = neuron[i].first;
+        Var newWeight =  weight - learningRate * input * delta;
         neuron.setWeight ( i, newWeight );
     }
 
@@ -88,10 +88,10 @@ BPNeuralLayer() {}
  */
 template<typename Layer, typename MomentumFunc>
 void calculateHiddenDeltas ( Layer& affectedLayer, MomentumFunc momentum  ) {
-    unsigned int curNeuronId = 0;
+    std::size_t curNeuronId = 0;
     for ( auto curNeuron = NeuralLayer::begin(); curNeuron != NeuralLayer::end(); curNeuron++ ) {
         Var sum = 0.0f; //sum(aDelta*aWeight)
-        for ( unsigned int i = 0; i < affectedLayer.size(); i++ ) {
+        for ( std::size_t i = 0; i < affectedLayer.size(); i++ ) {
             Var affectedDelta = affectedLayer.getDelta ( i );
             Var affectedWeight = affectedLayer.getInputWeight ( i, curNeuronId );
             sum += affectedDelta * affectedWeight;
@@ -109,7 +109,7 @@ void calculateHiddenDeltas ( Layer& affectedLayer, MomentumFunc momentum  ) {
 */
 template<typename Prototype, typename MomentumFunc>
 void calculateDeltas ( const Prototype& prototype, MomentumFunc momentum ) {
-    unsigned int neuronId = 0;
+    std::size_t neuronId = 0;
     for ( auto curNeuron = NeuralLayer::begin(); curNeuron != NeuralLayer::end(); curNeuron++ ) {
         ( *curNeuron )->calculateDelta( std::get<1>(prototype)[neuronId], momentum );
         neuronId++;
@@ -117,14 +117,12 @@ void calculateDeltas ( const Prototype& prototype, MomentumFunc momentum ) {
 }
 
 void calculateWeights ( Var learningRate ) {
-    std::for_each ( NeuralLayer::begin(), NeuralLayer::end(), std::bind(&BPNeuralLayer::calculateWeight, this, learningRate, std::placeholders::_1) );
+    std::for_each ( NeuralLayer::begin(), 
+		    NeuralLayer::end(), 
+		    std::bind(&BPNeuralLayer::calculateWeight, this, learningRate, std::placeholders::_1) );
 }
 
-const  Var& getDelta ( unsigned int neuronId ) const {
-    if ( neuronId >= NeuralLayer::size() ) {
-        throw NNException ( "Wrong neuronId", __FILE__, __LINE__ );
-    }
-
+const  Var& getDelta ( std::size_t neuronId ) const {
     return NeuralLayer::operator[] ( neuronId )->getDelta();
 }
 
