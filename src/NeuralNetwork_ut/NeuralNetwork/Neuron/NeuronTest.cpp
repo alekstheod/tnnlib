@@ -48,15 +48,9 @@ TEST_F(NeuronTest, TestSetInputWeight) {
     for( unsigned int i =0; i< inputsNumber; i++) {
 	// It's not important to use boost::numeric_cast
         float inputWeight = boost::numeric_cast<float>(rand());
-        ASSERT_TRUE(neuron.setWeight(i, inputWeight));
+        neuron.setWeight(i, inputWeight);
         ASSERT_EQ( inputWeight,  (neuron.begin()+i)->first);
     }
-}
-
-
-TEST_F(NeuronTest, TestSetInputWeightWithInvalidInputIdShouldReturnFalse) {
-    Neuron neuron;
-    ASSERT_FALSE(neuron.setWeight(7, 0.0f));
 }
 
 
