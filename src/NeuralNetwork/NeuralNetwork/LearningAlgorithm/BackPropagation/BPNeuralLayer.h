@@ -94,11 +94,11 @@ void calculateHiddenDeltas ( Layer& affectedLayer, MomentumFunc momentum  ) {
         for ( unsigned int i = 0; i < affectedLayer.size(); i++ ) {
             Var affectedDelta = affectedLayer.getDelta ( i );
             Var affectedWeight = affectedLayer.getInputWeight ( i, curNeuronId );
-            sum += affectedDelta * affectedWeight;
-            sum += affectedDelta * affectedLayer->getBias(i);
+            sum += affectedDelta * affectedWeight * (*curNeuron)->calculateDerivate();
+            sum += affectedDelta * affectedLayer->getBias(i)*(*curNeuron)->calculateDerivate();
         }
 
-        (*curNeuron)->setDelta( momentum( (*curNeuron)->getDelta(), sum * (*curNeuron)->calculateDerivate() ) );
+        (*curNeuron)->setDelta( momentum( (*curNeuron)->getDelta(), sum ) );
         curNeuronId++;
     }
 }
