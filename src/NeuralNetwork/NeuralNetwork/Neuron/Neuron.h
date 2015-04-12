@@ -54,15 +54,18 @@ namespace detail{
 /// @param inputsNumber the number of inputs.
 /// @return a vector of initialized inputs.
 template<typename Var, typename Iterator>
-void rand_inputs(Iterator begin, Iterator end){
+void rand_inputs(Iterator begin, Iterator end, int scaleFactor){
     while( begin != end){
-      *begin = std::make_pair( utils::createRandom<Var>(1) / boost::numeric_cast<Var>(1000.f)  , 
-                               utils::createRandom<Var>(1) / boost::numeric_cast<Var>(1000.f)  );
+      *begin = std::make_pair( utils::createRandom<Var>(1) / boost::numeric_cast<Var>(scaleFactor)  , 
+                               utils::createRandom<Var>(1) / boost::numeric_cast<Var>(scaleFactor)  );
       begin++;
     }
 }
   
-template<typename OutputFunctionType, unsigned int inputsNumber, bool isDynamic>
+template<typename OutputFunctionType, 
+         std::size_t inputsNumber,
+         int scaleFactor,
+         bool isDynamic>
 class Neuron {
 public:
     typedef IActivationFunction< OutputFunctionType > OutputFunction;
@@ -81,12 +84,12 @@ public:
 
     template<typename VarType>
     struct rebindVar{
-      typedef Neuron< typename OutputFunctionType::template rebindVar<VarType>::type, inputsNumber , isDynamic> type;
+      typedef Neuron< typename OutputFunctionType::template rebindVar<VarType>::type, inputsNumber, scaleFactor, isDynamic> type;
     };    
     
     template< std::size_t inputs>
     struct rebindInputs{
-      typedef Neuron< OutputFunctionType, inputs, isDynamic > type;
+      typedef Neuron< OutputFunctionType, inputs, scaleFactor, isDynamic > type;
     };
 private:
     /**
@@ -126,7 +129,7 @@ private:
     Container init(size_t inputs){
       static_assert(dynamic, "Available only for dynamic type of neuron");
       Container in(inputs, Input());
-      rand_inputs<Var>(in.begin(), in.end());
+      rand_inputs<Var>(in.begin(), in.end(), scaleFactor);
       return in;
     }
 
@@ -140,7 +143,7 @@ public:
                          m_output( boost::numeric_cast<Var>(0) ),
                          m_sum( boost::numeric_cast<Var>(0) ){  
         static_assert(inputsNumber > 0,"Invalid number of inputs");
-        rand_inputs<Var>(m_inputs.begin(), m_inputs.end());
+        rand_inputs<Var>(m_inputs.begin(), m_inputs.end(), scaleFactor);
     }
     
     Neuron(size_t inputs):m_inputs( init<isDynamic>(inputs) ){
@@ -254,8 +257,12 @@ public:
 };
 }
 
-template<template<class> class OutputFunctionType, typename VarType, unsigned int inputsNumber, bool isDynamic = false >
-using Neuron = detail::Neuron< OutputFunctionType<VarType>, inputsNumber, isDynamic >;
+template<template<class> class OutputFunctionType, 
+         typename VarType, 
+         std::size_t inputsNumber, 
+         int scaleFactor = 1,
+         bool isDynamic = false >
+using Neuron = detail::Neuron< OutputFunctionType<VarType>, inputsNumber, scaleFactor, isDynamic >;
 
 }
 

@@ -292,14 +292,15 @@ public:
 }
 
 template<
-	 template<template<class> class, class, unsigned int, bool> class NeuronType,
+	 template<template<class> class, class, std::size_t, int, bool> class NeuronType,
          template<class> class ActivationFunctionType,
-	 unsigned int size,
-	 unsigned int inputsNumber = 2,
+	 std::size_t size,
+	 std::size_t inputsNumber = 2,
+	 int scaleFactor = 1,
 	 bool isDynamic = false,
 	 typename Var = float
          >
-using NeuralLayer = detail::NeuralLayer< NeuronType<ActivationFunctionType, Var, inputsNumber, isDynamic >, size, inputsNumber, isDynamic >;
+using NeuralLayer = detail::NeuralLayer< NeuronType<ActivationFunctionType, Var, inputsNumber, scaleFactor, isDynamic >, size, inputsNumber, isDynamic >;
 
 }
 

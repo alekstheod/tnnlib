@@ -22,6 +22,14 @@ float randomize<float> ( unsigned int maxValue )
     return rnd<float>(maxValue);
 }
 
+
+template<>
+double randomize<double> ( unsigned int maxValue )
+{
+    return rnd<double>(maxValue);
+}
+
+
 template<>
 int randomize<int> ( unsigned int maxValue )
 {
