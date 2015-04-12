@@ -56,7 +56,8 @@ namespace detail{
 template<typename Var, typename Iterator>
 void rand_inputs(Iterator begin, Iterator end){
     while( begin != end){
-      *begin = std::make_pair( utils::createRandom<Var>(1) , utils::createRandom<Var>(1) );
+      *begin = std::make_pair( utils::createRandom<Var>(1) / boost::numeric_cast<Var>(1000.f)  , 
+                               utils::createRandom<Var>(1) / boost::numeric_cast<Var>(1000.f)  );
       begin++;
     }
 }
@@ -156,24 +157,18 @@ public:
     }
 
     /// @brief see @ref INeuron
-    unsigned int size ( ) const {
+    std::size_t size ( ) const {
         return m_inputs.size();
     }
 
     /// @brief see @ref INeuron
-    Input& operator [] (unsigned int id) {
+    Input& operator [] (std::size_t id) {
         return m_inputs[id];
     }
 
     /// @brief see @ref INeuron
-    bool setWeight ( unsigned int weightId, const Var& weight ) {
-        bool result = false;
-        if( weightId < m_inputs.size() ) {
-            m_inputs[weightId].first = weight;
-            result = true;
-        }
-
-        return result;
+    void setWeight ( std::size_t weightId, const Var& weight ) {
+       m_inputs[weightId].first = weight;
     }
 
     /// @brief see @ref INeuron
@@ -182,11 +177,7 @@ public:
     }
 
     /// @brief see @ref INeuron
-    const Var& getWeight( unsigned int weightId )const {
-        if ( weightId >= m_inputs.size() ) {
-            throw NNException ( "Invalid weightId", __FILE__, __LINE__ );
-        }
-
+    const Var& getWeight( std::size_t weightId )const {
         return m_inputs[weightId].first;
     }
 
@@ -216,11 +207,6 @@ public:
 
     /// @brief see @ref INeuron
     void setInput ( unsigned int inputId, const Var& value ) {
-        if ( inputId >= m_inputs.size() )
-        {
-            throw NNException ( "Wrong argument inputId", __FILE__, __LINE__ );
-        }
-
         m_inputs[inputId].second = value;
     }
 
