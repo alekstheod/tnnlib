@@ -267,9 +267,6 @@ public:
         for ( unsigned int i = 0; i < m_neurons.size(); i++ ) {
             nextLayer.setInput ( i, m_neurons[i].calculateOutput( begin ,end ) );
         }
-        for ( unsigned int i = 0; i < m_neurons.size(); i++ ) {
-            nextLayer.setInput ( i, m_neurons[i].calculateOutput( begin ,end ) );
-        }
     }
 
     /**
