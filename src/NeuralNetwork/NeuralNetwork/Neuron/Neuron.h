@@ -40,6 +40,7 @@
 #include <boost/iterator/counting_iterator.hpp>
 #include <boost/bind.hpp>
 #include <utility>
+#include <NeuralNetwork/Neuron/Input.h>
 
 namespace nn {
 /**
@@ -56,8 +57,8 @@ namespace detail{
 template<typename Var, typename Iterator>
 void rand_inputs(Iterator begin, Iterator end, int scaleFactor){
     while( begin != end){
-      *begin = std::make_pair( utils::createRandom<Var>(1) / boost::numeric_cast<Var>(scaleFactor)  , 
-                               utils::createRandom<Var>(1) / boost::numeric_cast<Var>(scaleFactor)  );
+      *begin = Input<Var>( utils::createRandom<Var>(1) / boost::numeric_cast<Var>(scaleFactor)  , 
+                           utils::createRandom<Var>(1) / boost::numeric_cast<Var>(scaleFactor)  );
       begin++;
     }
 }
@@ -71,8 +72,7 @@ public:
     typedef IActivationFunction< OutputFunctionType > OutputFunction;
     typedef typename OutputFunction::Var Var;
     typedef NeuronMemento<Var> Memento;
-
-    typedef typename std::pair<Var, Var> Input;
+    typedef typename nn::Input<Var> Input;
     
     typedef typename std::conditional<isDynamic, 
                                       std::vector< Input >, 
@@ -122,7 +122,7 @@ private:
 
     /// @brief needed in order to calculate the neurons output.
     Var sumInput(const Input& input)const {
-        return input.first * input.second;
+        return input.value * input.weight;
     }
     
     template<bool dynamic>
@@ -171,7 +171,7 @@ public:
 
     /// @brief see @ref INeuron
     void setWeight ( std::size_t weightId, const Var& weight ) {
-       m_inputs[weightId].first = weight;
+       m_inputs[weightId].weight = weight;
     }
 
     /// @brief see @ref INeuron
@@ -181,7 +181,7 @@ public:
 
     /// @brief see @ref INeuron
     const Var& getWeight( std::size_t weightId )const {
-        return m_inputs[weightId].first;
+        return m_inputs[weightId].weight;
     }
 
     /// @brief see @ref INeuron
@@ -210,7 +210,7 @@ public:
 
     /// @brief see @ref INeuron
     void setInput ( unsigned int inputId, const Var& value ) {
-        m_inputs[inputId].second = value;
+        m_inputs[inputId].value = value;
     }
 
     /// @brief see @ref INeuron

@@ -195,10 +195,6 @@ public:
     }
 
     const Var& getBias( unsigned int neuronId )const {
-        if ( neuronId >= m_neurons.size() ) {
-            throw NNException ( "Invalid argument neuronId", __FILE__, __LINE__ );
-        }
-
         return m_neurons[neuronId].getBias();
     }
 
@@ -206,10 +202,6 @@ public:
     * @see {INeuralLayer}
     */
     const Var& getInputWeight ( unsigned int neuronId, unsigned int weightId ) const {
-        if ( neuronId >= m_neurons.size() ) {
-            throw NNException ( "Invalid argument neuronId", __FILE__, __LINE__ );
-        }
-
         return m_neurons[neuronId].getWeight ( weightId );
     }
 
@@ -250,10 +242,6 @@ public:
      * @see {INeuralLayer}
      */
     Var getOutput ( unsigned int outputId ) const {
-        if ( outputId >= m_neurons.size() ) {
-            throw NNException ( "Wrong outputId", __FILE__, __LINE__ );
-        }
-
         return m_neurons[outputId].getOutput();
     }
 

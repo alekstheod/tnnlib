@@ -67,8 +67,8 @@ private:
     std::size_t inputsNumber =neuron->size();
     Var delta = neuron->getDelta();
     for ( std::size_t i = 0; i < inputsNumber; i++ ) {
-        Var input = neuron[i].second;
-        Var weight = neuron[i].first;
+        Var input = neuron[i].value;
+        Var weight = neuron[i].weight;
         Var newWeight =  weight - learningRate * input * delta;
         neuron.setWeight ( i, newWeight );
     }

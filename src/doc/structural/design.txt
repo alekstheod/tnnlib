@@ -1,5 +1,8 @@
 === class diagram
 
+In the following diagram not all the "inheritance" relations are a real inheritance relations. This is an attempt to
+describe the CRTP in UML language. Especially it is true for the interfaces realization such as INeuralLayer, INeuron and IActivationFunction.
+
 [plantuml]
 ---------------------------------------------------------------------
 @startuml
@@ -33,6 +36,7 @@ Perceptron *-- "many" INeuralLayer
 Perceptron ..> PerceptronMemento
 NeuralLayer *-- "many" INeuron
 ComplexLayer *-- Perceptron
+ComplexLayer ..|> INeuralLayer
 
 BPNeuralLayer --|> NeuralLayer
 BPNeuron --|> Neuron

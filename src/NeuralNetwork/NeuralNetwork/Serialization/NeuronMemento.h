@@ -35,6 +35,7 @@
 #include <boost/serialization/utility.hpp>
 #include <vector>
 #include <utility>
+#include <NeuralNetwork/Neuron/Input.h>
 
 namespace nn {
 
@@ -50,7 +51,7 @@ private:
     /**
      * The list of the neuron's inputs.
      */
-    std::vector< std::pair<Var, Var> > m_inputs;
+    std::vector< nn::Input<Var> > m_inputs;
 
     /**
      * Value of the neuron's weight.
@@ -68,6 +69,7 @@ private:
     Var m_sum;
 
 private:
+    typedef nn::Input<Var> Input;
     friend class boost::serialization::access;
         
     template<class Archive>
@@ -86,7 +88,7 @@ public:
      * Will set the default number of
      * inputs to 1.
      */
-    NeuronMemento() : m_inputs(1, std::pair<Var, Var>( Var(0.0f), Var(0.0f) ) ) {
+    NeuronMemento() : m_inputs(1, Input() ) {
     }
 
     /**
@@ -95,7 +97,7 @@ public:
      * in order to be assigned to the inputs list member variable.
      * @return true if succeed, false otherwise.
      */
-    bool setInputs ( const std::vector< std::pair<Var, Var> >& inputs ) {
+    bool setInputs ( const std::vector< Input >& inputs ) {
         bool result = false;
         if ( !inputs.empty() ) {
             m_inputs = inputs;
@@ -121,7 +123,7 @@ public:
     * Will return the list of assigned inputs.
     * @return the list of assigned inputs.
     */
-    const std::vector< std::pair<Var, Var> >& getInputs() const {
+    const std::vector< Input >& getInputs() const {
         return m_inputs;
     }
 

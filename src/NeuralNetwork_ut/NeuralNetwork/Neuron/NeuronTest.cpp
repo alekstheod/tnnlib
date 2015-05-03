@@ -49,7 +49,7 @@ TEST_F(NeuronTest, TestSetInputWeight) {
 	// It's not important to use boost::numeric_cast
         float inputWeight = boost::numeric_cast<float>(rand());
         neuron.setWeight(i, inputWeight);
-        ASSERT_EQ( inputWeight,  (neuron.begin()+i)->first);
+        ASSERT_EQ( inputWeight,  (neuron.begin()+i)->weight);
     }
 }
 
@@ -77,7 +77,7 @@ TEST_F(NeuronTest, setInputTest) {
     Neuron neuron;
     const float result = boost::numeric_cast<float>(rand()%1000);
     neuron.setInput(0, result);
-    ASSERT_EQ(result, neuron.begin()->second);
+    ASSERT_EQ(result, neuron.begin()->value);
 }
 
 TEST_F(NeuronTest, sizeTest) {

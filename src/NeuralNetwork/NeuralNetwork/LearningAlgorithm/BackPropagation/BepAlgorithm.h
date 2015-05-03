@@ -180,8 +180,8 @@ public:
                 epochCounter++;
             }
 
-        } while ( error > m_maxError
-                  && (epochCounter < maxNumberOfEpochs
+        } while ( error > m_maxError && 
+		  (epochCounter < maxNumberOfEpochs
                       || maxNumberOfEpochs == std::numeric_limits< unsigned int >::max()
                      )
                 );
