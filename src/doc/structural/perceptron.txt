@@ -44,9 +44,9 @@ typedef nn::Perceptron<float,
 Here we have a definition of a three (2 hidden - one output) layers perceptron. The number of inputs
 is 2 see the third template argument of the first hidden layer. Thun number of neurons in a first
 hidden layer is 3. The second hidden layer consists of 20 neurons and tnnlib will magically calculate
-the amount of inputs needed for the second hidden layer based on the number of the neurons in a first hidden layer ;)
-Finally we have an output layer which consists only on one neuron. This neuron is rosponsible to provide the final
-result - decision for the given input.
+the amount of inputs needed for the second hidden layer. Finally we have an output layer which 
+consists only on one neuron. This neuron is rosponsible to provide the final result - decision for the 
+given input.
 
 The definition of the perceptron class is available in a Perceptron.h file
 [source, c]
