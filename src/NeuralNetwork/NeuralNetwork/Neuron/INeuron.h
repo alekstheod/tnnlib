@@ -69,6 +69,10 @@ public:
     Input& operator [] (std::size_t id) {
         return m_neuron[id];
     }
+    
+     const Input& operator [] (std::size_t id) const{
+        return m_neuron[id];
+    }
 
     /**
      * @brief will return the output value of the current neuron.

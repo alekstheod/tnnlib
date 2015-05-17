@@ -1,10 +1,12 @@
 project(NeuralNetwork)
 cmake_minimum_required(VERSION 2.8)
 
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/NeuralNetwork/cmake")
 set( BOOST_COMPONENTS_NEEDED serialization)
 SET(BOOST_MIN_VERSION "1.46.0")
 find_package(Boost ${BOOST_MIN_VERSION} COMPONENTS ${BOOST_COMPONENTS_NEEDED} REQUIRED) 
-if(Boost_FOUND)
+find_package(OpenCL)
+
 #SET( CMAKE_CXX_COMPILER clang++ )
 
 if(NOT MSVC)
@@ -30,7 +32,8 @@ add_library(NeuralNetwork
 	  ./NeuralNetwork/Neuron/ActivationFunction/SigmoidFunction.h
 	  ./NeuralNetwork/Neuron/ActivationFunction/TanhFunction.h
 	  ./NeuralNetwork/Perceptron/Perceptron.h
-	  ./NeuralNetwork/Perceptron/NeuralLayer/NeuralLayer.h
+	  ./NeuralNetwork/NeuralLayer/NeuralLayer.h
+	  ./NeuralNetwork/NeuralLayer/OpenCLNeuralLayer.h
 	  ./NeuralNetwork/SOM/INode.h
 	  ./NeuralNetwork/SOM/INeighbourhood.h
 	  ./NeuralNetwork/SOM/IPosition.h
@@ -48,10 +51,10 @@ target_include_directories(NeuralNetwork
 		  PUBLIC
 			.
 			../Utilities
-			${Boost_INCLUDE_DIRS})
+			${Boost_INCLUDE_DIRS}
+			${OPENCL_INCLUDE_DIR})
 	
 target_link_libraries(NeuralNetwork 
 		      Utilities
-		      ${Boost_LIBRARIES})
-
-endif()
+		      ${Boost_LIBRARIES}
+		      ${OPENCL_LIBRARIES})

@@ -1,6 +1,6 @@
 #include <NeuralNetwork/Perceptron/Perceptron.h>
 #include <NeuralNetwork/Neuron/Neuron.h>
-#include <NeuralNetwork/Perceptron/NeuralLayer/NeuralLayer.h>
+#include <NeuralNetwork/NeuralLayer/NeuralLayer.h>
 #include <NeuralNetwork/Neuron/ActivationFunction/SigmoidFunction.h>
 #include <NeuralNetwork/Neuron/ActivationFunction/TanhFunction.h>
 #include <NeuralNetwork/Neuron/ActivationFunction/SoftmaxFunction.h>
@@ -48,21 +48,27 @@
 #include "Var.h"
 
 
-typedef float VarType;
+typedef double VarType;
 
 using namespace boost::gil;
 using namespace boost::gil::detail;
-static const std::string alphabet("0123456789");
-static const unsigned int width = 10;
-static const unsigned int height = 14;
+static const std::string alphabet("123456789");
+static const unsigned int width = 49;
+static const unsigned int height = 67;
 static const unsigned int inputsNumber = width * height;
 
-typedef nn::Perceptron< float,
-			nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, inputsNumber, inputsNumber>, 
-			nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, 30>, 
-			nn::NeuralLayer<nn::Neuron, nn::SoftmaxFunction, 10>
+typedef nn::Perceptron< VarType,
+			nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, 10 , inputsNumber, 1000 >, 
+			nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, 80, 10, 1000>, 
+			nn::NeuralLayer<nn::Neuron, nn::SoftmaxFunction, 9, 1000>
 		       > Perceptron;
+		       
+typedef nn::Perceptron< VarType,
+			nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, 80, inputsNumber, 1000>,
+			nn::NeuralLayer<nn::Neuron, nn::SoftmaxFunction,  inputsNumber, 80, 1000 >
+		      > AutoEncoder;
 
+typedef nn::bp::BepAlgorithm< AutoEncoder, nn::bp::CrossEntropyError> AutoEncAlgo;
 typedef nn::bp::BepAlgorithm< Perceptron, nn::bp::CrossEntropyError> Algo;
 
 template <typename Out>
@@ -82,8 +88,8 @@ void convert_color(const SrcView& src, const DstView& dst) {
     copy_pixels(color_converted_view<gray_pixel_t>(src), dst);
 }
 
-template<typename InputIterator>
-void readImage(std::string fileName, InputIterator input) {
+template<typename Iterator>
+void readImage(std::string fileName, Iterator out) {
     using namespace boost::gil;
     using namespace nn;
     using namespace nn::bp;
@@ -106,8 +112,8 @@ void readImage(std::string fileName, InputIterator input) {
     for (int y=0; y<srcView.height(); ++y) {
         gray8c_view_t::x_iterator src_it( srcView.row_begin(y) );
         for (int x=0; x<srcView.width(); ++x) {
-            *input = src_it[x] < 130 ? 1.f : -1.f;
-            input++;
+            *out = src_it[x]/255.f;// < 130? 1.f: -1.f;//255.f;
+            out++;
         }
     }
 }
@@ -136,22 +142,14 @@ void recognize(std::string perceptron, std::string image) {
         readImage(image, inputs.begin() );
         std::vector<VarType> result(alphabet.length(), VarType(0.f) );
         readPerceptron(perceptron).calculate(inputs.begin(), inputs.end(), result.begin() );
-        bool found = false;
-        int foundedSymbols = 0;
-        int position = 0;
         for( unsigned int i = 0; i < result.size(); i++ ) {
-            if( result[i] > 0.8f ) {
-                position = i;
-                found = true;
-                foundedSymbols++;
-            }
+	  std::cout << "Symbol: " << 
+		       alphabet[i] << 
+		       " " <<
+		       result[i] <<
+		       std::endl;
         }
-
-        if( !found || foundedSymbols > 1 ) {
-            std::cout << "Unknown symbol" << std::endl;
-        } else {
-            std::cout << "Found symbol: "<< alphabet[position] << std::endl;
-        }
+        
     } catch( const nn::NNException& e) {
         std::cout << e.what() << std::endl;
     } catch( const std::exception& e) {
@@ -161,55 +159,105 @@ void recognize(std::string perceptron, std::string image) {
     }
 }
 
+template<typename Perc>
+void save(const Perc& perc, std::string name)
+{
+    typename Perc::Memento memento = perc.getMemento();
+    std::ofstream strm( name );
+    boost::archive::xml_oarchive oa ( strm );
+    oa << BOOST_SERIALIZATION_NVP ( memento );
+    strm.flush();
+}
+
+template<typename Files>
+AutoEncoder calculateAutoEncoder(Files files){
+    std::cout << "AutoEncoder calculation started" << std::endl;
+    std::vector<AutoEncAlgo::Prototype> prototypes;
+    for( auto image : files) {
+        if( !boost::filesystem::is_directory( image ) ) {
+            try {
+                AutoEncAlgo::Prototype proto;
+                readImage( image, std::get<0>(proto).begin() );
+		std::copy( std::get<0>(proto).begin(),
+			   std::get<0>(proto).end(),
+			   std::get<1>(proto).begin());
+		
+                prototypes.push_back(proto);
+            } catch(const std::exception&) {
+                std::cout << "Invalid image found :" << image << std::endl;
+            }
+        }
+    }
+    
+    static AutoEncAlgo autoEncAlgo(0.005f, 0.01f);
+    
+    static std::size_t counter = 0;
+    static AutoEncoder enc = autoEncAlgo.calculatePerceptron(prototypes.begin(), 
+							  prototypes.end(), 
+							  [](VarType error) {
+							      counter++;
+							      if(counter > 0){
+								counter = 0;
+								std::cout << error << std::endl;
+							      }
+							  });  
+    
+    save(enc, "autoencoder.xml");
+}
+
 void calculateWeights(std::string imagesPath) {
     using namespace boost::filesystem;
     path directory(imagesPath);
     directory_iterator end_iter;
 
-    std::set< std::string > files;
+    std::vector< std::string > files;
     if ( exists(directory) && is_directory(directory))
     {
         for( directory_iterator dir_iter(directory) ; dir_iter != end_iter ; ++dir_iter)
         {
             if (is_regular_file(dir_iter->status()) )
             {
-                files.insert( dir_iter->path().string() );
+                files.push_back( dir_iter->path().string() );
             }
         }
     }
-
-    Perceptron tmp = readPerceptron("perceptron.xml");
-    Algo algorithm (0.04f, 0.01f );
+    
+    //static AutoEncoder autoEnc = calculateAutoEncoder(files);
+    
+    std::cout << "Perceptron calculation started" << std::endl;
+    static Perceptron tmp = readPerceptron("perceptron.xml");
+    static Algo algorithm (0.003f, 0.001f );
     algorithm.setMemento( tmp.getMemento() );
     
     std::vector<Algo::Prototype> prototypes;
-    for( auto i = files.begin(); i != files.end(); i++ ) {
-        if( !boost::filesystem::is_directory( *i ) ) {
+    for( auto image : files ) {
+        if( !boost::filesystem::is_directory( image ) ) {
             try {
                 Algo::Prototype proto;
-                readImage( *i, std::get<0>(proto).begin() );
+                readImage( image, std::get<0>(proto).begin() );
                 std::fill(std::get<1>(proto).begin(), std::get<1>(proto).end(), 0.f);
-                char ch = path(*i).filename().string()[0];
+                char ch = path(image).filename().string()[0];
                 size_t pos = alphabet.find(ch);
                 std::get<1>(proto)[pos] = 1.0f;
                 prototypes.push_back(proto);
             } catch(const std::exception&) {
-                std::cout << "Invalid image found :" << *i << std::endl;
+                std::cout << "Invalid image found :" << image << std::endl;
             }
         }
     }
 
-    Perceptron perceptron = algorithm.calculatePerceptron(prototypes.begin()
-                            , prototypes.end()
-    , [](VarType error) {
-        std::cout << error << std::endl;
-    });
+    static std::size_t counter = 0;
+    static Perceptron perceptron = algorithm.calculatePerceptron(prototypes.begin(), 
+							  prototypes.end(), 
+							  [](VarType error) {
+							      counter++;
+							      if(counter > 1000){
+								counter = 0;
+								std::cout << error << std::endl;
+							      }
+							  });
 
-    Perceptron::Memento memento = perceptron.getMemento();
-    std::ofstream strm( "perceptron.xml");
-    boost::archive::xml_oarchive oa ( strm );
-    oa << BOOST_SERIALIZATION_NVP ( memento );
-    strm.flush();
+    save(perceptron, "perceptron.xml");
 }
 
 int main(int argc, char** argv)

@@ -42,14 +42,15 @@
 #include <NeuralNetwork/SOM/KNode.h>
 #include <Utilities/System/Time.h>
 #include <NeuralNetwork/Neuron/Neuron.h>
-#include <NeuralNetwork/Perceptron/NeuralLayer/NeuralLayer.h>
+#include <NeuralNetwork/NeuralLayer/NeuralLayer.h>
 #include <Utilities/StrUtil/StrUtil.h>
 #include <time.h>
 #include <iostream>
 #include <sstream>
 #include <array>
 #include <Utilities/Design/Factory.h>
-#include <NeuralNetwork/Perceptron/NeuralLayer/ComplexLayer.h>
+#include <NeuralNetwork/NeuralLayer/OpenCLNeuralLayer.h>
+#include <NeuralNetwork/Perceptron/ComplexLayer.h>
 
 using namespace nn;
 using namespace bp;
@@ -58,14 +59,14 @@ using namespace utils;
 
 void testDeepNN() {
     typedef nn::Perceptron<float,
-            nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, 20, 20>,
+            nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, 20, 200>,
             nn::NeuralLayer<nn::Neuron, nn::TanhFunction, 5>,
-            nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, 20>
+            nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, 200>
             > AutoEncoder;
 
     typedef nn::Perceptron<float,
             nn::ComplexLayer<AutoEncoder>,
-            nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, 2>> Perceptron;
+            nn::OpenCLNeuralLayer<nn::Neuron, nn::SigmoidFunction, 200>> Perceptron;
 
     Perceptron p2;
     std::array<float, 20> out {0};

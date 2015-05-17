@@ -97,6 +97,10 @@ public:
         return m_neuralLayer[id];
     }
 
+     Neuron& operator [] ( std::size_t id ) {
+        return m_neuralLayer[id];
+    }
+    
     operator NeuralLayerType& () {
         return &m_neuralLayer;
     }

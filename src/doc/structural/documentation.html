@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
 <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
-<meta name="generator" content="AsciiDoc 8.6.8" />
+<meta name="generator" content="AsciiDoc 8.6.9" />
 <title>The Article Title</title>
 <style type="text/css">
 /* Shared CSS for AsciiDoc xhtml11 and html5 backends */
@@ -94,7 +94,9 @@ ul > li > * { color: black; }
   padding: 0;
   margin: 0;
 }
-
+pre {
+  white-space: pre-wrap;
+}
 
 #author {
   color: #527bbd;
@@ -223,7 +225,7 @@ div.exampleblock > div.content {
 }
 
 div.imageblock div.content { padding-left: 0; }
-span.image img { border-style: none; }
+span.image img { border-style: none; vertical-align: text-bottom; }
 a.image:visited { color: white; }
 
 dl {
@@ -806,19 +808,7 @@ because different activation functions are more or less suitable on solving diff
 just by reusing this class.
 === NeuralLayer</p></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.6
-by Lorenzo Bettini
-http://www.lorenzobettini.it
-http://www.gnu.org/software/src-highlite -->
-<pre><tt>template<span style="color: #990000">&lt;</span>
-         <span style="color: #008080">template&lt;template&lt;class&gt;</span> class<span style="color: #990000">,</span> class<span style="color: #990000">,</span> <span style="color: #009900">unsigned</span> <span style="color: #009900">int</span><span style="color: #990000">,</span> <span style="color: #009900">bool</span><span style="color: #990000">&gt;</span> <span style="color: #008080">class</span> NeuronType<span style="color: #990000">,</span>
-         template<span style="color: #990000">&lt;</span>class<span style="color: #990000">&gt;</span> <span style="color: #008080">class</span> ActivationFunctionType<span style="color: #990000">,</span>
-         <span style="color: #009900">unsigned</span> <span style="color: #009900">int</span> size<span style="color: #990000">,</span>
-         <span style="color: #009900">unsigned</span> <span style="color: #009900">int</span> inputsNumber <span style="color: #990000">=</span> <span style="color: #993399">2</span><span style="color: #990000">,</span>
-         <span style="color: #009900">bool</span> isDynamic <span style="color: #990000">=</span> false<span style="color: #990000">,</span>
-         <span style="color: #008080">typename</span> Var <span style="color: #990000">=</span> <span style="color: #009900">float</span>
-         <span style="color: #990000">&gt;</span>
-<span style="color: #008080">using</span> NeuralLayer <span style="color: #990000">=</span> detail<span style="color: #990000">::</span>NeuralLayer<span style="color: #990000">&lt;</span> NeuronType<span style="color: #990000">&lt;</span>ActivationFunctionType<span style="color: #990000">,</span> Var<span style="color: #990000">,</span> inputsNumber<span style="color: #990000">,</span> isDynamic <span style="color: #990000">&gt;,</span> size<span style="color: #990000">,</span> inputsNumber<span style="color: #990000">,</span> isDynamic <span style="color: #990000">&gt;;</span></tt></pre></div></div>
+<div class="content"></div></div>
 <div class="listingblock">
 <div class="content">
 <pre><code>** NeuronType the type of the neurons used in this layer.
@@ -891,15 +881,7 @@ tnnlib starts with the hidden layer.</p></div>
 <div class="paragraph"><p>The only difference between the layers is the place where these layers are placed in a perceptron.</p></div>
 <div class="paragraph"><p>example with the code:</p></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.6
-by Lorenzo Bettini
-http://www.lorenzobettini.it
-http://www.gnu.org/software/src-highlite -->
-<pre><tt><span style="font-weight: bold"><span style="color: #0000FF">typedef</span></span> nn<span style="color: #990000">::</span>Perceptron<span style="color: #990000">&lt;</span><span style="color: #009900">float</span><span style="color: #990000">,</span>
-        nn<span style="color: #990000">::</span>NeuralLayer<span style="color: #990000">&lt;</span>nn<span style="color: #990000">::</span>Neuron<span style="color: #990000">,</span> nn<span style="color: #990000">::</span>SigmoidFunction<span style="color: #990000">,</span> <span style="color: #993399">3</span><span style="color: #990000">,</span> <span style="color: #993399">2</span><span style="color: #990000">&gt;,</span>
-        nn<span style="color: #990000">::</span>NeuralLayer<span style="color: #990000">&lt;</span>nn<span style="color: #990000">::</span>Neuron<span style="color: #990000">,</span> nn<span style="color: #990000">::</span>TanhFunction<span style="color: #990000">,</span> <span style="color: #993399">20</span><span style="color: #990000">&gt;,</span>
-        nn<span style="color: #990000">::</span>NeuralLayer<span style="color: #990000">&lt;</span>nn<span style="color: #990000">::</span>Neuron<span style="color: #990000">,</span> nn<span style="color: #990000">::</span>SigmoidFunction<span style="color: #990000">,</span> <span style="color: #993399">1</span><span style="color: #990000">&gt;</span>
-        <span style="color: #990000">&gt;</span> Perceptron<span style="color: #990000">;</span></tt></pre></div></div>
+<div class="content"></div></div>
 <div class="paragraph"><p>Here we have a definition of a three (2 hidden - one output) layers perceptron. The number of inputs
 is 2 see the third template argument of the first hidden layer. Thun number of neurons in a first
 hidden layer is 3. The second hidden layer consists of 20 neurons and tnnlib will magically calculate
@@ -908,12 +890,7 @@ Finally we have an output layer which consists only on one neuron. This neuron i
 result - decision for the given input.</p></div>
 <div class="paragraph"><p>The definition of the perceptron class is available in a Perceptron.h file</p></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.6
-by Lorenzo Bettini
-http://www.lorenzobettini.it
-http://www.gnu.org/software/src-highlite -->
-<pre><tt>template<span style="color: #990000">&lt;</span><span style="color: #008080">typename</span> VarType<span style="color: #990000">,</span> typename<span style="color: #990000">...</span> NeuralLayers<span style="color: #990000">&gt;</span>
-<span style="color: #008080">using</span> Perceptron <span style="color: #990000">=</span> detail<span style="color: #990000">::</span>Perceptron<span style="color: #990000">&lt;</span>VarType<span style="color: #990000">,</span> std<span style="color: #990000">::</span>tuple<span style="color: #990000">&lt;</span>NeuralLayers<span style="color: #990000">...&gt;</span> <span style="color: #990000">&gt;;</span></tt></pre></div></div>
+<div class="content"></div></div>
 <div class="listingblock">
 <div class="content">
 <pre><code>** VarType : the type of the internal variable representing the data - usually float or any other type with the floatin point and possibility to initialize by float.
@@ -929,43 +906,7 @@ http://www.gnu.org/software/src-highlite -->
 CRTP - <a href="http://en.wikipedia.org/wiki/Curiously_recurring_template_pattern">http://en.wikipedia.org/wiki/Curiously_recurring_template_pattern</a> in order to create a conceptial interfaces in our implementation.
 An example of a neuron interface is following</p></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.6
-by Lorenzo Bettini
-http://www.lorenzobettini.it
-http://www.gnu.org/software/src-highlite -->
-<pre><tt>template<span style="color: #990000">&lt;</span><span style="color: #008080">class</span> Neuron<span style="color: #990000">&gt;</span>
-<span style="color: #008080">class</span> INeuron <span style="color: #FF0000">{</span>
-<span style="font-weight: bold"><span style="color: #008080">public:</span></span>
-    <span style="font-weight: bold"><span style="color: #0000FF">typedef</span></span> <span style="color: #008080">typename</span> Neuron<span style="color: #990000">::</span><span style="color: #008080">Var</span> Var<span style="color: #990000">;</span>
-    <span style="font-weight: bold"><span style="color: #0000FF">typedef</span></span> <span style="color: #008080">typename</span> Neuron<span style="color: #990000">::</span><span style="color: #008080">OutputFunction</span> OutputFunction<span style="color: #990000">;</span>
-    <span style="font-weight: bold"><span style="color: #0000FF">typedef</span></span> <span style="color: #008080">typename</span> Neuron<span style="color: #990000">::</span><span style="color: #008080">Memento</span> Memento<span style="color: #990000">;</span>
-    <span style="font-weight: bold"><span style="color: #0000FF">typedef</span></span> <span style="color: #008080">typename</span> Neuron<span style="color: #990000">::</span><span style="color: #008080">Input</span> Input<span style="color: #990000">;</span>
-    <span style="font-weight: bold"><span style="color: #0000FF">typedef</span></span> <span style="color: #008080">Neuron</span> NeuronType<span style="color: #990000">;</span>
-
-<span style="font-weight: bold"><span style="color: #008080">private:</span></span>
-    <span style="color: #008080">Neuron</span> m_neuron<span style="color: #990000">;</span>
-
-<span style="font-weight: bold"><span style="color: #008080">public:</span></span>
-    <span style="font-weight: bold"><span style="color: #000000">INeuron</span></span><span style="color: #990000">();</span>
-    <span style="font-weight: bold"><span style="color: #000000">INeuron</span></span> <span style="color: #990000">(</span> <span style="color: #008080">Neuron</span> neuron <span style="color: #990000">)</span> <span style="color: #990000">:</span><span style="font-weight: bold"><span style="color: #000000">m_neuron</span></span> <span style="color: #990000">(</span> neuron <span style="color: #990000">);</span>
-    template<span style="color: #990000">&lt;</span><span style="color: #008080">typename</span> Iterator<span style="color: #990000">&gt;</span>
-    <span style="font-weight: bold"><span style="color: #0000FF">const</span></span> Var<span style="color: #990000">&amp;</span> <span style="font-weight: bold"><span style="color: #000000">calculateOutput</span></span> <span style="color: #990000">(</span><span style="color: #008080">Iterator</span> begin<span style="color: #990000">,</span> <span style="color: #008080">Iterator</span> end<span style="color: #990000">);</span>
-    std<span style="color: #990000">::</span><span style="color: #008080">size_t</span> <span style="font-weight: bold"><span style="color: #000000">size</span></span> <span style="color: #990000">(</span> <span style="color: #990000">)</span> <span style="font-weight: bold"><span style="color: #0000FF">const</span></span><span style="color: #990000">;</span>
-    Input<span style="color: #990000">&amp;</span> operator <span style="color: #990000">[]</span> <span style="color: #990000">(</span>std<span style="color: #990000">::</span><span style="color: #008080">size_t</span> id<span style="color: #990000">);</span>
-    <span style="color: #008080">Var</span> <span style="font-weight: bold"><span style="color: #000000">getOutput</span></span><span style="color: #990000">()</span> <span style="font-weight: bold"><span style="color: #0000FF">const</span></span><span style="color: #990000">;</span>
-    <span style="color: #008080">Var</span> <span style="font-weight: bold"><span style="color: #000000">calcDotProduct</span></span><span style="color: #990000">()</span><span style="font-weight: bold"><span style="color: #0000FF">const</span></span><span style="color: #990000">;</span>
-    <span style="color: #009900">void</span> <span style="font-weight: bold"><span style="color: #000000">setInput</span></span> <span style="color: #990000">(</span> std<span style="color: #990000">::</span><span style="color: #008080">size_t</span> inputId<span style="color: #990000">,</span> <span style="font-weight: bold"><span style="color: #0000FF">const</span></span> Var<span style="color: #990000">&amp;</span> value <span style="color: #990000">);</span>
-    <span style="color: #009900">bool</span> <span style="font-weight: bold"><span style="color: #000000">setWeight</span></span> <span style="color: #990000">(</span> std<span style="color: #990000">::</span><span style="color: #008080">size_t</span> weightId<span style="color: #990000">,</span> <span style="font-weight: bold"><span style="color: #0000FF">const</span></span> Var<span style="color: #990000">&amp;</span> weight <span style="color: #990000">);</span>
-    <span style="font-weight: bold"><span style="color: #0000FF">const</span></span> Var<span style="color: #990000">&amp;</span> <span style="font-weight: bold"><span style="color: #000000">getBias</span></span> <span style="color: #990000">()</span> <span style="font-weight: bold"><span style="color: #0000FF">const</span></span><span style="color: #990000">;</span>
-    <span style="color: #009900">void</span> <span style="font-weight: bold"><span style="color: #000000">setBias</span></span> <span style="color: #990000">(</span> <span style="color: #008080">Var</span> weight <span style="color: #990000">);</span>
-    <span style="font-weight: bold"><span style="color: #0000FF">const</span></span> Var<span style="color: #990000">&amp;</span> <span style="font-weight: bold"><span style="color: #000000">getWeight</span></span> <span style="color: #990000">(</span>std<span style="color: #990000">::</span><span style="color: #008080">size_t</span> weightId<span style="color: #990000">)</span> <span style="font-weight: bold"><span style="color: #0000FF">const</span></span><span style="color: #990000">;</span>
-    <span style="font-weight: bold"><span style="color: #0000FF">const</span></span> <span style="color: #008080">Memento</span> <span style="font-weight: bold"><span style="color: #000000">getMemento</span></span><span style="color: #990000">()</span> <span style="font-weight: bold"><span style="color: #0000FF">const</span></span><span style="color: #990000">;</span>
-    Neuron<span style="color: #990000">&amp;</span> operator<span style="color: #990000">*();</span>
-    <span style="font-weight: bold"><span style="color: #0000FF">const</span></span> Neuron<span style="color: #990000">&amp;</span> operator<span style="color: #990000">*()</span><span style="font-weight: bold"><span style="color: #0000FF">const</span></span><span style="color: #990000">;</span>
-    <span style="font-weight: bold"><span style="color: #0000FF">const</span></span> Neuron<span style="color: #990000">*</span> operator<span style="color: #990000">-&gt;()</span> <span style="font-weight: bold"><span style="color: #0000FF">const</span></span><span style="color: #990000">;</span>
-    Neuron<span style="color: #990000">*</span> operator<span style="color: #990000">-&gt;();</span>
-    <span style="color: #990000">~</span><span style="font-weight: bold"><span style="color: #000000">INeuron</span></span><span style="color: #990000">()</span> <span style="color: #FF0000">{}</span>
-<span style="color: #FF0000">}</span><span style="color: #990000">;</span></tt></pre></div></div>
+<div class="content"></div></div>
 <div class="paragraph"><p>The interface simply wraps the template argument and propagate all the call into it.
 This concept is used all over the place in a tnn library.</p></div>
 </div>
@@ -1004,7 +945,8 @@ describe the CRTP in UML language. Especially it is true for the interfaces real
 <div id="footer">
 <div id="footer-text">
 Version 1.0<br />
-Last updated 2015-04-22 22:23:35 CEST
+Last updated
+ 2015-04-22 22:23:35 CEST
 </div>
 </div>
 </body>

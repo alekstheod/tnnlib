@@ -168,6 +168,10 @@ public:
     Input& operator [] (std::size_t id) {
         return m_inputs[id];
     }
+    
+    const Input& operator[](const::size_t id)const{
+      return m_inputs[id];
+    }
 
     /// @brief see @ref INeuron
     void setWeight ( std::size_t weightId, const Var& weight ) {
