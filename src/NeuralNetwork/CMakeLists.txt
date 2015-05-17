@@ -45,7 +45,7 @@ add_library(NeuralNetwork
 	  ./NeuralNetwork/Serialization/NeuronMemento.h
 	  ./NeuralNetwork/Serialization/PerceptronMemento.h
 	  )
-
+	 
 set_target_properties(NeuralNetwork PROPERTIES LINKER_LANGUAGE CXX)
 target_include_directories(NeuralNetwork
 		  PUBLIC

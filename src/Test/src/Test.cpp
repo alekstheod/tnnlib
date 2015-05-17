@@ -49,30 +49,12 @@
 #include <sstream>
 #include <array>
 #include <Utilities/Design/Factory.h>
-#include <NeuralNetwork/NeuralLayer/OpenCLNeuralLayer.h>
 #include <NeuralNetwork/Perceptron/ComplexLayer.h>
 
 using namespace nn;
 using namespace bp;
 using namespace std;
 using namespace utils;
-
-void testDeepNN() {
-    typedef nn::Perceptron<float,
-            nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, 20, 200>,
-            nn::NeuralLayer<nn::Neuron, nn::TanhFunction, 5>,
-            nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, 200>
-            > AutoEncoder;
-
-    typedef nn::Perceptron<float,
-            nn::ComplexLayer<AutoEncoder>,
-            nn::OpenCLNeuralLayer<nn::Neuron, nn::SigmoidFunction, 200>> Perceptron;
-
-    Perceptron p2;
-    std::array<float, 20> out {0};
-    std::array< float, 20 > in {0, 0};
-    p2.calculate(in.begin(), in.end(), out.begin());
-}
 
 /*
  *
@@ -88,7 +70,6 @@ int main ( int argc, char** argv )
     typedef BepAlgorithm< Perceptron > Algo;
     Algo algorithm (0.09f, 0.01f );
 
-    testDeepNN();
     std::array< Algo::Prototype, 4> prototypes= { Algo::Prototype{{0.f, 1.f}, {1.f}} ,
         Algo::Prototype{{1.f, 0.f}, {1.f}} ,
         Algo::Prototype{{1.f, 1.f}, {0.f}} ,
