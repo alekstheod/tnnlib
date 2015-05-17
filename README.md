@@ -46,3 +46,7 @@ cmake -DBoost_USE_STATIC_LIBS=ON -DZLIB_INCLUDE_DIR="C:\Program Files (x86)\GnuW
 
 You have to define your boost libraries, libpng and zlib. In this case we have boost_1_57 and libpng + zlib as a binary distributions.
 
+note
+====
+If your system does not have installed OpenCL you can disable it using the following flag:
+-DCMAKE_DISABLE_FIND_PACKAGE_OpenCL:bool=TRUE
