@@ -66,6 +66,9 @@ cl::Program createProgram(const cl::Context& context){
      return program;
 }
 
+/// @brief OpenCL based neural layer. Used to improve the perormace
+/// for a larg ammount of neurons. This layer will use the openCL in order
+/// to calculate a dot product for the neuros inputs.
 template<class Internal>
 class OpenCLNeuralLayer
 {
@@ -304,6 +307,13 @@ public:
 
 }
 
+/// @brief OpenCL based neural layer @see={detail::OpenCLNeuralLayer}
+/// @param NeuronType a type of the neuron in a layer.
+/// @param ActivationFunction a type of the activation function used in a neuron.
+/// @param size ammount of neurons in a layer.
+/// @param inputsNumber the number of inputs of each neuron in a layer.
+/// @param scaleFactor a factor which will be applied during the weight initialization
+/// a final weight will be calculated in a following way random(0, 1)/scaleFactor
 template<
 template<template<class> class, class, std::size_t, int, bool> class NeuronType,
          template<class> class ActivationFunctionType,
