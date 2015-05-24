@@ -32,7 +32,7 @@ private:
     /**
      * A maximum size of the cache.
      */
-    const unsigned int m_size;
+    const unsigned int m_capacity;
 
     /**
      * Default destoryer function.
@@ -46,7 +46,7 @@ private:
     using Iterator = decltype( boost::make_transform_iterator( m_lruList.begin(), boost::bind(&LRUCache::lruTransform, (LRUCache*)nullptr, _1) ) );
 
 public:
-    explicit LRUCache(const unsigned int size): m_size( size != 0? size: 1)
+    explicit LRUCache(const unsigned int size): m_capacity( size != 0? size: 1)
     {
     }
 
@@ -92,7 +92,7 @@ public:
         auto i = m_cache.find(key);
         if( i == m_cache.end() )
         {
-            if( m_lruList.size() >= m_size )
+            if( m_cache.size() >= m_capacity )
             {
                 i = m_cache.find( m_lruList.back() );
                 drop( i->first, i->second.first );
