@@ -11,6 +11,8 @@ if(NOT MSVC)
 	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 endif()
 
+link_directories(${Boost_LIBRARY_DIRS})
+
 add_executable(NeuralNetwork_ut
 	main.cpp
 	NeuralNetwork/Neuron/NeuronTest.cpp

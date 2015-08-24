@@ -16,13 +16,13 @@ find_package(Boost ${BOOST_MIN_VERSION} COMPONENTS ${BOOST_COMPONENTS_NEEDED} RE
 
 set(NeuralNetworkDir ${PROJECT_SOURCE_DIR}/../NeuralNetwork)
 
+link_directories(${Boost_LIBRARY_DIRS})
+
 add_executable(ocr src/main.cpp )
 
 include_directories(
 	${Boost_INCLUDE_DIRS}
 	${PNG_INCLUDE_DIRS})
-
-link_directories(${Boost_LIBRARY_DIRS})
 
 target_link_libraries(ocr  
 	NeuralNetwork
