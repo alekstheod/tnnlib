@@ -20,6 +20,8 @@ link_directories(${Boost_LIBRARY_DIRS})
 
 add_executable(ocr src/main.cpp )
 
+add_definitions(-D_SCL_SECURE_NO_WARNINGS)
+
 include_directories(
 	${Boost_INCLUDE_DIRS}
 	${PNG_INCLUDE_DIRS})
