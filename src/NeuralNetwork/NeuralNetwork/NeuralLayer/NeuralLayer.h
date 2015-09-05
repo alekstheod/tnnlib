@@ -93,11 +93,6 @@ public:
     typedef typename std::conditional<isDynamic, std::true_type, std::false_type>::type IsDynamic;
     
 private:
-    /**
-     * A list of the neurons.
-     */
-    Container m_neurons;
-    
     struct Initializer{
       Container operator()(size_t inputs, size_t neurons){
 	Container container;
@@ -118,6 +113,11 @@ private:
     
     typedef typename std::conditional<isDynamic, Initializer, Dummy>::type Init;
     Init init;
+    
+    /**
+     * A list of the neurons.
+     */
+    Container m_neurons;    
 public:
     NeuralLayer():m_neurons(init(inputsNumber, neuronsNumber)){}
     NeuralLayer(size_t inputs, size_t nNumber):m_neurons(init( inputs, nNumber )){}
