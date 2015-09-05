@@ -4,16 +4,16 @@
 #include <string>
 #include <list>
 #include <queue>
-#include <Utilities/AException.h>
+#include <stdexcept>
 #include <sstream>
 
 namespace utils {
 
-class bad_cast: public AException {
+class bad_cast: public std::logic_error {
 public:
 
     bad_cast ( const std::string& message ) :
-        AException ( message ) {
+        std::logic_error ( message ) {
     }
 
     virtual ~bad_cast ( void ) throw () {

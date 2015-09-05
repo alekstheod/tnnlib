@@ -30,16 +30,16 @@
 #ifndef _NNEXCEPTION_H
 #define _NNEXCEPTION_H
 
-#include <Utilities/AException.h>
+#include <stdexcept>
 #include <Utilities/StrUtil/StrUtil.h>
 
 namespace nn {
 
-class NNException : public utils::AException {
+class NNException : public std::logic_error {
 public:
-    NNException(const std::string& message, const std::string& file, int line) : AException(message + "\nin: "+file+"\nline: "+utils::lexical_cast<std::string, int>(line) ) {}
+    NNException(const std::string& message, 
+		const std::string& file, int line) : std::logic_error(message + "\nin: "+file+"\nline: "+utils::lexical_cast<std::string, int>(line) ) {}
     virtual ~NNException() throw () {}
-
 };
 
 }
