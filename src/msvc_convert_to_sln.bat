@@ -9,7 +9,7 @@ if "%1" == "" (
 	echo   cd tnnlib\src
 	echo   mkdir build
 	echo   cd build
-	echo   ..\build_msvc ..
+	echo   ..\msvc_convert_to_sln ..
 
 	exit /B 1
 	)
@@ -35,8 +35,8 @@ set libpng_release_lib=C:\libs\libpng\lpng1618\projects\vstudio\Release Library\
 set python_exe=C:\Programs\Python27\python.exe
 
 :: BOOST configuration
-set boost_root=C:\libs\boost\boost_1_57_0
-set boost_libraries_dir=C:\libs\boost\boost_1_57_0\build\msvc-12.0\32\lib
+set boost_root=C:\libs\boost\boost_1_59_0
+set boost_libraries_dir=C:\libs\boost\boost_1_59_0\lib32-msvc-12.0
 
 
 
@@ -52,6 +52,8 @@ if %enable_opencl% EQU 0 (
 
 %cmake% -G "%msvc_version%" -Wno-dev ^
 	%opencl_cmake_flag% ^
+	-DBoost_USE_STATIC_LIBS=ON ^
+	-DBoost_USE_STATIC_RUNTIME=ON ^
 	"-DZLIB_INCLUDE_DIR=%zlib_include_dir%" ^
 	"-DZLIB_LIBRARY:PATH=debug;%zlib_debug_lib%;optimized;%zlib_release_lib%" ^
 	"-DPNG_PNG_INCLUDE_DIR=%libpng_include_dir%" ^

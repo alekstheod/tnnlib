@@ -52,7 +52,7 @@ typedef double VarType;
 
 using namespace boost::gil;
 using namespace boost::gil::detail;
-static const std::string alphabet("123456789");
+static const std::string alphabet("0123456789");
 static const unsigned int width = 49;
 static const unsigned int height = 67;
 static const unsigned int inputsNumber = width * height;
@@ -60,7 +60,7 @@ static const unsigned int inputsNumber = width * height;
 typedef nn::Perceptron< VarType,
 			nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, 10 , inputsNumber, 1000 >, 
 			nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, 80, 10, 1000>, 
-			nn::NeuralLayer<nn::Neuron, nn::SoftmaxFunction, 9, 1000>
+			nn::NeuralLayer<nn::Neuron, nn::SoftmaxFunction, 10, 1000>
 		       > Perceptron;
 		       
 typedef nn::Perceptron< VarType,
