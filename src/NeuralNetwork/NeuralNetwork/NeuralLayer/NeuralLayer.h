@@ -117,7 +117,8 @@ private:
     /**
      * A list of the neurons.
      */
-    Container m_neurons;    
+    Container m_neurons;   
+    
 public:
     NeuralLayer():m_neurons(init(inputsNumber, neuronsNumber)){}
     NeuralLayer(size_t inputs, size_t nNumber):m_neurons(init( inputs, nNumber )){}
