@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 <head>
 <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
-<meta name="generator" content="AsciiDoc 8.6.9" />
+<meta name="generator" content="AsciiDoc 8.6.8" />
 <title>The Article Title</title>
 <style type="text/css">
 /* Shared CSS for AsciiDoc xhtml11 and html5 backends */
@@ -94,9 +94,7 @@ ul > li > * { color: black; }
   padding: 0;
   margin: 0;
 }
-pre {
-  white-space: pre-wrap;
-}
+
 
 #author {
   color: #527bbd;
@@ -225,7 +223,7 @@ div.exampleblock > div.content {
 }
 
 div.imageblock div.content { padding-left: 0; }
-span.image img { border-style: none; vertical-align: text-bottom; }
+span.image img { border-style: none; }
 a.image:visited { color: white; }
 
 dl {
@@ -805,10 +803,12 @@ because different activation functions are more or less suitable on solving diff
 </div>
 </div>
 <div class="paragraph"><p>Neuron is a basic brick of any artificial neural network, since we have it we can construct any type of the nn
-just by reusing this class.
-=== NeuralLayer</p></div>
+just by reusing this class.</p></div>
+</div>
+<div class="sect2">
+<h3 id="_neurallayer">NeuralLayer</h3>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.7
+<div class="content"><!-- Generator: GNU source-highlight 3.1.8
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -893,7 +893,7 @@ tnnlib starts with the hidden layer.</p></div>
 <div class="paragraph"><p>The only difference between the layers is the place where these layers are placed in a perceptron.</p></div>
 <div class="paragraph"><p>example with the code:</p></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.7
+<div class="content"><!-- Generator: GNU source-highlight 3.1.8
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -910,7 +910,7 @@ consists only on one neuron. This neuron is rosponsible to provide the final res
 given input.</p></div>
 <div class="paragraph"><p>The definition of the perceptron class is available in a Perceptron.h file</p></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.7
+<div class="content"><!-- Generator: GNU source-highlight 3.1.8
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -931,7 +931,7 @@ http://www.gnu.org/software/src-highlite -->
 CRTP - <a href="http://en.wikipedia.org/wiki/Curiously_recurring_template_pattern">http://en.wikipedia.org/wiki/Curiously_recurring_template_pattern</a> in order to create a conceptial interfaces in our implementation.
 An example of a neuron interface is following</p></div>
 <div class="listingblock">
-<div class="content"><!-- Generator: GNU source-highlight 3.1.7
+<div class="content"><!-- Generator: GNU source-highlight 3.1.8
 by Lorenzo Bettini
 http://www.lorenzobettini.it
 http://www.gnu.org/software/src-highlite -->
@@ -1006,8 +1006,7 @@ describe the CRTP in UML language. Especially it is true for the interfaces real
 <div id="footer">
 <div id="footer-text">
 Version 1.0<br />
-Last updated
- 2015-09-05 12:52:52 CEST
+Last updated 2015-11-15 22:32:59 CET
 </div>
 </div>
 </body>

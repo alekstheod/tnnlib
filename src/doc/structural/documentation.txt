@@ -11,6 +11,7 @@ Version 1 release
 
 Introduction
 -------------
+
 By browsing through the web we realized that there are not so many neural network libraries
 with an simple and intuitive user interface available. We thought that it 
 would be very interesting to construct a neural network in an easy way by 
@@ -45,18 +46,25 @@ here we are:
 image:neuron_math.png[math_neuron]
 
 == Design
+
 So lets do some mapping between the mathematical representation and biological instance of an neuron.
 Dendrites are the Inputs for a neuron. So Input class.
 Cell body is an actuall body of a neuron therefore can be represented as a Neuron class.
 Axon is represented as an activation function in a neuron. Activation function should be exchangable
 because different activation functions are more or less suitable on solving different types of problems.
 
+
 include::neuron.txt[]
+
 include::neurallayer.txt[]
+
 include::perceptron.txt[]
+
 include::tnnlib.txt[]
 
+
 === Template based intefaces
+
 Since in c++ we still don't have an official support for a concepts we decided to use the 
 CRTP - http://en.wikipedia.org/wiki/Curiously_recurring_template_pattern in order to create a conceptial interfaces in our implementation. 
 An example of a neuron interface is following
@@ -101,6 +109,7 @@ The interface simply wraps the template argument and propagate all the call into
 This concept is used all over the place in a tnn library. 
 
 == Architecture
+
 include::design.txt[]
 
 == Next steps
