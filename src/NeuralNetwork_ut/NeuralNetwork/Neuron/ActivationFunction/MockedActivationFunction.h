@@ -4,6 +4,7 @@
 #include <gmock/gmock.h>
 #include <vector>
 
+
 template<typename VarType>
 class MockedActivationFunction{
 public:

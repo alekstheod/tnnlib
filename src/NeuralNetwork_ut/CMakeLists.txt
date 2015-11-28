@@ -16,7 +16,8 @@ link_directories(${Boost_LIBRARY_DIRS})
 add_executable(NeuralNetwork_ut
 	main.cpp
 	NeuralNetwork/Neuron/NeuronTest.cpp
-	NeuralNetwork/Perceptron/PerceptronTest.cpp)
+	NeuralNetwork/Perceptron/PerceptronTest.cpp
+	NeuralNetwork/Neuron/ActivationFunction/ThresholdTest.cpp)
 
 include_directories(.
 	../gmock-1.7.0/include
