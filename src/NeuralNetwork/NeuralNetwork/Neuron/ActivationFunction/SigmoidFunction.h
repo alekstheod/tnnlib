@@ -73,14 +73,14 @@ public:
      * @return the calculation result.
      */
     template<typename Iterator>
-    Var calculateEquation ( const Var& sum, Iterator begin, Iterator end )const {
+    Var calculate ( const Var& sum, Iterator begin, Iterator end )const {
         Var tmp ( m_slope * sum );
         Var tmp2 = tmp * boost::numeric_cast<Var>( -1.0f );
         return boost::numeric_cast<Var> ( 1.0f ) / ( boost::numeric_cast<Var> ( 1.0f ) + utils::exp ( tmp2 ) );
     }
 
     template<typename Iterator>
-    Var calculateSum(Iterator begin, Iterator end, const Var& start)const {
+    Var sum (Iterator begin, Iterator end, const Var& start)const {
         return std::accumulate( begin, end, start );
     }
 
@@ -90,11 +90,11 @@ public:
      * @param output the output value of the neuron.
      * @return result of calculation.
      */
-    Var calculateDelta ( const Var& output , const Var& expectedOutput)const {
-        return ( output - expectedOutput )*calculateDerivate(output);
+    Var delta ( const Var& output , const Var& expectedOutput)const {
+        return ( output - expectedOutput )*derivate(output);
     }
 
-    Var calculateDerivate ( const Var& output)const {
+    Var derivate ( const Var& output)const {
         return m_slope * output * ( boost::numeric_cast<Var> ( 1.0f ) - output );
     }
 

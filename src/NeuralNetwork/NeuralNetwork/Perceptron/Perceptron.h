@@ -86,6 +86,7 @@ public:
     struct rebindInputs{
       typedef Perceptron<VarType, LayerTypes, in> type;
     };
+    
 private:
     /*!
      * Hidden layers.

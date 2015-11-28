@@ -50,6 +50,7 @@
 #include <array>
 #include <Utilities/Design/Factory.h>
 #include <NeuralNetwork/Perceptron/ComplexLayer.h>
+#include <NeuralNetwork/RBM/RBM.h>
 
 using namespace nn;
 using namespace bp;
@@ -66,6 +67,12 @@ int main ( int argc, char** argv )
             nn::NeuralLayer<nn::Neuron, nn::TanhFunction, 20>,
             nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, 1>
             > Perceptron;
+	    
+	    
+    nn::detail::RBM<float, 
+		    nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, 3>,
+		    nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, 10>  > rbm;
+				      	    
 
     typedef BepAlgorithm< Perceptron > Algo;
     Algo algorithm (0.09f, 0.01f );
@@ -81,7 +88,7 @@ int main ( int argc, char** argv )
         numOfEpochs = utils::lexical_cast< unsigned int >(argv[1]);
     }
 
-    Perceptron perceptron = algorithm.calculatePerceptron ( prototypes.begin(), prototypes.end(),
+    Perceptron perceptron = algorithm.calculate( prototypes.begin(), prototypes.end(),
     [] ( float error ) {
         std::cout << error << std::endl;
     },

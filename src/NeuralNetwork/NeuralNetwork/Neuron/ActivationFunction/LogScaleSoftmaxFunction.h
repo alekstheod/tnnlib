@@ -56,7 +56,7 @@ public:
     ~LogScaleSoftmaxFunction() {}
 
     template<typename Iterator>
-    Var calculateEquation ( const Var& sum, Iterator begin, Iterator end )const {
+    Var calculate ( const Var& sum, Iterator begin, Iterator end )const {
         Var sum2 = boost::numeric_cast<Var>(0.f);
         while(begin != end ) {
             sum2 += *begin ;
@@ -67,7 +67,7 @@ public:
     }
 
     template<typename Iterator>
-    Var calculateSum(Iterator begin, Iterator end, const Var& start)const {
+    Var sum (Iterator begin, Iterator end, const Var& start)const {
 	Var max = *begin; //*max_element(begin, end); // doesn't work with transform_iterator...
 	Iterator i = begin;
 	while(i != end ){
@@ -88,7 +88,7 @@ public:
         return sum;
     }
 
-    Var calculateDelta ( const Var& output, const Var& expectedOutput)const {
+    Var delta ( const Var& output, const Var& expectedOutput)const {
         return ( output - expectedOutput );
     }
 };

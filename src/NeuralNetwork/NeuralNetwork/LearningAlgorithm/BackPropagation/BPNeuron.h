@@ -104,12 +104,12 @@ public:
     */
     template<typename MomentumFunc>
     const Var& calculateDelta( const Var& expectedOutput, MomentumFunc momentum ) {
-        m_delta = momentum (m_delta, m_outputFunction.calculateDelta ( Neuron::getOutput(), expectedOutput ) );
+        m_delta = momentum (m_delta, m_outputFunction.delta ( Neuron::getOutput(), expectedOutput ) );
         return m_delta;
     }
 
     const Var calculateDerivate()const {
-        return m_outputFunction.calculateDerivate(Neuron::getOutput());
+        return m_outputFunction.derivate(Neuron::getOutput());
     }
 
     /**

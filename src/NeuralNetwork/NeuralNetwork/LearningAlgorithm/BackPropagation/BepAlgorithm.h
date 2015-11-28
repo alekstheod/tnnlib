@@ -72,7 +72,7 @@ private:
     Perceptron m_perceptron;
 
     /// @brief error limit, algorithm will stop execution when we reach this error limit.
-    float m_maxError;
+    Var m_maxError;
 
     /// @brief the learning rate.
     Var m_leariningRate;
@@ -112,7 +112,7 @@ public:
     /// @brief constructor will initialize the object with a learning rate and maximum error limit.
     /// @param varP the learning rate.
     /// @param maxError the limit for the error. Algorithm will stop when we reach the limit.
-    BepAlgorithm ( Var learningRate, float maxError):m_maxError ( maxError )
+    BepAlgorithm ( Var learningRate, Var maxError):m_maxError ( maxError )
         ,m_leariningRate(learningRate){}
 
     /// @brief execution of the single learning step in this algorithm.
@@ -137,11 +137,11 @@ public:
     }
 
     template<typename Iterator, typename ErrorFunc>
-    PerceptronType calculatePerceptron ( Iterator begin, Iterator end,
-                                         ErrorFunc func,
-                                         unsigned int maxNumberOfEpochs = std::numeric_limits< unsigned int >::max()
-                                       ) {
-        return calculatePerceptron(begin, end, func, maxNumberOfEpochs, DummyMomentum() );
+    PerceptronType calculate ( Iterator begin, 
+			       Iterator end,
+                               ErrorFunc func,
+                               unsigned int maxNumberOfEpochs = std::numeric_limits< unsigned int >::max() ) {
+        return calculate(begin, end, func, maxNumberOfEpochs, DummyMomentum() );
     }
     
     void setMemento( PerceptronMemento<Var> memento ){
@@ -155,7 +155,7 @@ public:
     /// @param MomentumFunc function which will calculate a momentum.
     /// @return a calculated perceptron.
     template<typename Iterator, typename ErrorFunc, typename MomentumFunc>
-    PerceptronType calculatePerceptron ( Iterator begin, Iterator end,
+    PerceptronType calculate ( Iterator begin, Iterator end,
                                          ErrorFunc func,
                                          unsigned int maxNumberOfEpochs = std::numeric_limits< unsigned int >::max(),
                                          MomentumFunc momentum = DummyMomentum()

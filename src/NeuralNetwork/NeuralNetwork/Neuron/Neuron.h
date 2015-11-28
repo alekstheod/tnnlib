@@ -221,7 +221,7 @@ public:
     Var calcDotProduct()const {
         auto begin = boost::make_transform_iterator(m_inputs.cbegin(), boost::bind(&Neuron::sumInput, this, _1) );
         auto end = boost::make_transform_iterator(m_inputs.cend(), boost::bind(&Neuron::sumInput, this, _1) );
-        return m_activationFunction.calculateSum(begin, end, m_bias);
+        return m_activationFunction.sum(begin, end, m_bias);
     }
 
     /// @brief see @ref INeuron
@@ -247,7 +247,7 @@ public:
     /// @brief see @ref INeuron
     template<typename Iterator>
     const Var& calculateOutput (Iterator begin, Iterator end) {
-        m_output = m_activationFunction.calculateEquation ( calcDotProduct(), begin, end );
+        m_output = m_activationFunction.calculate ( calcDotProduct(), begin, end );
         return m_output;
     }
 

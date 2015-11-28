@@ -56,7 +56,7 @@ public:
     ~SoftmaxFunction() {}
 
     template<typename Iterator>
-    Var calculateEquation ( const Var& sum, Iterator begin, Iterator end )const {
+    Var calculate ( const Var& sum, Iterator begin, Iterator end )const {
         return utils::exp(sum)/std::accumulate(begin,
                                                end,
                                                boost::numeric_cast<Var>(0.f),
@@ -65,11 +65,11 @@ public:
     }
 
     template<typename Iterator>
-    Var calculateSum(Iterator begin, Iterator end, const Var& start)const {
+    Var sum (Iterator begin, Iterator end, const Var& start)const {
         return std::accumulate( begin, end, start);
     }
 
-    Var calculateDelta ( const Var& output, const Var& expectedOutput)const {
+    Var delta ( const Var& output, const Var& expectedOutput)const {
         return ( output - expectedOutput );
     }
 };
