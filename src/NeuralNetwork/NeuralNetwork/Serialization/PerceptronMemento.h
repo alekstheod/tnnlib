@@ -31,16 +31,16 @@
 #define PERCEPTRONMEMENTO_H
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/nvp.hpp>
-#include <boost/serialization/array.hpp>
 #include <NeuralNetwork/Serialization/NeuralLayerMemento.h>
-#include <vector>
+#include <NeuralNetwork/Serialization/Tuple.h>
 
 namespace nn {
 
-template<class Var>
+template<typename Layers>
 class PerceptronMemento {
 private:
-    std::vector< NeuralLayerMemento<Var> > m_neuralLayers;
+    using Container = Layers;
+    Container m_neuralLayers;
 
 private:
     friend class boost::serialization::access;
@@ -50,19 +50,14 @@ private:
     {
         ar & BOOST_SERIALIZATION_NVP(m_neuralLayers);
     }
+    
 public:
-    PerceptronMemento() {
-    }
-
-    const std::vector< NeuralLayerMemento<Var> >& getLayers() const {
+    const Container& getLayers() const {
         return m_neuralLayers;
     }
 
-    void setLayers ( const std::vector< NeuralLayerMemento<Var> >& neuralLayers ) {
+    void setLayers ( const Container& neuralLayers ) {
         m_neuralLayers = neuralLayers;
-    }
-
-    ~PerceptronMemento() {
     }
 };
 

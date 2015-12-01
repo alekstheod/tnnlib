@@ -59,3 +59,4 @@ target_link_libraries(NeuralNetwork
 		      Utilities
 		      ${Boost_LIBRARIES}
 		      ${OPENCL_LIBRARIES})
+		      

@@ -1,5 +1,7 @@
 #ifndef RBM_H
 #define RBM_H
+#include <algorithm>
+#include <boost/numeric/conversion/cast.hpp>
 
 namespace nn{
 
@@ -14,11 +16,13 @@ template<typename VarType,
 	 typename OutputLayerType>
 class RBM{
 private:
+  using Var = VarType;
   using InputTmp = typename InputLayerType::template rebindVar<VarType>::type;
   using OutputTmp = typename OutputLayerType::template rebindVar<VarType>::type;
   using InputLayer = INeuralLayer<typename InputTmp::template rebindInputs<OutputTmp::CONST_NEURONS_NUMBER>::type>;
   using OutputLayer = INeuralLayer<typename OutputTmp::template rebindInputs<InputTmp::CONST_NEURONS_NUMBER>::type>;
 
+  static constexpr std::size_t INPUTS_NUMBER = InputLayer::CONST_NEURONS_NUMBER; 
   InputLayer m_input;
   OutputLayer m_output;
   
@@ -32,18 +36,12 @@ public:
   template<typename It,typename  OutIt>
   void calculate(It begin, It end, OutIt out){
         unsigned int inputId = 0;
-        while( begin != end ) {
-            m_output.setInput(inputId, *begin);
-            begin++;
-            inputId++;
-        }
+        std::for_each(begin, end, [&](const Var& val){m_output.setInput(inputId++, val);});
 
         VarType biasInput = boost::numeric_cast<VarType>(1.f);
-        m_output.setInput(m_input.size()-1, biasInput);
 	m_input.setInput(m_output.size()-1, biasInput);
-        m_output.calculate(m_input);
-	m_input.calculate(m_output);
-	m_output.calculate();
+	m_input.calculateOutputs(m_output);
+	m_output.calculateOutputs();
 	std::transform( m_output.begin(),
 			m_output.end(),
 			out,
@@ -55,14 +53,6 @@ public:
 
 }
 
-template<typename VarType, 
-	 typename InputLayerType, 
-	 typename OutputLayerType,
-	 typename It>
-detail::RBM<VarType, InputLayerType, OutputLayerType> calculateRBM(It begin, It end){
-  typedef detail::RBM<VarType, InputLayerType, OutputLayerType>  RBM;
-  
-}
 
 }
 

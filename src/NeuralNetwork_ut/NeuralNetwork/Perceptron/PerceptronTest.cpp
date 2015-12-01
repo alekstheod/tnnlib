@@ -38,41 +38,30 @@ using ::testing::Mock;
 using ::testing::InSequence;
 
 typedef std::array<int, 4>::iterator Iterator;
-typedef MockedNeuralLayer<float, 5> NeuralLayer1;
-typedef MockedNeuralLayer<float, 2> NeuralLayer2;
+typedef MockedNeuralLayer<float, 5, 1> NeuralLayer1;
+typedef MockedNeuralLayer<float, 2, 5> NeuralLayer2;
 typedef nn::Perceptron< float, NeuralLayer1, NeuralLayer2 > Perceptron;
-typedef NeuralLayer1::Neuron Neuron;
+typedef NeuralLayer2::Neuron Neuron;
 
-std::array< Neuron, 2 > neurons = { 
-				      Neuron(4),
-				      Neuron(4)
-				    };
+std::array< Neuron, 2> neurons;
 
-PerceptronTest::PerceptronTest():m_inputsNumber(0), m_outputsNumber(0) {
+PerceptronTest::PerceptronTest(){
 }
 
 PerceptronTest::~PerceptronTest() {
 }
 
 void PerceptronTest::SetUp() {
-    m_inputsNumber  = 4;
-    m_outputsNumber = 2;
-    m_outputs.resize(2, 0.f);
     m_inputs.resize(4, 0.f);
-    neurons[0]=Neuron(4);
-    neurons[1]=Neuron(4);
 }
 
 void PerceptronTest::TearDown() {
-    (*neurons[0]).clear();
-    (*neurons[1]).clear();
 }
   
 USING_SUPPORT_TEST_T_NN(PerceptronTest, TestCalculateOutputsForOneLayerPerceptron, nn, detail, Perceptron)
 TEST_F(PerceptronTest, TestCalculateOutputsForOneLayerPerceptron) {
   Perceptron perceptron;
   perceptron.supportTest(*this);
-  m_outputs.push_back(1.0);
   std::array< float, 2 > outputs = { 0.f, 0.f };
   perceptron.calculate(m_inputs.begin(), m_inputs.end(), outputs.begin() );
   ASSERT_EQ( 1.f, outputs[0] );

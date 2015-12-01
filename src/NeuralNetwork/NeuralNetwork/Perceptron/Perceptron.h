@@ -40,6 +40,11 @@
 #include <cassert>
 #include <tuple>
 #include <type_traits>
+#include <functional>
+#include <NeuralNetwork/Utils/Utils.h>
+
+template<typename T>
+void test(T t, std::size_t sz){}
 
 namespace nn {
 
@@ -73,9 +78,9 @@ public:
         typedef typename utils::rebind_tuple<Layer, Layers>::type NewLayers;
         typedef detail::Perceptron<VarType, NewLayers > type;
     };
-
-    /// @brief Memento type.
-    typedef PerceptronMemento<Var> Memento;
+    
+    using LayersMemento = typename detail::mpl::ToMemento< Layers >::type;
+    typedef PerceptronMemento< LayersMemento > Memento;
 
     template<typename T>
     struct rebindVar{
@@ -93,26 +98,28 @@ private:
      */
     Layers  m_layers;
 
-    struct SetMemento {
-        int& m_position;
-        std::vector< NeuralLayerMemento<Var> > m_layers;
-        SetMemento(int& position, std::vector< NeuralLayerMemento<Var> > layers):m_position(position), m_layers(layers) {}
-        template<typename T>
-        void operator()(T& layer) {
-            layer.setMemento(m_layers[m_position]);
-            m_position++;
-        }
-    };
-
-    struct GetMemento {
-        std::vector<NeuralLayerMemento<Var> >& m_layers;
-        GetMemento( std::vector<NeuralLayerMemento<Var> >& layers ) : m_layers(layers) {}
-        template<typename T>
-        void operator()(const T& layer) {
-            m_layers.push_back(layer.getMemento());
-        }
-    };
-
+    template<std::size_t index>
+    void setMem(const LayersMemento& layers, int){}    
+    
+    template<std::size_t index>
+    void setMem(const LayersMemento& layers, bool){
+      std::get<index>(m_layers).setMemento(std::get<index>(layers));
+      enum { enable = (index < CONST_LAYERS_NUMBER - 2) };
+      typedef typename std::conditional< enable, bool, int >::type ArgType;
+      setMem<index+1>( layers,  ArgType(0));      
+    }
+    
+    template<std::size_t index>
+    void getMem(LayersMemento& layers, int)const{}    
+    
+    template<std::size_t index>
+    void getMem(LayersMemento& layers, bool)const{
+      std::get<index>(layers) = std::get<index>(m_layers).getMemento();
+      enum { enable = (index < CONST_LAYERS_NUMBER - 2) };
+      typedef typename std::conditional< enable, bool, int >::type ArgType;
+      getMem<index+1>( layers,  ArgType(0));      
+    }
+       
     template<unsigned int index>
     void calculate(Layers&, int) {}
 
@@ -124,16 +131,13 @@ private:
         typedef typename std::conditional< enable, bool, int >::type ArgType;
         calculate<index+1>( layers,  ArgType(0));
     }
+    
+    static_assert( std::tuple_size< Layers >::value > 1 , 
+		   "Invalid number of layers, at least two layers need to be set" );    
 
 public:
-    /*!
-     *
-     */
-    Perceptron()
-    {
-        static_assert( std::tuple_size< Layers >::value > 1 , "Invalid number of layers, at least two layers need to be set" );
-    }
-    
+    Perceptron(){}
+      
     Perceptron( const Layers& layers ):m_layers(layers){}
     
     Layers& layers() {
@@ -142,17 +146,14 @@ public:
 
     void setMemento( const Memento& memento )
     {
-        auto layers = memento.getLayers();
-        int position = 0;
-        utils::for_each(m_layers, SetMemento(position, layers) );
+	setMem<0>(memento.getLayers(), true);
     }
 
     Memento getMemento()const
     {
-        typename std::vector< NeuralLayerMemento<Var> > layers;
-        layers.reserve( CONST_LAYERS_NUMBER );
-        utils::for_each_c(m_layers, GetMemento(layers) );
-        PerceptronMemento<Var> memento;
+        LayersMemento layers;
+        getMem<0>(layers, true);
+	Memento memento;
         memento.setLayers(layers);
         return memento;
     }
@@ -189,12 +190,6 @@ public:
      */
     template<typename Test>
     void supportTest(Test&);
-
-    /*!
-     * Destructor
-     */
-    ~Perceptron() {
-    }
 };
 
 }

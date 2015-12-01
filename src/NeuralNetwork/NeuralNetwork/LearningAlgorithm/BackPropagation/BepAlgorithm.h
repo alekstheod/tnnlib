@@ -60,12 +60,13 @@ private:
 	BOOST_STATIC_CONSTEXPR unsigned int inputsNumber = PerceptronType::CONST_INPUTS_NUMBER;
 	BOOST_STATIC_CONSTEXPR unsigned int outputsNumber = PerceptronType::CONST_OUTPUTS_NUMBER;
 
-public:
-    typedef typename std::tuple< std::array<Var, inputsNumber>, std::array<Var, outputsNumber> > Prototype;
-
 private:
     typedef typename PerceptronType::template wrap< BPNeuralLayer >::type Perceptron;
     typedef typename Perceptron::Layers Layers;
+    
+public:
+    typedef typename std::tuple< std::array<Var, inputsNumber>, std::array<Var, outputsNumber> > Prototype;
+    using Memento = typename Perceptron::Memento;
 
 private:
     /// @brief current perceptron.
@@ -144,7 +145,7 @@ public:
         return calculate(begin, end, func, maxNumberOfEpochs, DummyMomentum() );
     }
     
-    void setMemento( PerceptronMemento<Var> memento ){
+    void setMemento( Memento memento ){
       m_perceptron.setMemento(memento);
     }
 
@@ -155,36 +156,29 @@ public:
     /// @param MomentumFunc function which will calculate a momentum.
     /// @return a calculated perceptron.
     template<typename Iterator, typename ErrorFunc, typename MomentumFunc>
-    PerceptronType calculate ( Iterator begin, Iterator end,
-                                         ErrorFunc func,
-                                         unsigned int maxNumberOfEpochs = std::numeric_limits< unsigned int >::max(),
-                                         MomentumFunc momentum = DummyMomentum()
-                                       ) {
+    PerceptronType calculate ( Iterator begin, 
+			       Iterator end,
+                               ErrorFunc func, 
+                               unsigned int limit = std::numeric_limits< unsigned int >::max(),
+                               MomentumFunc momentum = DummyMomentum() ) {
         Var error = boost::numeric_cast<Var>(0.f);
         unsigned int epochCounter = 0;
         typename std::vector<Prototype > prototypes(begin, end);
-
+	
         do {
             error = 0;
             auto seed = std::chrono::system_clock::now().time_since_epoch().count();
-            std::shuffle(
-				prototypes.begin(),
-				prototypes.end(),
-				std::default_random_engine(static_cast<unsigned int>(seed)));
+            std::shuffle(prototypes.begin(),
+			 prototypes.end(),
+			 std::default_random_engine(static_cast<unsigned int>(seed)));
+	    
             error = std::accumulate(prototypes.begin(), prototypes.end(),  error, [&]( Var& init, Prototype& first )->Var {
                 return init+executeTrainingStep(first, momentum);
             });
 
             func (error);
-            if( epochCounter < std::numeric_limits< unsigned int >::max() ) {
-                epochCounter++;
-            }
-
-        } while ( error > m_maxError && 
-		  (epochCounter < maxNumberOfEpochs
-                      || maxNumberOfEpochs == std::numeric_limits< unsigned int >::max()
-                     )
-                );
+            epochCounter += epochCounter <  limit ? 1: 0;  
+        } while ( epochCounter < limit && error > m_maxError );
 
         PerceptronType perceptron;
         perceptron.setMemento( m_perceptron.getMemento() );

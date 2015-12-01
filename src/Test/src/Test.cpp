@@ -72,6 +72,10 @@ int main ( int argc, char** argv )
     nn::detail::RBM<float, 
 		    nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, 3>,
 		    nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, 10>  > rbm;
+		    
+    float input[3] = {1.f, 1.f , 2.f};
+    float output[10] = {0};
+    rbm.calculate(input, input+3, output);
 				      	    
 
     typedef BepAlgorithm< Perceptron > Algo;
@@ -88,14 +92,15 @@ int main ( int argc, char** argv )
         numOfEpochs = utils::lexical_cast< unsigned int >(argv[1]);
     }
 
-    Perceptron perceptron = algorithm.calculate( prototypes.begin(), prototypes.end(),
-    [] ( float error ) {
-        std::cout << error << std::endl;
-    },
-    numOfEpochs
-                                                          );
+    Perceptron perceptron = algorithm.calculate( prototypes.begin(), 
+						 prototypes.end(),
+						  [] ( float error ) {
+						      std::cout << error << std::endl;
+						  },
+						  numOfEpochs );
 
-    PerceptronMemento< float > memento = perceptron.getMemento();
+    using Memento = Perceptron::Memento;
+    Memento memento = perceptron.getMemento();
     Perceptron perceptron2;
     {
         std::stringstream strStream;
@@ -103,9 +108,10 @@ int main ( int argc, char** argv )
         // write class instance to archive
         oa << BOOST_SERIALIZATION_NVP ( memento );
 
-        PerceptronMemento< float > memento2;
+        Memento memento2;
         boost::archive::xml_iarchive ia ( strStream );
         ia  >> BOOST_SERIALIZATION_NVP ( memento2 );
+	std::cout << strStream.str() << std::endl;
 
         perceptron2.setMemento ( memento2 );
     }

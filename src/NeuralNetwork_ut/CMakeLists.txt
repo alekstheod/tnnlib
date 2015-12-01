@@ -17,7 +17,7 @@ add_executable(NeuralNetwork_ut
 	main.cpp
 	NeuralNetwork/Neuron/NeuronTest.cpp
 	NeuralNetwork/Perceptron/PerceptronTest.cpp
-	NeuralNetwork/Neuron/ActivationFunction/ThresholdTest.cpp)
+	NeuralNetwork/Neuron/ActivationFunction/BinaryTest.cpp)
 
 include_directories(.
 	../gmock-1.7.0/include

@@ -36,7 +36,7 @@ typedef nn::SigmoidFunction<float> Equation;
 typedef std::pair<float, float> Input;
 typedef std::vector< Input > Inputs;
 typedef Inputs::const_iterator InputIterator;
-typedef nn::detail::Neuron<MockedActivationFunction<float>, 5, 1, false > Neuron;
+typedef nn::detail::Neuron<MockedActivationFunction<float>, 5, 1 > Neuron;
  
 
 TEST_F(NeuronTest, TestSetInputWeight) {

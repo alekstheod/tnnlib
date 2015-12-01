@@ -45,9 +45,10 @@ namespace bp {
 template<class NeuronType>
 class BPNeuron  : public INeuron<NeuronType> {
 public:
-    typedef nn::INeuron<NeuronType> Neuron;
-    typedef typename Neuron::Var Var;
-    typedef typename Neuron::OutputFunction OutputFunction;
+    using Neuron = nn::INeuron<NeuronType>;
+    using Var = typename Neuron::Var;
+    using Memento = typename Neuron::Memento;
+    using OutputFunction = typename Neuron::OutputFunction;
 
     template<typename EquationType>
     struct rebind {
@@ -94,7 +95,7 @@ public:
         m_delta = delta;
     }
     
-    void setMemento( NeuronMemento<Var> memento ){
+    void setMemento( const Memento& memento ){
       (*this)->setMemento(memento);
     }
 

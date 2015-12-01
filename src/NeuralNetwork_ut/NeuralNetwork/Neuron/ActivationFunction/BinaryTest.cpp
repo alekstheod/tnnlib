@@ -1,7 +1,7 @@
 /*
- * Copyright (c) 2014, alekstheod <email>
+ * Copyright (c) 2015, <Alexandros Theodoridis> <alekstheod@gmail.com>
  * All rights reserved.
- *
+ * 
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
  *     * Redistributions of source code must retain the above copyright
@@ -12,39 +12,53 @@
  *     * Neither the name of the <organization> nor the
  *     names of its contributors may be used to endorse or promote products
  *     derived from this software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY alekstheod <email> ''AS IS'' AND ANY
+ * 
+ * THIS SOFTWARE IS PROVIDED BY <Alexandros Theodoridis> <alekstheod@gmail.com> ''AS IS'' AND ANY
  * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL alekstheod <email> BE LIABLE FOR ANY
+ * DISCLAIMED. IN NO EVENT SHALL <Alexandros Theodoridis> <alekstheod@gmail.com> BE LIABLE FOR ANY
  * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
  * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
  * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
  * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
+ * 
  */
 
-#ifndef PERCEPTRONTEST_H
-#define PERCEPTRONTEST_H
-#include <gtest/gtest.h>
-#include <NeuralNetwork/Perceptron/Perceptron.h>
-#include <NeuralNetwork/Perceptron/NeuralLayer/MockedNeuralLayer.h>
-#include <NeuralNetwork/Neuron/MockedNeuron.h>
+#include "BinaryTest.h"
+#include <NeuralNetwork/Neuron/ActivationFunction/MockedActivationFunction.h>
+#include <NeuralNetwork/Neuron/ActivationFunction/Binary.h>
 #include <array>
 
-class PerceptronTest : public ::testing::Test
+typedef MockedActivationFunction<float> Func;
+using ::testing::Return;
+
+
+INSTANTIATE_TEST_CASE_P(TestBinary,
+                        BinaryTest,
+                        ::testing::Values( Param(0.1f, 0.f),
+					   Param(0.f, 0.f),
+					   Param(0.01f, 0.f),
+					   Param(0.18f, 0.f),
+					   Param(0.19f, 0.f), 
+					   Param(-0.1f, 0.f),
+					   Param(0.20f, 0.f),
+					   Param(0.21f, 1.f),
+					   Param(0.99f, 1.f),
+					   Param(0.6f, 1.f),
+					   Param(0.8f, 1.f),
+					   Param(1.1f, 1.f),
+					   Param(0.5f, 1.f)));
+
+
+TEST_P(BinaryTest, TestBinary)
 {
-public:
-    PerceptronTest() ;
-    ~PerceptronTest() ;
-    void SetUp() ;
-    void TearDown();
-    
-public:
-  std::vector< float> m_inputs;
-};
+    nn::Binary<Func, 20> func;
+    std::array<float, 3> inputs;
+    auto param = GetParam();
+    EXPECT_CALL(*func, calcEquation() ).WillOnce(Return(param.activation));
+    ASSERT_EQ( param.result, func.calculate(0, inputs.begin(), inputs.end()) );
+}
 
 
-#endif // PERCEPTRONTEST_H

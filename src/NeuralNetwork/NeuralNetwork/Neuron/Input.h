@@ -18,7 +18,6 @@ private:
   void serialize(Archive & ar, const unsigned int version)
   {
       ar & BOOST_SERIALIZATION_NVP(weight);
-      ar & BOOST_SERIALIZATION_NVP(value);
   }
   
 };

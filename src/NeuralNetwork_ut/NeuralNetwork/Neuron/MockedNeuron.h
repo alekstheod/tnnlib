@@ -35,21 +35,21 @@
 #include <utility>
 #include <memory>
 
-template<typename OutputFunctionType>
+template<typename OutputFunctionType, 
+	 std::size_t inputsNumber>
 class MockedNeuron
 {
 public:
     typedef typename nn::IActivationFunction<OutputFunctionType> OutputFunction;
     typedef typename OutputFunction::Var Var;
-    typedef typename nn::NeuronMemento<Var> Memento;
+    typedef typename nn::NeuronMemento<Var, inputsNumber> Memento;
     typedef typename std::pair< Var, Var > Input;
 
     template<typename OutputFunc >
     struct rebind {
-        typedef MockedNeuron<OutputFunc> type;
+        typedef MockedNeuron<OutputFunc, inputsNumber> type;
     };
 public:
-    const unsigned int m_intpusNumber;
     class Mock;
     
 private:
@@ -65,10 +65,11 @@ public:
 
     unsigned int size()const
     {
-        return m_intpusNumber;
+        return inputsNumber;
     }
 
-    MockedNeuron<OutputFunctionType>& operator = (MockedNeuron<OutputFunctionType> other){
+    using TMock = MockedNeuron<OutputFunctionType, inputsNumber>;
+    TMock& operator = (TMock other){
       m_mock = other.m_mock;
       return *this;
     }    
@@ -94,8 +95,7 @@ public:
       m_mock.reset();
     }
     
-    MockedNeuron(unsigned int inputsNumber):m_intpusNumber(inputsNumber), m_mock(new Mock) {}
-    ~MockedNeuron() {}
+    MockedNeuron():m_mock(new Mock){}
 };
 
 

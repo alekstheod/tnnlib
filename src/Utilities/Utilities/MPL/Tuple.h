@@ -43,11 +43,13 @@ struct for_each_t_c<0> {
     }
 };
 
+
 template <class T, std::size_t N, class... Args>
 struct get
 {
     static const auto value = N;
 };
+
 
 template <class T, std::size_t N, class... Args>
 struct get<T, N, T, Args...>
@@ -55,14 +57,17 @@ struct get<T, N, T, Args...>
     static const auto value = N;
 };
 
+
 template <class T, std::size_t N, class U, class... Args>
 struct get<T, N, U, Args...>
 {
     static const auto value = get<T, N + 1, Args...>::value;
 };
 
+
 template<template<typename> class C, typename Tuple>
 struct rebind_tuple;
+
 
 template<template<typename> class C, typename... Args>
 struct rebind_tuple<C, std::tuple<Args...>>
@@ -72,11 +77,13 @@ struct rebind_tuple<C, std::tuple<Args...>>
 
 } // namespace detail
 
+
 template <class T, class... Args>
 T& get(std::tuple<Args...>& t)
 {
     return std::get<detail::get<T, 0, Args...>::value>(t);
 }
+
 
 template < typename Functor, typename... ArgsT >
 void for_each( std::tuple<ArgsT...>& t, Functor func )
@@ -84,11 +91,13 @@ void for_each( std::tuple<ArgsT...>& t, Functor func )
     detail::for_each_t<sizeof...(ArgsT)>::exec( t, func );
 }
 
+
 template < typename Functor, typename... ArgsT >
 void for_each_c( const std::tuple<ArgsT...>& t, Functor func )
 {
     detail::for_each_t_c<sizeof...(ArgsT)>::exec( t, func );
 }
+
 
 template< template<class> class C, typename Tuple>
 struct rebind_tuple
@@ -96,8 +105,10 @@ struct rebind_tuple
   typedef typename detail::rebind_tuple<C, Tuple>::type type;
 };
 
+
 template<typename LastElement, typename... Elements>
 struct push_back;
+
 
 template<typename LastElement, typename... Elements>
 struct push_back<LastElement, std::tuple<Elements...> >
