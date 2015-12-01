@@ -29,11 +29,10 @@
 
 #ifndef NEURALLAYERMEMENTO_H
 #define NEURALLAYERMEMENTO_H
+#include <array>
 #include <NeuralNetwork/Serialization/NeuronMemento.h>
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/array.hpp>
-#include <array>
-
 namespace nn {
 
 template<typename NeuronMemento,
