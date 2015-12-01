@@ -47,6 +47,17 @@ struct rebindInputs
     typedef typename RebindInputsHelper<FirstInputs, std::tuple<>, Tuple>::type type;
 };
 
+
+/// @brief Memento type.
+template<typename T>
+struct ToMemento;
+
+template<typename... L>
+struct ToMemento<std::tuple<L...> >{
+  using type = typename std::tuple< typename L::Memento...>;
+};
+
+
 }
 
 }

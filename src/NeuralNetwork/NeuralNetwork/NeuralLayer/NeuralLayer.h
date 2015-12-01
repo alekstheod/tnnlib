@@ -50,18 +50,15 @@ namespace detail {
  */
 template<class NeuronType,
 	 std::size_t neuronsNumber, 
-	 std::size_t inputsNumber, 
-	 bool isDynamic>
+	 std::size_t inputsNumber>
 class NeuralLayer
 {
 public:
     typedef INeuron<typename NeuronType::template rebindInputs<inputsNumber>::type> Neuron;
     typedef typename Neuron::Var Var;
     typedef typename Neuron::Memento NeuronMemento;
-    typedef NeuralLayerMemento<Var> Memento;
-    typedef typename std::conditional<isDynamic,  
-				      std::vector<Neuron>, 
-				      std::array<Neuron, neuronsNumber> >::type Container;
+    typedef NeuralLayerMemento<NeuronMemento, neuronsNumber> Memento;
+    typedef typename std::array<Neuron, neuronsNumber> Container;
 				      
     typedef typename Container::const_iterator const_iterator;
     typedef typename Container::iterator iterator;
@@ -70,59 +67,34 @@ public:
 
     template<template <class> class NewType>
     struct rebind {
-        typedef NeuralLayer< NewType<NeuronType>, neuronsNumber, inputsNumber, isDynamic > type;
+        typedef NeuralLayer< NewType<NeuronType>, neuronsNumber, inputsNumber > type;
     };
 
     template<typename NewType, unsigned int inputs>
     struct rebindNeuron {
-        typedef NeuralLayer< NewType, neuronsNumber, inputs, isDynamic > type;
+        typedef NeuralLayer< NewType, neuronsNumber, inputs > type;
     };
     
     template< unsigned int inputs>
     struct rebindInputs{
-      typedef NeuralLayer<NeuronType, neuronsNumber, inputs, isDynamic> type;
+      typedef NeuralLayer<NeuronType, neuronsNumber, inputs> type;
     };
 
     template<typename VarType>
     struct rebindVar{
-      typedef NeuralLayer< typename NeuronType::template rebindVar<VarType>::type , neuronsNumber, inputsNumber, isDynamic > type;
+      typedef NeuralLayer< typename NeuronType::template rebindVar<VarType>::type , neuronsNumber, inputsNumber > type;
     };
     
     BOOST_STATIC_CONSTEXPR unsigned int CONST_NEURONS_NUMBER = neuronsNumber;
     BOOST_STATIC_CONSTEXPR unsigned int CONST_INPUTS_NUMBER = inputsNumber;
-    typedef typename std::conditional<isDynamic, std::true_type, std::false_type>::type IsDynamic;
     
-private:
-    struct Initializer{
-      Container operator()(size_t inputs, size_t neurons){
-	Container container;
-	container.reserve(neurons);
-	for( size_t i = 0; i < neurons; i++ ){
-	  container.emplace_back(inputs);
-	}
-	
-	return container;
-      }
-    };
-    
-    struct Dummy{
-      Container operator()(size_t inputs, size_t neurons){
-	return Container();
-      }
-    };
-    
-    typedef typename std::conditional<isDynamic, Initializer, Dummy>::type Init;
-    Init init;
-    
+private:    
     /**
      * A list of the neurons.
      */
     Container m_neurons;   
     
 public:
-    NeuralLayer():m_neurons(init(inputsNumber, neuronsNumber)){}
-    NeuralLayer(size_t inputs, size_t nNumber):m_neurons(init( inputs, nNumber )){}
-  
     /**
      * Constructor will initialize the layer by the given inputs number and neurons number.
      */
@@ -209,7 +181,8 @@ public:
     /**
     * @see {INeuralLayer}
     */
-    const Var& getInputWeight ( unsigned int neuronId, unsigned int weightId ) const {
+    const Var& getInputWeight ( unsigned int neuronId, 
+				unsigned int weightId ) const {
         return m_neurons[neuronId].getWeight ( weightId );
     }
 
@@ -218,8 +191,12 @@ public:
      */
     const Memento getMemento() const {
         Memento memento;
-        std::vector< NeuronMemento > neurons;
-        std::transform ( m_neurons.begin(), m_neurons.end(), std::back_inserter ( neurons ), std::bind ( &Neuron::getMemento, std::placeholders::_1 ) );
+        std::array< NeuronMemento, CONST_NEURONS_NUMBER > neurons;
+        std::transform ( m_neurons.begin(), 
+			 m_neurons.end(), 
+			 neurons.begin(), 
+			 std::bind ( &Neuron::getMemento, std::placeholders::_1 ) );
+	
         memento.setNeurons ( neurons );
         return memento;
     }
@@ -227,11 +204,7 @@ public:
     /**
      * @see {INeuralLayer}
      */
-    void setMemento ( const NeuralLayerMemento<Var>& memento ) {
-        if ( memento.getNeuronsNumber() != m_neurons.size() ) {
-            throw nn::NNException("Invalid argument memento", __FILE__, __LINE__ );
-        }
-
+    void setMemento ( const Memento& memento ) {
         auto neurons=memento.getNeurons();
         std::array< Neuron, neuronsNumber > internalNeurons;
         std::transform ( neurons.begin(), neurons.end(), internalNeurons.begin(), [] ( NeuronMemento& m ) {
@@ -239,10 +212,7 @@ public:
             neuron->setMemento ( m );
             return neuron;
         } );
-
 	
-	/// TODO no exception guarantee, please fix as soon as possible.
-        //std::swap(m_neurons, internalNeurons);
 	std::copy(internalNeurons.begin(), internalNeurons.end(), m_neurons.begin() );
     }
 
@@ -274,26 +244,19 @@ public:
         using IteratorType = decltype ( begin );
         std::for_each ( m_neurons.begin(), m_neurons.end(), std::bind ( &Neuron::template calculateOutput<IteratorType>, std::placeholders::_1, begin, end ) );
     }
-
-    /**
-     *
-     */
-    ~NeuralLayer() {
-    }
 };
 
 }
 
 template<
-	 template<template<class> class, class, std::size_t, int, bool> class NeuronType,
+	 template<template<class> class, class, std::size_t, int> class NeuronType,
          template<class> class ActivationFunctionType,
 	 std::size_t size,
 	 std::size_t inputsNumber = 2,
 	 int scaleFactor = 1,
-	 bool isDynamic = false,
 	 typename Var = float
          >
-using NeuralLayer = detail::NeuralLayer< NeuronType<ActivationFunctionType, Var, inputsNumber, scaleFactor, isDynamic >, size, inputsNumber, isDynamic >;
+using NeuralLayer = detail::NeuralLayer< NeuronType<ActivationFunctionType, Var, inputsNumber, scaleFactor >, size, inputsNumber >;
 
 }
 

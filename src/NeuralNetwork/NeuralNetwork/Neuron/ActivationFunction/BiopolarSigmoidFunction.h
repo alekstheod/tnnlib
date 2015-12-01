@@ -56,16 +56,16 @@ public:
         return boost::numeric_cast<Var> ( 2.0f ) / ( boost::numeric_cast<Var> ( 1.0f ) + utils::exp ( tmp ) ) - boost::numeric_cast<Var> ( 1.0f );
     }
 
-    Var calculateDelta ( const Var& output , const Var& expectedOutput)const {
+    Var delta ( const Var& output , const Var& expectedOutput)const {
         return ( output - expectedOutput )* calculateDerivate(output);
     }
 
     template<typename Iterator>
-    Var calculateSum(Iterator begin, Iterator end, const Var& start)const {
+    Var sum (Iterator begin, Iterator end, const Var& start)const {
         return std::accumulate( begin, end, start );
     }
 
-    Var calculateDerivate ( const Var& output)const {
+    Var derivate ( const Var& output)const {
         return ( boost::numeric_cast<Var> ( 1.0f ) - output*output ) / boost::numeric_cast<Var> ( 2.0f );
     }
 

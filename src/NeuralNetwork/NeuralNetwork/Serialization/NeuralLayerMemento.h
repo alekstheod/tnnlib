@@ -31,14 +31,17 @@
 #define NEURALLAYERMEMENTO_H
 #include <NeuralNetwork/Serialization/NeuronMemento.h>
 #include <boost/serialization/serialization.hpp>
-#include <boost/serialization/vector.hpp>
+#include <boost/serialization/array.hpp>
+#include <array>
 
 namespace nn {
 
-template<class Var>
+template<typename NeuronMemento,
+	 std::size_t neuronsNumber>
 class NeuralLayerMemento {
 private:
-    std::vector< NeuronMemento<Var> > m_neurons;
+    using Container =  std::array< NeuronMemento, neuronsNumber >;
+    Container m_neurons;
 
 private:
     friend class boost::serialization::access;
@@ -50,33 +53,17 @@ private:
     }
 
 public:
-    NeuralLayerMemento() {
-    }
-
-    void setNeurons ( const std::vector< NeuronMemento<Var> >& neurons ) {
+    void setNeurons ( const Container& neurons ) {
         m_neurons = neurons;
     }
 
-    const std::vector< NeuronMemento<Var> >& getNeurons() const {
+    const Container& getNeurons() const {
         return m_neurons;
     }
-
-    unsigned int getInputsNumber() const {
-        unsigned int result = 0;
-        if ( !m_neurons.empty() ) {
-            result = m_neurons[0].getInputs().size();
-        }
-
-        return result;
-    }
-
+    
     unsigned int getNeuronsNumber() const {
         return m_neurons.size();
     }
-
-    ~NeuralLayerMemento() {
-    }
-
 };
 
 }

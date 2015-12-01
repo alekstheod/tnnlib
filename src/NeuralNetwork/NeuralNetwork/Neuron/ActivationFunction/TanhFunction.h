@@ -55,12 +55,12 @@ public:
 
     //2 / (1 + exp(-2 * x)) - 1
     template<typename Iterator>
-    Var calculateEquation ( const Var& sum, Iterator begin, Iterator end )const {
+    Var calculate ( const Var& sum, Iterator begin, Iterator end )const {
         return boost::numeric_cast<Var>(2.f) / ( boost::numeric_cast<Var>(1.f) + utils::exp ( boost::numeric_cast<Var>(-2.f)*sum ) ) - boost::numeric_cast<Var>(1.f);
     }
     
     template<typename Iterator>
-    Var calculateSum(Iterator begin, Iterator end, const Var& start)const {
+    Var sum (Iterator begin, Iterator end, const Var& start)const {
         return std::accumulate( begin, end, start );
     }
 
@@ -69,11 +69,11 @@ public:
      * @param output the output value of the neuron.
      * @return calculated differential for given input value.
      */
-    Var calculateDelta ( const Var& output, const Var& expectedOutput ) const {
+    Var delta ( const Var& output, const Var& expectedOutput ) const {
         return ( output - expectedOutput ) * calculateDerivate(output);
     }
 
-    Var calculateDerivate ( const Var& output)const {
+    Var derivate ( const Var& output)const {
         return boost::numeric_cast<Var>(1.f) - output*output;
     }
 };

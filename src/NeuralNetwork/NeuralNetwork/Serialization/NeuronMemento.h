@@ -31,9 +31,9 @@
 #define NEURONMEMENTO_H
 #include <map>
 #include <boost/serialization/serialization.hpp>
-#include <boost/serialization/vector.hpp>
+#include <boost/serialization/array.hpp>
 #include <boost/serialization/utility.hpp>
-#include <vector>
+#include <array>
 #include <utility>
 #include <NeuralNetwork/Neuron/Input.h>
 
@@ -45,28 +45,19 @@ namespace nn {
 * class. The instance of this class is enough in order
 * to restore the Neuron's state.
 */
-template<class Var>
+template<class Var, std::size_t inputsNumber>
 class NeuronMemento {
 private:
     /**
      * The list of the neuron's inputs.
      */
-    std::vector< nn::Input<Var> > m_inputs;
+    using Container = std::array< nn::Input<Var>, inputsNumber >;
+    Container m_inputs;
 
     /**
      * Value of the neuron's weight.
      */
     Var m_bias;
-
-    /**
-     * The output value of the neuron.
-     */
-    Var m_output;
-
-    /**
-    * the value of the calculated inputs sum.
-    */
-    Var m_sum;
 
 private:
     typedef nn::Input<Var> Input;
@@ -75,34 +66,20 @@ private:
     template<class Archive>
     void serialize(Archive & ar, const unsigned int version)
     {
-        ar & BOOST_SERIALIZATION_NVP(m_output);
-        ar & BOOST_SERIALIZATION_NVP(m_sum);
         ar & BOOST_SERIALIZATION_NVP(m_bias);
         ar & BOOST_SERIALIZATION_NVP(m_inputs);
     }
     
 public:
     /**
-     * Empty constructor.
-     * Will initialize the object.
-     * Will set the default number of
-     * inputs to 1.
-     */
-    NeuronMemento() : m_inputs(1, Input() ) {
-    }
-
-    /**
      * Will set the given inputs list.
      * The given inputs list should contain at least 1 element
      * in order to be assigned to the inputs list member variable.
      * @return true if succeed, false otherwise.
      */
-    bool setInputs ( const std::vector< Input >& inputs ) {
+    bool setInputs ( const Container& inputs ) {
         bool result = false;
-        if ( !inputs.empty() ) {
-            m_inputs = inputs;
-        }
-
+        m_inputs = inputs;
         return result;
     }
 
@@ -115,15 +92,11 @@ public:
         m_bias = weight;
     }
 
-    unsigned int getInputsNumber() const {
-        return m_inputs.size();
-    }
-
     /**
     * Will return the list of assigned inputs.
     * @return the list of assigned inputs.
     */
-    const std::vector< Input >& getInputs() const {
+    const Container& getInputs() const {
         return m_inputs;
     }
 
@@ -134,41 +107,6 @@ public:
     const Var& getBias() const {
         return m_bias;
     }
-
-    /**
-    * Will return the last calculated sum.
-    * @return sum.
-    */
-    const Var& getSum() const {
-        return m_sum;
-    }
-
-    /**
-     * Will set the value to the member sum variable.
-     * @param sum the value.
-     */
-    void setSum ( const Var& sum ) {
-        m_sum = sum;
-    }
-
-    /**
-    * Will set a value to the output member variable.
-    * @param output the value.
-    */
-    void setOutput ( const Var& output ) {
-        m_output = output;
-    }
-
-    const Var& getOutput() const {
-        return m_output;
-    }
-
-    /**
-     * Destructor.
-     */
-    ~NeuronMemento() {
-    }
-
 };
 
 }

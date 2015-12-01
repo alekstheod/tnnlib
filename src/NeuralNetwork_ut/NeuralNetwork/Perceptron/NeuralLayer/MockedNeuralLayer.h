@@ -37,15 +37,17 @@
 #include <memory>
 #include <boost/bind.hpp>
 
-template<typename VarType, std::size_t neurons, std::size_t inputs = 1>
+template<typename VarType, 
+	 std::size_t neurons, 
+	 std::size_t inputs>
 class MockedNeuralLayer
 {
 public:
-    typedef typename nn::NeuralLayerMemento<VarType> Memento;
+    typedef typename nn::NeuralLayerMemento<VarType, inputs> Memento;
     typedef VarType Var;
     typedef typename std::vector<Var>::const_iterator VarIterator;
     typedef typename std::vector< std::pair<Var, Var> >::const_iterator NeuronInputIterator;
-    typedef typename nn::INeuron< MockedNeuron< MockedActivationFunction<Var> > > Neuron;
+    typedef typename nn::INeuron< MockedNeuron< MockedActivationFunction<Var>, inputs > > Neuron;
     typedef typename std::array<Neuron, neurons>::const_iterator const_iterator;
     typedef typename std::array<Neuron, neurons>::iterator iterator;
     typedef typename std::array<Neuron, neurons>::reverse_iterator reverse_iterator;
@@ -99,12 +101,10 @@ private:
     std::shared_ptr< Mock > m_mock;
 
 public:
-    MockedNeuralLayer():MockedNeuralLayer(0) {}
-    MockedNeuralLayer(unsigned int inputsNumber) : m_inputsNumber( inputsNumber ),  m_mock(new Mock) {
-    }
+    MockedNeuralLayer():m_mock(new Mock) {}
 
     unsigned int size()const {
-        return 10;
+        return neurons;
     }
 
     Mock& operator* () {
@@ -174,9 +174,6 @@ public:
     void calculateOutputs () {
         return m_mock->calculateOutputs();
     }
-
-
-    ~MockedNeuralLayer() {}
 };
 
 #endif // NEURALLAYERMOCK_H

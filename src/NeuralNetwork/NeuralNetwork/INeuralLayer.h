@@ -142,9 +142,9 @@ public:
 };
 
 template<typename NeuralLayer, typename Var>
-NeuralLayer createLayer( const NeuralLayerMemento<Var>& memento )
+NeuralLayer createLayer( const NeuralLayerMemento< typename NeuralLayer::NeuronMemento, NeuralLayer::CONST_NEURONS_NUMBER>& memento )
 {
-    NeuralLayer layer( memento.getInputsNumber(), memento.getNeuronsNumber() ) ;
+    NeuralLayer layer;
     layer.setMemento( memento );
     return layer;
 }

@@ -67,8 +67,8 @@ public:
      * @return the calculated output value.
      */
     template<typename Iterator>
-    Var calculateEquation ( const Var& sum, Iterator begin, Iterator end )const {
-        return m_function.calculateEquation( sum, begin, end );
+    Var calculate ( const Var& sum, Iterator begin, Iterator end )const {
+        return m_function.calculate( sum, begin, end );
     }
 
     /**
@@ -76,8 +76,8 @@ public:
      * @param output the output value of the neuron.
      * @return calculated differential for given input value.
      */
-    Var calculateDelta ( const Var& output, const Var& expectedOutput )const{
-        return m_function.calculateDelta( output, expectedOutput );
+    Var delta ( const Var& output, const Var& expectedOutput )const{
+        return m_function.delta( output, expectedOutput );
     }
     
     /**
@@ -85,8 +85,8 @@ public:
      * @param output the output - point for which the value of the derivate will be calculated.
      * @return the calculated value of the derivate.
      */
-    Var calculateDerivate ( const Var& output)const{
-        return m_function.calculateDerivate(output);
+    Var derivate ( const Var& output)const{
+        return m_function.derivate(output);
     }
     
     /**
@@ -98,8 +98,8 @@ public:
      * @return the accumulated weight*input + bias of the neuron.
      */
     template<typename Iterator>
-    Var calculateSum(Iterator begin, Iterator end, const Var& start)const{
-        return m_function.calculateSum(begin, end, start);
+    Var sum (Iterator begin, Iterator end, const Var& start)const{
+        return m_function.sum(begin, end, start);
     }
 
     FunctionType* operator * () {

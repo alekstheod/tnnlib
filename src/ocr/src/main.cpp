@@ -192,7 +192,7 @@ AutoEncoder calculateAutoEncoder(Files files){
     static AutoEncAlgo autoEncAlgo(0.005f, 0.01f);
     
     static std::size_t counter = 0;
-    static AutoEncoder enc = autoEncAlgo.calculatePerceptron(prototypes.begin(), 
+    static AutoEncoder enc = autoEncAlgo.calculate(prototypes.begin(), 
 							  prototypes.end(), 
 							  [](VarType error) {
 							      counter++;
@@ -247,15 +247,15 @@ void calculateWeights(std::string imagesPath) {
     }
 
     static std::size_t counter = 0;
-    static Perceptron perceptron = algorithm.calculatePerceptron(prototypes.begin(), 
-							  prototypes.end(), 
-							  [](VarType error) {
-							      counter++;
-							      if(counter > 1000){
-								counter = 0;
-								std::cout << error << std::endl;
-							      }
-							  });
+    auto errorFunc = [](VarType error) {counter++;
+					if(counter > 1000){
+					  counter = 0;
+					  std::cout << error << std::endl;
+					}};
+					
+    static Perceptron perceptron = algorithm.calculate(prototypes.begin(), 
+						       prototypes.end(), 
+						       errorFunc);
 
     save(perceptron, "perceptron.xml");
 }

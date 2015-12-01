@@ -44,6 +44,7 @@ add_library(NeuralNetwork
 	  ./NeuralNetwork/Serialization/NeuralLayerMemento.h
 	  ./NeuralNetwork/Serialization/NeuronMemento.h
 	  ./NeuralNetwork/Serialization/PerceptronMemento.h
+	  ./NeuralNetwork/RBM/RBM.h
 	  )
 	 
 set_target_properties(NeuralNetwork PROPERTIES LINKER_LANGUAGE CXX)
@@ -58,3 +59,4 @@ target_link_libraries(NeuralNetwork
 		      Utilities
 		      ${Boost_LIBRARIES}
 		      ${OPENCL_LIBRARIES})
+		      

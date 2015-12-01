@@ -21,8 +21,8 @@ add_test(NeuralNetwork_ut NeuralNetwork_ut/NeuralNetwork_ut)
 
 
 find_program(asciidoc_cmd NAMES asciidoc)
-if(EXISTS ${asciidoc_cmd})
-add_custom_target(design ALL #COMMAND ${asciidoc_cmd} --filter install ${CMAKE_CURRENT_LIST_DIR}/doc/plantuml.zip
+if(EXISTS ${asciidoc_cmd}) 
+add_custom_target(design ALL COMMAND #${asciidoc_cmd} --filter install ${CMAKE_CURRENT_LIST_DIR}/doc/plantuml.zip
 			     COMMAND ${asciidoc_cmd} --verbose -dbook ${CMAKE_CURRENT_LIST_DIR}/doc/structural/documentation.txt
 			     )
 endif()

@@ -65,18 +65,14 @@ void rand_inputs(Iterator begin, Iterator end, int scaleFactor){
   
 template<typename OutputFunctionType, 
          std::size_t inputsNumber,
-         int scaleFactor,
-         bool isDynamic>
+         int scaleFactor>
 class Neuron {
 public:
     typedef IActivationFunction< OutputFunctionType > OutputFunction;
     typedef typename OutputFunction::Var Var;
-    typedef NeuronMemento<Var> Memento;
+    typedef NeuronMemento<Var, inputsNumber> Memento;
     typedef typename nn::Input<Var> Input;
-    
-    typedef typename std::conditional<isDynamic, 
-                                      std::vector< Input >, 
-                                      std::array< Input, inputsNumber > >::type Container;
+    typedef std::array< Input, inputsNumber > Container;
                                       
     /// @brief a list of the inputs first is the weight, second is the value
     typedef Container Inputs;
@@ -84,13 +80,14 @@ public:
 
     template<typename VarType>
     struct rebindVar{
-      typedef Neuron< typename OutputFunctionType::template rebindVar<VarType>::type, inputsNumber, scaleFactor, isDynamic> type;
+      typedef Neuron< typename OutputFunctionType::template rebindVar<VarType>::type, inputsNumber, scaleFactor> type;
     };    
     
     template< std::size_t inputs>
     struct rebindInputs{
-      typedef Neuron< OutputFunctionType, inputs, scaleFactor, isDynamic > type;
+      typedef Neuron< OutputFunctionType, inputs, scaleFactor > type;
     };
+    
 private:
     /**
      * @brief Instance of output calculation equation.
@@ -124,14 +121,6 @@ private:
     Var sumInput(const Input& input)const {
         return input.value * input.weight;
     }
-    
-    template<bool dynamic>
-    Container init(size_t inputs){
-      static_assert(dynamic, "Available only for dynamic type of neuron");
-      Container in(inputs, Input());
-      rand_inputs<Var>(in.begin(), in.end(), scaleFactor);
-      return in;
-    }
 
 public:
     /**
@@ -144,9 +133,6 @@ public:
                          m_sum( boost::numeric_cast<Var>(0) ){  
         static_assert(inputsNumber > 0,"Invalid number of inputs");
         rand_inputs<Var>(m_inputs.begin(), m_inputs.end(), scaleFactor);
-    }
-    
-    Neuron(size_t inputs):m_inputs( init<isDynamic>(inputs) ){
     }
 
     /// @brief see @ref INeuron
@@ -191,25 +177,16 @@ public:
     /// @brief see @ref INeuron
     const Memento getMemento() const {
         Memento memento;
-        std::vector< Input > inputs( m_inputs.begin(), m_inputs.end() );
-        memento.setInputs ( inputs );
-        memento.setOutput ( m_output );
+        memento.setInputs ( m_inputs );
         memento.setBias ( m_bias );
-        memento.setSum ( m_sum );
         return memento;
     }
 
     /// @brief see @ref INeuron
     void setMemento ( const Memento& memento ) {
-        if ( memento.getInputs().size() != m_inputs.size() ) {
-            throw NNException ( "Wrong argument memento, invalid number of inputs", __FILE__, __LINE__ );
-        }
-
         auto inputs = memento.getInputs();
         std::copy(inputs.begin(), inputs.end(), m_inputs.begin() );
-        m_output=memento.getOutput();
         m_bias=memento.getBias();
-        m_sum=memento.getSum();
     }
 
     /// @brief see @ref INeuron
@@ -221,7 +198,7 @@ public:
     Var calcDotProduct()const {
         auto begin = boost::make_transform_iterator(m_inputs.cbegin(), boost::bind(&Neuron::sumInput, this, _1) );
         auto end = boost::make_transform_iterator(m_inputs.cend(), boost::bind(&Neuron::sumInput, this, _1) );
-        return m_activationFunction.calculateSum(begin, end, m_bias);
+        return m_activationFunction.sum(begin, end, m_bias);
     }
 
     /// @brief see @ref INeuron
@@ -247,26 +224,21 @@ public:
     /// @brief see @ref INeuron
     template<typename Iterator>
     const Var& calculateOutput (Iterator begin, Iterator end) {
-        m_output = m_activationFunction.calculateEquation ( calcDotProduct(), begin, end );
+        m_output = m_activationFunction.calculate ( calcDotProduct(), begin, end );
         return m_output;
     }
 
     template<typename Test>
     void supportTest(Test&);
-
-    /**
-     * Destructor.
-     */
-    ~Neuron () {}
 };
+
 }
 
 template<template<class> class OutputFunctionType, 
          typename VarType, 
          std::size_t inputsNumber, 
-         int scaleFactor = 1,
-         bool isDynamic = false >
-using Neuron = detail::Neuron< OutputFunctionType<VarType>, inputsNumber, scaleFactor, isDynamic >;
+         int scaleFactor = 1 >
+using Neuron = detail::Neuron< OutputFunctionType<VarType>, inputsNumber, scaleFactor >;
 
 }
 
