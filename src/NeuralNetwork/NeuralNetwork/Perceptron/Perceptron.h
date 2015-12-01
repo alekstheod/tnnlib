@@ -104,7 +104,7 @@ private:
     template<std::size_t index>
     void setMem(const LayersMemento& layers, bool){
       std::get<index>(m_layers).setMemento(std::get<index>(layers));
-      enum { enable = (index < CONST_LAYERS_NUMBER - 2) };
+      enum { enable = (index < CONST_LAYERS_NUMBER - 1) };
       typedef typename std::conditional< enable, bool, int >::type ArgType;
       setMem<index+1>( layers,  ArgType(0));      
     }
@@ -115,7 +115,7 @@ private:
     template<std::size_t index>
     void getMem(LayersMemento& layers, bool)const{
       std::get<index>(layers) = std::get<index>(m_layers).getMemento();
-      enum { enable = (index < CONST_LAYERS_NUMBER - 2) };
+      enum { enable = (index < CONST_LAYERS_NUMBER - 1) };
       typedef typename std::conditional< enable, bool, int >::type ArgType;
       getMem<index+1>( layers,  ArgType(0));      
     }

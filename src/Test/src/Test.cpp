@@ -66,17 +66,7 @@ int main ( int argc, char** argv )
             nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, 2, 2>,
             nn::NeuralLayer<nn::Neuron, nn::TanhFunction, 20>,
             nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, 1>
-            > Perceptron;
-	    
-	    
-    nn::detail::RBM<float, 
-		    nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, 3>,
-		    nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, 10>  > rbm;
-		    
-    float input[3] = {1.f, 1.f , 2.f};
-    float output[10] = {0};
-    rbm.calculate(input, input+3, output);
-				      	    
+            > Perceptron;				      	    
 
     typedef BepAlgorithm< Perceptron > Algo;
     Algo algorithm (0.09f, 0.01f );
@@ -113,7 +103,7 @@ int main ( int argc, char** argv )
         ia  >> BOOST_SERIALIZATION_NVP ( memento2 );
 	std::cout << strStream.str() << std::endl;
 
-        perceptron2.setMemento ( memento2 );
+        perceptron2.setMemento ( memento );
     }
 
 
