@@ -25,6 +25,8 @@ public:
         Var result = m_func.calculate(sum, begin, end) > t? 
 		     boost::numeric_cast<Var>(1.0f):  
 		     boost::numeric_cast<Var>(0.0f);
+		     
+	return result;
     }
 
     template<typename Iterator>
