@@ -7,6 +7,7 @@ namespace nn{
 
 namespace detail{
   
+/// Under construction.  
 /// @brief implementation of Restricted boltzmann machine.
 /// @arg VarType the type of the internal variable.
 /// @arg InputLayerType the type of the input layer.
@@ -22,7 +23,7 @@ private:
   using InputLayer = INeuralLayer<typename InputTmp::template rebindInputs<OutputTmp::CONST_NEURONS_NUMBER>::type>;
   using OutputLayer = INeuralLayer<typename OutputTmp::template rebindInputs<InputTmp::CONST_NEURONS_NUMBER>::type>;
 
-  static constexpr std::size_t INPUTS_NUMBER = InputLayer::CONST_NEURONS_NUMBER; 
+  static const std::size_t INPUTS_NUMBER = InputLayer::CONST_NEURONS_NUMBER; 
   InputLayer m_input;
   OutputLayer m_output;
   
