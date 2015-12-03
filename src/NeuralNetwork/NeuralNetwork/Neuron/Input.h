@@ -2,6 +2,7 @@
 #define NN_INPUT_H
 #include <boost/serialization/serialization.hpp>
 #include <boost/numeric/conversion/cast.hpp>
+#include <boost/serialization/array.hpp>
 
 namespace nn{
   
