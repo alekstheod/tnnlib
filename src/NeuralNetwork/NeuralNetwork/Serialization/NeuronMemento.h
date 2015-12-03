@@ -30,11 +30,11 @@
 #ifndef NEURONMEMENTO_H
 #define NEURONMEMENTO_H
 #include <map>
+#include <array>
+#include <utility>
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/array.hpp>
 #include <boost/serialization/utility.hpp>
-#include <array>
-#include <utility>
 #include <NeuralNetwork/Neuron/Input.h>
 
 namespace nn {
