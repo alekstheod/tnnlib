@@ -32,14 +32,14 @@
 #include <array>
 #include <NeuralNetwork/Serialization/NeuronMemento.h>
 #include <boost/serialization/serialization.hpp>
-#include <boost/serialization/array.hpp>
+#include <boost/serialization/vector.hpp>
 namespace nn {
 
 template<typename NeuronMemento,
 	 std::size_t neuronsNumber>
 class NeuralLayerMemento {
 private:
-    using Container =  std::array< NeuronMemento, neuronsNumber >;
+    using Container =  std::vector< NeuronMemento >;
     Container m_neurons;
 
 private:
@@ -52,6 +52,8 @@ private:
     }
 
 public:
+    NeuralLayerMemento():m_neurons(neuronsNumber){}
+  
     void setNeurons ( const Container& neurons ) {
         m_neurons = neurons;
     }

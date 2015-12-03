@@ -58,7 +58,7 @@ public:
     typedef typename Neuron::Var Var;
     typedef typename Neuron::Memento NeuronMemento;
     typedef NeuralLayerMemento<NeuronMemento, neuronsNumber> Memento;
-    typedef typename std::array<Neuron, neuronsNumber> Container;
+    typedef typename std::vector<Neuron> Container;
 				      
     typedef typename Container::const_iterator const_iterator;
     typedef typename Container::iterator iterator;
@@ -95,6 +95,8 @@ private:
     Container m_neurons;   
     
 public:
+    NeuralLayer():m_neurons(neuronsNumber){}
+  
     /**
      * Constructor will initialize the layer by the given inputs number and neurons number.
      */
@@ -191,7 +193,7 @@ public:
      */
     const Memento getMemento() const {
         Memento memento;
-        std::array< NeuronMemento, CONST_NEURONS_NUMBER > neurons;
+        std::vector< NeuronMemento > neurons(CONST_NEURONS_NUMBER);
         std::transform ( m_neurons.begin(), 
 			 m_neurons.end(), 
 			 neurons.begin(), 
@@ -206,7 +208,7 @@ public:
      */
     void setMemento ( const Memento& memento ) {
         auto neurons=memento.getNeurons();
-        std::array< Neuron, neuronsNumber > internalNeurons;
+        std::vector< Neuron > internalNeurons(CONST_NEURONS_NUMBER);
         std::transform ( neurons.begin(), neurons.end(), internalNeurons.begin(), [] ( NeuronMemento& m ) {
             Neuron neuron;
             neuron->setMemento ( m );
