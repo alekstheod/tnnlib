@@ -9,8 +9,7 @@ addons:
     packages:
     - g++-5
     - gcc-5
-    - cmake-2.8.11
-    - valgrind-3.11.0
+    - cmake
     - libboost-all-dev
 
 compiler:
