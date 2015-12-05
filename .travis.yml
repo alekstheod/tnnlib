@@ -3,12 +3,14 @@ language: cpp
 addons:
   apt:
     sources:
+    - boost-latest/ppa
     - ubuntu-toolchain-r-test
     packages:
     - g++-5
     - gcc-5
     - cmake-3.3.2
     - valgrind-3.11.0
+    - boost1.55
 
 compiler:
 - gcc
