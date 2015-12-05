@@ -5,10 +5,11 @@ addons:
     sources:
     - boost-latest
     - ubuntu-toolchain-r-test
+    - kalakris-cmake
     packages:
     - g++-5
     - gcc-5
-    - cmake-3.3.2
+    - cmake-2.8.11
     - valgrind-3.11.0
     - libboost-all-dev
 
