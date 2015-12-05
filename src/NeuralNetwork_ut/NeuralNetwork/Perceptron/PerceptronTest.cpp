@@ -37,13 +37,7 @@ using ::testing::_;
 using ::testing::Mock;
 using ::testing::InSequence;
 
-typedef std::array<int, 4>::iterator Iterator;
-typedef MockedNeuralLayer<float, 5, 1> NeuralLayer1;
-typedef MockedNeuralLayer<float, 2, 5> NeuralLayer2;
-typedef nn::Perceptron< float, NeuralLayer1, NeuralLayer2 > Perceptron;
-typedef NeuralLayer2::Neuron Neuron;
-
-std::array< Neuron, 2> neurons;
+using Perceptron = PerceptronTest::Perceptron;
 
 PerceptronTest::PerceptronTest(){
 }
@@ -53,6 +47,8 @@ PerceptronTest::~PerceptronTest() {
 
 void PerceptronTest::SetUp() {
     m_inputs.resize(4, 0.f);
+    m_neurons[0] = Neuron();
+    m_neurons[1] = Neuron();
 }
 
 void PerceptronTest::TearDown() {
@@ -76,10 +72,10 @@ SUPPORT_TEST_T(PerceptronTest, TestCalculateOutputsForOneLayerPerceptron, Percep
   EXPECT_CALL( *std::get<0>(m_layers), setInput(3, test.m_inputs[3] ) ).Times(1);
   EXPECT_CALL( *std::get<0>(m_layers), calculateOutputs( _ ) ).Times(1);
   EXPECT_CALL( *std::get<1>(m_layers), calculateOutputs() ).Times(1);
-  EXPECT_CALL( *std::get<1>(m_layers), end() ).WillOnce( Return(neurons.end()) );
-  EXPECT_CALL( *std::get<1>(m_layers), begin() ).WillOnce( Return(neurons.begin()) );
-  EXPECT_CALL( **neurons[0],  getOutput() ).Times(1).WillRepeatedly(Return(1.f) );
-  EXPECT_CALL( **neurons[1],  getOutput() ).Times(1).WillRepeatedly(Return(2.f) );
+  EXPECT_CALL( *std::get<1>(m_layers), end() ).WillOnce( Return(test.m_neurons.end()) );
+  EXPECT_CALL( *std::get<1>(m_layers), begin() ).WillOnce( Return(test.m_neurons.begin()) );
+  EXPECT_CALL( **test.m_neurons[0],  getOutput() ).Times(1).WillRepeatedly(Return(1.f) );
+  EXPECT_CALL( **test.m_neurons[1],  getOutput() ).Times(1).WillRepeatedly(Return(2.f) );
 }
 
 /*

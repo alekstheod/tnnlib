@@ -41,9 +41,16 @@ public:
     ~PerceptronTest() ;
     void SetUp() ;
     void TearDown();
-    
+
 public:
+  typedef std::array<int, 4>::iterator Iterator;
+  typedef MockedNeuralLayer<float, 5, 1> NeuralLayer1;
+  typedef MockedNeuralLayer<float, 2, 5> NeuralLayer2;
+  typedef nn::Perceptron< float, NeuralLayer1, NeuralLayer2 > Perceptron;
+  typedef NeuralLayer2::Neuron Neuron;  
+  
   std::vector< float> m_inputs;
+  std::array< Neuron, 2> m_neurons;
 };
 
 
