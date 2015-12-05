@@ -1,21 +1,22 @@
 language: cpp
-compiler:
-- gcc
-- clang
+
 apt:
 sources:
-    - llvm-toolchain-precise
     - ubuntu-toolchain-r-test
 packages:
-    - clang-3.7
     - g++-5
     - gcc-5
     - cmake-3.3.2
     - valgrind-3.11.0
 
+compiler:
+- gcc
+
 before_script:
 - cd src
 script: 
+- gcc --version
+- echo $CXX
 - CXX="g++-5" && CC="gcc-5" && cmake CMakeLists.txt
 - make
 after_success:
