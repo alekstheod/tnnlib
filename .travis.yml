@@ -1,9 +1,10 @@
 language: cpp
 
-apt:
-sources:
+addons:
+  apt:
+    sources:
     - ubuntu-toolchain-r-test
-packages:
+    packages:
     - g++-5
     - gcc-5
     - cmake-3.3.2
