@@ -21,7 +21,7 @@ script:
 - export CXX="g++-5" CC="gcc-5"
 - g++-5 --version
 - echo $CXX $CC
-- cmake -DCMAKE_DISABLE_FIND_PACKAGE_OpenCL CMakeLists.txt
+- cmake -DCMAKE_DISABLE_FIND_PACKAGE_OpenCL:bool=TRUE CMakeLists.txt
 - make
 after_success:
 - if [ $TRAVIS_BRANCH == $TRAVIS_TAG ]; then rake deploy; fi
