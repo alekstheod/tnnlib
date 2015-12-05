@@ -9,7 +9,6 @@ before_install:
 - if [ $TRAVIS_OS_NAME == osx ]; then brew update && brew install llvm35 && brew link --force llvm35; fi
 before_script:
 - cd src
-- travis_retry cmake;
 script: 
 - cmake CMakeLists.txt
 - make
