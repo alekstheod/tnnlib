@@ -10,13 +10,14 @@ addons:
     - g++-5
     - gcc-5
     - cmake
-    - boost1.55
+    - libboost1.55-all-dev
 
 compiler:
 - gcc
 
 before_script:
 - cd src
+
 script: 
 - export CXX="g++-5" CC="gcc-5"
 - g++-5 --version
@@ -35,3 +36,4 @@ env:
   - secure: aqG9eB/PrzQ7XJQN6YX/00sNVvwSB77saxXQzguL2WFjAXB74h6168Hzq+awHtNX/vfOb6ta7fpWLHrA0D+gmZnvTR29VlP6nd0vs1tkdX1/jWbiBHjamRffp+NWVdKbJKYn5iLOGXcuUMOzY/opLKOdvxKZfkxGMxR2tTNLZUE=
 os:
 - linux
+
