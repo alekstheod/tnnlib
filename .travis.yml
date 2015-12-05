@@ -10,7 +10,7 @@ addons:
     - g++-5
     - gcc-5
     - cmake
-    - libboost-all-dev
+    - boost1.55
 
 compiler:
 - gcc
@@ -35,4 +35,3 @@ env:
   - secure: aqG9eB/PrzQ7XJQN6YX/00sNVvwSB77saxXQzguL2WFjAXB74h6168Hzq+awHtNX/vfOb6ta7fpWLHrA0D+gmZnvTR29VlP6nd0vs1tkdX1/jWbiBHjamRffp+NWVdKbJKYn5iLOGXcuUMOzY/opLKOdvxKZfkxGMxR2tTNLZUE=
 os:
 - linux
-- osx
