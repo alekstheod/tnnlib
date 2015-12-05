@@ -11,17 +11,12 @@ packages:
     - g++-5
     - gcc-5
     - cmake-3.3.2
+    - valgrind-3.11.0
 
-before_install:
-- echo $LANG
-- echo $LC_ALL
-- if [ $TRAVIS_OS_NAME == linux ]; then sudo apt-get update && sudo apt-get install -y llvm-3.4 llvm-3.4-dev cmake libboost-all-dev valgrind; fi
-- if [ $TRAVIS_OS_NAME == osx ]; then brew update && brew install llvm35 && brew link --force llvm35; fi
-- export CXX="clang++-3.7" CC="clang-3.7"
 before_script:
 - cd src
 script: 
-- cmake CMakeLists.txt
+- CXX="clang++-3.7" && CC="clang-3.7" && cmake CMakeLists.txt
 - make
 after_success:
 - if [ $TRAVIS_BRANCH == $TRAVIS_TAG ]; then rake deploy; fi
