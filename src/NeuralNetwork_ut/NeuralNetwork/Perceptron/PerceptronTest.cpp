@@ -77,7 +77,7 @@ SUPPORT_TEST_T(PerceptronTest, TestCalculateOutputsForOneLayerPerceptron, Percep
   EXPECT_CALL( **test.m_neurons[0],  getOutput() ).Times(1).WillRepeatedly(Return(1.f) );
   EXPECT_CALL( **test.m_neurons[1],  getOutput() ).Times(1).WillRepeatedly(Return(2.f) );
 }
-
+ 
 /*
 USING_SUPPORT_TEST_T_NN(PerceptronTest, TestCalculateOutputsForTwoLayersPerceptron, nn, detail, Perceptron)
 TEST_F(PerceptronTest, TestCalculateOutputsForTwoLayersPerceptron)
