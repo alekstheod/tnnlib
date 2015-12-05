@@ -30,7 +30,7 @@
 #ifndef NEURONMEMENTO_H
 #define NEURONMEMENTO_H
 #include <map>
-#include <array>
+#include <boost/array.hpp>
 #include <utility>
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/array.hpp>
@@ -51,7 +51,7 @@ private:
     /**
      * The list of the neuron's inputs.
      */
-    using Container = std::array< nn::Input<Var>, inputsNumber >;
+    using Container = boost::array< nn::Input<Var>, inputsNumber >;
     Container m_inputs;
 
     /**

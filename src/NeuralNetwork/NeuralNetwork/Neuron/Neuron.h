@@ -39,6 +39,7 @@
 #include <boost/iterator/transform_iterator.hpp>
 #include <boost/iterator/counting_iterator.hpp>
 #include <boost/bind.hpp>
+#include <boost/array.hpp>
 #include <utility>
 #include <NeuralNetwork/Neuron/Input.h>
 
@@ -72,7 +73,7 @@ public:
     typedef typename OutputFunction::Var Var;
     typedef NeuronMemento<Var, inputsNumber> Memento;
     typedef typename nn::Input<Var> Input;
-    typedef std::array< Input, inputsNumber > Container;
+    typedef boost::array< Input, inputsNumber > Container;
                                       
     /// @brief a list of the inputs first is the weight, second is the value
     typedef Container Inputs;
