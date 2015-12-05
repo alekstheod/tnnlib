@@ -16,7 +16,7 @@ before_script:
 - cd src
 script: 
 - export CXX="g++-5" CC="gcc-5"
-- gcc-5 --version
+- g++-5 --version
 - echo $CXX $CC
 - cmake CMakeLists.txt
 - make
