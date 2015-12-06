@@ -1,5 +1,4 @@
 language: cpp
-
 addons:
   apt:
     sources:
@@ -12,21 +11,17 @@ addons:
     - cmake
     - libboost1.55-all-dev
     - valgrind
-
 compiler:
 - gcc
-
 notifications:
   email:
     recipients:
-      - alekstheod@gmail.com
+    - alekstheod@gmail.com
     on_success: always
     on_failure: always
-
 before_script:
 - cd src
- 
-script: 
+script:
 - export CXX="g++-5" CC="gcc-5"
 - g++-5 --version
 - echo $CXX $CC
@@ -37,6 +32,7 @@ script:
 after_success:
 - cd ..
 - if [ $TRAVIS_BRANCH == $TRAVIS_TAG ]; then rake deploy; fi
+- git -c user.name='travis_CI' -c user.email='alekstheod@gmail.com' commit -m init
 - git checkout -b master
 - git pull
 - git checkout -b development
@@ -51,4 +47,3 @@ branches:
   email: alekstheod@gmail.com
 os:
 - linux
-
