@@ -39,7 +39,7 @@ after_success:
 - git merge master
 - git checkout -b master
 - git merge development
-- git push -f -q https://alekstheod:$GITHUB_API_KEY@github.com/alekstheod/tnnlib master
+- git push -f -q https://alekstheod:$GITHUB_API_KEY@github.com/alekstheod/tnnlib master &2 > /dev/null
 branches:
   only:
   - master
