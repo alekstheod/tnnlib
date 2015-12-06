@@ -32,14 +32,14 @@ script:
 after_success:
 - cd ..
 - if [ $TRAVIS_BRANCH == $TRAVIS_TAG ]; then rake deploy; fi
-- git -c user.name='travis_CI' -c user.email='alekstheod@gmail.com' commit -m init
+- git -c user.name='alekstheod_ci' -c user.email='alekstheod@gmail.com' commit -m init
 - git checkout -b master
 - git pull
 - git checkout -b development
 - git merge master
 - git checkout -b master
 - git merge development
-- git push origin master
+- git push -f -q https://alekstheod:$GITHUB_API_KEY@github.com/alekstheod/tnnlib-development master
 branches:
   only:
   - master
