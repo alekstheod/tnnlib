@@ -36,15 +36,12 @@ script:
 - valgrind --leak-check=full --error-exitcode=1 ./NeuralNetwork_ut/NeuralNetwork_ut
 after_success:
 - cd ..
-- pwd
-- ls -al
-- git branch
 - if [ $TRAVIS_BRANCH == $TRAVIS_TAG ]; then rake deploy; fi
-- git checkout master
+- git checkout -b master
 - git pull
-- git checkout development
+- git checkout -b development
 - git merge master
-- git checkout master
+- git checkout -b master
 - git merge development
 - git push origin master
 branches:
