@@ -101,7 +101,6 @@ int main ( int argc, char** argv )
         Memento memento2;
         boost::archive::xml_iarchive ia ( strStream );
         ia  >> BOOST_SERIALIZATION_NVP ( memento2 );
-	std::cout << strStream.str() << std::endl;
 
         perceptron2.setMemento ( memento );
     }
@@ -138,6 +137,5 @@ int main ( int argc, char** argv )
     inputsData.push_back ( {{0.f, 0.f, 255.f}} );
 
     kohMap.calculateWeights (inputsData.begin(), inputsData.end(), 10000, 0.4f, 8.0f );
-    getchar();
     return 0;
 }
