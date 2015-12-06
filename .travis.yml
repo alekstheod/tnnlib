@@ -15,6 +15,10 @@ addons:
 compiler:
 - gcc
 
+notifications:
+  slack:
+    on_success: always
+
 before_script:
 - cd src
 
