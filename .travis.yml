@@ -32,8 +32,10 @@ script:
 - echo $CXX $CC
 - cmake -DCMAKE_DISABLE_FIND_PACKAGE_OpenCL:bool=TRUE CMakeLists.txt
 - make
-- valgrind --leak-check=full --error-exitcode=1 ./Test/Test 1000
+- valgrind --leak-check=full --error-exitcode=1 ./Test/Test 1000 > /dev/null
+- valgrind --leak-check=full --error-exitcode=1 ./NeuralNetwork_ut/NeuralNetwork_ut
 after_success:
+- cd ..
 - if [ $TRAVIS_BRANCH == $TRAVIS_TAG ]; then rake deploy; fi
 - git checkout master
 - git pull
