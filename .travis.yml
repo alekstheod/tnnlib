@@ -32,7 +32,6 @@ script:
 after_success:
 - cd ..
 - if [ $TRAVIS_BRANCH == $TRAVIS_TAG ]; then rake deploy; fi
-- git -c user.name='alekstheod_ci' -c user.email='alekstheod@gmail.com' commit -m init
 - git checkout -b master
 - git pull
 - git checkout -b development
