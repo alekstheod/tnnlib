@@ -260,6 +260,7 @@ void calculateWeights(std::string imagesPath) {
     save(perceptron, "perceptron.xml");
 }
 
+
 int main(int argc, char** argv)
 {
     int result = -1;
