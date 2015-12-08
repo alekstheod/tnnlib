@@ -103,7 +103,6 @@ public:
 
     BOOST_STATIC_CONSTEXPR unsigned int CONST_NEURONS_NUMBER = Internal::CONST_NEURONS_NUMBER;
     BOOST_STATIC_CONSTEXPR unsigned int CONST_INPUTS_NUMBER = Internal::CONST_INPUTS_NUMBER;
-    typedef typename Internal::IsDynamic IsDynamic;
 
 private:
     cl::Context m_context;
@@ -119,14 +118,14 @@ private:
 	// Create a command queue and use the first device
 	const std::size_t size = m_weights.size();
 	std::vector< Device > devices = m_context.getInfo<CL_CONTEXT_DEVICES>();
-	Buffer bufferA(m_context, CL_MEM_READ_ONLY, size * sizeof(float));
-	Buffer bufferB(m_context, CL_MEM_READ_ONLY, size * sizeof(float));
-	Buffer bufferC(m_context, CL_MEM_WRITE_ONLY, size * sizeof(float));
+	Buffer weights(m_context, CL_MEM_READ_ONLY, size * sizeof(float));
+	Buffer values(m_context, CL_MEM_READ_ONLY, size * sizeof(float));
+	Buffer product(m_context, CL_MEM_WRITE_ONLY, size * sizeof(float));
 	
 	// Set arguments to kernel
-	m_kernel.setArg(0, bufferA);
-	m_kernel.setArg(1, bufferB);
-	m_kernel.setArg(2, bufferC);
+	m_kernel.setArg(0, weights);
+	m_kernel.setArg(1, values);
+	m_kernel.setArg(2, product);
 	m_kernel.setArg(3, CONST_INPUTS_NUMBER);
 	CommandQueue queue(m_context, devices[0]);
 	
@@ -142,17 +141,16 @@ private:
 		    }
 	      }
 	      
-	      // Copy lists A and B to the memory buffers
-	      queue.enqueueWriteBuffer(bufferA, CL_TRUE, 0, m_weights.size() * sizeof(float), m_weights.data());
-	      queue.enqueueWriteBuffer(bufferB, CL_TRUE, 0, m_values.size() * sizeof(float), m_values.data());
+	      queue.enqueueWriteBuffer(weights, CL_TRUE, 0, m_weights.size() * sizeof(float), m_weights.data());
+	      queue.enqueueWriteBuffer(values, CL_TRUE, 0, m_values.size() * sizeof(float), m_values.data());
 	      for (int offset = 0; offset < CONST_NEURONS_NUMBER; ++offset){
 		      std::size_t rangeSize = CONST_INPUTS_NUMBER;
 		      queue.enqueueNDRangeKernel(m_kernel, 
-									 cl::NDRange(offset), 
-									 cl::NDRange(rangeSize));
+						 cl::NDRange(offset), 
+						 cl::NDRange(rangeSize));
 	      }
 	      
-	      queue.enqueueReadBuffer(bufferC, CL_TRUE,  0,  CONST_NEURONS_NUMBER * sizeof(float),  dotProducts.data());
+	      queue.enqueueReadBuffer(product, CL_TRUE,  0,  CONST_NEURONS_NUMBER * sizeof(float),  dotProducts.data());
 	      for(std::size_t i = 0; i < CONST_NEURONS_NUMBER; ++i ){
 		  m_internal[i].calculateOutput(dotProducts.begin(), dotProducts.end());
 	      }
@@ -169,12 +167,10 @@ private:
   
   
 public:
-    OpenCLNeuralLayer():OpenCLNeuralLayer(CONST_INPUTS_NUMBER, CONST_NEURONS_NUMBER) {}
-    OpenCLNeuralLayer(size_t inputs, size_t nNumber):m_internal(inputs, nNumber ),
-						     m_context(createContext()),
-						     m_program(createProgram(m_context)),
-						     m_kernel( m_program, "dot_product"){
-	}
+    OpenCLNeuralLayer():m_context(createContext()),
+			m_program(createProgram(m_context)),
+			m_kernel( m_program, "dot_product"){
+    }
 
     /**
      * Constructor will initialize the layer by the given inputs number and neurons number.
@@ -315,14 +311,13 @@ public:
 /// @param scaleFactor a factor which will be applied during the weight initialization
 /// a final weight will be calculated in a following way random(0, 1)/scaleFactor
 template<
-template<template<class> class, class, std::size_t, int, bool> class NeuronType,
+template<template<class> class, class, std::size_t, int> class NeuronType,
          template<class> class ActivationFunctionType,
          std::size_t size,
          std::size_t inputsNumber = 2,
-         int scaleFactor = 1
-         >
+         int scaleFactor = 1>
 
-using OpenCLNeuralLayer = detail::OpenCLNeuralLayer< NeuralLayer<NeuronType, ActivationFunctionType, size, inputsNumber, scaleFactor, false, float> >;
+using OpenCLNeuralLayer = detail::OpenCLNeuralLayer< NeuralLayer<NeuronType, ActivationFunctionType, size, inputsNumber, scaleFactor> >;
 
 }
 
