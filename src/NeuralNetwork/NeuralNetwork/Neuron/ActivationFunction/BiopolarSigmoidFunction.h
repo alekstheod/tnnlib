@@ -30,12 +30,12 @@
 #define BIOPOLARSIGMOIDFUNCTION_H
 #include <NeuralNetwork/Neuron/ActivationFunction/IActivationFunction.h>
 #include <NeuralNetwork/NNException.h>
-#include <Utilities/Math/Math.h>
 #include <vector>
 #include <functional>
 #include <numeric>
 #include <utility>
 #include <boost/numeric/conversion/cast.hpp>
+#include <cmath>
 
 namespace nn {
 
@@ -53,7 +53,7 @@ public:
     template<typename Iterator>
     Var calculateEquation ( const Var& sum, Iterator begin, Iterator end )const {
         Var tmp = sum * boost::numeric_cast<Var>( -2.0f );
-        return boost::numeric_cast<Var> ( 2.0f ) / ( boost::numeric_cast<Var> ( 1.0f ) + utils::exp ( tmp ) ) - boost::numeric_cast<Var> ( 1.0f );
+        return boost::numeric_cast<Var> ( 2.0f ) / ( boost::numeric_cast<Var> ( 1.0f ) + std::exp ( tmp ) ) - boost::numeric_cast<Var> ( 1.0f );
     }
 
     Var delta ( const Var& output , const Var& expectedOutput)const {
@@ -67,9 +67,6 @@ public:
 
     Var derivate ( const Var& output)const {
         return ( boost::numeric_cast<Var> ( 1.0f ) - output*output ) / boost::numeric_cast<Var> ( 2.0f );
-    }
-
-    ~BiopolarSigmoidFunction() {
     }
 };
 

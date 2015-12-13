@@ -28,7 +28,7 @@
 
 #ifndef ERRORFUNCTION_H
 #define ERRORFUNCTION_H
-#include <Utilities/Math/Math.h>
+#include <cmath>
 
 namespace nn {
 
@@ -60,7 +60,7 @@ struct CrossEntropyError {
         Var sum = 0;
         while(outputBegin != outputEnd ) {
             Var out = *outputBegin;
-            out = utils::log( out );   
+            out = std::log( out );   
             sum -= out*(*protoBegin);// - (1.f-*protoBegin)*utils::log(1.-*outputBegin);
             outputBegin++;
             protoBegin++;

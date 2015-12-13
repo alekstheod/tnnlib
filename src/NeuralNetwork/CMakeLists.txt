@@ -56,7 +56,9 @@ target_include_directories(NeuralNetwork
 			${OPENCL_INCLUDE_DIR})
 	
 target_link_libraries(NeuralNetwork 
+		  PUBLIC
 		      Utilities
 		      ${Boost_LIBRARIES}
 		      ${OPENCL_LIBRARIES})
+		      
 		      

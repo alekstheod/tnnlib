@@ -17,8 +17,6 @@ add_library(Utilities
 	    Utilities/MPL/Tuple.h
 	    Utilities/MPL/TypeList.h
 	    Utilities/MPL/TypeTraits.h
-	    Utilities/Math/Math.cpp
-	    Utilities/Math/Math.h
 	    Utilities/Memory/LRUCache.h
 	    Utilities/StrUtil/StrUtil.h
 	    Utilities/System/Time.h

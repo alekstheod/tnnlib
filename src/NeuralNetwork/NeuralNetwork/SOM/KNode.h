@@ -34,9 +34,8 @@
 #include <Utilities/System/Time.h>
 #include <NeuralNetwork/SOM/IPosition.h>
 #include <NeuralNetwork/NNException.h>
-#include <Utilities/Math/Math.h>
 #include <iostream>
-
+#include <cmath>
 
 namespace nn
 {
@@ -85,10 +84,10 @@ public:
     Var calculateDistance( const InputType& input )const {
         Var result ( 0 );
         for ( unsigned int i = 0; i < m_weights.size(); i++ ) {
-            result += utils::pow ( m_weights[i] - input[i], 2 );
+            result += std::pow ( m_weights[i] - input[i], 2 );
         }
 
-        return utils::sqrt(result);
+        return std::sqrt(result);
     }
 
     /// @brief getter for the weights

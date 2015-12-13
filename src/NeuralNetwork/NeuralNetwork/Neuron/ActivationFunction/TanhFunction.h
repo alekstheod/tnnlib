@@ -29,12 +29,12 @@
 #ifndef TanhFunction_H
 #define TanhFunction_H
 
-#include <Utilities/Math/Math.h>
 #include <functional>
 #include <numeric>
 #include <utility>
 #include <NeuralNetwork/Neuron/ActivationFunction/IActivationFunction.h>
 #include <boost/numeric/conversion/cast.hpp>
+#include <cmath>
 
 namespace nn
 {
@@ -56,7 +56,7 @@ public:
     //2 / (1 + exp(-2 * x)) - 1
     template<typename Iterator>
     Var calculate ( const Var& sum, Iterator begin, Iterator end )const {
-        return boost::numeric_cast<Var>(2.f) / ( boost::numeric_cast<Var>(1.f) + utils::exp ( boost::numeric_cast<Var>(-2.f)*sum ) ) - boost::numeric_cast<Var>(1.f);
+        return boost::numeric_cast<Var>(2.f) / ( boost::numeric_cast<Var>(1.f) + std::exp ( boost::numeric_cast<Var>(-2.f)*sum ) ) - boost::numeric_cast<Var>(1.f);
     }
     
     template<typename Iterator>

@@ -10,7 +10,6 @@
 #include <NeuralNetwork/Neuron/Neuron.h>
 #include <NeuralNetwork/Neuron/ActivationFunction/MockedActivationFunction.h>
 #include <NeuralNetwork/Neuron/ActivationFunction/SigmoidFunction.h>
-#include <Utilities/Math/Math.h>
 #include <boost/numeric/conversion/cast.hpp>
 #include <array>
 #include <Utilities/GMockUtils.h>

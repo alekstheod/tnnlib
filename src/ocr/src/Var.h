@@ -28,7 +28,7 @@
 
 #ifndef VAR_H
 #define VAR_H
-#include <Utilities/Math/Math.h>
+
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/array.hpp>
 #include <boost/array.hpp>

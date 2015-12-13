@@ -7,7 +7,9 @@
 #include <NeuralNetwork/Neuron/ActivationFunction/BiopolarSigmoidFunction.h>
 #include <NeuralNetwork/LearningAlgorithm/BackPropagation/BepAlgorithm.h>
 #include <NeuralNetwork/Neuron/ActivationFunction/LogScaleSoftmaxFunction.h>
+//#include <NeuralNetwork/NeuralLayer/OpenCLNeuralLayer.h>
 #include <NeuralNetwork/Config.h>
+#include <cmath>
 
 #ifndef BOOST_SYSTEM_NO_DEPRECATED
 #define BOOST_SYSTEM_NO_DEPRECATED 1
@@ -47,14 +49,13 @@
 
 #include "Var.h"
 
-
-typedef double VarType;
+typedef long double VarType;
 
 using namespace boost::gil;
 using namespace boost::gil::detail;
 static const std::string alphabet("0123456789");
-static const unsigned int width = 49;
-static const unsigned int height = 67;
+static const unsigned int width = 10;
+static const unsigned int height = 14;
 static const unsigned int inputsNumber = width * height;
 
 typedef nn::Perceptron< VarType,
@@ -64,7 +65,7 @@ typedef nn::Perceptron< VarType,
 		       > Perceptron;
 		       
 typedef nn::Perceptron< VarType,
-			nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, 80, inputsNumber, 1000>,
+			nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, 20, inputsNumber, 1000>,
 			nn::NeuralLayer<nn::Neuron, nn::SoftmaxFunction,  inputsNumber, 80, 1000 >
 		      > AutoEncoder;
 
@@ -222,7 +223,7 @@ void calculateWeights(std::string imagesPath) {
         }
     }
     
-    //static AutoEncoder autoEnc = calculateAutoEncoder(files);
+    static AutoEncoder autoEnc = calculateAutoEncoder(files);
     
     std::cout << "Perceptron calculation started" << std::endl;
     static Perceptron tmp = readPerceptron("perceptron.xml");

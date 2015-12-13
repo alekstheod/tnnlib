@@ -31,7 +31,6 @@
 #define SigmaEquationH
 #include <NeuralNetwork/Neuron/ActivationFunction/IActivationFunction.h>
 #include <NeuralNetwork/NNException.h>
-#include <Utilities/Math/Math.h>
 #include <vector>
 #include <functional>
 #include <numeric>
@@ -76,7 +75,7 @@ public:
     Var calculate ( const Var& sum, Iterator begin, Iterator end )const {
         Var tmp ( m_slope * sum );
         Var tmp2 = tmp * boost::numeric_cast<Var>( -1.0f );
-        return boost::numeric_cast<Var> ( 1.0f ) / ( boost::numeric_cast<Var> ( 1.0f ) + utils::exp ( tmp2 ) );
+        return boost::numeric_cast<Var> ( 1.0f ) / ( boost::numeric_cast<Var> ( 1.0f ) + std::exp ( tmp2 ) );
     }
 
     template<typename Iterator>

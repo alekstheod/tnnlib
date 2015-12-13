@@ -28,8 +28,9 @@
 
 #ifndef K2DPOSITION_H
 #define K2DPOSITION_H
-#include <Utilities/Math/Math.h>
+
 #include <boost/numeric/conversion/cast.hpp>
+#include <cmath>
 
 namespace nn
 {
@@ -54,7 +55,7 @@ public:
     K2DPosition( const K2DPosition& other ):m_x(other.m_x), m_y(other.m_y){}
 
     Var calculateDistance ( const K2DPosition& other )const {
-        return sqrt ( utils::pow ( ( m_x - other.m_x ), 2 ) + utils::pow ( ( m_y - other.m_y ), 2 ) );
+        return sqrt ( std::pow ( ( m_x - other.m_x ), 2 ) + std::pow ( ( m_y - other.m_y ), 2 ) );
     }
     
     bool operator == (const K2DPosition& other )const{

@@ -35,8 +35,8 @@
 #include <NeuralNetwork/SOM/INeighbourhood.h>
 #include <NeuralNetwork/NNException.h>
 #include <Utilities/System/Time.h>
-#include <Utilities/Math/Math.h>
 #include <boost/numeric/conversion/cast.hpp>
+#include <cmath>
 
 namespace nn
 {
@@ -68,7 +68,7 @@ private:
       Var distance = bestCandidate.calculateDistance(node.getPosition() );
       
       if( radius > 0.001f ){
-	Var influence( utils::exp( ( -(distance*distance) / ( boost::numeric_cast<Var>(2)*radius*radius) ) ) );
+	Var influence( std::exp( ( -(distance*distance) / ( boost::numeric_cast<Var>(2)*radius*radius) ) ) );
 	node.applyWeightModifications(learningRate, influence, input );
       }
     }
@@ -126,12 +126,12 @@ public:
         bool result = false;
         if ( begin != end ) {
             result = true;
-            Var timeConstant = initRadius/utils::log<Var> ( initRadius );
+            Var timeConstant = initRadius/std::log( initRadius );
             Var currentLearningRate = learningRate;
             for ( unsigned int i = 0; i < iterationsNumber; i++ ) {
-                Var radius = Var ( initRadius * Var( utils::exp ( - boost::numeric_cast<Var>(i) / timeConstant ) ) );
+                Var radius = Var ( initRadius * Var( std::exp ( - boost::numeric_cast<Var>(i) / timeConstant ) ) );
                 executeEpoch ( begin, end, radius, currentLearningRate );
-                currentLearningRate = learningRate * Var( utils::exp ( -boost::numeric_cast<Var>( i )/boost::numeric_cast<Var>(iterationsNumber) ) );
+                currentLearningRate = learningRate * Var( std::exp ( -boost::numeric_cast<Var>( i )/boost::numeric_cast<Var>(iterationsNumber) ) );
             }
         }
         

@@ -42,5 +42,11 @@ unsigned int randomize<unsigned int> ( unsigned int maxValue )
     return rnd<unsigned int>(maxValue);
 }
 
+template<>
+long double randomize<long double> ( unsigned int maxValue )
+{
+    return rnd<long double>(maxValue);
+}
+
 }
 }

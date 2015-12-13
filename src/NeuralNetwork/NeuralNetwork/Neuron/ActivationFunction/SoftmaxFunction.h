@@ -29,7 +29,6 @@
 #ifndef SoftmaxFunction_H
 #define SoftmaxFunction_H
 
-#include <Utilities/Math/Math.h>
 #include <functional>
 #include <numeric>
 #include <utility>
@@ -37,6 +36,7 @@
 #include <boost/iterator/transform_iterator.hpp>
 #include <boost/numeric/conversion/cast.hpp>
 #include <boost/concept_check.hpp>
+#include <cmath>
 
 namespace nn
 {
@@ -52,15 +52,12 @@ public:
     };
 
 public:
-    SoftmaxFunction() {}
-    ~SoftmaxFunction() {}
-
     template<typename Iterator>
     Var calculate ( const Var& sum, Iterator begin, Iterator end )const {
-        return utils::exp(sum)/std::accumulate(begin,
+        return std::exp(sum)/std::accumulate(begin,
                                                end,
                                                boost::numeric_cast<Var>(0.f),
-                                               [](Var init, Var next)->Var {return init + utils::exp(next);}
+                                               [](Var init, Var next)->Var {return init + std::exp(next);}
                                               );
     }
 

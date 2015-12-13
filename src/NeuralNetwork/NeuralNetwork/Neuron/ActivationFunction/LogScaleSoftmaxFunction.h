@@ -29,7 +29,6 @@
 #ifndef LogScaleSoftmaxFunction_H
 #define LogScaleSoftmaxFunction_H
 
-#include <Utilities/Math/Math.h>
 #include <functional>
 #include <numeric>
 #include <utility>
@@ -52,9 +51,6 @@ public:
     };
     
 public:
-    LogScaleSoftmaxFunction() {}
-    ~LogScaleSoftmaxFunction() {}
-
     template<typename Iterator>
     Var calculate ( const Var& sum, Iterator begin, Iterator end )const {
         Var sum2 = boost::numeric_cast<Var>(0.f);
@@ -80,11 +76,11 @@ public:
 	
 	Var sum = boost::numeric_cast<Var>(0.f);
 	while(begin != end ){
-	  sum += utils::exp(*begin - max);
+	  sum += std::exp(*begin - max);
 	  begin++;
 	}
 	
-	sum = max + utils::log(sum);
+	sum = max + std::log(sum);
         return sum;
     }
 
