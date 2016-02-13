@@ -18,6 +18,6 @@ IActivationFunction <|.. BiopolarSigmoidFunction
 @enduml
 ---------------------------------------------------------------------
 
-
+ 
 Neuron is a basic brick of any artificial neural network, since we have it we can construct any type of the nn
 just by reusing this class.
