@@ -10,6 +10,9 @@ namespace utils
   template<typename LastElement, typename... Elements>
   struct push_back;
   
+  template<typename Tuple>
+  struct reverse;
+  
   namespace detail
   {
 
@@ -45,13 +48,11 @@ namespace utils
 	}
     };
 
-
     template <class T, std::size_t N, class... Args>
     struct get
     {
 	static const auto value = N;
     };
-
 
     template <class T, std::size_t N, class... Args>
     struct get<T, N, T, Args...>
@@ -59,23 +60,34 @@ namespace utils
 	static const auto value = N;
     };
 
-
     template <class T, std::size_t N, class U, class... Args>
     struct get<T, N, U, Args...>
     {
 	static const auto value = get<T, N + 1, Args...>::value;
     };
 
-
     template<template<typename> class C, typename Tuple>
     struct rebind_tuple;
-
 
     template<template<typename> class C, typename... Args>
     struct rebind_tuple<C, std::tuple<Args...>>
     {
       typedef typename std::tuple<C<Args>...> type;
     };
+    
+    template<typename... Next>
+    struct reverse;
+    
+    template<typename First>
+    struct reverse<First>{
+      using type = std::tuple<First>;
+    };
+    
+    template<typename First, typename... Args>
+    struct reverse<First, Args...>{
+      using type = typename push_back<First, typename reverse<Args...>::type>::type;
+    };
+
   } // namespace detail
 
 
@@ -92,13 +104,11 @@ namespace utils
       detail::for_each_t<sizeof...(ArgsT)>::exec( t, func );
   }
 
-
   template < typename Functor, typename... ArgsT >
   void for_each_c( const std::tuple<ArgsT...>& t, Functor func )
   {
       detail::for_each_t_c<sizeof...(ArgsT)>::exec( t, func );
   }
-
 
   template< template<class> class C, typename Tuple>
   struct rebind_tuple
@@ -111,24 +121,6 @@ namespace utils
   {
       typedef typename std::tuple<Elements..., LastElement> type;
   };
-
-  template<typename Tuple>
-  struct reverse;
-  
-  namespace detail {
-    template<typename... Next>
-    struct reverse;
-    
-    template<typename First>
-    struct reverse<First>{
-      using type = std::tuple<First>;
-    };
-    
-    template<typename First, typename... Args>
-    struct reverse<First, Args...>{
-      using type = typename push_back<First, typename reverse<Args...>::type>::type;
-    };
-  }
   
   template<typename... Args>
   struct reverse<std::tuple<Args...>>{
