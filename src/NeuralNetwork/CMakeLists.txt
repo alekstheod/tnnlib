@@ -5,7 +5,7 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/NeuralNetwork/cmake")
 set( BOOST_COMPONENTS_NEEDED serialization)
 SET(BOOST_MIN_VERSION "1.46.0")
 find_package(Boost ${BOOST_MIN_VERSION} COMPONENTS ${BOOST_COMPONENTS_NEEDED} REQUIRED) 
-find_package(OpenCL REQUIRED)
+find_package(OpenCL)
 
 #SET( CMAKE_CXX_COMPILER clang++ )
 
