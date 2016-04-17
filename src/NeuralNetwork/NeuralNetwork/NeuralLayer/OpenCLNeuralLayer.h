@@ -73,33 +73,22 @@ template<class Internal>
 class OpenCLNeuralLayer
 {
 public:
-    typedef typename Internal::Neuron Neuron;
-    typedef typename Internal::Var Var;
-    typedef typename Internal::Memento Memento;
-    typedef typename Internal::const_iterator const_iterator;
-    typedef typename Internal::iterator iterator;
-    typedef typename Internal::reverse_iterator reverse_iterator;
-    typedef typename Internal::const_reverse_iterator const_reverse_iterator;
+    using Neuron = typename Internal::Neuron;
+    using Var = typename Internal::Var;
+    using Memento = typename Internal::Memento;
+    using const_iterator =typename Internal::const_iterator;
+    using iterator = typename Internal::iterator;
+    using reverse_iterator = typename Internal::reverse_iterator;
+    using const_reverse_iterator = typename Internal::const_reverse_iterator;
 
     template<template <class> class NewType>
-    struct rebind {
-        typedef OpenCLNeuralLayer< typename Internal::template rebind<NewType>::type > type;
-    };
-
-    template<typename NewType, unsigned int inputs>
-    struct rebindNeuron {
-        typedef OpenCLNeuralLayer< typename Internal:: template rebindNeuron<NewType, inputs>::type > type;
-    };
+    using wrap =OpenCLNeuralLayer< typename Internal::template wrap<NewType> >;
 
     template< unsigned int inputs>
-    struct rebindInputs {
-        typedef OpenCLNeuralLayer< typename Internal::template rebindInputs<inputs>::type > type;
-    };
+    using resize = OpenCLNeuralLayer< typename Internal::template resize<inputs> >;
 
     template<typename VarType>
-    struct rebindVar {
-        typedef OpenCLNeuralLayer< typename Internal::template rebindVar<VarType>::type> type;
-    };
+    using use = OpenCLNeuralLayer< typename Internal::template use<VarType>>;
 
     BOOST_STATIC_CONSTEXPR unsigned int CONST_NEURONS_NUMBER = Internal::CONST_NEURONS_NUMBER;
     BOOST_STATIC_CONSTEXPR unsigned int CONST_INPUTS_NUMBER = Internal::CONST_INPUTS_NUMBER;
@@ -292,12 +281,6 @@ public:
      */
     void calculateOutputs() {
 	calculate();
-    }
-
-    /**
-     *
-     */
-    ~OpenCLNeuralLayer() {
     }
 };
 
