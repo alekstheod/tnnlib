@@ -7,7 +7,7 @@
 #include <NeuralNetwork/Neuron/ActivationFunction/BiopolarSigmoidFunction.h>
 #include <NeuralNetwork/LearningAlgorithm/BackPropagation/BepAlgorithm.h>
 #include <NeuralNetwork/Neuron/ActivationFunction/LogScaleSoftmaxFunction.h>
-//#include <NeuralNetwork/NeuralLayer/OpenCLNeuralLayer.h>
+#include <NeuralNetwork/NeuralLayer/OpenCLNeuralLayer.h>
 #include <NeuralNetwork/Config.h>
 #include <cmath>
 

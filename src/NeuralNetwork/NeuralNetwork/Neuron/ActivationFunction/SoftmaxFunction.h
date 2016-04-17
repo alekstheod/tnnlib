@@ -47,9 +47,7 @@ class SoftmaxFunction
 public:
     typedef VarType Var;
     template<typename V>
-    struct rebindVar {
-        typedef SoftmaxFunction<V> type;
-    };
+    using use = SoftmaxFunction<V>;
 
 public:
     template<typename Iterator>

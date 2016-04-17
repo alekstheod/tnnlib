@@ -92,6 +92,9 @@ public:
       typedef Perceptron<VarType, LayerTypes, in> type;
     };
     
+    struct reverse{
+      using type = typename Perceptron<VarType, utils::reverse<LayerTypes> >::type;
+    };
 private:
     /*!
      * Hidden layers.

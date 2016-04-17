@@ -70,7 +70,7 @@ public:
         return m_neuron[id];
     }
     
-     const Input& operator [] (std::size_t id) const{
+    const Input& operator [] (std::size_t id) const{
         return m_neuron[id];
     }
 

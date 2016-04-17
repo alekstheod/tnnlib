@@ -10,6 +10,9 @@ class MockedActivationFunction{
 public:
   typedef VarType Var;
   
+  template<typename NewVarType>
+  using use = MockedActivationFunction<NewVarType>;
+  
 public:
     MockedActivationFunction(){}
     MOCK_CONST_METHOD0_T( calcEquation, Var () );

@@ -62,14 +62,10 @@ public:
     };
     
     template<typename V>
-    struct rebindVar{
-      typedef MockedNeuralLayer< V, neurons, inputs > type;
-    };
+    using use =  MockedNeuralLayer< V, neurons, inputs >;
     
     template< std::size_t new_inputs>
-    struct rebindInputs{
-      typedef MockedNeuralLayer<VarType, neurons, new_inputs> type;
-    };    
+    using resize = MockedNeuralLayer<VarType, neurons, new_inputs>;
 
 public:
     /// Need this because the googlemock does not allow to copy the mock objects.

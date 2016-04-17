@@ -54,7 +54,7 @@ template<class NeuronType,
 class NeuralLayer
 {
 public:
-    typedef INeuron<typename NeuronType::template rebindInputs<inputsNumber>::type> Neuron;
+    typedef INeuron<typename NeuronType::template resize<inputsNumber>> Neuron;
     typedef typename Neuron::Var Var;
     typedef typename Neuron::Memento NeuronMemento;
     typedef NeuralLayerMemento<NeuronMemento, neuronsNumber> Memento;
@@ -66,25 +66,13 @@ public:
     typedef typename Container::const_reverse_iterator const_reverse_iterator;
 
     template<template <class> class NewType>
-    struct rebind {
-        typedef NeuralLayer< NewType<NeuronType>, neuronsNumber, inputsNumber > type;
-    };
+    using wrap = NeuralLayer< NewType<NeuronType>, neuronsNumber, inputsNumber >;
 
-    template<typename NewType, unsigned int inputs>
-    struct rebindNeuron {
-        typedef NeuralLayer< NewType, neuronsNumber, inputs > type;
-    };
-    
     template< unsigned int inputs>
-    struct rebindInputs{
-      typedef NeuralLayer<NeuronType, neuronsNumber, inputs> type;
-    };
+    using resize = NeuralLayer<NeuronType, neuronsNumber, inputs>;
 
     template<typename VarType>
-    struct rebindVar{
-      typedef NeuralLayer< typename NeuronType::template rebindVar<VarType>::type , neuronsNumber, inputsNumber > type;
-    };
-    
+    using use = NeuralLayer< typename NeuronType::template use<VarType> , neuronsNumber, inputsNumber >;
     BOOST_STATIC_CONSTEXPR unsigned int CONST_NEURONS_NUMBER = neuronsNumber;
     BOOST_STATIC_CONSTEXPR unsigned int CONST_INPUTS_NUMBER = inputsNumber;
     

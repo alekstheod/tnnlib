@@ -44,10 +44,9 @@ class TanhFunction
 {
 public:
     typedef VarType Var;
+    
     template<typename V>
-    struct rebindVar {
-        typedef TanhFunction<V> type;
-    };
+    using use = TanhFunction<V>;
     
 public:
     TanhFunction() {}

@@ -42,26 +42,23 @@ namespace bp
 {
 
 template<typename NeuralLayerType>
-class BPNeuralLayer : public nn::INeuralLayer<typename NeuralLayerType::template rebind<BPNeuron>::type>
+class BPNeuralLayer : public nn::INeuralLayer<typename NeuralLayerType::template wrap<BPNeuron>>
 {
     public:
-    typedef INeuralLayer< typename NeuralLayerType::template rebind<BPNeuron>::type > NeuralLayer;
+    typedef INeuralLayer< typename NeuralLayerType::template wrap<BPNeuron> > NeuralLayer;
     typedef typename NeuralLayer::Neuron Neuron;
     typedef typename NeuralLayer::Var Var;
     typedef typename NeuralLayer::const_iterator const_iterator;
     typedef typename NeuralLayer::iterator iterator;
 
     template<typename VarType>
-    struct rebindVar {
-        typedef BPNeuralLayer< typename NeuralLayerType::template rebindVar<VarType>::type > type;
-    };
+    using use = BPNeuralLayer< typename NeuralLayerType::template use<VarType> >;
 
     BOOST_STATIC_CONSTEXPR std::size_t CONST_NEURONS_NUMBER = NeuralLayerType::CONST_NEURONS_NUMBER;
 
     template< std::size_t inputs>
-    struct rebindInputs{
-      typedef BPNeuralLayer< typename NeuralLayerType::template rebindInputs<inputs>::type > type;
-    };
+    using resize = BPNeuralLayer< typename NeuralLayerType::template resize<inputs> >;
+    
 private:
  void calculateWeight ( Var learningRate, Neuron& neuron) {
     std::size_t inputsNumber =neuron->size();

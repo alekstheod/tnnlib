@@ -50,7 +50,6 @@
 #include <array>
 #include <Utilities/Design/Factory.h>
 #include <NeuralNetwork/Perceptron/ComplexLayer.h>
-#include <NeuralNetwork/RBM/RBM.h>
 
 using namespace nn;
 using namespace bp;
@@ -62,6 +61,10 @@ using namespace utils;
  */
 int main ( int argc, char** argv )
 {
+    using Test = std::tuple<int, float, double, char, std::string, float>;
+    using rev = utils::reverse<Test>::type;
+    rev r;
+    
     typedef nn::Perceptron<float,
             nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, 2, 2>,
             nn::NeuralLayer<nn::Neuron, nn::TanhFunction, 20>,

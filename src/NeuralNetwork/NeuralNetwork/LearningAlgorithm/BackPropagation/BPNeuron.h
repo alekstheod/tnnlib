@@ -51,14 +51,10 @@ public:
     using OutputFunction = typename Neuron::OutputFunction;
 
     template<typename EquationType>
-    struct rebind {
-        typedef BPNeuron< typename NeuronType::template rebind<EquationType>::type > type;
-    };
-
+    using use = BPNeuron< typename NeuronType::template use<EquationType> >;
+    
     template< unsigned int inputs>
-    struct rebindInputs{
-      typedef BPNeuron<typename NeuronType::template rebindInputs< inputs >::type > type;
-    };
+    using resize = BPNeuron<typename NeuronType::template resize< inputs > >;
 private:
     /**
     * Neurons error delta

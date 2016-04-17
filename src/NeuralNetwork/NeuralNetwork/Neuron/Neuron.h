@@ -80,15 +80,11 @@ public:
     typedef typename Inputs::const_iterator iterator;
 
     template<typename VarType>
-    struct rebindVar{
-      typedef Neuron< typename OutputFunctionType::template rebindVar<VarType>::type, inputsNumber, scaleFactor> type;
-    };    
+    using use = Neuron< typename OutputFunctionType::template use<VarType>, inputsNumber, scaleFactor>;
     
     template< std::size_t inputs>
-    struct rebindInputs{
-      typedef Neuron< OutputFunctionType, inputs, scaleFactor > type;
-    };
-    
+    using resize = Neuron< OutputFunctionType, inputs, scaleFactor >;
+
 private:
     /**
      * @brief Instance of output calculation equation.

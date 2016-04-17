@@ -45,10 +45,9 @@ class LogScaleSoftmaxFunction
 {
 public:
     typedef VarType Var;
+    
     template<typename V>
-    struct rebindVar {
-        typedef LogScaleSoftmaxFunction<V> type;
-    };
+    using use = LogScaleSoftmaxFunction<V>;
     
 public:
     template<typename Iterator>

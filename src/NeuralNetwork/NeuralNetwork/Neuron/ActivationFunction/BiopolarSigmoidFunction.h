@@ -44,10 +44,9 @@ class BiopolarSigmoidFunction
 {
 public:
     typedef VarType Var;
+    
     template<typename V>
-    struct rebindVar {
-        typedef BiopolarSigmoidFunction<V> type;
-    };
+    using use = BiopolarSigmoidFunction<V>;
 
 public:
     template<typename Iterator>
