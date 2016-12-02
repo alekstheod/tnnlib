@@ -18,15 +18,11 @@ public:
     
     /// @brief will rebind the variable type for an underlying perceptron.
     template<typename VarType>
-    struct rebindVar{
-      typedef ComplexLayer<typename Perceptron::template rebindVar<VarType>::type > type;
-    };
+    using use = ComplexLayer<typename Perceptron::template use<VarType>>;
     
     /// @brief will rebind the number of inputs for an underlying perceptron
     template<std::size_t inputs>
-    struct rebindInputs{
-      typedef ComplexLayer<typename Perceptron::template rebindInputs<inputs>::type> type;
-    };
+    using resize = ComplexLayer<typename Perceptron::template resize<inputs>>;
 
 private:
     std::array< Var, CONST_INPUTS_NUMBER > m_inputs;

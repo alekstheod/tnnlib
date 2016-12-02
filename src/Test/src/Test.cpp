@@ -65,12 +65,11 @@ int main ( int argc, char** argv )
     using rev = utils::reverse<Test>::type;
     rev r;
     
-    typedef nn::Perceptron<float,
+    using Perceptron = nn::Perceptron<float,
             nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, 2, 2>,
             nn::NeuralLayer<nn::Neuron, nn::TanhFunction, 20>,
-            nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, 1>
-            > Perceptron;				      	    
-
+            nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, 1>>;
+            
     typedef BepAlgorithm< Perceptron > Algo;
     Algo algorithm (0.09f, 0.01f );
 

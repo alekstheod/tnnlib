@@ -43,9 +43,6 @@
 #include <functional>
 #include <NeuralNetwork/Utils/Utils.h>
 
-template<typename T>
-void test(T t, std::size_t sz){}
-
 namespace nn {
 
 namespace detail {
@@ -83,18 +80,11 @@ public:
     typedef PerceptronMemento< LayersMemento > Memento;
 
     template<typename T>
-    struct rebindVar{
-      typedef Perceptron<T, LayerTypes> type;
-    };
+    using use = Perceptron<T, LayerTypes>;
     
     template<std::size_t in>
-    struct rebindInputs{
-      typedef Perceptron<VarType, LayerTypes, in> type;
-    };
-    
-    struct reverse{
-      using type = typename Perceptron<VarType, utils::reverse<LayerTypes> >::type;
-    };
+    using resize = Perceptron<VarType, LayerTypes, in>;
+    using reverse = Perceptron<VarType, utils::reverse<LayerTypes> >;
 private:
     /*!
      * Hidden layers.
