@@ -29,19 +29,19 @@
 #ifndef INEURALNETWORK_H
 #define INEURALNETWORK_H
 
-namespace nn{
-  
-template<class NeuralNetwork>
-class INeuralNetwork {
-private:
-  NeuralNetwork m_neuralNetwork;
-  
-public:
-    INeuralNetwork(){}
-    bool calculateOutputs(){};
-    virtual ~INeuralNetwork(){}
-};
-  
+namespace nn {
+
+    template < class NeuralNetwork > class INeuralNetwork {
+        private:
+        NeuralNetwork m_neuralNetwork;
+
+        public:
+        INeuralNetwork () {
+        }
+        bool calculateOutputs (){};
+        virtual ~INeuralNetwork () {
+        }
+    };
 }
 
 #endif // INEURALNETWORK_H

@@ -30,55 +30,50 @@
 #ifndef IPOSITION_H
 #define IPOSITION_H
 
-namespace nn
-{
+namespace nn {
 
-namespace kohonen
-{
+    namespace kohonen {
 
-template<typename PositionType>
-class IPosition
-{
-public:
-    typedef typename PositionType::Var Var;
+        template < typename PositionType > class IPosition {
+            public:
+            typedef typename PositionType::Var Var;
 
-private:
-    PositionType m_position;
+            private:
+            PositionType m_position;
 
-public:
+            public:
+            template < typename... Args > IPosition (Args... args) : m_position (args...) {
+            }
 
-    template< typename... Args>
-    IPosition ( Args... args ) : m_position ( args... ) {
+            IPosition (const PositionType& pos) : m_position (pos) {
+            }
+
+            IPosition (const IPosition& other) : m_position (other.m_position) {
+            }
+
+            bool operator== (const IPosition& other) const {
+                return m_position == other.m_position;
+            }
+
+            bool operator== (const PositionType& other) const {
+                return m_position == other;
+            }
+
+            Var calculateDistance (const IPosition< PositionType >& other) const {
+                return m_position.calculateDistance (other.m_position);
+            }
+
+            operator PositionType () {
+                return m_position;
+            }
+
+            unsigned int calculateId () const {
+                return m_position.calculateId ();
+            }
+
+            ~IPosition () {
+            }
+        };
     }
-    
-    IPosition( const PositionType& pos ):m_position(pos){}
-    
-    IPosition( const IPosition& other ):m_position(other.m_position){}
-
-    bool operator == (const IPosition& other )const{
-      return m_position == other.m_position;
-    }
-    
-    bool operator == (const PositionType& other )const{
-      return m_position == other;
-    }
-    
-    Var calculateDistance ( const IPosition<PositionType> &other )const {
-        return m_position.calculateDistance ( other.m_position );
-    }
-    
-    operator PositionType(){
-      return m_position;
-    }
-    
-    unsigned int calculateId()const{
-      return m_position.calculateId();
-    }
-
-    ~IPosition() {}
-};
-
-}
-
 }
 #endif

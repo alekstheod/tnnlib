@@ -28,39 +28,25 @@ or implied, of Christopher Allen Ogden.
 #include <boost/serialization/nvp.hpp>
 
 namespace boost {
-namespace serialization {
+    namespace serialization {
 
-template<unsigned int N>
-struct Serialize
-{
-    template<class Archive, typename... Args>
-    static void serialize(Archive & ar, std::tuple<Args...> & t, const unsigned int version)
-    {
-	auto val = std::get<N-1>(t);
-	Serialize<N-1>::serialize(ar, t, version);
-        ar & BOOST_SERIALIZATION_NVP(val);
+        template < unsigned int N > struct Serialize {
+            template < class Archive, typename... Args > static void serialize (Archive& ar, std::tuple< Args... >& t, const unsigned int version) {
+                auto val = std::get< N - 1 > (t);
+                Serialize< N - 1 >::serialize (ar, t, version);
+                ar& BOOST_SERIALIZATION_NVP (val);
+            }
+        };
+
+        template <> struct Serialize< 0 > {
+            template < class Archive, typename... Args > static void serialize (Archive& ar, std::tuple< Args... >& t, const unsigned int version) {
+            }
+        };
+
+        template < class Archive, typename... Args > void serialize (Archive& ar, std::tuple< Args... >& t, const unsigned int version) {
+            Serialize< sizeof...(Args) >::serialize (ar, t, version);
+        }
     }
-};
-
-template<>
-struct Serialize<0>
-{
-    template<class Archive, typename... Args>
-    static void serialize(Archive & ar, 
-			  std::tuple<Args...> & t, 
-			  const unsigned int version){}
-};
-
-template<class Archive, 
-	 typename... Args>
-void serialize(Archive & ar, 
-	       std::tuple<Args...> & t, 
-	       const unsigned int version)
-{
-    Serialize<sizeof...(Args)>::serialize(ar, t, version);
-}
-
-}
 }
 
 #endif

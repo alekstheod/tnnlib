@@ -27,29 +27,29 @@
 *  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE
 */
 
-#include <NeuralNetwork/Perceptron/Perceptron.h>
-#include <NeuralNetwork/LearningAlgorithm//BackPropagation/BepAlgorithm.h>
-#include <Utilities/StrUtil/StrUtil.h>
-#include <Utilities/Design/Singleton.h>
-#include <NeuralNetwork/SOM/K2DPosition.h>
-#include <NeuralNetwork/SOM/KohonenMap.h>
-#include <NeuralNetwork/SOM/K2DNeighbourhood.h>
-#include <NeuralNetwork/Neuron/ActivationFunction/SigmoidFunction.h>
-#include <NeuralNetwork/Neuron/ActivationFunction/TanhFunction.h>
-#include <NeuralNetwork/Neuron/ActivationFunction/SoftmaxFunction.h>
-#include <boost/archive/xml_oarchive.hpp>
-#include <boost/archive/xml_iarchive.hpp>
-#include <NeuralNetwork/SOM/KNode.h>
-#include <Utilities/System/Time.h>
-#include <NeuralNetwork/Neuron/Neuron.h>
+#include <NeuralNetwork/LearningAlgorithm/BackPropagation/BepAlgorithm.h>
 #include <NeuralNetwork/NeuralLayer/NeuralLayer.h>
+#include <NeuralNetwork/Neuron/ActivationFunction/SigmoidFunction.h>
+#include <NeuralNetwork/Neuron/ActivationFunction/SoftmaxFunction.h>
+#include <NeuralNetwork/Neuron/ActivationFunction/TanhFunction.h>
+#include <NeuralNetwork/Neuron/Neuron.h>
+#include <NeuralNetwork/Perceptron/ComplexLayer.h>
+#include <NeuralNetwork/Perceptron/Perceptron.h>
+#include <NeuralNetwork/SOM/K2DNeighbourhood.h>
+#include <NeuralNetwork/SOM/K2DPosition.h>
+#include <NeuralNetwork/SOM/KNode.h>
+#include <NeuralNetwork/SOM/KohonenMap.h>
+#include <Utilities/Design/Factory.h>
+#include <Utilities/Design/Singleton.h>
 #include <Utilities/StrUtil/StrUtil.h>
-#include <time.h>
+#include <Utilities/StrUtil/StrUtil.h>
+#include <Utilities/System/Time.h>
+#include <array>
+#include <boost/archive/xml_iarchive.hpp>
+#include <boost/archive/xml_oarchive.hpp>
 #include <iostream>
 #include <sstream>
-#include <array>
-#include <Utilities/Design/Factory.h>
-#include <NeuralNetwork/Perceptron/ComplexLayer.h>
+#include <time.h>
 
 using namespace nn;
 using namespace bp;
@@ -59,85 +59,72 @@ using namespace utils;
 /*
  *
  */
-int main ( int argc, char** argv )
-{
-    using Test = std::tuple<int, float, double, char, std::string, float>;
-    using rev = utils::reverse<Test>::type;
+int main (int argc, char** argv) {
+    using Test = std::tuple< int, float, double, char, std::string, float >;
+    using rev = utils::reverse< Test >::type;
     rev r;
-    
-    using Perceptron = nn::Perceptron<float,
-            nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, 2, 2>,
-            nn::NeuralLayer<nn::Neuron, nn::TanhFunction, 20>,
-            nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, 1>>;
-            
+
+    using Perceptron =
+     nn::Perceptron< float, nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, 2, 2 >, nn::NeuralLayer< nn::Neuron, nn::TanhFunction, 20 >, nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, 1 > >;
+
     typedef BepAlgorithm< Perceptron > Algo;
-    Algo algorithm (0.09f, 0.01f );
+    Algo algorithm (0.09f, 0.01f);
+    std::array< Algo::Prototype, 4 > prototypes = {Algo::Prototype{{0.f, 1.f}, {1.f}}, Algo::Prototype{{1.f, 0.f}, {1.f}}, Algo::Prototype{{1.f, 1.f}, {0.f}},
+                                                   Algo::Prototype{{0.f, 0.f}, {0.f}}};
 
-    std::array< Algo::Prototype, 4> prototypes= { Algo::Prototype{{0.f, 1.f}, {1.f}} ,
-        Algo::Prototype{{1.f, 0.f}, {1.f}} ,
-        Algo::Prototype{{1.f, 1.f}, {0.f}} ,
-        Algo::Prototype{{0.f, 0.f}, {0.f}}
-    };
-
-    unsigned int numOfEpochs = std::numeric_limits< unsigned int >::max();
-    if( argc == 2 ) {
-        numOfEpochs = utils::lexical_cast< unsigned int >(argv[1]);
+    unsigned int numOfEpochs = std::numeric_limits< unsigned int >::max ();
+    if (argc == 2) {
+        numOfEpochs = utils::lexical_cast< unsigned int > (argv[1]);
     }
 
-    Perceptron perceptron = algorithm.calculate( prototypes.begin(), 
-						 prototypes.end(),
-						  [] ( float error ) {
-						      std::cout << error << std::endl;
-						  },
-						  numOfEpochs );
+    Perceptron perceptron = algorithm.calculate (prototypes.begin (), prototypes.end (), [](float error) { std::cout << error << std::endl; }, numOfEpochs);
 
     using Memento = Perceptron::Memento;
-    Memento memento = perceptron.getMemento();
+    Memento memento = perceptron.getMemento ();
     Perceptron perceptron2;
     {
         std::stringstream strStream;
-        boost::archive::xml_oarchive oa ( strStream );
+        boost::archive::xml_oarchive oa (strStream);
         // write class instance to archive
-        oa << BOOST_SERIALIZATION_NVP ( memento );
+        oa << BOOST_SERIALIZATION_NVP (memento);
 
         Memento memento2;
-        boost::archive::xml_iarchive ia ( strStream );
-        ia  >> BOOST_SERIALIZATION_NVP ( memento2 );
+        boost::archive::xml_iarchive ia (strStream);
+        ia >> BOOST_SERIALIZATION_NVP (memento2);
 
-        perceptron2.setMemento ( memento );
+        perceptron2.setMemento (memento);
     }
 
+    std::array< float, 2 > outputs{0};
+    std::array< float, 2 > input1{0, 0};
+    perceptron2.calculate (input1.begin (), input1.end (), outputs.begin ());
+    std::cout << "0 0 " << outputs[0] << std::endl;
 
-    std::array<float, 2> outputs {0};
-    std::array< float, 2 > input1 {0, 0};
-    perceptron2.calculate( input1.begin(), input1.end(), outputs.begin() );
-    std::cout << "0 0 "<<  outputs[0] << std::endl;
+    std::array< float, 2 > input2{1, 0};
+    perceptron2.calculate (input2.begin (), input2.end (), outputs.begin ());
+    std::cout << "1 0 " << outputs[0] << std::endl;
 
-    std::array< float, 2 > input2 {1, 0};
-    perceptron2.calculate( input2.begin(), input2.end(), outputs.begin() );
-    std::cout << "1 0 "<<  outputs[0] << std::endl;
+    std::array< float, 2 > input3{1, 1};
+    perceptron2.calculate (input3.begin (), input3.end (), outputs.begin ());
+    std::cout << "1 1 " << outputs[0] << std::endl;
 
-    std::array< float, 2 > input3 {1, 1};
-    perceptron2.calculate(input3.begin(), input3.end(), outputs.begin());
-    std::cout << "1 1 "<<  outputs[0] << std::endl;
-
-    std::array< float, 2 > input4 {0, 1};
-    perceptron2.calculate(input4.begin(), input4.end(), outputs.begin());
-    std::cout << "0 1 "<<  outputs[0] << std::endl;
+    std::array< float, 2 > input4{0, 1};
+    perceptron2.calculate (input4.begin (), input4.end (), outputs.begin ());
+    std::cout << "0 1 " << outputs[0] << std::endl;
 
     /// Kohonen map implementation
     typedef kohonen::K2DPosition< float, 5 > Position;
-    typedef kohonen::K2DNeighbourhood<kohonen::KNode< Position > > Neighbourhood;
-    typedef nn::kohonen::KohonenMap< Neighbourhood, 25, 3> KohonenMap;
+    typedef kohonen::K2DNeighbourhood< kohonen::KNode< Position > > Neighbourhood;
+    typedef nn::kohonen::KohonenMap< Neighbourhood, 25, 3 > KohonenMap;
 
     KohonenMap kohMap;
 
     typedef KohonenMap::InputType InputType;
     std::vector< InputType > inputsData;
-    inputsData.push_back ( {{0.f, 255.f, 0.f}} );
-    inputsData.push_back ( {{255.f, 0.f, 0.f}} );
-    inputsData.push_back ( {{0.f, 0.f, 255.f}} );
+    inputsData.push_back ({{0.f, 255.f, 0.f}});
+    inputsData.push_back ({{255.f, 0.f, 0.f}});
+    inputsData.push_back ({{0.f, 0.f, 255.f}});
 
-    kohMap.calculateWeights (inputsData.begin(), inputsData.end(), 10000, 0.4f, 8.0f );
+    kohMap.calculateWeights (inputsData.begin (), inputsData.end (), 10000, 0.4f, 8.0f);
     return 0;
 }

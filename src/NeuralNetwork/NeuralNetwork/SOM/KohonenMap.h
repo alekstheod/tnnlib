@@ -38,125 +38,117 @@
 #include <boost/numeric/conversion/cast.hpp>
 #include <cmath>
 
-namespace nn
-{
+namespace nn {
 
-namespace kohonen
-{
+    namespace kohonen {
 
-template<typename NeighbourhoodType, unsigned int numberOfNodes, unsigned int inputsNumber >
-class KohonenMap
-{
-public:
-    typedef INeighbourhood< typename NeighbourhoodType::template rebindInputsNumber< inputsNumber >::Neighbourhood > Neighbourhood;
-    
-private:
-    typedef typename Neighbourhood::Node NodeType;
-    
-public:
-    typedef typename NodeType::template rebindInputsNumber< inputsNumber >::Type Node;
-    typedef typename Node::InputType InputType;
-    typedef typename Node::Var Var;
-    typedef typename Node::Position Position;
-    typedef typename std::vector< Node >::const_iterator iterator;
-    
-private:
-    std::vector< Node > m_nodes;
-    
-private:
-   virtual void applyWeightModifications( Node& node, Position bestCandidate, Var radius, Var learningRate, const InputType& input ){
-      Var distance = bestCandidate.calculateDistance(node.getPosition() );
-      
-      if( radius > 0.001f ){
-	Var influence( std::exp( ( -(distance*distance) / ( boost::numeric_cast<Var>(2)*radius*radius) ) ) );
-	node.applyWeightModifications(learningRate, influence, input );
-      }
-    }
+        template < typename NeighbourhoodType, unsigned int numberOfNodes, unsigned int inputsNumber > class KohonenMap {
+            public:
+            typedef INeighbourhood< typename NeighbourhoodType::template rebindInputsNumber< inputsNumber >::Neighbourhood > Neighbourhood;
 
-    template< typename InputIterator>
-    void executeEpoch ( InputIterator begin, InputIterator end, Var radius,Var learningRate) {
-      int randNumb = utils::createRandom<int>( std::distance(begin, end) );
-      auto currentInput(  *(begin+randNumb)  );
-      unsigned int nodeId = 0;
-      Position bestCandidate ( calculateBestCandidate ( currentInput, nodeId ) );
-      Neighbourhood nbhd ( bestCandidate, radius, m_nodes.begin(), m_nodes.end() );
-      
-	  std::for_each(nbhd.begin(), nbhd.end(), std::bind(&KohonenMap::applyWeightModifications, this, std::placeholders::_1, bestCandidate, radius, learningRate, currentInput));
-    }
-    
-    /**
-     * @brief will calculate the best candidate for the given input.
-     * @param input the input
-     * @param nodeId[out] the node id
-     * @return the position of the best candidate.
-     */
-    Position calculateBestCandidate ( const InputType& input, unsigned int& nodeId ) const {
-        Var distance ( m_nodes[0].calculateDistance ( input ) );
-        Position currentPosition ( m_nodes[0].getPosition() );
-	nodeId = 0;
-        for (auto pNode = m_nodes.cbegin(); pNode != m_nodes.cend(); ++pNode) {
-            Var newDistance = pNode->calculateDistance ( input );
-            if ( newDistance < distance ) {
-                distance = newDistance;
-		nodeId = std::distance(m_nodes.cbegin(), pNode);
-                currentPosition = pNode->getPosition();
+            private:
+            typedef typename Neighbourhood::Node NodeType;
+
+            public:
+            typedef typename NodeType::template rebindInputsNumber< inputsNumber >::Type Node;
+            typedef typename Node::InputType InputType;
+            typedef typename Node::Var Var;
+            typedef typename Node::Position Position;
+            typedef typename std::vector< Node >::const_iterator iterator;
+
+            private:
+            std::vector< Node > m_nodes;
+
+            private:
+            virtual void applyWeightModifications (Node& node, Position bestCandidate, Var radius, Var learningRate, const InputType& input) {
+                Var distance = bestCandidate.calculateDistance (node.getPosition ());
+
+                if (radius > 0.001f) {
+                    Var influence (std::exp ((-(distance * distance) / (boost::numeric_cast< Var > (2) * radius * radius))));
+                    node.applyWeightModifications (learningRate, influence, input);
+                }
             }
-        }
 
-        return currentPosition;
-    }
-    
-public:
-    KohonenMap (){
-	static_assert( numberOfNodes > 0, "Invalid number of nodes" );
-	static_assert( inputsNumber >= 2, "Invalid number of inputs" );
-        for ( unsigned int i = 0; i < numberOfNodes; i++ ) {
-            m_nodes.push_back ( Node ( Position ( i ) ) );
-	}
-    }
-    
-    /// @brief will classify the inputs to the different clusters by using the kohonen algorithm.
-    /// @param iterationsNumber number of iterations which will be used in classification.
-    /// @param learningRate the learning rate. This variable affects the learning mechanism.
-    /// @param initRadius the initial radius of the neighbourhood.
-    /// @param inputsData the inputs set used in the learning process.
-    /// @return true if the inputsData is not empty, false otherwise.
-    template< typename InputIterator>
-    bool calculateWeights ( InputIterator begin, InputIterator end, unsigned int iterationsNumber,const Var& learningRate, Var initRadius ) {
-        bool result = false;
-        if ( begin != end ) {
-            result = true;
-            Var timeConstant = initRadius/std::log( initRadius );
-            Var currentLearningRate = learningRate;
-            for ( unsigned int i = 0; i < iterationsNumber; i++ ) {
-                Var radius = Var ( initRadius * Var( std::exp ( - boost::numeric_cast<Var>(i) / timeConstant ) ) );
-                executeEpoch ( begin, end, radius, currentLearningRate );
-                currentLearningRate = learningRate * Var( std::exp ( -boost::numeric_cast<Var>( i )/boost::numeric_cast<Var>(iterationsNumber) ) );
+            template < typename InputIterator > void executeEpoch (InputIterator begin, InputIterator end, Var radius, Var learningRate) {
+                int randNumb = utils::createRandom< int > (std::distance (begin, end));
+                auto currentInput (*(begin + randNumb));
+                unsigned int nodeId = 0;
+                Position bestCandidate (calculateBestCandidate (currentInput, nodeId));
+                Neighbourhood nbhd (bestCandidate, radius, m_nodes.begin (), m_nodes.end ());
+
+                std::for_each (nbhd.begin (), nbhd.end (), std::bind (&KohonenMap::applyWeightModifications, this, std::placeholders::_1, bestCandidate, radius, learningRate, currentInput));
             }
-        }
-        
-        return result;
-    }
 
-    /// @brief stl compatible interface, to iterate over the nodes.
-    /// @return will return the iterator which points to the first node in a map.
-    iterator begin()const{
-      return m_nodes.cbegin();
-    }
-    
-    /// @brief stl compatible interface, to iterate over the nodes.
-    /// @return will return the iterator which points to the end of the list with the nodes.
-    iterator end()const{
-      return m_nodes.cend();
-    }
-    
-    ~KohonenMap() {
-    }
-};
+            /**
+             * @brief will calculate the best candidate for the given input.
+             * @param input the input
+             * @param nodeId[out] the node id
+             * @return the position of the best candidate.
+             */
+            Position calculateBestCandidate (const InputType& input, unsigned int& nodeId) const {
+                Var distance (m_nodes[0].calculateDistance (input));
+                Position currentPosition (m_nodes[0].getPosition ());
+                nodeId = 0;
+                for (auto pNode = m_nodes.cbegin (); pNode != m_nodes.cend (); ++pNode) {
+                    Var newDistance = pNode->calculateDistance (input);
+                    if (newDistance < distance) {
+                        distance = newDistance;
+                        nodeId = std::distance (m_nodes.cbegin (), pNode);
+                        currentPosition = pNode->getPosition ();
+                    }
+                }
 
-}
+                return currentPosition;
+            }
 
+            public:
+            KohonenMap () {
+                static_assert (numberOfNodes > 0, "Invalid number of nodes");
+                static_assert (inputsNumber >= 2, "Invalid number of inputs");
+                for (unsigned int i = 0; i < numberOfNodes; i++) {
+                    m_nodes.push_back (Node (Position (i)));
+                }
+            }
 
+            /// @brief will classify the inputs to the different clusters by using the kohonen algorithm.
+            /// @param iterationsNumber number of iterations which will be used in classification.
+            /// @param learningRate the learning rate. This variable affects the learning mechanism.
+            /// @param initRadius the initial radius of the neighbourhood.
+            /// @param inputsData the inputs set used in the learning process.
+            /// @return true if the inputsData is not empty, false otherwise.
+            template < typename InputIterator >
+            bool calculateWeights (InputIterator begin, InputIterator end, unsigned int iterationsNumber, const Var& learningRate, Var initRadius) {
+                bool result = false;
+                if (begin != end) {
+                    result = true;
+                    Var timeConstant = initRadius / std::log (initRadius);
+                    Var currentLearningRate = learningRate;
+                    for (unsigned int i = 0; i < iterationsNumber; i++) {
+                        Var radius = Var (initRadius * Var (std::exp (-boost::numeric_cast< Var > (i) / timeConstant)));
+                        executeEpoch (begin, end, radius, currentLearningRate);
+                        currentLearningRate = learningRate * Var (std::exp (-boost::numeric_cast< Var > (i) / boost::numeric_cast< Var > (iterationsNumber)));
+                    }
+                }
+
+                return result;
+            }
+
+            /// @brief stl compatible interface, to iterate over the nodes.
+            /// @return will return the iterator which points to the first node in a map.
+            iterator begin () const {
+                return m_nodes.cbegin ();
+            }
+
+            /// @brief stl compatible interface, to iterate over the nodes.
+            /// @return will return the iterator which points to the end of the list with the nodes.
+            iterator end () const {
+                return m_nodes.cend ();
+            }
+
+            ~KohonenMap () {
+            }
+        };
+    }
 }
 
 #endif // KOHONENMAP_H

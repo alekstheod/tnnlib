@@ -39,36 +39,30 @@
 
 namespace nn {
 
-template<typename VarType>
-class BiopolarSigmoidFunction
-{
-public:
-    typedef VarType Var;
-    
-    template<typename V>
-    using use = BiopolarSigmoidFunction<V>;
+    template < typename VarType > class BiopolarSigmoidFunction {
+        public:
+        typedef VarType Var;
 
-public:
-    template<typename Iterator>
-    Var calculateEquation ( const Var& sum, Iterator begin, Iterator end )const {
-        Var tmp = sum * boost::numeric_cast<Var>( -2.0f );
-        return boost::numeric_cast<Var> ( 2.0f ) / ( boost::numeric_cast<Var> ( 1.0f ) + std::exp ( tmp ) ) - boost::numeric_cast<Var> ( 1.0f );
-    }
+        template < typename V > using use = BiopolarSigmoidFunction< V >;
 
-    Var delta ( const Var& output , const Var& expectedOutput)const {
-        return ( output - expectedOutput )* calculateDerivate(output);
-    }
+        public:
+        template < typename Iterator > Var calculateEquation (const Var& sum, Iterator begin, Iterator end) const {
+            Var tmp = sum * boost::numeric_cast< Var > (-2.0f);
+            return boost::numeric_cast< Var > (2.0f) / (boost::numeric_cast< Var > (1.0f) + std::exp (tmp)) - boost::numeric_cast< Var > (1.0f);
+        }
 
-    template<typename Iterator>
-    Var sum (Iterator begin, Iterator end, const Var& start)const {
-        return std::accumulate( begin, end, start );
-    }
+        Var delta (const Var& output, const Var& expectedOutput) const {
+            return (output - expectedOutput) * calculateDerivate (output);
+        }
 
-    Var derivate ( const Var& output)const {
-        return ( boost::numeric_cast<Var> ( 1.0f ) - output*output ) / boost::numeric_cast<Var> ( 2.0f );
-    }
-};
+        template < typename Iterator > Var sum (Iterator begin, Iterator end, const Var& start) const {
+            return std::accumulate (begin, end, start);
+        }
 
+        Var derivate (const Var& output) const {
+            return (boost::numeric_cast< Var > (1.0f) - output * output) / boost::numeric_cast< Var > (2.0f);
+        }
+    };
 }
 
 #endif // BIOPOLARSIGMOIDFUNCTION_H

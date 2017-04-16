@@ -33,87 +33,84 @@
 
 namespace utils {
 
-/**
- * @author alekstheod
- * The Observer design
- * pattern implementation.
- */
-template<class T>
-class Observable
-{
-private:
-    bool operator==(const Observer& other) const;
-    Observer(const Observer& other);
-
-private:
     /**
-     * List of the listeners, objects
-     * of observer.
+     * @author alekstheod
+     * The Observer design
+     * pattern implementation.
      */
-    std::set<T*> _listeners;
+    template < class T > class Observable {
+        private:
+        bool operator== (const Observer& other) const;
+        Observer (const Observer& other);
 
-protected:
-      /**
-    * Empty constructor
-    * will initialize the object.
-    */
-    Observable() {
-    }
-    
-    std::set<T*> getListeners() {
-        return _listeners;
-    }
+        private:
+        /**
+         * List of the listeners, objects
+         * of observer.
+         */
+        std::set< T* > _listeners;
 
-    /**
-     * Destructor.
-     */
-    ~Observer() {
-    }
-    
-public:
-    /**
-    * Assign operator overload.
-    */
-    Observable& operator=(const Observable& other) {
-        _listeners = other._listeners;
-    }
-
-    /**
-     * Will add a new listener
-     * to the listeners list. The listener
-     * will not be added in case if it is
-     * already present in the listeners list.
-     * @param listener instance of the listener.
-     * @return true if succeed, false otherwise.
-     */
-    bool addListener(T* listener) {
-        bool result = false;
-
-        if( _listeners.find(listener) == _listeners.end() ) {
-            _listeners.insert(listener);
-            result = true;
+        protected:
+        /**
+      * Empty constructor
+      * will initialize the object.
+      */
+        Observable () {
         }
 
-        return result;
-    }
-    
-    /**
-     * Will remove a listener
-     * from the listeners list
-     * @param listener instance of the listener.
-     * @return true if succeed, false otherwise.
-     */
-    bool removeListener( T* listener ) {
-        bool result = false;
-        if( _listeners.find(listener) == _listeners.end() ) {
-            _listeners.erase(listener);
-            result = true;
+        std::set< T* > getListeners () {
+            return _listeners;
         }
 
-        return result;
-    }
-};
+        /**
+         * Destructor.
+         */
+        ~Observer () {
+        }
 
+        public:
+        /**
+        * Assign operator overload.
+        */
+        Observable& operator= (const Observable& other) {
+            _listeners = other._listeners;
+        }
+
+        /**
+         * Will add a new listener
+         * to the listeners list. The listener
+         * will not be added in case if it is
+         * already present in the listeners list.
+         * @param listener instance of the listener.
+         * @return true if succeed, false otherwise.
+         */
+        bool addListener (T* listener) {
+            bool result = false;
+
+            if (_listeners.find (listener) == _listeners.end ()) {
+                _listeners.insert (listener);
+                result = true;
+            }
+
+            return result;
+        }
+
+        /**
+         * Will remove a listener
+         * from the listeners list
+         * @param listener instance of the listener.
+         * @return true if succeed, false otherwise.
+         */
+        bool removeListener (T* listener) {
+            bool result = false;
+            if (_listeners.find (listener) == _listeners.end ()) {
+                _listeners.erase (listener);
+                result = true;
+            }
+
+            return result;
+        }
+    };
 }
 
 #endif // OBSERVER_H

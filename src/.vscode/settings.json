@@ -1,0 +1,29 @@
+{
+    "editor.snippetSuggestions": "bottom",
+    "editor.quickSuggestions": false,
+    "C_Cpp.autocomplete": "Default",
+    "clang.completion.enable": false,
+    "clang.cxxflags": [
+        "-std=c++11"
+    ],
+    "cmake.configureArgs": [
+        "-DCMAKE_DISABLE_FIND_PACKAGE_OpenCL:bool=TRUE"
+    ],
+    "editor.formatOnSave": true,
+    "C_Cpp.formatting": "Disabled",
+    "C_Cpp.clang_format_style": "file",
+    "C_Cpp.clang_format_fallbackStyle": "Visual Studio",
+    "C_Cpp.clang_format_formatOnSave": true,
+    "files.associations": {
+        "array": "cpp",
+        "hash_map": "cpp",
+        "hash_set": "cpp",
+        "string": "cpp",
+        "unordered_map": "cpp",
+        "initializer_list": "cpp",
+        "slist": "cpp",
+        "valarray": "cpp",
+        "functional": "cpp",
+        "cstdlib": "cpp"
+    }
+}

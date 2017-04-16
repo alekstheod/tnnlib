@@ -36,151 +36,133 @@
 
 namespace ocr {
 
-template<unsigned int size>
-struct Var {
-    typedef boost::array<float, size > row;
-    boost::array< row, size > m_rows;
+    template < unsigned int size > struct Var {
+        typedef boost::array< float, size > row;
+        boost::array< row, size > m_rows;
 
-    Var():Var(0.f) {
-    }
-
-    Var( float val ) {
-        for( auto r = m_rows.begin(); r != m_rows.end(); r++ ) {
-            std::fill(r->begin(), r->end(), val );
+        Var () : Var (0.f) {
         }
-    }
 
-    Var( const Var& other ) {
-        for( unsigned int i = 0; i < size; i++) {
-            std::copy(other[i].begin(), other[i].end(), m_rows[i].begin() );
-        }
-    }
-
-    Var& operator = ( const Var& other ) {
-        if( &other != this ) {
-            for( unsigned int i = 0; i < size; i++) {
-                std::copy(other[i].begin(), other[i].end(), m_rows[i].begin() );
+        Var (float val) {
+            for (auto r = m_rows.begin (); r != m_rows.end (); r++) {
+                std::fill (r->begin (), r->end (), val);
             }
         }
 
-        return *this;
-    }
-
-    Var operator * ( const Var& var ) const {
-        return perform(var, std::multiplies<float>() );
-    }
-
-    Var operator - ( const Var& var ) const {
-        return perform(var, std::minus<float>() );
-    }
-
-    Var operator / ( const Var& var ) const {
-        return perform(var, std::divides<float>() );
-    }
-
-    row& operator [] (unsigned int i) {
-        return m_rows[i];
-    }
-
-    const row& operator [] (unsigned int i)const {
-        return m_rows[i];
-    }
-
-    float calculateAvg()const {
-        float sum = 0;
-        for( unsigned int i = 0; i < size; i++ ) {
-            for( unsigned int j = 0; j < size; j++ ) {
-                sum += m_rows[i][j];
+        Var (const Var& other) {
+            for (unsigned int i = 0; i < size; i++) {
+                std::copy (other[i].begin (), other[i].end (), m_rows[i].begin ());
             }
         }
 
-        return (sum/(size*size));
-    }
-
-    float max()const {
-        float maximum = m_rows[0][0];
-	unsigned int k = 0, n = 0;
-        for( unsigned int i = 0; i < size; i++ ) {
-            for( unsigned int j = 0; j < size; j++ ) {
-                if( m_rows[i][j] > maximum )
-                {
-		  k= i;
-		  n=j;
-                    maximum = m_rows[i][j];
+        Var& operator= (const Var& other) {
+            if (&other != this) {
+                for (unsigned int i = 0; i < size; i++) {
+                    std::copy (other[i].begin (), other[i].end (), m_rows[i].begin ());
                 }
             }
+
+            return *this;
         }
 
-        return maximum;
-    }
+        Var operator* (const Var& var) const {
+            return perform (var, std::multiplies< float > ());
+        }
 
-    bool operator > (float other )
-    {
-        bool result = false;
-        float sum = 0;
-        for( unsigned int i = 0; i < size && !result; i++ ) {
-            for( unsigned int j = 0; j < size && !result; j++ ) {
-                if( m_rows[i][j] > other )
-                {
-                    result = true;
+        Var operator- (const Var& var) const {
+            return perform (var, std::minus< float > ());
+        }
+
+        Var operator/ (const Var& var) const {
+            return perform (var, std::divides< float > ());
+        }
+
+        row& operator[] (unsigned int i) {
+            return m_rows[i];
+        }
+
+        const row& operator[] (unsigned int i) const {
+            return m_rows[i];
+        }
+
+        float calculateAvg () const {
+            float sum = 0;
+            for (unsigned int i = 0; i < size; i++) {
+                for (unsigned int j = 0; j < size; j++) {
+                    sum += m_rows[i][j];
                 }
             }
+
+            return (sum / (size * size));
+        }
+
+        float max () const {
+            float maximum = m_rows[0][0];
+            unsigned int k = 0, n = 0;
+            for (unsigned int i = 0; i < size; i++) {
+                for (unsigned int j = 0; j < size; j++) {
+                    if (m_rows[i][j] > maximum) {
+                        k = i;
+                        n = j;
+                        maximum = m_rows[i][j];
+                    }
+                }
+            }
+
+            return maximum;
+        }
+
+        bool operator> (float other) {
+            bool result = false;
+            float sum = 0;
+            for (unsigned int i = 0; i < size && !result; i++) {
+                for (unsigned int j = 0; j < size && !result; j++) {
+                    if (m_rows[i][j] > other) {
+                        result = true;
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        ~Var () {
+        }
+
+        private:
+        template < typename Operation > Var perform (const Var& var, Operation op) const {
+            ocr::Var< size > result;
+            for (unsigned int i = 0; i < size; i++) {
+                for (unsigned int j = 0; j < size; j++) {
+                    result[i][j] = op (m_rows[i][j], var[i][j]);
+                }
+            }
+
+            return result;
+        }
+
+        friend class boost::serialization::access;
+        template < class Archive > void serialize (Archive& ar, const unsigned int version) {
+            ar& BOOST_SERIALIZATION_NVP (m_rows);
+        }
+    };
+
+    template < unsigned int size > Var< size > operator+ (const Var< size >& left, const Var< size >& right) {
+        Var< size > result (0.f);
+        for (unsigned int i = 0; i < size; i++) {
+            std::transform (left[i].begin (), left[i].end (), right[i].begin (), result.m_rows[i].begin (), std::plus< float > ());
         }
 
         return result;
     }
 
-    ~Var() {}
-
-private:    
-    template<typename Operation>
-    Var perform( const Var& var, Operation op )const {
-        ocr::Var<size> result;
-        for( unsigned int i = 0; i < size; i++ ) {
-            for( unsigned int j = 0; j < size; j++ ) {
-                result[i][j] = op(m_rows[i][j], var[i][j]);
-            }
+    template < unsigned int size > Var< size >& operator+= (Var< size >& left, const Var< size >& right) {
+        for (unsigned int i = 0; i < size; i++) {
+            std::transform (left[i].begin (), left[i].end (), right[i].begin (), left[i].begin (), std::plus< float > ());
         }
 
-        return result;
+        return left;
     }
-    
-    friend class boost::serialization::access;
-    template<class Archive>
-    void serialize(Archive & ar, const unsigned int version)
-    {
-        ar & BOOST_SERIALIZATION_NVP(m_rows);
-    }
-};
-
-template<unsigned int size>
-Var<size> operator + ( const Var<size>& left, const Var<size>& right ) {
-    Var<size> result(0.f);
-    for( unsigned int i = 0; i < size; i++) {
-        std::transform(left[i].begin()
-                       ,left[i].end()
-                       ,right[i].begin()
-                       ,result.m_rows[i].begin()
-                       ,std::plus<float>() );
-    }
-    
-    return result;
-}
-
-template<unsigned int size>
-Var<size>& operator += ( Var<size>& left, const Var<size>& right ) {
-    for( unsigned int i = 0; i < size; i++) {
-        std::transform(left[i].begin()
-                       ,left[i].end()
-                       ,right[i].begin()
-                       ,left[i].begin()
-                       ,std::plus<float>() );
-	
-    }
-
-    return left;
-}
-
 }
 
 #endif // VAR_H

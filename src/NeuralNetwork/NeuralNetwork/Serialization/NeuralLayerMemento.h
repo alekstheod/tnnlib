@@ -37,38 +37,34 @@
 
 namespace nn {
 
-template<typename NeuronMemento,
-	 std::size_t neuronsNumber>
-class NeuralLayerMemento {
-private:
-    using Container =  std::vector< NeuronMemento >;
-    Container m_neurons;
+    template < typename NeuronMemento, std::size_t neuronsNumber > class NeuralLayerMemento {
+        private:
+        using Container = std::vector< NeuronMemento >;
+        Container m_neurons;
 
-private:
-    friend class boost::serialization::access;
+        private:
+        friend class boost::serialization::access;
 
-    template<class Archive>
-    void serialize(Archive & ar, const unsigned int version)
-    {
-        ar & BOOST_SERIALIZATION_NVP(m_neurons);
-    }
+        template < class Archive > void serialize (Archive& ar, const unsigned int version) {
+            ar& BOOST_SERIALIZATION_NVP (m_neurons);
+        }
 
-public:
-    NeuralLayerMemento():m_neurons(neuronsNumber){}
-  
-    void setNeurons ( const Container& neurons ) {
-        m_neurons = neurons;
-    }
+        public:
+        NeuralLayerMemento () : m_neurons (neuronsNumber) {
+        }
 
-    const Container& getNeurons() const {
-        return m_neurons;
-    }
-    
-    unsigned int getNeuronsNumber() const {
-        return m_neurons.size();
-    }
-};
+        void setNeurons (const Container& neurons) {
+            m_neurons = neurons;
+        }
 
+        const Container& getNeurons () const {
+            return m_neurons;
+        }
+
+        unsigned int getNeuronsNumber () const {
+            return m_neurons.size ();
+        }
+    };
 }
 
 #endif // NEURALLAYERMEMENTO_H

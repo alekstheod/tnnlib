@@ -4,15 +4,15 @@
 #include <gtest/gtest.h>
 
 class NeuronTest : public ::testing::Test {
-protected:
-    NeuronTest() ;
-    ~NeuronTest() ;
-    void SetUp() ;
-    void TearDown();
-    
-public:
+    protected:
+    NeuronTest ();
+    ~NeuronTest ();
+    void SetUp ();
+    void TearDown ();
+
+    public:
     float m_result;
 };
 
 #endif
-// kate: indent-mode cstyle; space-indent on; indent-width 0; 
+// kate: indent-mode cstyle; space-indent on; indent-width 0;

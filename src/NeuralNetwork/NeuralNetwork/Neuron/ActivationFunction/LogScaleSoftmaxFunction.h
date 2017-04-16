@@ -37,57 +37,50 @@
 #include <boost/numeric/conversion/cast.hpp>
 #include <boost/concept_check.hpp>
 
-namespace nn
-{
+namespace nn {
 
-template<typename VarType>
-class LogScaleSoftmaxFunction
-{
-public:
-    typedef VarType Var;
-    
-    template<typename V>
-    using use = LogScaleSoftmaxFunction<V>;
-    
-public:
-    template<typename Iterator>
-    Var calculate ( const Var& sum, Iterator begin, Iterator end )const {
-        Var sum2 = boost::numeric_cast<Var>(0.f);
-        while(begin != end ) {
-            sum2 += *begin ;
-            begin++;
+    template < typename VarType > class LogScaleSoftmaxFunction {
+        public:
+        typedef VarType Var;
+
+        template < typename V > using use = LogScaleSoftmaxFunction< V >;
+
+        public:
+        template < typename Iterator > Var calculate (const Var& sum, Iterator begin, Iterator end) const {
+            Var sum2 = boost::numeric_cast< Var > (0.f);
+            while (begin != end) {
+                sum2 += *begin;
+                begin++;
+            }
+
+            return sum / sum2;
         }
 
-        return sum/sum2;
-    }
+        template < typename Iterator > Var sum (Iterator begin, Iterator end, const Var& start) const {
+            Var max = *begin; //*max_element(begin, end); // doesn't work with transform_iterator...
+            Iterator i = begin;
+            while (i != end) {
+                if (*i > max) {
+                    max = *i;
+                }
 
-    template<typename Iterator>
-    Var sum (Iterator begin, Iterator end, const Var& start)const {
-	Var max = *begin; //*max_element(begin, end); // doesn't work with transform_iterator...
-	Iterator i = begin;
-	while(i != end ){
-	  if( *i > max ){
-	    max = *i;
-	  }
-	  
-	  i++;
-	}
-	
-	Var sum = boost::numeric_cast<Var>(0.f);
-	while(begin != end ){
-	  sum += std::exp(*begin - max);
-	  begin++;
-	}
-	
-	sum = max + std::log(sum);
-        return sum;
-    }
+                i++;
+            }
 
-    Var delta ( const Var& output, const Var& expectedOutput)const {
-        return ( output - expectedOutput );
-    }
-};
+            Var sum = boost::numeric_cast< Var > (0.f);
+            while (begin != end) {
+                sum += std::exp (*begin - max);
+                begin++;
+            }
 
+            sum = max + std::log (sum);
+            return sum;
+        }
+
+        Var delta (const Var& output, const Var& expectedOutput) const {
+            return (output - expectedOutput);
+        }
+    };
 }
 
 #endif // LogScaleSoftmaxFunction_H

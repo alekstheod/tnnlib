@@ -36,31 +36,27 @@
 
 namespace nn {
 
-template<typename Layers>
-class PerceptronMemento {
-private:
-    using Container = Layers;
-    Container m_neuralLayers;
+    template < typename Layers > class PerceptronMemento {
+        private:
+        using Container = Layers;
+        Container m_neuralLayers;
 
-private:
-    friend class boost::serialization::access;
+        private:
+        friend class boost::serialization::access;
 
-    template<class Archive>
-    void serialize(Archive & ar, const unsigned int version)
-    {
-        ar & BOOST_SERIALIZATION_NVP(m_neuralLayers);
-    }
-    
-public:
-    const Container& getLayers() const {
-        return m_neuralLayers;
-    }
+        template < class Archive > void serialize (Archive& ar, const unsigned int version) {
+            ar& BOOST_SERIALIZATION_NVP (m_neuralLayers);
+        }
 
-    void setLayers ( const Container& neuralLayers ) {
-        m_neuralLayers = neuralLayers;
-    }
-};
+        public:
+        const Container& getLayers () const {
+            return m_neuralLayers;
+        }
 
+        void setLayers (const Container& neuralLayers) {
+            m_neuralLayers = neuralLayers;
+        }
+    };
 }
 
 #endif // PERCEPTRONMEMENTO_H

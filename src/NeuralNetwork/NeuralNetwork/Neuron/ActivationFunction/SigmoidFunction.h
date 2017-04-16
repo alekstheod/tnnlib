@@ -39,70 +39,64 @@
 
 namespace nn {
 
-/**
- * Sigmoid function implementation.
- * Used by not-linear neural networks.
- */
-template<class VarType>
-class SigmoidFunction {
-public:
-    typedef VarType Var;
-    template<typename V>
-    using use = SigmoidFunction<V>;
-    
-private:
     /**
-     * Slope value.
+     * Sigmoid function implementation.
+     * Used by not-linear neural networks.
      */
-    Var m_slope;
+    template < class VarType > class SigmoidFunction {
+        public:
+        typedef VarType Var;
+        template < typename V > using use = SigmoidFunction< V >;
 
-public:
+        private:
+        /**
+         * Slope value.
+         */
+        Var m_slope;
 
-    /**
-     * Empty constructor.
-     */
-    SigmoidFunction(): m_slope(1.0f) {
-    }
+        public:
+        /**
+         * Empty constructor.
+         */
+        SigmoidFunction () : m_slope (1.0f) {
+        }
 
-    /**
-     * Will calculate the equation
-     * for the given input value.
-     * @return the calculation result.
-     */
-    template<typename Iterator>
-    Var calculate ( const Var& sum, Iterator begin, Iterator end )const {
-        Var tmp ( m_slope * sum );
-        Var tmp2 = tmp * boost::numeric_cast<Var>( -1.0f );
-        return boost::numeric_cast<Var> ( 1.0f ) / ( boost::numeric_cast<Var> ( 1.0f ) + std::exp ( tmp2 ) );
-    }
+        /**
+         * Will calculate the equation
+         * for the given input value.
+         * @return the calculation result.
+         */
+        template < typename Iterator > Var calculate (const Var& sum, Iterator begin, Iterator end) const {
+            Var tmp (m_slope * sum);
+            Var tmp2 = tmp * boost::numeric_cast< Var > (-1.0f);
+            return boost::numeric_cast< Var > (1.0f) / (boost::numeric_cast< Var > (1.0f) + std::exp (tmp2));
+        }
 
-    template<typename Iterator>
-    Var sum (Iterator begin, Iterator end, const Var& start)const {
-        return std::accumulate( begin, end, start );
-    }
+        template < typename Iterator > Var sum (Iterator begin, Iterator end, const Var& start) const {
+            return std::accumulate (begin, end, start);
+        }
 
-    /**
-     * Will calculate the delta d=(yo-yw)*f'(s)
-     * for current equation.
-     * @param output the output value of the neuron.
-     * @return result of calculation.
-     */
-    Var delta ( const Var& output , const Var& expectedOutput)const {
-        return ( output - expectedOutput )*derivate(output);
-    }
+        /**
+         * Will calculate the delta d=(yo-yw)*f'(s)
+         * for current equation.
+         * @param output the output value of the neuron.
+         * @return result of calculation.
+         */
+        Var delta (const Var& output, const Var& expectedOutput) const {
+            return (output - expectedOutput) * derivate (output);
+        }
 
-    Var derivate ( const Var& output)const {
-        return m_slope * output * ( boost::numeric_cast<Var> ( 1.0f ) - output );
-    }
+        Var derivate (const Var& output) const {
+            return m_slope * output * (boost::numeric_cast< Var > (1.0f) - output);
+        }
 
-    /**
-     * Destructor.
-     */
-    ~SigmoidFunction() {
-    }
-};
-
+        /**
+         * Destructor.
+         */
+        ~SigmoidFunction () {
+        }
+    };
 }
 
 #endif
-// kate: indent-mode cstyle; replace-tabs on; 
+// kate: indent-mode cstyle; replace-tabs on;

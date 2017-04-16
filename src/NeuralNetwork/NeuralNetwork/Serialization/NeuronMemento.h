@@ -39,77 +39,73 @@
 
 namespace nn {
 
-/**
-* @author alekstheod
-* Represents the Neuron's memento (state)
-* class. The instance of this class is enough in order
-* to restore the Neuron's state.
-*/
-template<class Var, std::size_t inputsNumber>
-class NeuronMemento {
-private:
     /**
-     * The list of the neuron's inputs.
-     */
-    using Container = boost::array< nn::Input<Var>, inputsNumber >;
-    Container m_inputs;
-
-    /**
-     * Value of the neuron's weight.
-     */
-    Var m_bias;
-
-private:
-    typedef nn::Input<Var> Input;
-    friend class boost::serialization::access;
-        
-    template<class Archive>
-    void serialize(Archive & ar, const unsigned int version)
-    {
-        ar & BOOST_SERIALIZATION_NVP(m_bias);
-        ar & BOOST_SERIALIZATION_NVP(m_inputs);
-    }
-    
-public:
-    /**
-     * Will set the given inputs list.
-     * The given inputs list should contain at least 1 element
-     * in order to be assigned to the inputs list member variable.
-     * @return true if succeed, false otherwise.
-     */
-    bool setInputs ( const Container& inputs ) {
-        bool result = false;
-        m_inputs = inputs;
-        return result;
-    }
-
-    /**
-     * Will set the given value to the
-     * neuron weight member variable.
-     * @param weight the value to be set.
-     */
-    void setBias ( const Var& weight ) {
-        m_bias = weight;
-    }
-
-    /**
-    * Will return the list of assigned inputs.
-    * @return the list of assigned inputs.
+    * @author alekstheod
+    * Represents the Neuron's memento (state)
+    * class. The instance of this class is enough in order
+    * to restore the Neuron's state.
     */
-    const Container& getInputs() const {
-        return m_inputs;
-    }
+    template < class Var, std::size_t inputsNumber > class NeuronMemento {
+        private:
+        /**
+         * The list of the neuron's inputs.
+         */
+        using Container = boost::array< nn::Input< Var >, inputsNumber >;
+        Container m_inputs;
 
-    /**
-     * Will return the neuron's weight value.
-     * @return the neuron's weight value.
-     */
-    const Var& getBias() const {
-        return m_bias;
-    }
-};
+        /**
+         * Value of the neuron's weight.
+         */
+        Var m_bias;
 
+        private:
+        typedef nn::Input< Var > Input;
+        friend class boost::serialization::access;
+
+        template < class Archive > void serialize (Archive& ar, const unsigned int version) {
+            ar& BOOST_SERIALIZATION_NVP (m_bias);
+            ar& BOOST_SERIALIZATION_NVP (m_inputs);
+        }
+
+        public:
+        /**
+         * Will set the given inputs list.
+         * The given inputs list should contain at least 1 element
+         * in order to be assigned to the inputs list member variable.
+         * @return true if succeed, false otherwise.
+         */
+        bool setInputs (const Container& inputs) {
+            bool result = false;
+            m_inputs = inputs;
+            return result;
+        }
+
+        /**
+         * Will set the given value to the
+         * neuron weight member variable.
+         * @param weight the value to be set.
+         */
+        void setBias (const Var& weight) {
+            m_bias = weight;
+        }
+
+        /**
+        * Will return the list of assigned inputs.
+        * @return the list of assigned inputs.
+        */
+        const Container& getInputs () const {
+            return m_inputs;
+        }
+
+        /**
+         * Will return the neuron's weight value.
+         * @return the neuron's weight value.
+         */
+        const Var& getBias () const {
+            return m_bias;
+        }
+    };
 }
 
 #endif // NEURONMEMENTO_H
-// kate: indent-mode cstyle; indent-width 4; replace-tabs on; 
+// kate: indent-mode cstyle; indent-width 4; replace-tabs on;

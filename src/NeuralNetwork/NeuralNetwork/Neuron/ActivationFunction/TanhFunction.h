@@ -36,47 +36,42 @@
 #include <boost/numeric/conversion/cast.hpp>
 #include <cmath>
 
-namespace nn
-{
+namespace nn {
 
-template<class VarType>
-class TanhFunction
-{
-public:
-    typedef VarType Var;
-    
-    template<typename V>
-    using use = TanhFunction<V>;
-    
-public:
-    TanhFunction() {}
-    ~TanhFunction() {}
+    template < class VarType > class TanhFunction {
+        public:
+        typedef VarType Var;
 
-    //2 / (1 + exp(-2 * x)) - 1
-    template<typename Iterator>
-    Var calculate ( const Var& sum, Iterator begin, Iterator end )const {
-        return boost::numeric_cast<Var>(2.f) / ( boost::numeric_cast<Var>(1.f) + std::exp ( boost::numeric_cast<Var>(-2.f)*sum ) ) - boost::numeric_cast<Var>(1.f);
-    }
-    
-    template<typename Iterator>
-    Var sum (Iterator begin, Iterator end, const Var& start)const {
-        return std::accumulate( begin, end, start );
-    }
+        template < typename V > using use = TanhFunction< V >;
 
-    /**
-     * Will calculate the delta of given equation for the input value.
-     * @param output the output value of the neuron.
-     * @return calculated differential for given input value.
-     */
-    Var delta ( const Var& output, const Var& expectedOutput ) const {
-        return ( output - expectedOutput ) * calculateDerivate(output);
-    }
+        public:
+        TanhFunction () {
+        }
+        ~TanhFunction () {
+        }
 
-    Var derivate ( const Var& output)const {
-        return boost::numeric_cast<Var>(1.f) - output*output;
-    }
-};
+        // 2 / (1 + exp(-2 * x)) - 1
+        template < typename Iterator > Var calculate (const Var& sum, Iterator begin, Iterator end) const {
+            return boost::numeric_cast< Var > (2.f) / (boost::numeric_cast< Var > (1.f) + std::exp (boost::numeric_cast< Var > (-2.f) * sum)) - boost::numeric_cast< Var > (1.f);
+        }
 
+        template < typename Iterator > Var sum (Iterator begin, Iterator end, const Var& start) const {
+            return std::accumulate (begin, end, start);
+        }
+
+        /**
+         * Will calculate the delta of given equation for the input value.
+         * @param output the output value of the neuron.
+         * @return calculated differential for given input value.
+         */
+        Var delta (const Var& output, const Var& expectedOutput) const {
+            return (output - expectedOutput) * calculateDerivate (output);
+        }
+
+        Var derivate (const Var& output) const {
+            return boost::numeric_cast< Var > (1.f) - output * output;
+        }
+    };
 }
 
 #endif // SOFTMAXFUNCTION_H

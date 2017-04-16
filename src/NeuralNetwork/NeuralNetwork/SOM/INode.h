@@ -29,60 +29,49 @@
 #ifndef INODE_H
 #define INODE_H
 
-namespace nn 
-{
+namespace nn {
 
-namespace kohonen 
-{
-  
-template< typename NodeType>
-class INode
-{
-public:
-    typedef NodeType Node;
-    typedef typename NodeType::Var Var;
-    typedef typename NodeType::Position Position;
-    typedef typename NodeType::InputType InputType;
+    namespace kohonen {
 
-private:
-    NodeType m_node;
-    
-public:
-    template<unsigned int inputsNumber>
-    struct rebindInputsNumber{
-      typedef INode< typename NodeType::template rebindInputsNumber<inputsNumber>::Type > Type;
-    };
-  
+        template < typename NodeType > class INode {
+            public:
+            typedef NodeType Node;
+            typedef typename NodeType::Var Var;
+            typedef typename NodeType::Position Position;
+            typedef typename NodeType::InputType InputType;
 
-public:
-    template< typename... Args >
-    INode( Args... args ) : m_node(args...) {
-     }
-    
-    Var calculateDistance( const InputType& input )const{
-      return m_node.calculateDistance(input);
-    }
+            private:
+            NodeType m_node;
 
-    void applyWeightModifications ( Var learningRate, Var influence,const InputType& input ){
-      m_node.applyWeightModifications( learningRate, influence, input );
+            public:
+            template < unsigned int inputsNumber > struct rebindInputsNumber { typedef INode< typename NodeType::template rebindInputsNumber< inputsNumber >::Type > Type; };
+
+
+            public:
+            template < typename... Args > INode (Args... args) : m_node (args...) {
+            }
+
+            Var calculateDistance (const InputType& input) const {
+                return m_node.calculateDistance (input);
+            }
+
+            void applyWeightModifications (Var learningRate, Var influence, const InputType& input) {
+                m_node.applyWeightModifications (learningRate, influence, input);
+            }
+
+            const InputType& getWeights () const {
+                return m_node.getWeights ();
+            }
+
+            const Position& getPosition () const {
+                return m_node.getPosition ();
+            }
+
+            ~INode () {
+            }
+        };
     }
-    
-    const InputType& getWeights()const{
-      return m_node.getWeights();
-    }
-    
-    const Position& getPosition()const{
-      return m_node.getPosition();
-    }
-    
-    ~INode() {
-    }
-};
 }
-
-
-}
-
 
 
 #endif // INODE_H

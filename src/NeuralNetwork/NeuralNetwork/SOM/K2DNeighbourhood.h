@@ -36,69 +36,65 @@
 #include <boost/iterator/filter_iterator.hpp>
 #include <math.h>
 
-namespace nn
-{
+namespace nn {
 
-namespace kohonen
-{
-  
-template< typename NodeType>
-class K2DNeighbourhood
-{
-public:
-  typedef INode< NodeType > Node;
-  typedef typename Node::Position Position;
-  typedef typename Position::Var Var;
-  
-public:
-  template<unsigned int inputsNumber>
-  struct rebindInputsNumber{
-    typedef K2DNeighbourhood< typename Node::template rebindInputsNumber<inputsNumber>::Type::Node > Neighbourhood;
-  };
-  
-  
-private:
-  typedef typename std::vector< Node >::iterator viterator;
-  typedef typename std::vector< Node >::const_iterator vconst_iterator;
-  typedef IPosition< Position > IPos;
+    namespace kohonen {
 
-private:
-  IPos m_center;
-  Var m_radius;
-  std::pair<viterator, viterator> m_nodes;
-  
-private:
-  struct IsInNbhd{
-    IPos m_center;
-    Var m_radius;
-    IsInNbhd(const IPos& center, const Var& radius):m_center(center), m_radius(radius){}
-    bool operator()(const Node& node) { 
-	Var distance = node.getPosition().calculateDistance( m_center );
-	return (distance < m_radius);
+        template < typename NodeType > class K2DNeighbourhood {
+            public:
+            typedef INode< NodeType > Node;
+            typedef typename Node::Position Position;
+            typedef typename Position::Var Var;
+
+            public:
+            template < unsigned int inputsNumber > struct rebindInputsNumber {
+                typedef K2DNeighbourhood< typename Node::template rebindInputsNumber< inputsNumber >::Type::Node > Neighbourhood;
+            };
+
+
+            private:
+            typedef typename std::vector< Node >::iterator viterator;
+            typedef typename std::vector< Node >::const_iterator vconst_iterator;
+            typedef IPosition< Position > IPos;
+
+            private:
+            IPos m_center;
+            Var m_radius;
+            std::pair< viterator, viterator > m_nodes;
+
+            private:
+            struct IsInNbhd {
+                IPos m_center;
+                Var m_radius;
+                IsInNbhd (const IPos& center, const Var& radius) : m_center (center), m_radius (radius) {
+                }
+                bool operator() (const Node& node) {
+                    Var distance = node.getPosition ().calculateDistance (m_center);
+                    return (distance < m_radius);
+                }
+            };
+
+            public:
+            typedef boost::filter_iterator< IsInNbhd, viterator > iterator;
+            typedef boost::filter_iterator< IsInNbhd, viterator > const_iterator;
+
+            public:
+            template < typename Iterator >
+            K2DNeighbourhood (Position center, Var radius, Iterator begin, Iterator end) : m_center (center), m_radius (radius), m_nodes (begin, end) {
+            }
+
+            iterator begin () {
+                return boost::make_filter_iterator< IsInNbhd > (IsInNbhd (m_center, m_radius), m_nodes.first, m_nodes.second);
+            }
+
+            iterator end () {
+                return boost::make_filter_iterator< IsInNbhd > (IsInNbhd (m_center, m_radius), m_nodes.second, m_nodes.second);
+            }
+
+            ~K2DNeighbourhood () {
+            }
+        };
     }
-  };
-  
-public:
-  typedef boost::filter_iterator< IsInNbhd, viterator> iterator;
-  typedef boost::filter_iterator< IsInNbhd, viterator> const_iterator;
-public:
-  template<typename Iterator>
-  K2DNeighbourhood( Position center, Var radius, Iterator begin, Iterator end ): m_center(center), m_radius(radius), m_nodes(begin, end){
-  }
-  
-  iterator begin(){
-    return boost::make_filter_iterator<IsInNbhd>( IsInNbhd(m_center, m_radius), m_nodes.first, m_nodes.second );
-  }
-  
-  iterator end(){
-    return boost::make_filter_iterator<IsInNbhd>( IsInNbhd(m_center, m_radius), m_nodes.second, m_nodes.second );
-  }
-  
-  ~K2DNeighbourhood(){}
-};
-
-}
-
 }
 
 #endif

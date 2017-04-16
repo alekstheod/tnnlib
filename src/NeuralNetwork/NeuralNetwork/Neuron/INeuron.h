@@ -21,126 +21,125 @@
     (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
     ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-    (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+    (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+   THIS
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-
 
 #ifndef INEURON_H
 #define INEURON_H
 
-namespace nn
-{
+#include <cstdlib>
 
-template<class Neuron>
-class INeuron {
-public:
-    typedef typename Neuron::Var Var;
-    typedef typename Neuron::OutputFunction OutputFunction;
-    typedef typename Neuron::Memento Memento;
-    typedef typename Neuron::Input Input;
-    typedef Neuron NeuronType;
+namespace nn {
 
-private:
-    Neuron m_neuron;
+    template < class Neuron > class INeuron {
+        public:
+        typedef typename Neuron::Var Var;
+        typedef typename Neuron::OutputFunction OutputFunction;
+        typedef typename Neuron::Memento Memento;
+        typedef typename Neuron::Input Input;
+        typedef Neuron NeuronType;
 
-public:
-    INeuron() {}
+        private:
+        Neuron m_neuron;
 
-    INeuron ( Neuron neuron ) :m_neuron ( neuron ) {}
-    
-    /**
-     * @brief will calculate the output of the neuron.
-     * @return the calculated value.
-     */
-    template<typename Iterator>
-    const Var& calculateOutput (Iterator begin, Iterator end) {
-        return m_neuron.calculateOutput(begin, end);
-    }
+        public:
+        INeuron () {
+        }
 
-    /**
-    * @brief Will return the number of inputs for current neuron.
-    * @return the number of inputs.
-    */
-    std::size_t size ( ) const {
-        return m_neuron.size();
-    }
+        INeuron (Neuron neuron) : m_neuron (neuron) {
+        }
 
-    Input& operator [] (std::size_t id) {
-        return m_neuron[id];
-    }
-    
-    const Input& operator [] (std::size_t id) const{
-        return m_neuron[id];
-    }
+        /**
+         * @brief will calculate the output of the neuron.
+         * @return the calculated value.
+         */
+        template < typename Iterator > const Var& calculateOutput (Iterator begin, Iterator end) {
+            return m_neuron.calculateOutput (begin, end);
+        }
 
-    /**
-     * @brief will return the output value of the current neuron.
-     * @return a current output value of the neuron.
-     */
-    Var getOutput() const {
-        return m_neuron.getOutput();
-    }
+        /**
+        * @brief Will return the number of inputs for current neuron.
+        * @return the number of inputs.
+        */
+        std::size_t size () const {
+            return m_neuron.size ();
+        }
 
-    
-    Var calcDotProduct()const {
-        return m_neuron.calcDotProduct();
-    }
+        Input& operator[] (std::size_t id) {
+            return m_neuron[id];
+        }
 
-    /**
-     * @brief set the value to the given input
-     * @param inputId the id of the input in which the value will be assigned.
-     * @param value a value.
-     */
-    void setInput ( unsigned int inputId, const Var& value ) {
-        m_neuron.setInput ( inputId, value );
-    }
-    
-    /**
-     *	Will set the inputs weight value.
-     *	@param weightId the inputs identifier to set the new weight value.
-     *	@param weigh a new weight value.
-     */
-    void setWeight ( unsigned int weightId, 
-		     const Var& weight ) {
-        m_neuron.setWeight ( weightId, weight );
-    }
+        const Input& operator[] (std::size_t id) const {
+            return m_neuron[id];
+        }
 
-    const Var& getBias () const {
-        return m_neuron.getBias();
-    }
+        /**
+         * @brief will return the output value of the current neuron.
+         * @return a current output value of the neuron.
+         */
+        Var getOutput () const {
+            return m_neuron.getOutput ();
+        }
 
-    void setBias ( Var weight ) {
-       m_neuron.setBias ( weight );
-    }
+        Var calcDotProduct () const {
+            return m_neuron.calcDotProduct ();
+        }
 
-    const Var& getWeight (unsigned int weightId) const {
-        return m_neuron.getWeight(weightId);
-    }
+        /**
+         * @brief set the value to the given input
+         * @param inputId the id of the input in which the value will be assigned.
+         * @param value a value.
+         */
+        void setInput (unsigned int inputId, const Var& value) {
+            m_neuron.setInput (inputId, value);
+        }
 
-    const Memento getMemento() const {
-        return m_neuron.getMemento();
-    }
+        /**
+         *	Will set the inputs weight value.
+         *	@param weightId the inputs identifier to set the new weight value.
+         *	@param weigh a new weight value.
+         */
+        void setWeight (unsigned int weightId, const Var& weight) {
+            m_neuron.setWeight (weightId, weight);
+        }
 
-    Neuron& operator*(){
-      return m_neuron;
-    }
-    
-    const Neuron& operator*()const{
-      return m_neuron;
-    }
-    
-    const Neuron* operator->() const {
-        return &m_neuron;
-    }
+        const Var& getBias () const {
+            return m_neuron.getBias ();
+        }
 
-    Neuron* operator->() {
-        return &m_neuron;
-    }
+        void setBias (Var weight) {
+            m_neuron.setBias (weight);
+        }
 
-    ~INeuron() {}
-};
+        const Var& getWeight (unsigned int weightId) const {
+            return m_neuron.getWeight (weightId);
+        }
 
+        const Memento getMemento () const {
+            return m_neuron.getMemento ();
+        }
+
+        Neuron& operator* () {
+            return m_neuron;
+        }
+
+        const Neuron& operator* () const {
+            return m_neuron;
+        }
+
+        const Neuron* operator-> () const {
+            return &m_neuron;
+        }
+
+        Neuron* operator-> () {
+            return &m_neuron;
+        }
+
+        ~INeuron () {
+        }
+    };
 }
 
 #endif // INEURON_H

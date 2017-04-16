@@ -32,50 +32,44 @@
 #include <NeuralNetwork/SOM/INode.h>
 #include <vector>
 
-namespace nn
-{
+namespace nn {
 
-namespace kohonen
-{
+    namespace kohonen {
 
-template< typename NeighbourhoodType>
-class INeighbourhood {
-public:
-  typedef typename NeighbourhoodType::Position Position;
-  typedef typename NeighbourhoodType::Node Node;
-  typedef typename Position::Var Var;
-  typedef typename NeighbourhoodType::iterator iterator;
-  typedef typename NeighbourhoodType::const_iterator const_iterator;
-  
-private:
-  NeighbourhoodType m_neighbourhood;
-  
-public:
-  template<typename... Args>
-  INeighbourhood( Args... args ):m_neighbourhood(args...){}
-  
-  template<typename Iterator>
-  INeighbourhood( Position center, Var radius, Iterator begin, Iterator end ):m_neighbourhood(center, radius, begin, end){}
-  
-  template< typename NodeType >
-  bool applyWeightModifications( const Var& learningRate, std::vector< INode< NodeType > >& nodes, const std::vector< Var >& inputs ){
-    return m_neighbourhood.applyWeightModifications( learningRate, nodes, inputs );
-  }
-  
-  iterator begin(){
-    return m_neighbourhood.begin();
-  }
-  
-  iterator end(){
-    return m_neighbourhood.end();
-  }
-  
-  ~INeighbourhood(){}
-  
-};
+        template < typename NeighbourhoodType > class INeighbourhood {
+            public:
+            typedef typename NeighbourhoodType::Position Position;
+            typedef typename NeighbourhoodType::Node Node;
+            typedef typename Position::Var Var;
+            typedef typename NeighbourhoodType::iterator iterator;
+            typedef typename NeighbourhoodType::const_iterator const_iterator;
 
-}
+            private:
+            NeighbourhoodType m_neighbourhood;
 
+            public:
+            template < typename... Args > INeighbourhood (Args... args) : m_neighbourhood (args...) {
+            }
+
+            template < typename Iterator > INeighbourhood (Position center, Var radius, Iterator begin, Iterator end) : m_neighbourhood (center, radius, begin, end) {
+            }
+
+            template < typename NodeType > bool applyWeightModifications (const Var& learningRate, std::vector< INode< NodeType > >& nodes, const std::vector< Var >& inputs) {
+                return m_neighbourhood.applyWeightModifications (learningRate, nodes, inputs);
+            }
+
+            iterator begin () {
+                return m_neighbourhood.begin ();
+            }
+
+            iterator end () {
+                return m_neighbourhood.end ();
+            }
+
+            ~INeighbourhood () {
+            }
+        };
+    }
 }
 
 

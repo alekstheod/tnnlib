@@ -37,82 +37,73 @@
 #include <iostream>
 #include <cmath>
 
-namespace nn
-{
+namespace nn {
 
-namespace kohonen
-{
+    namespace kohonen {
 
-template< typename PositionType, unsigned int inputsNumber = 10>
-class KNode
-{
-public:
-    typedef IPosition< PositionType > Position;
-    typedef typename Position::Var Var;
-    typedef std::array< Var, inputsNumber > InputType;
-      
-public:
-    /// @brief rebind the current node to a different number of inputs.
-    template<unsigned int numOfInputs>
-    struct rebindInputsNumber{
-      typedef KNode< PositionType, numOfInputs > Type;
-    };
-  
-private:
-    Position m_position;
-    InputType m_weights;
+        template < typename PositionType, unsigned int inputsNumber = 10 > class KNode {
+            public:
+            typedef IPosition< PositionType > Position;
+            typedef typename Position::Var Var;
+            typedef std::array< Var, inputsNumber > InputType;
 
-public:
-    /**
-     * @brief constructor will initialize the object.
-     * @param inputsNumber the number of the inputs for the current object.
-     * @param position a position inside the map.
-     */
-    KNode (const Position& position ) :m_weights({Var(0.f), Var(0.f), Var(0.f)}), m_position ( position ) {
-        Var weight ( 0.0f );
-        for ( unsigned int i = 0; i < inputsNumber; i++ ) {
-            weight = ( Var( utils::createRandom<Var>(1) ) );
-            m_weights[i] = weight;
-        }
+            public:
+            /// @brief rebind the current node to a different number of inputs.
+            template < unsigned int numOfInputs > struct rebindInputsNumber { typedef KNode< PositionType, numOfInputs > Type; };
+
+            private:
+            Position m_position;
+            InputType m_weights;
+
+            public:
+            /**
+             * @brief constructor will initialize the object.
+             * @param inputsNumber the number of the inputs for the current object.
+             * @param position a position inside the map.
+             */
+            KNode (const Position& position) : m_weights ({Var (0.f), Var (0.f), Var (0.f)}), m_position (position) {
+                Var weight (0.0f);
+                for (unsigned int i = 0; i < inputsNumber; i++) {
+                    weight = (Var (utils::createRandom< Var > (1)));
+                    m_weights[i] = weight;
+                }
+            }
+
+            /**
+             * @brief Will calculate the distance of the input from the input weight.
+             * @param inputs the list of the input values.
+             * @return the calulated euclidean distance.
+             */
+            Var calculateDistance (const InputType& input) const {
+                Var result (0);
+                for (unsigned int i = 0; i < m_weights.size (); i++) {
+                    result += std::pow (m_weights[i] - input[i], 2);
+                }
+
+                return std::sqrt (result);
+            }
+
+            /// @brief getter for the weights
+            /// @return the reference to the weights array.
+            const InputType& getWeights () const {
+                return m_weights;
+            }
+
+            /**
+             * @brief will return the position of the Node in the map.
+             * @return the position of the node.
+             */
+            const Position& getPosition () const {
+                return m_position;
+            }
+
+            void applyWeightModifications (Var learningRate, Var influence, const InputType& input) {
+                for (unsigned int i = 0; i < m_weights.size (); i++) {
+                    m_weights[i] += learningRate * influence * (input[i] - m_weights[i]);
+                }
+            }
+        };
     }
-
-    /**
-     * @brief Will calculate the distance of the input from the input weight.
-     * @param inputs the list of the input values.
-     * @return the calulated euclidean distance.
-     */
-    Var calculateDistance( const InputType& input )const {
-        Var result ( 0 );
-        for ( unsigned int i = 0; i < m_weights.size(); i++ ) {
-            result += std::pow ( m_weights[i] - input[i], 2 );
-        }
-
-        return std::sqrt(result);
-    }
-
-    /// @brief getter for the weights
-    /// @return the reference to the weights array.
-    const InputType& getWeights()const{
-      return m_weights;
-    }
-    
-    /**
-     * @brief will return the position of the Node in the map.
-     * @return the position of the node.
-     */
-    const Position& getPosition() const {
-        return m_position;
-    }
-
-    void applyWeightModifications ( Var learningRate, Var influence,const InputType& input ) {
-      for ( unsigned int i=0; i<m_weights.size(); i++ ) {
-	  m_weights[i] += learningRate * influence * ( input[i] - m_weights[i] );
-      }
-    }
-};
-
-}
-
 }
 
 #endif // NODE_H
