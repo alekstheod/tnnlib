@@ -23,8 +23,8 @@ add_library(Utilities
 	    System/Time.cpp)
 
 target_include_directories(Utilities
-		      PUBLIC
-			.
-		      PRIVATE
-			${Boost_INCLUDE_DIRS})
+		    PUBLIC
+			  ${CMAKE_SOURCE_DIR}
+		    PRIVATE
+			  ${Boost_INCLUDE_DIRS})
 endif()
