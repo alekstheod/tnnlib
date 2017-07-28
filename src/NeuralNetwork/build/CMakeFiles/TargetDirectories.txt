@@ -1,0 +1,6 @@
+/home/alekstheod/projects/tnnlib/src/NeuralNetwork/build/CMakeFiles/rebuild_cache.dir
+/home/alekstheod/projects/tnnlib/src/NeuralNetwork/build/CMakeFiles/NeuralNetwork.dir
+/home/alekstheod/projects/tnnlib/src/NeuralNetwork/build/CMakeFiles/edit_cache.dir
+/home/alekstheod/projects/tnnlib/src/NeuralNetwork/build/NeuralNetwork_ut/CMakeFiles/rebuild_cache.dir
+/home/alekstheod/projects/tnnlib/src/NeuralNetwork/build/NeuralNetwork_ut/CMakeFiles/NeuralNetwork_ut.dir
+/home/alekstheod/projects/tnnlib/src/NeuralNetwork/build/NeuralNetwork_ut/CMakeFiles/edit_cache.dir

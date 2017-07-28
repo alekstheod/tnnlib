@@ -30,7 +30,7 @@
 #define VAR_H
 
 #include <boost/serialization/serialization.hpp>
-#include <boost/serialization/array.hpp>
+#include <boost/serialization/boost_array.hpp>
 #include <boost/array.hpp>
 #include <functional>
 

@@ -14,36 +14,36 @@ if(NOT MSVC)
 endif()
 
 add_library(NeuralNetwork
-	  ./NeuralNetwork/NeuralNetwork.cpp
-	  ./NeuralNetwork/INeuralLayer.h
-	  ./NeuralNetwork/NNException.h
-	  ./NeuralNetwork/Config.h
-	  ./NeuralNetwork/LearningAlgorithm/BackPropagation/BepAlgorithm.h
-	  ./NeuralNetwork/LearningAlgorithm/BackPropagation/BPNeuralLayer.h
-	  ./NeuralNetwork/LearningAlgorithm/BackPropagation/BPNeuron.h
-	  ./NeuralNetwork/LearningAlgorithm/BackPropagation/ErrorFunction.h
-	  ./NeuralNetwork/LearningAlgorithm/BackPropagation/OutputNeuralLayer.h
-	  ./NeuralNetwork/Neuron/INeuron.h
-	  ./NeuralNetwork/Neuron/Neuron.h
-	  ./NeuralNetwork/Neuron/ActivationFunction/BiopolarSigmoidFunction.h
-	  ./NeuralNetwork/Neuron/ActivationFunction/IActivationFunction.h
-	  ./NeuralNetwork/Neuron/ActivationFunction/LogScaleSoftmaxFunction.h
-	  ./NeuralNetwork/Neuron/ActivationFunction/SoftmaxFunction.h
-	  ./NeuralNetwork/Neuron/ActivationFunction/SigmoidFunction.h
-	  ./NeuralNetwork/Neuron/ActivationFunction/TanhFunction.h
-	  ./NeuralNetwork/Perceptron/Perceptron.h
-	  ./NeuralNetwork/NeuralLayer/NeuralLayer.h
-	  ./NeuralNetwork/NeuralLayer/OpenCLNeuralLayer.h
-	  ./NeuralNetwork/SOM/INode.h
-	  ./NeuralNetwork/SOM/INeighbourhood.h
-	  ./NeuralNetwork/SOM/IPosition.h
-	  ./NeuralNetwork/SOM/K2DPosition.h
-	  ./NeuralNetwork/SOM/K2DNeighbourhood.h
-	  ./NeuralNetwork/SOM/KNode.h
-	  ./NeuralNetwork/SOM/KohonenMap.h
-	  ./NeuralNetwork/Serialization/NeuralLayerMemento.h
-	  ./NeuralNetwork/Serialization/NeuronMemento.h
-	  ./NeuralNetwork/Serialization/PerceptronMemento.h
+	  NeuralNetwork.cpp
+	  INeuralLayer.h
+	  NNException.h
+	  Config.h
+	  LearningAlgorithm/BackPropagation/BepAlgorithm.h
+	  LearningAlgorithm/BackPropagation/BPNeuralLayer.h
+	  LearningAlgorithm/BackPropagation/BPNeuron.h
+	  LearningAlgorithm/BackPropagation/ErrorFunction.h
+	  LearningAlgorithm/BackPropagation/OutputNeuralLayer.h
+	  Neuron/INeuron.h
+	  Neuron/Neuron.h
+	  Neuron/ActivationFunction/BiopolarSigmoidFunction.h
+	  Neuron/ActivationFunction/IActivationFunction.h
+	  Neuron/ActivationFunction/LogScaleSoftmaxFunction.h
+	  Neuron/ActivationFunction/SoftmaxFunction.h
+	  Neuron/ActivationFunction/SigmoidFunction.h
+	  Neuron/ActivationFunction/TanhFunction.h
+	  Perceptron/Perceptron.h
+	  NeuralLayer/NeuralLayer.h
+	  NeuralLayer/OpenCLNeuralLayer.h
+	  SOM/INode.h
+	  SOM/INeighbourhood.h
+	  SOM/IPosition.h
+	  SOM/K2DPosition.h
+	  SOM/K2DNeighbourhood.h
+	  SOM/KNode.h
+	  SOM/KohonenMap.h
+	  Serialization/NeuralLayerMemento.h
+	  Serialization/NeuronMemento.h
+	  Serialization/PerceptronMemento.h
 	  #./NeuralNetwork/RBM/RBM.h
 	  )
 	 
@@ -61,3 +61,4 @@ target_link_libraries(NeuralNetwork
 		      ${OPENCL_LIBRARIES})
 		      
 		      
+add_subdirectory(NeuralNetwork_ut)

@@ -11,16 +11,16 @@ find_package(Boost ${BOOST_MIN_VERSION} REQUIRED)
 if(Boost_FOUND)
 
 add_library(Utilities
-	    Utilities/Design/Factory.h
-	    Utilities/Design/Singleton.h
-	    Utilities/Design/StateMachine.h
-	    Utilities/MPL/Tuple.h
-	    Utilities/MPL/TypeList.h
-	    Utilities/MPL/TypeTraits.h
-	    Utilities/Memory/LRUCache.h
-	    Utilities/StrUtil/StrUtil.h
-	    Utilities/System/Time.h
-	    Utilities/System/Time.cpp)
+	    Design/Factory.h
+	    Design/Singleton.h
+	    Design/StateMachine.h
+	    MPL/Tuple.h
+	    MPL/TypeList.h
+	    MPL/TypeTraits.h
+	    Memory/LRUCache.h
+	    StrUtil/StrUtil.h
+	    System/Time.h
+	    System/Time.cpp)
 
 target_include_directories(Utilities
 		      PUBLIC

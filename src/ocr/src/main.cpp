@@ -21,6 +21,7 @@
 #include <boost/archive/xml_oarchive.hpp>
 #include <fstream>
 #include <iomanip>
+#include <iostream>
 #include <set>
 
 #define png_infopp_NULL (png_infopp) NULL
