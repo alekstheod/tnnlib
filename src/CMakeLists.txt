@@ -9,7 +9,7 @@ endif()
 add_subdirectory(Utilities)
 add_subdirectory(NeuralNetwork)
 add_subdirectory(Test)
-add_subdirectory(gmock-1.7.0)
+add_subdirectory(gmock)
 add_subdirectory(doc)
 
 IF(NOT DEFINED ENV{DISABLE_OCR})
