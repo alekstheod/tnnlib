@@ -21,7 +21,7 @@ notifications:
 before_script:
 - cd src
 script:
-- apt-get search boost
+- apt-cache search boost
 - export CXX="g++-5" CC="gcc-5"
 - g++-5 --version
 - echo $CXX $CC
