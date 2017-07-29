@@ -43,24 +43,22 @@
 
 namespace nn {
 
-    /**
+    /**s
     * @author alekstheod
     * Represents the Neuron's memento (state)
     * class. The instance of this class is enough in order
     * to restore the Neuron's state.
     */
-    template < class Var, std::size_t inputsNumber > class NeuronMemento {
-        private:
-/**
- * The list of the neuron's inputs.
- */
-#if BOOST_VERSION >= 106400
-        using Container = std::array< nn::Input< Var >, inputsNumber >;
-#else
-        using Container = boost::array< nn::Input< Var >, inputsNumber >;
-#endif
+    template < class Var, std::size_t inputsNumber >
+    class NeuronMemento {
+        public:
+        /**
+         * The list of the neuron's inputs.
+         */
+        using Inputs = typename std::conditional< BOOST_VERSION >= 106400, std::array< nn::Input< Var >, inputsNumber >, boost::array< nn::Input< Var >, inputsNumber > >::type;
 
-        Container m_inputs;
+        private:
+        Inputs m_inputs;
 
         /**
          * Value of the neuron's weight.
@@ -71,7 +69,8 @@ namespace nn {
         typedef nn::Input< Var > Input;
         friend class boost::serialization::access;
 
-        template < class Archive > void serialize (Archive& ar, const unsigned int version) {
+        template < class Archive >
+        void serialize (Archive& ar, const unsigned int version) {
             ar& BOOST_SERIALIZATION_NVP (m_bias);
             ar& BOOST_SERIALIZATION_NVP (m_inputs);
         }
@@ -83,7 +82,7 @@ namespace nn {
          * in order to be assigned to the inputs list member variable.
          * @return true if succeed, false otherwise.
          */
-        bool setInputs (const Container& inputs) {
+        bool setInputs (const Inputs& inputs) {
             bool result = false;
             m_inputs = inputs;
             return result;
@@ -102,7 +101,7 @@ namespace nn {
         * Will return the list of assigned inputs.
         * @return the list of assigned inputs.
         */
-        const Container& getInputs () const {
+        const Inputs& getInputs () const {
             return m_inputs;
         }
 

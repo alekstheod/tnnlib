@@ -67,14 +67,13 @@ namespace nn {
 
         template < typename OutputFunctionType, std::size_t inputsNumber, int scaleFactor > class Neuron {
             public:
-            typedef IActivationFunction< OutputFunctionType > OutputFunction;
-            typedef typename OutputFunction::Var Var;
-            typedef NeuronMemento< Var, inputsNumber > Memento;
-            typedef typename nn::Input< Var > Input;
-            typedef std::array< Input, inputsNumber > Container;
+            using OutputFunction = IActivationFunction< OutputFunctionType >;
+            using Var = typename OutputFunction::Var;
+            using Memento = NeuronMemento< Var, inputsNumber >;
+            using Input = nn::Input< Var >;
 
             /// @brief a list of the inputs first is the weight, second is the value
-            typedef Container Inputs;
+            using Inputs = typename Memento::Inputs;
             typedef typename Inputs::const_iterator iterator;
 
             template < typename VarType > using use = Neuron< typename OutputFunctionType::template use< VarType >, inputsNumber, scaleFactor >;
