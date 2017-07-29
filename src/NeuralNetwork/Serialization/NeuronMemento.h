@@ -49,13 +49,21 @@ namespace nn {
     * class. The instance of this class is enough in order
     * to restore the Neuron's state.
     */
+
+    namespace detail {
+        constexpr bool useStdArray = BOOST_VERSION >= 106000;
+    }
+
     template < class Var, std::size_t inputsNumber >
     class NeuronMemento {
+        private:
+        typedef nn::Input< Var > Input;
+
         public:
         /**
          * The list of the neuron's inputs.
          */
-        using Inputs = typename std::conditional< BOOST_VERSION >= 106400, std::array< nn::Input< Var >, inputsNumber >, boost::array< nn::Input< Var >, inputsNumber > >::type;
+        using Inputs = typename std::conditional< detail::useStdArray, std::array< nn::Input< Var >, inputsNumber >, boost::array< nn::Input< Var >, inputsNumber > >::type;
 
         private:
         Inputs m_inputs;
@@ -64,9 +72,6 @@ namespace nn {
          * Value of the neuron's weight.
          */
         Var m_bias;
-
-        private:
-        typedef nn::Input< Var > Input;
         friend class boost::serialization::access;
 
         template < class Archive >
