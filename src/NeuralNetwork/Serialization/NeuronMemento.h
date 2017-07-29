@@ -51,10 +51,15 @@ namespace nn {
     */
     template < class Var, std::size_t inputsNumber > class NeuronMemento {
         private:
-        /**
-         * The list of the neuron's inputs.
-         */
+/**
+ * The list of the neuron's inputs.
+ */
+#if BOOST_VERSION >= 106400
         using Container = std::array< nn::Input< Var >, inputsNumber >;
+#else
+        using Container = boost::array< nn::Input< Var >, inputsNumber >;
+#endif
+
         Container m_inputs;
 
         /**
