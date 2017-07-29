@@ -9,7 +9,6 @@ addons:
     - g++-5
     - gcc-5
     - cmake
-    - libboost1.64-all-dev
     - valgrind
 compiler:
 - gcc
