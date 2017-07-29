@@ -8,7 +8,7 @@ addons:
     packages:
     - g++-5
     - gcc-5
-    - libboost1.58-all-dev
+    - libboost1.54-all-dev
     - cmake
     - valgrind
 compiler:
