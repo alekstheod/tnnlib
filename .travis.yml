@@ -9,7 +9,7 @@ addons:
     - g++-5
     - gcc-5
     - cmake
-    - libboost1.58-all-dev
+    - libboost1.54-all-dev
     - valgrind
 compiler:
 - gcc
