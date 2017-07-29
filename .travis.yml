@@ -9,7 +9,7 @@ addons:
     - g++-5
     - gcc-5
     - cmake
-    - libboost1.54-all-dev
+    - libboost1.64-all-dev
     - valgrind
 compiler:
 - gcc
@@ -46,3 +46,4 @@ branches:
   email: alekstheod@gmail.com
 os:
 - linux
+dist: trusty
