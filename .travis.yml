@@ -43,6 +43,7 @@ after_success:
 branches:
   only:
   - development
+  - master
   email: alekstheod@gmail.com
 os:
 - linux
