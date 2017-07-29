@@ -71,7 +71,7 @@ namespace nn {
             typedef typename OutputFunction::Var Var;
             typedef NeuronMemento< Var, inputsNumber > Memento;
             typedef typename nn::Input< Var > Input;
-            typedef boost::array< Input, inputsNumber > Container;
+            typedef std::array< Input, inputsNumber > Container;
 
             /// @brief a list of the inputs first is the weight, second is the value
             typedef Container Inputs;

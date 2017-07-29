@@ -33,7 +33,7 @@
 #include <NeuralNetwork/Neuron/Input.h>
 
 #include <boost/array.hpp>
-#include <boost/serialization/boost_array.hpp>
+#include <boost/serialization/array.hpp>
 #include <boost/serialization/nvp.hpp>
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/utility.hpp>
@@ -54,7 +54,7 @@ namespace nn {
         /**
          * The list of the neuron's inputs.
          */
-        using Container = boost::array< nn::Input< Var >, inputsNumber >;
+        using Container = std::array< nn::Input< Var >, inputsNumber >;
         Container m_inputs;
 
         /**

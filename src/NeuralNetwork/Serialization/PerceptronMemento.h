@@ -35,7 +35,6 @@
 
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/nvp.hpp>
-#include <boost/serialization/boost_array.hpp>
 
 namespace nn {
 

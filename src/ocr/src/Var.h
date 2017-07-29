@@ -30,14 +30,15 @@
 #define VAR_H
 
 #include <boost/serialization/serialization.hpp>
-#include <boost/serialization/boost_array.hpp>
-#include <boost/array.hpp>
+#include <boost/serialization/array.hpp>
+
+#include <array>
 #include <functional>
 
 namespace ocr {
 
     template < unsigned int size > struct Var {
-        typedef boost::array< float, size > row;
+        typedef std::array< float, size > row;
         boost::array< row, size > m_rows;
 
         Var () : Var (0.f) {
