@@ -37,6 +37,7 @@
 #include <boost/serialization/nvp.hpp>
 #include <boost/serialization/serialization.hpp>
 #include <boost/serialization/utility.hpp>
+#include <boost/version.hpp>
 
 #include <utility>
 #include <map>
