@@ -13,7 +13,7 @@ namespace util {
         template < typename Internal >
         class Operation {
             public:
-            Operation (Internal& internal, Action& before, Action& after)
+            Operation (Internal& internal, Action before, Action& after)
              : m_internal (internal), m_after (after) {
                 before ();
             }
@@ -33,9 +33,8 @@ namespace util {
     } // namespace detail
 
     template < typename Internal >
-    class Decorator : public Internal {
+    class Decorator {
         public:
-        template < typename... Args >
         Decorator (Internal& internal, const Action& before, const Action& after)
          : m_internal (internal), m_before (before), m_after (after) {
         }
@@ -52,8 +51,8 @@ namespace util {
 
     template < typename Internal >
     auto decorate (Internal& internal, const Action& before, const Action& after)
-     -> Decorator< Internal >* {
-        return new Decorator< Internal > (internal, before, after);
+     -> Decorator< Internal > {
+        return Decorator< Internal > (internal, before, after);
     }
 } // namespace util
 
