@@ -10,9 +10,11 @@ namespace util {
 
     namespace detail {
 
-        template < typename Internal > class Operation {
+        template < typename Internal >
+        class Operation {
             public:
-            Operation (Internal& internal, Action before, Action& after) : m_internal (internal), m_after (after) {
+            Operation (Internal& internal, Action& before, Action& after)
+             : m_internal (internal), m_after (after) {
                 before ();
             }
 
@@ -28,11 +30,14 @@ namespace util {
             Internal& m_internal;
             Action& m_after;
         };
-    }
+    } // namespace detail
 
-    template < typename Internal > class Decorator {
+    template < typename Internal >
+    class Decorator : public Internal {
         public:
-        template < typename... Args > Decorator (Args... args) : m_internal (std::forward (args)...) {
+        template < typename... Args >
+        Decorator (Internal& internal, const Action& before, const Action& after)
+         : m_internal (internal), m_before (before), m_after (after) {
         }
 
         auto operator-> () -> detail::Operation< Internal > {
@@ -40,14 +45,16 @@ namespace util {
         }
 
         private:
-        Internal m_internal;
+        Internal& m_internal;
         Action m_before;
         Action m_after;
     };
 
-    template < typename Internal > auto decorate (const Action& before, const Action& after) -> Decorator< Internal > {
-        return Decorator< Internal > (before, after);
+    template < typename Internal >
+    auto decorate (Internal& internal, const Action& before, const Action& after)
+     -> Decorator< Internal >* {
+        return new Decorator< Internal > (internal, before, after);
     }
-}
+} // namespace util
 
 #endif
