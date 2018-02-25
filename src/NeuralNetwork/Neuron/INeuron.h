@@ -26,52 +26,53 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-#ifndef INEURON_H
-#define INEURON_H
+#pragma once
 
 #include <cstdlib>
 
 namespace nn {
 
-    template < class Neuron > class INeuron {
-        public:
+    template< class Neuron >
+    class INeuron {
+      public:
         typedef typename Neuron::Var Var;
         typedef typename Neuron::OutputFunction OutputFunction;
         typedef typename Neuron::Memento Memento;
         typedef typename Neuron::Input Input;
         typedef Neuron NeuronType;
 
-        private:
+      private:
         Neuron m_neuron;
 
-        public:
-        INeuron () {
+      public:
+        INeuron() {
         }
 
-        INeuron (Neuron neuron) : m_neuron (neuron) {
+        INeuron(Neuron neuron) : m_neuron(neuron) {
         }
 
         /**
          * @brief will calculate the output of the neuron.
          * @return the calculated value.
          */
-        template < typename Iterator > const Var& calculateOutput (Iterator begin, Iterator end) {
-            return m_neuron.calculateOutput (begin, end);
+        template< typename Iterator >
+        const Var& calculateOutput(Iterator begin, Iterator end) {
+            return m_neuron.calculateOutput(begin, end);
         }
 
         /**
-        * @brief Will return the number of inputs for current neuron.
-        * @return the number of inputs.
-        */
-        std::size_t size () const {
-            return m_neuron.size ();
+         * @brief Will return the number of inputs for current neuron.
+         * @return the number of inputs.
+         */
+        std::size_t size() const {
+            return m_neuron.size();
         }
 
-        Input& operator[] (std::size_t id) {
+        Input& operator[](std::size_t id) {
             return m_neuron[id];
         }
 
-        const Input& operator[] (std::size_t id) const {
+        const Input& operator[](std::size_t id) const {
             return m_neuron[id];
         }
 
@@ -79,21 +80,22 @@ namespace nn {
          * @brief will return the output value of the current neuron.
          * @return a current output value of the neuron.
          */
-        Var getOutput () const {
-            return m_neuron.getOutput ();
+        Var getOutput() const {
+            return m_neuron.getOutput();
         }
 
-        Var calcDotProduct () const {
-            return m_neuron.calcDotProduct ();
+        Var calcDotProduct() const {
+            return m_neuron.calcDotProduct();
         }
 
         /**
          * @brief set the value to the given input
-         * @param inputId the id of the input in which the value will be assigned.
+         * @param inputId the id of the input in which the value will be
+         * assigned.
          * @param value a value.
          */
-        void setInput (unsigned int inputId, const Var& value) {
-            m_neuron.setInput (inputId, value);
+        void setInput(unsigned int inputId, const Var& value) {
+            m_neuron.setInput(inputId, value);
         }
 
         /**
@@ -101,45 +103,43 @@ namespace nn {
          *	@param weightId the inputs identifier to set the new weight value.
          *	@param weigh a new weight value.
          */
-        void setWeight (unsigned int weightId, const Var& weight) {
-            m_neuron.setWeight (weightId, weight);
+        void setWeight(unsigned int weightId, const Var& weight) {
+            m_neuron.setWeight(weightId, weight);
         }
 
-        const Var& getBias () const {
-            return m_neuron.getBias ();
+        const Var& getBias() const {
+            return m_neuron.getBias();
         }
 
-        void setBias (Var weight) {
-            m_neuron.setBias (weight);
+        void setBias(Var weight) {
+            m_neuron.setBias(weight);
         }
 
-        const Var& getWeight (unsigned int weightId) const {
-            return m_neuron.getWeight (weightId);
+        const Var& getWeight(unsigned int weightId) const {
+            return m_neuron.getWeight(weightId);
         }
 
-        const Memento getMemento () const {
-            return m_neuron.getMemento ();
+        const Memento getMemento() const {
+            return m_neuron.getMemento();
         }
 
-        Neuron& operator* () {
+        Neuron& operator*() {
             return m_neuron;
         }
 
-        const Neuron& operator* () const {
+        const Neuron& operator*() const {
             return m_neuron;
         }
 
-        const Neuron* operator-> () const {
+        const Neuron* operator->() const {
             return &m_neuron;
         }
 
-        Neuron* operator-> () {
+        Neuron* operator->() {
             return &m_neuron;
         }
 
-        ~INeuron () {
+        ~INeuron() {
         }
     };
-}
-
-#endif // INEURON_H
+} // namespace nn

@@ -41,87 +41,103 @@ namespace nn {
 
     namespace bp {
 
-        template < typename NeuralLayerType > class BPNeuralLayer : public nn::INeuralLayer< typename NeuralLayerType::template wrap< BPNeuron > > {
-            public:
+        template< typename NeuralLayerType >
+        class BPNeuralLayer
+         : public nn::INeuralLayer< typename NeuralLayerType::template wrap< BPNeuron > > {
+          public:
             typedef INeuralLayer< typename NeuralLayerType::template wrap< BPNeuron > > NeuralLayer;
             typedef typename NeuralLayer::Neuron Neuron;
             typedef typename NeuralLayer::Var Var;
             typedef typename NeuralLayer::const_iterator const_iterator;
             typedef typename NeuralLayer::iterator iterator;
 
-            template < typename VarType > using use = BPNeuralLayer< typename NeuralLayerType::template use< VarType > >;
+            template< typename VarType >
+            using use =
+             BPNeuralLayer< typename NeuralLayerType::template use< VarType > >;
 
-            BOOST_STATIC_CONSTEXPR std::size_t CONST_NEURONS_NUMBER = NeuralLayerType::CONST_NEURONS_NUMBER;
+            BOOST_STATIC_CONSTEXPR std::size_t CONST_NEURONS_NUMBER =
+             NeuralLayerType::CONST_NEURONS_NUMBER;
 
-            template < std::size_t inputs > using resize = BPNeuralLayer< typename NeuralLayerType::template resize< inputs > >;
+            template< std::size_t inputs >
+            using resize =
+             BPNeuralLayer< typename NeuralLayerType::template resize< inputs > >;
 
-            private:
-            void calculateWeight (Var learningRate, Neuron& neuron) {
-                std::size_t inputsNumber = neuron->size ();
-                Var delta = neuron->getDelta ();
-                for (std::size_t i = 0; i < inputsNumber; i++) {
+          private:
+            void calculateWeight(Var learningRate, Neuron& neuron) {
+                std::size_t inputsNumber = neuron->size();
+                Var delta = neuron->getDelta();
+                for(std::size_t i = 0; i < inputsNumber; i++) {
                     Var input = neuron[i].value;
                     Var weight = neuron[i].weight;
                     Var newWeight = weight - learningRate * input * delta;
-                    neuron.setWeight (i, newWeight);
+                    neuron.setWeight(i, newWeight);
                 }
 
-                Var weight = neuron->getBias ();
+                Var weight = neuron->getBias();
                 Var newWeight = weight - learningRate * delta;
-                neuron->setBias (newWeight);
+                neuron->setBias(newWeight);
             }
 
-            public:
-            BPNeuralLayer () {
+          public:
+            BPNeuralLayer() {
             }
 
             /**
-             * @brief Will calculate the deltas for the current leyer. This method must be
-             * called for the hidden layers.
+             * @brief Will calculate the deltas for the current leyer. This
+             * method must be called for the hidden layers.
              * @param affectedLayer the next affected layer.
-             * @param current data set based on which the deltas will be calculated.
+             * @param current data set based on which the deltas will be
+             * calculated.
              */
-            template < typename Layer, typename MomentumFunc > void calculateHiddenDeltas (Layer& affectedLayer, MomentumFunc momentum) {
+            template< typename Layer, typename MomentumFunc >
+            void calculateHiddenDeltas(Layer& affectedLayer, MomentumFunc momentum) {
                 std::size_t curNeuronId = 0;
-                for (auto curNeuron = NeuralLayer::begin (); curNeuron != NeuralLayer::end (); curNeuron++) {
+                for(auto& curNeuron : *this) {
                     Var sum = 0.0f; // sum(aDelta*aWeight)
-                    for (std::size_t i = 0; i < affectedLayer.size (); i++) {
-                        Var affectedDelta = affectedLayer.getDelta (i);
-                        Var affectedWeight = affectedLayer.getInputWeight (i, curNeuronId);
+                    for(std::size_t i = 0; i < affectedLayer.size(); i++) {
+                        Var affectedDelta = affectedLayer.getDelta(i);
+                        Var affectedWeight = affectedLayer.getInputWeight(i, curNeuronId);
                         sum += affectedDelta * affectedWeight;
-                        sum += affectedDelta * affectedLayer->getBias (i);
+                        sum += affectedDelta * affectedLayer->getBias(i);
                     }
 
-                    (*curNeuron)->setDelta (momentum ((*curNeuron)->getDelta (), sum * (*curNeuron)->calculateDerivate ()));
+                    curNeuron->setDelta(momentum(curNeuron->getDelta(),
+                                                 sum * curNeuron->calculateDerivate()));
+
                     curNeuronId++;
                 }
             }
 
             /**
-            * @brief Will calculate the deltas for the current layer. This method must be
-            * called for the output layer layers.
-            * @param current data set based on which the deltas will be calculated.
-            */
-            template < typename Prototype, typename MomentumFunc > void calculateDeltas (const Prototype& prototype, MomentumFunc momentum) {
+             * @brief Will calculate the deltas for the current layer. This
+             * method must be called for the output layer layers.
+             * @param current data set based on which the deltas will be
+             * calculated.
+             */
+            template< typename Prototype, typename MomentumFunc >
+            void calculateDeltas(const Prototype& prototype, MomentumFunc momentum) {
                 std::size_t neuronId = 0;
-                for (auto curNeuron = NeuralLayer::begin (); curNeuron != NeuralLayer::end (); curNeuron++) {
-                    (*curNeuron)->calculateDelta (std::get< 1 > (prototype)[neuronId], momentum);
+                for(auto curNeuron = NeuralLayer::begin();
+                    curNeuron != NeuralLayer::end(); curNeuron++) {
+                    (*curNeuron)->calculateDelta(std::get< 1 >(prototype)[neuronId], momentum);
                     neuronId++;
                 }
             }
 
-            void calculateWeights (Var learningRate) {
-                std::for_each (NeuralLayer::begin (), NeuralLayer::end (), std::bind (&BPNeuralLayer::calculateWeight, this, learningRate, std::placeholders::_1));
+            void calculateWeights(Var learningRate) {
+                std::for_each(NeuralLayer::begin(), NeuralLayer::end(),
+                              std::bind(&BPNeuralLayer::calculateWeight, this,
+                                        learningRate, std::placeholders::_1));
             }
 
-            const Var& getDelta (std::size_t neuronId) const {
-                return NeuralLayer::operator[] (neuronId)->getDelta ();
+            const Var& getDelta(std::size_t neuronId) const {
+                return NeuralLayer::operator[](neuronId)->getDelta();
             }
 
-            ~BPNeuralLayer () {
+            ~BPNeuralLayer() {
             }
         };
-    }
-}
+    } // namespace bp
+} // namespace nn
 
 #endif

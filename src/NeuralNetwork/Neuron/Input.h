@@ -1,5 +1,4 @@
-#ifndef NN_INPUT_H
-#define NN_INPUT_H
+#pragma once
 
 #include <boost/serialization/nvp.hpp>
 #include <boost/serialization/serialization.hpp>
@@ -7,20 +6,22 @@
 
 namespace nn {
 
-    template < typename Var > struct Input {
-        Input () : weight (boost::numeric_cast< Var > (0)), value (boost::numeric_cast< Var > (0)) {
+    template< typename Var >
+    struct Input {
+        Input()
+         : weight(boost::numeric_cast< Var >(0)),
+           value(boost::numeric_cast< Var >(0)) {
         }
-        Input (const Var& w, const Var& v) : weight (w), value (v) {
+        Input(const Var& w, const Var& v) : weight(w), value(v) {
         }
         Var weight;
         Var value;
 
-        private:
+      private:
         friend class boost::serialization::access;
-        template < class Archive > void serialize (Archive& ar, const unsigned int version) {
-            ar& BOOST_SERIALIZATION_NVP (weight);
+        template< class Archive >
+        void serialize(Archive& ar, const unsigned int version) {
+            ar& BOOST_SERIALIZATION_NVP(weight);
         }
     };
-}
-
-#endif
+} // namespace nn

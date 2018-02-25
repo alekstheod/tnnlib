@@ -36,7 +36,6 @@
 
 #include <boost/bind.hpp>
 #include <boost/bind/placeholders.hpp>
-#include <boost/config/suffix.hpp>
 #include <boost/iterator/transform_iterator.hpp>
 
 #include <algorithm>
@@ -49,8 +48,9 @@ namespace nn {
         /**
          * Represent the NeuralLayer in perceptron.
          */
-        template < class NeuronType, std::size_t neuronsNumber, std::size_t inputsNumber > class NeuralLayer {
-            public:
+        template< class NeuronType, std::size_t neuronsNumber, std::size_t inputsNumber >
+        class NeuralLayer {
+          public:
             typedef INeuron< typename NeuronType::template resize< inputsNumber > > Neuron;
             typedef typename Neuron::Var Var;
             typedef typename Neuron::Memento NeuronMemento;
@@ -62,173 +62,199 @@ namespace nn {
             typedef typename Container::reverse_iterator reverse_iterator;
             typedef typename Container::const_reverse_iterator const_reverse_iterator;
 
-            template < template < class > class NewType > using wrap = NeuralLayer< NewType< NeuronType >, neuronsNumber, inputsNumber >;
+            template< template< class > class NewType >
+            using wrap =
+             NeuralLayer< NewType< NeuronType >, neuronsNumber, inputsNumber >;
 
-            template < unsigned int inputs > using resize = NeuralLayer< NeuronType, neuronsNumber, inputs >;
+            template< unsigned int inputs >
+            using resize = NeuralLayer< NeuronType, neuronsNumber, inputs >;
 
-            template < typename VarType > using use = NeuralLayer< typename NeuronType::template use< VarType >, neuronsNumber, inputsNumber >;
+            template< typename VarType >
+            using use =
+             NeuralLayer< typename NeuronType::template use< VarType >, neuronsNumber, inputsNumber >;
             BOOST_STATIC_CONSTEXPR unsigned int CONST_NEURONS_NUMBER = neuronsNumber;
             BOOST_STATIC_CONSTEXPR unsigned int CONST_INPUTS_NUMBER = inputsNumber;
 
-            private:
+          private:
             /**
              * A list of the neurons.
              */
             Container m_neurons;
 
-            public:
-            NeuralLayer () : m_neurons (neuronsNumber) {
+          public:
+            NeuralLayer() : m_neurons(neuronsNumber) {
             }
 
             /**
-             * Constructor will initialize the layer by the given inputs number and neurons number.
+             * Constructor will initialize the layer by the given inputs number
+             * and neurons number.
              */
-            static_assert (neuronsNumber > 0, "Invalid template argument neuronsNumber == 0");
-            static_assert (inputsNumber > 0, "Invalid template argument inputsNumber <= 1");
+            static_assert(neuronsNumber > 0,
+                          "Invalid template argument neuronsNumber == 0");
+            static_assert(inputsNumber > 0,
+                          "Invalid template argument inputsNumber <= 1");
 
             /**
-            * @see {INeuralLayer}
-            */
-            const_iterator cbegin () const {
-                return m_neurons.cbegin ();
-            }
-
-            /**
-            * @see {INeuralLayer}
-            */
-            const_iterator cend () const {
-                return m_neurons.cend ();
-            }
-
-            /**
-            * @see {INeuralLayer}
-            */
-            iterator begin () {
-                return m_neurons.begin ();
-            }
-
-            /**
-            * @see {INeuralLayer}
-            */
-            iterator end () {
-                return m_neurons.end ();
+             * @see {INeuralLayer}
+             */
+            const_iterator cbegin() const {
+                return m_neurons.cbegin();
             }
 
             /**
              * @see {INeuralLayer}
              */
-            unsigned int size () const {
-                return m_neurons.size ();
+            const_iterator cend() const {
+                return m_neurons.cend();
             }
 
             /**
-            * @see {INeuralLayer}
-            */
-            const Neuron& operator[] (unsigned int id) const {
+             * @see {INeuralLayer}
+             */
+            iterator begin() {
+                return m_neurons.begin();
+            }
+
+            /**
+             * @see {INeuralLayer}
+             */
+            iterator end() {
+                return m_neurons.end();
+            }
+
+            /**
+             * @see {INeuralLayer}
+             */
+            unsigned int size() const {
+                return m_neurons.size();
+            }
+
+            /**
+             * @see {INeuralLayer}
+             */
+            const Neuron& operator[](unsigned int id) const {
                 return m_neurons[id];
             }
 
             /**
-            * @see {INeuralLayer}
-            */
-            Neuron& operator[] (unsigned int id) {
+             * @see {INeuralLayer}
+             */
+            Neuron& operator[](unsigned int id) {
                 return m_neurons[id];
             }
 
-            reverse_iterator rbegin () {
-                return m_neurons.rbegin ();
+            reverse_iterator rbegin() {
+                return m_neurons.rbegin();
             }
 
-            reverse_iterator rend () {
-                return m_neurons.rend ();
+            reverse_iterator rend() {
+                return m_neurons.rend();
             }
 
-            const_reverse_iterator rbegin () const {
-                return m_neurons.rbegin ();
+            const_reverse_iterator rbegin() const {
+                return m_neurons.rbegin();
             }
 
-            const_reverse_iterator rend () const {
-                return m_neurons.rend ();
-            }
-
-
-            /**
-             * @see {INeuralLayer}
-             */
-            void setInput (unsigned int inputId, const Var& value) {
-                std::for_each (m_neurons.begin (), m_neurons.end (), std::bind (&Neuron::setInput, std::placeholders::_1, inputId, value));
-            }
-
-            const Var& getBias (unsigned int neuronId) const {
-                return m_neurons[neuronId].getBias ();
-            }
-
-            /**
-            * @see {INeuralLayer}
-            */
-            const Var& getInputWeight (unsigned int neuronId, unsigned int weightId) const {
-                return m_neurons[neuronId].getWeight (weightId);
+            const_reverse_iterator rend() const {
+                return m_neurons.rend();
             }
 
             /**
              * @see {INeuralLayer}
              */
-            const Memento getMemento () const {
+            void setInput(unsigned int inputId, const Var& value) {
+                std::for_each(m_neurons.begin(), m_neurons.end(),
+                              std::bind(&Neuron::setInput,
+                                        std::placeholders::_1, inputId, value));
+            }
+
+            const Var& getBias(unsigned int neuronId) const {
+                return m_neurons[neuronId].getBias();
+            }
+
+            /**
+             * @see {INeuralLayer}
+             */
+            const Var& getInputWeight(unsigned int neuronId, unsigned int weightId) const {
+                return m_neurons[neuronId].getWeight(weightId);
+            }
+
+            /**
+             * @see {INeuralLayer}
+             */
+            const Memento getMemento() const {
                 Memento memento;
-                std::vector< NeuronMemento > neurons (CONST_NEURONS_NUMBER);
-                std::transform (m_neurons.begin (), m_neurons.end (), neurons.begin (), std::bind (&Neuron::getMemento, std::placeholders::_1));
+                std::vector< NeuronMemento > neurons(CONST_NEURONS_NUMBER);
+                std::transform(m_neurons.begin(), m_neurons.end(), neurons.begin(),
+                               std::bind(&Neuron::getMemento, std::placeholders::_1));
 
-                memento.setNeurons (neurons);
+                memento.setNeurons(neurons);
                 return memento;
             }
 
             /**
              * @see {INeuralLayer}
              */
-            void setMemento (const Memento& memento) {
-                auto neurons = memento.getNeurons ();
-                std::vector< Neuron > internalNeurons (CONST_NEURONS_NUMBER);
-                std::transform (neurons.begin (), neurons.end (), internalNeurons.begin (), [](NeuronMemento& m) {
-                    Neuron neuron;
-                    neuron->setMemento (m);
-                    return neuron;
-                });
+            void setMemento(const Memento& memento) {
+                auto neurons = memento.getNeurons();
+                std::vector< Neuron > internalNeurons(CONST_NEURONS_NUMBER);
+                std::transform(neurons.begin(), neurons.end(),
+                               internalNeurons.begin(), [](NeuronMemento& m) {
+                                   Neuron neuron;
+                                   neuron->setMemento(m);
+                                   return neuron;
+                               });
 
-                std::copy (internalNeurons.begin (), internalNeurons.end (), m_neurons.begin ());
+                std::copy(internalNeurons.begin(), internalNeurons.end(),
+                          m_neurons.begin());
             }
 
             /**
              * @see {INeuralLayer}
              */
-            Var getOutput (unsigned int outputId) const {
-                return m_neurons[outputId].getOutput ();
+            Var getOutput(unsigned int outputId) const {
+                return m_neurons[outputId].getOutput();
             }
 
             /**
              * @see {INeuralLayer}
              */
-            template < typename Layer > void calculateOutputs (Layer& nextLayer) {
-                auto begin = boost::make_transform_iterator (m_neurons.begin (), boost::bind (&Neuron::calcDotProduct, _1));
-                auto end = boost::make_transform_iterator (m_neurons.end (), boost::bind (&Neuron::calcDotProduct, _1));
-                for (unsigned int i = 0; i < m_neurons.size (); i++) {
-                    nextLayer.setInput (i, m_neurons[i].calculateOutput (begin, end));
+            template< typename Layer >
+            void calculateOutputs(Layer& nextLayer) {
+                auto begin =
+                 boost::make_transform_iterator(m_neurons.begin(),
+                                                boost::bind(&Neuron::calcDotProduct, _1));
+                auto end =
+                 boost::make_transform_iterator(m_neurons.end(),
+                                                boost::bind(&Neuron::calcDotProduct, _1));
+                for(unsigned int i = 0; i < m_neurons.size(); i++) {
+                    nextLayer.setInput(i, m_neurons[i].calculateOutput(begin, end));
                 }
             }
 
             /**
              * @see {INeuralLayer}
              */
-            void calculateOutputs () {
-                auto begin = boost::make_transform_iterator (m_neurons.begin (), boost::bind (&Neuron::calcDotProduct, ::_1));
-                auto end = boost::make_transform_iterator (m_neurons.end (), boost::bind (&Neuron::calcDotProduct, ::_1));
-                using IteratorType = decltype (begin);
-                std::for_each (m_neurons.begin (), m_neurons.end (), std::bind (&Neuron::template calculateOutput< IteratorType >, std::placeholders::_1, begin, end));
+            void calculateOutputs() {
+                auto begin =
+                 boost::make_transform_iterator(m_neurons.begin(),
+                                                boost::bind(&Neuron::calcDotProduct, ::_1));
+                auto end =
+                 boost::make_transform_iterator(m_neurons.end(),
+                                                boost::bind(&Neuron::calcDotProduct, ::_1));
+                using IteratorType = decltype(begin);
+                std::for_each(m_neurons.begin(), m_neurons.end(),
+                              std::bind(&Neuron::template calculateOutput< IteratorType >,
+                                        std::placeholders::_1, begin, end));
             }
         };
-    }
+    } // namespace detail
 
-    template < template < template < class > class, class, std::size_t, int > class NeuronType, template < class > class ActivationFunctionType, std::size_t size, std::size_t inputsNumber = 2, int scaleFactor = 1, typename Var = float >
-    using NeuralLayer = detail::NeuralLayer< NeuronType< ActivationFunctionType, Var, inputsNumber, scaleFactor >, size, inputsNumber >;
-}
+    template< template< template< class > class, class, std::size_t, int > class NeuronType,
+              template< class > class ActivationFunctionType, std::size_t size,
+              std::size_t inputsNumber = 2, int scaleFactor = 1, typename Var = float >
+    using NeuralLayer =
+     detail::NeuralLayer< NeuronType< ActivationFunctionType, Var, inputsNumber, scaleFactor >, size, inputsNumber >;
+} // namespace nn
 
 #endif
