@@ -59,57 +59,61 @@ using namespace utils;
 /*
  *
  */
-int main (int argc, char** argv) {
+int main(int argc, char** argv) {
     using Test = std::tuple< int, float, double, char, std::string, float >;
-    using rev = utils::reverse< Test >::type;
-    rev r;
 
     using Perceptron =
-     nn::Perceptron< float, nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, 2, 2 >, nn::NeuralLayer< nn::Neuron, nn::TanhFunction, 20 >, nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, 1 > >;
+     nn::Perceptron< float, nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, 2, 2 >,
+                     nn::NeuralLayer< nn::Neuron, nn::TanhFunction, 20 >,
+                     nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, 1 > >;
 
     typedef BepAlgorithm< Perceptron > Algo;
-    Algo algorithm (0.09f, 0.01f);
-    std::array< Algo::Prototype, 4 > prototypes = {Algo::Prototype{{0.f, 1.f}, {1.f}}, Algo::Prototype{{1.f, 0.f}, {1.f}}, Algo::Prototype{{1.f, 1.f}, {0.f}},
-                                                   Algo::Prototype{{0.f, 0.f}, {0.f}}};
+    Algo algorithm(0.09f, 0.01f);
+    std::array< Algo::Prototype, 4 > prototypes = {
+     Algo::Prototype{{0.f, 1.f}, {1.f}}, Algo::Prototype{{1.f, 0.f}, {1.f}},
+     Algo::Prototype{{1.f, 1.f}, {0.f}}, Algo::Prototype{{0.f, 0.f}, {0.f}}};
 
-    unsigned int numOfEpochs = std::numeric_limits< unsigned int >::max ();
-    if (argc == 2) {
-        numOfEpochs = utils::lexical_cast< unsigned int > (argv[1]);
-    }
+    unsigned int numOfEpochs =
+     argc < 2 ? std::numeric_limits< unsigned int >::max() :
+                numOfEpochs = utils::lexical_cast< unsigned int >(argv[1]);
 
-    Perceptron perceptron = algorithm.calculate (prototypes.begin (), prototypes.end (), [](float error) { std::cout << error << std::endl; }, numOfEpochs);
+    Perceptron perceptron =
+     algorithm.calculate(prototypes.begin(), prototypes.end(),
+                         [](float error) { std::cout << error << std::endl; }, numOfEpochs);
 
     using Memento = Perceptron::Memento;
-    Memento memento = perceptron.getMemento ();
+    Memento memento = perceptron.getMemento();
     Perceptron perceptron2;
     {
-        std::stringstream strStream;
-        boost::archive::xml_oarchive oa (strStream);
-        // write class instance to archive
-        oa << BOOST_SERIALIZATION_NVP (memento);
+        std::stringstream strm;
+        {
+            // Archive has to be destroyed before using the stream
+            boost::archive::xml_oarchive oa(strm);
+            // write class instance to archive
+            oa << BOOST_SERIALIZATION_NVP(memento);
+        }
 
         Memento memento2;
-        boost::archive::xml_iarchive ia (strStream);
-        ia >> BOOST_SERIALIZATION_NVP (memento2);
-
-        perceptron2.setMemento (memento);
+        boost::archive::xml_iarchive ia(strm);
+        ia >> BOOST_SERIALIZATION_NVP(memento2);
+        perceptron2.setMemento(memento);
     }
 
     std::array< float, 2 > outputs{0};
     std::array< float, 2 > input1{0, 0};
-    perceptron2.calculate (input1.begin (), input1.end (), outputs.begin ());
+    perceptron2.calculate(input1.begin(), input1.end(), outputs.begin());
     std::cout << "0 0 " << outputs[0] << std::endl;
 
     std::array< float, 2 > input2{1, 0};
-    perceptron2.calculate (input2.begin (), input2.end (), outputs.begin ());
+    perceptron2.calculate(input2.begin(), input2.end(), outputs.begin());
     std::cout << "1 0 " << outputs[0] << std::endl;
 
     std::array< float, 2 > input3{1, 1};
-    perceptron2.calculate (input3.begin (), input3.end (), outputs.begin ());
+    perceptron2.calculate(input3.begin(), input3.end(), outputs.begin());
     std::cout << "1 1 " << outputs[0] << std::endl;
 
     std::array< float, 2 > input4{0, 1};
-    perceptron2.calculate (input4.begin (), input4.end (), outputs.begin ());
+    perceptron2.calculate(input4.begin(), input4.end(), outputs.begin());
     std::cout << "0 1 " << outputs[0] << std::endl;
 
     /// Kohonen map implementation
@@ -121,10 +125,10 @@ int main (int argc, char** argv) {
 
     typedef KohonenMap::InputType InputType;
     std::vector< InputType > inputsData;
-    inputsData.push_back ({{0.f, 255.f, 0.f}});
-    inputsData.push_back ({{255.f, 0.f, 0.f}});
-    inputsData.push_back ({{0.f, 0.f, 255.f}});
+    inputsData.push_back({{0.f, 255.f, 0.f}});
+    inputsData.push_back({{255.f, 0.f, 0.f}});
+    inputsData.push_back({{0.f, 0.f, 255.f}});
 
-    kohMap.calculateWeights (inputsData.begin (), inputsData.end (), 10000, 0.4f, 8.0f);
+    kohMap.calculateWeights(inputsData.begin(), inputsData.end(), 10000, 0.4f, 8.0f);
     return 0;
 }
