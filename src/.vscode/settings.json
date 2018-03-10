@@ -28,13 +28,7 @@
         "-I/home/alekstheod/projects/tnnlib/src/gmock/gtest/include",
         "-I/home/alekstheod/projects/tnnlib/src/gmock",
         "-I/home/alekstheod/projects/tnnlib/src/gmock/gtest",
-        "-Wall",
-        "-Wshadow",
         "-DGTEST_HAS_PTHREAD=1",
-        "-fexceptions",
-        "-Wextra",
-        "-Wno-unused-parameter",
-        "-Wno-missing-field-initializers",
         "-D_SCL_SECURE_NO_WARNINGS",
         "-std=c11"
     ],
@@ -48,13 +42,7 @@
         "-I/home/alekstheod/projects/tnnlib/src/gmock/gtest/include",
         "-I/home/alekstheod/projects/tnnlib/src/gmock",
         "-I/home/alekstheod/projects/tnnlib/src/gmock/gtest",
-        "-Wall",
-        "-Wshadow",
         "-DGTEST_HAS_PTHREAD=1",
-        "-fexceptions",
-        "-Wextra",
-        "-Wno-unused-parameter",
-        "-Wno-missing-field-initializers",
         "-D_SCL_SECURE_NO_WARNINGS",
         "-std=c++1z"
     ]
