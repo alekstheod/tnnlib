@@ -41,7 +41,7 @@ after_success:
 - git push -f -q https://alekstheod:$GITHUB_API_KEY@github.com/alekstheod/tnnlib master>/dev/null
 branches:
   only:
-  - development
+  - develop
   - master
   email: alekstheod@gmail.com
 os:
