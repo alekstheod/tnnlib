@@ -165,12 +165,6 @@ namespace nn {
                 }
 
                 calculate< 0 >(m_layers);
-                typedef typename std::tuple_element< CONST_LAYERS_NUMBER - 1, Layers >::type OutputLayer;
-                std::get< CONST_LAYERS_NUMBER - 1 >(m_layers).calculateOutputs();
-                std::transform(std::get< CONST_LAYERS_NUMBER - 1 >(m_layers).begin(),
-                               std::get< CONST_LAYERS_NUMBER - 1 >(m_layers).end(), out,
-                               std::bind(&OutputLayer::Neuron::getOutput,
-                                         std::placeholders::_1));
                 using OutputLayer =
                  typename std::tuple_element< CONST_LAYERS_NUMBER - 1, Layers >::type;
                 std::get< CONST_LAYERS_NUMBER - 1 >(m_layers).calculateOutputs();
@@ -178,7 +172,6 @@ namespace nn {
                                std::get< CONST_LAYERS_NUMBER - 1 >(m_layers).end(), out,
                                std::bind(&OutputLayer::Neuron::getOutput,
                                          std::placeholders::_1));
->>>>>>> Stashed changes
             }
 
             /**
