@@ -6,8 +6,7 @@ addons:
     - ubuntu-toolchain-r-test
     - kalakris-cmake
     packages:
-    - g++-5
-    - gcc-5
+    - clang
     - libboost1.54-all-dev
     - cmake
     - valgrind
@@ -23,8 +22,8 @@ before_script:
 - cd src
 script:
 - apt-cache search boost
-- export CXX="g++-5" CC="gcc-5"
-- g++-5 --version
+- export CXX="clang++" CC="clang"
+- clang --version
 - echo $CXX $CC
 - cmake -DCMAKE_DISABLE_FIND_PACKAGE_OpenCL:bool=TRUE CMakeLists.txt
 - make
