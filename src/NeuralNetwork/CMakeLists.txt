@@ -7,12 +7,6 @@ SET(BOOST_MIN_VERSION "1.46.0")
 find_package(Boost ${BOOST_MIN_VERSION} COMPONENTS ${BOOST_COMPONENTS_NEEDED} REQUIRED) 
 find_package(OpenCL)
 
-#SET( CMAKE_CXX_COMPILER clang++ )
-
-if(NOT MSVC)
-  SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-endif()
-
 add_library(NeuralNetwork
 	  NeuralNetwork.cpp
 	  INeuralLayer.h
@@ -44,7 +38,6 @@ add_library(NeuralNetwork
 	  Serialization/NeuralLayerMemento.h
 	  Serialization/NeuronMemento.h
 	  Serialization/PerceptronMemento.h
-	  #./NeuralNetwork/RBM/RBM.h
 	  )
 	 
 set_target_properties(NeuralNetwork PROPERTIES LINKER_LANGUAGE CXX)

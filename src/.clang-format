@@ -1,6 +1,6 @@
-AccessModifierOffset: 0
+AccessModifierOffset: -2
 AlignEscapedNewlinesLeft: true
-AlignAfterOpenBracket: true
+AlignAfterOpenBracket: Align
 AlignTrailingComments: false
 AlignOperands: true
 AllowAllParametersOfDeclarationOnNextLine: true
@@ -9,12 +9,12 @@ AllowShortIfStatementsOnASingleLine: false
 AllowShortLoopsOnASingleLine: true
 AlwaysBreakBeforeMultilineStrings: true
 AlwaysBreakTemplateDeclarations: true
-BinPackParameters: false
+BinPackParameters: true
 BreakBeforeBinaryOperators: false
 BreakBeforeBraces: Attach
 BreakBeforeTernaryOperators: false
 BreakConstructorInitializersBeforeComma: false
-ColumnLimit: 180
+ColumnLimit: 80
 CommentPragmas: ''
 BinPackArguments: true
 ConstructorInitializerAllOnOneLineOrOnePerLine: false
@@ -39,7 +39,7 @@ PenaltyExcessCharacter: 1
 PenaltyReturnTypeOnItsOwnLine: 20
 SortIncludes: false
 SpaceBeforeAssignmentOperators: true
-SpaceBeforeParens: Always
+SpaceBeforeParens: Never
 SpaceInEmptyParentheses: false
 SpacesBeforeTrailingComments: 1
 SpacesInAngles: true
@@ -49,3 +49,4 @@ SpacesInParentheses: false
 Standard: Cpp11
 TabWidth: 4
 UseTab: Never
+SpaceAfterTemplateKeyword: false

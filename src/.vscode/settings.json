@@ -1,19 +1,11 @@
 {
     "editor.snippetSuggestions": "bottom",
     "editor.quickSuggestions": false,
-    "C_Cpp.autocomplete": "Default",
     "clang.completion.enable": false,
-    "clang.cxxflags": [
-        "-std=c++11"
-    ],
     "cmake.configureArgs": [
         "-DCMAKE_DISABLE_FIND_PACKAGE_OpenCL:bool=TRUE"
     ],
     "editor.formatOnSave": true,
-    "C_Cpp.formatting": "Disabled",
-    "C_Cpp.clang_format_style": "file",
-    "C_Cpp.clang_format_fallbackStyle": "Visual Studio",
-    "C_Cpp.clang_format_formatOnSave": true,
     "files.associations": {
         "array": "cpp",
         "hash_map": "cpp",
@@ -25,5 +17,45 @@
         "valarray": "cpp",
         "functional": "cpp",
         "cstdlib": "cpp"
-    }
+    },
+    "clang.cflags": [
+        "-I/home/alekstheod/projects/tnnlib/src",
+        "-g",
+        "-I/home/alekstheod/projects/tnnlib/src/NeuralNetwork/.",
+        "-I/home/alekstheod/projects/tnnlib/src/NeuralNetwork/../Utilities",
+        "-I/home/alekstheod/projects/tnnlib/src/NeuralNetwork/NeuralNetwork_ut",
+        "-I/home/alekstheod/projects/tnnlib/src/gmock/include",
+        "-I/home/alekstheod/projects/tnnlib/src/gmock/gtest/include",
+        "-I/home/alekstheod/projects/tnnlib/src/gmock",
+        "-I/home/alekstheod/projects/tnnlib/src/gmock/gtest",
+        "-Wall",
+        "-Wshadow",
+        "-DGTEST_HAS_PTHREAD=1",
+        "-fexceptions",
+        "-Wextra",
+        "-Wno-unused-parameter",
+        "-Wno-missing-field-initializers",
+        "-D_SCL_SECURE_NO_WARNINGS",
+        "-std=c11"
+    ],
+    "clang.cxxflags": [
+        "-I/home/alekstheod/projects/tnnlib/src",
+        "-g",
+        "-I/home/alekstheod/projects/tnnlib/src/NeuralNetwork/.",
+        "-I/home/alekstheod/projects/tnnlib/src/NeuralNetwork/../Utilities",
+        "-I/home/alekstheod/projects/tnnlib/src/NeuralNetwork/NeuralNetwork_ut",
+        "-I/home/alekstheod/projects/tnnlib/src/gmock/include",
+        "-I/home/alekstheod/projects/tnnlib/src/gmock/gtest/include",
+        "-I/home/alekstheod/projects/tnnlib/src/gmock",
+        "-I/home/alekstheod/projects/tnnlib/src/gmock/gtest",
+        "-Wall",
+        "-Wshadow",
+        "-DGTEST_HAS_PTHREAD=1",
+        "-fexceptions",
+        "-Wextra",
+        "-Wno-unused-parameter",
+        "-Wno-missing-field-initializers",
+        "-D_SCL_SECURE_NO_WARNINGS",
+        "-std=c++1z"
+    ]
 }

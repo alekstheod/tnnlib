@@ -2,11 +2,6 @@ project(ocr)
 
 cmake_minimum_required(VERSION 2.8)
 
-if(NOT MSVC)
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-#set( CMAKE_CXX_COMPILER clang++ )
-endif()
-
 find_package(PNG REQUIRED)
 message(STATUS "LibPNG package was found with include dir: '${PNG_INCLUDE_DIRS}'")
 

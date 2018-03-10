@@ -48,8 +48,6 @@ namespace nn {
             typedef INeuralLayer< typename NeuralLayerType::template wrap< BPNeuron > > NeuralLayer;
             typedef typename NeuralLayer::Neuron Neuron;
             typedef typename NeuralLayer::Var Var;
-            typedef typename NeuralLayer::const_iterator const_iterator;
-            typedef typename NeuralLayer::iterator iterator;
 
             template< typename VarType >
             using use =

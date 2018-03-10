@@ -58,7 +58,7 @@
                     ]
                   },
                   {
-                    "compileFlags": " -std=c++11 -g  ",
+                    "compileFlags": "-g   -std=gnu++1z",
                     "includePath": [
                       {
                         "path": "/home/alekstheod/projects/tnnlib/src/NeuralNetwork/."
@@ -90,7 +90,7 @@
                 "buildDirectory": "/home/alekstheod/projects/tnnlib/src/build/NeuralNetwork/NeuralNetwork_ut",
                 "fileGroups": [
                   {
-                    "compileFlags": " -std=c++11 -std=c++11 -g  ",
+                    "compileFlags": " -std=c++11 -g   -std=gnu++1z",
                     "includePath": [
                       {
                         "path": "/home/alekstheod/projects/tnnlib/src/NeuralNetwork/NeuralNetwork_ut"
@@ -123,7 +123,7 @@
                 ],
                 "fullName": "NeuralNetwork_ut",
                 "linkFlags": "-rdynamic",
-                "linkLanguageFlags": "-std=c++11 -std=c++11 -g",
+                "linkLanguageFlags": "-std=c++11 -g",
                 "linkLibraries": "../libNeuralNetwork.a ../../gmock/gtest/libgtest.a ../../gmock/libgmock.a ../../Utilities/libUtilities.a -lboost_serialization -lboost_filesystem -lboost_system -lpthread",
                 "linkerLanguage": "CXX",
                 "name": "NeuralNetwork_ut",
@@ -144,7 +144,7 @@
                 "buildDirectory": "/home/alekstheod/projects/tnnlib/src/build/NeuralNetwork/NeuralNetwork_ut",
                 "fileGroups": [
                   {
-                    "compileFlags": " -std=c++11 -std=c++11 -g  ",
+                    "compileFlags": " -std=c++11 -g   -std=gnu++1z",
                     "includePath": [
                       {
                         "path": "/home/alekstheod/projects/tnnlib/src/NeuralNetwork/NeuralNetwork_ut"
@@ -177,7 +177,7 @@
                 ],
                 "fullName": "NeuralNetwork_ut",
                 "linkFlags": "-rdynamic",
-                "linkLanguageFlags": "-std=c++11 -std=c++11 -g",
+                "linkLanguageFlags": "-std=c++11 -g",
                 "linkLibraries": "../libNeuralNetwork.a ../../gmock/gtest/libgtest.a ../../gmock/libgmock.a ../../Utilities/libUtilities.a -lboost_serialization -lboost_filesystem -lboost_system -lpthread",
                 "linkerLanguage": "CXX",
                 "name": "NeuralNetwork_ut",
@@ -198,7 +198,7 @@
                 "buildDirectory": "/home/alekstheod/projects/tnnlib/src/build/Test",
                 "fileGroups": [
                   {
-                    "compileFlags": " -std=c++11 -g  ",
+                    "compileFlags": "-g   -std=gnu++1z",
                     "includePath": [
                       {
                         "path": "/home/alekstheod/projects/tnnlib/src/NeuralNetwork/."
@@ -219,7 +219,7 @@
                 ],
                 "fullName": "Test",
                 "linkFlags": "-rdynamic",
-                "linkLanguageFlags": "-std=c++11 -g",
+                "linkLanguageFlags": "-g",
                 "linkLibraries": "../NeuralNetwork/libNeuralNetwork.a ../Utilities/libUtilities.a -lboost_system -lboost_filesystem -lboost_serialization",
                 "linkerLanguage": "CXX",
                 "name": "Test",
@@ -240,7 +240,7 @@
                 "buildDirectory": "/home/alekstheod/projects/tnnlib/src/build/Utilities",
                 "fileGroups": [
                   {
-                    "compileFlags": " -std=c++11 -g  ",
+                    "compileFlags": "-g   -std=gnu++1z",
                     "includePath": [
                       {
                         "path": "/home/alekstheod/projects/tnnlib/src"
@@ -282,49 +282,12 @@
             "targets": [
               {
                 "artifacts": [
-                  "/home/alekstheod/projects/tnnlib/src/build/gmock/libgmock_main.a"
-                ],
-                "buildDirectory": "/home/alekstheod/projects/tnnlib/src/build/gmock",
-                "fileGroups": [
-                  {
-                    "compileFlags": "-g    -Wall -Wshadow -DGTEST_HAS_PTHREAD=1 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers",
-                    "includePath": [
-                      {
-                        "path": "/home/alekstheod/projects/tnnlib/src/gmock/include"
-                      },
-                      {
-                        "path": "/home/alekstheod/projects/tnnlib/src/gmock"
-                      },
-                      {
-                        "path": "/home/alekstheod/projects/tnnlib/src/gmock/gtest/include"
-                      },
-                      {
-                        "path": "/home/alekstheod/projects/tnnlib/src/gmock/gtest"
-                      }
-                    ],
-                    "isGenerated": false,
-                    "language": "CXX",
-                    "sources": [
-                      "gtest/src/gtest-all.cc",
-                      "src/gmock-all.cc",
-                      "src/gmock_main.cc"
-                    ]
-                  }
-                ],
-                "fullName": "libgmock_main.a",
-                "linkerLanguage": "CXX",
-                "name": "gmock_main",
-                "sourceDirectory": "/home/alekstheod/projects/tnnlib/src/gmock",
-                "type": "STATIC_LIBRARY"
-              },
-              {
-                "artifacts": [
                   "/home/alekstheod/projects/tnnlib/src/build/gmock/gtest/libgtest.a"
                 ],
                 "buildDirectory": "/home/alekstheod/projects/tnnlib/src/build/gmock/gtest",
                 "fileGroups": [
                   {
-                    "compileFlags": "-g    -Wall -Wshadow -DGTEST_HAS_PTHREAD=1 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers",
+                    "compileFlags": "-g    -Wall -Wshadow -DGTEST_HAS_PTHREAD=1 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -std=gnu++1z",
                     "includePath": [
                       {
                         "path": "/home/alekstheod/projects/tnnlib/src/gmock/gtest/include"
@@ -353,7 +316,7 @@
                 "buildDirectory": "/home/alekstheod/projects/tnnlib/src/build/gmock/gtest",
                 "fileGroups": [
                   {
-                    "compileFlags": "-g    -Wall -Wshadow -DGTEST_HAS_PTHREAD=1 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers",
+                    "compileFlags": "-g    -Wall -Wshadow -DGTEST_HAS_PTHREAD=1 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -std=gnu++1z",
                     "includePath": [
                       {
                         "path": "/home/alekstheod/projects/tnnlib/src/gmock/gtest/include"
@@ -382,7 +345,7 @@
                 "buildDirectory": "/home/alekstheod/projects/tnnlib/src/build/gmock",
                 "fileGroups": [
                   {
-                    "compileFlags": "-g    -Wall -Wshadow -DGTEST_HAS_PTHREAD=1 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers",
+                    "compileFlags": "-g    -Wall -Wshadow -DGTEST_HAS_PTHREAD=1 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -std=gnu++1z",
                     "includePath": [
                       {
                         "path": "/home/alekstheod/projects/tnnlib/src/gmock/include"
@@ -410,6 +373,43 @@
                 "name": "gmock",
                 "sourceDirectory": "/home/alekstheod/projects/tnnlib/src/gmock",
                 "type": "STATIC_LIBRARY"
+              },
+              {
+                "artifacts": [
+                  "/home/alekstheod/projects/tnnlib/src/build/gmock/libgmock_main.a"
+                ],
+                "buildDirectory": "/home/alekstheod/projects/tnnlib/src/build/gmock",
+                "fileGroups": [
+                  {
+                    "compileFlags": "-g    -Wall -Wshadow -DGTEST_HAS_PTHREAD=1 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -std=gnu++1z",
+                    "includePath": [
+                      {
+                        "path": "/home/alekstheod/projects/tnnlib/src/gmock/include"
+                      },
+                      {
+                        "path": "/home/alekstheod/projects/tnnlib/src/gmock"
+                      },
+                      {
+                        "path": "/home/alekstheod/projects/tnnlib/src/gmock/gtest/include"
+                      },
+                      {
+                        "path": "/home/alekstheod/projects/tnnlib/src/gmock/gtest"
+                      }
+                    ],
+                    "isGenerated": false,
+                    "language": "CXX",
+                    "sources": [
+                      "gtest/src/gtest-all.cc",
+                      "src/gmock-all.cc",
+                      "src/gmock_main.cc"
+                    ]
+                  }
+                ],
+                "fullName": "libgmock_main.a",
+                "linkerLanguage": "CXX",
+                "name": "gmock_main",
+                "sourceDirectory": "/home/alekstheod/projects/tnnlib/src/gmock",
+                "type": "STATIC_LIBRARY"
               }
             ]
           },
@@ -425,7 +425,7 @@
                 "buildDirectory": "/home/alekstheod/projects/tnnlib/src/build/gmock/gtest",
                 "fileGroups": [
                   {
-                    "compileFlags": "-g    -Wall -Wshadow -DGTEST_HAS_PTHREAD=1 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers",
+                    "compileFlags": "-g    -Wall -Wshadow -DGTEST_HAS_PTHREAD=1 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -std=gnu++1z",
                     "includePath": [
                       {
                         "path": "/home/alekstheod/projects/tnnlib/src/gmock/gtest/include"
@@ -454,7 +454,7 @@
                 "buildDirectory": "/home/alekstheod/projects/tnnlib/src/build/gmock/gtest",
                 "fileGroups": [
                   {
-                    "compileFlags": "-g    -Wall -Wshadow -DGTEST_HAS_PTHREAD=1 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers",
+                    "compileFlags": "-g    -Wall -Wshadow -DGTEST_HAS_PTHREAD=1 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -std=gnu++1z",
                     "includePath": [
                       {
                         "path": "/home/alekstheod/projects/tnnlib/src/gmock/gtest/include"
@@ -490,7 +490,7 @@
                 "buildDirectory": "/home/alekstheod/projects/tnnlib/src/build/ocr",
                 "fileGroups": [
                   {
-                    "compileFlags": " -std=c++11 -g  ",
+                    "compileFlags": "-g   -std=gnu++1z",
                     "defines": [
                       "_SCL_SECURE_NO_WARNINGS"
                     ],
@@ -514,7 +514,7 @@
                 ],
                 "fullName": "ocr",
                 "linkFlags": "-rdynamic",
-                "linkLanguageFlags": "-std=c++11 -g",
+                "linkLanguageFlags": "-g",
                 "linkLibraries": "../NeuralNetwork/libNeuralNetwork.a -lboost_filesystem -lboost_system -lboost_serialization -lpng -lz ../Utilities/libUtilities.a",
                 "linkerLanguage": "CXX",
                 "name": "ocr",
@@ -530,40 +530,41 @@
             "targets": [
               {
                 "artifacts": [
-                  "/home/alekstheod/projects/tnnlib/src/build/gmock/libgmock_main.a"
+                  "/home/alekstheod/projects/tnnlib/src/build/ocr/ocr"
                 ],
-                "buildDirectory": "/home/alekstheod/projects/tnnlib/src/build/gmock",
+                "buildDirectory": "/home/alekstheod/projects/tnnlib/src/build/ocr",
                 "fileGroups": [
                   {
-                    "compileFlags": "-g    -Wall -Wshadow -DGTEST_HAS_PTHREAD=1 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers",
+                    "compileFlags": "-g   -std=gnu++1z",
+                    "defines": [
+                      "_SCL_SECURE_NO_WARNINGS"
+                    ],
                     "includePath": [
                       {
-                        "path": "/home/alekstheod/projects/tnnlib/src/gmock/include"
+                        "path": "/home/alekstheod/projects/tnnlib/src/NeuralNetwork/."
                       },
                       {
-                        "path": "/home/alekstheod/projects/tnnlib/src/gmock"
+                        "path": "/home/alekstheod/projects/tnnlib/src/NeuralNetwork/../Utilities"
                       },
                       {
-                        "path": "/home/alekstheod/projects/tnnlib/src/gmock/gtest/include"
-                      },
-                      {
-                        "path": "/home/alekstheod/projects/tnnlib/src/gmock/gtest"
+                        "path": "/home/alekstheod/projects/tnnlib/src"
                       }
                     ],
                     "isGenerated": false,
                     "language": "CXX",
                     "sources": [
-                      "gtest/src/gtest-all.cc",
-                      "src/gmock-all.cc",
-                      "src/gmock_main.cc"
+                      "src/main.cpp"
                     ]
                   }
                 ],
-                "fullName": "libgmock_main.a",
+                "fullName": "ocr",
+                "linkFlags": "-rdynamic",
+                "linkLanguageFlags": "-g",
+                "linkLibraries": "../NeuralNetwork/libNeuralNetwork.a -lboost_filesystem -lboost_system -lboost_serialization -lpng -lz ../Utilities/libUtilities.a",
                 "linkerLanguage": "CXX",
-                "name": "gmock_main",
-                "sourceDirectory": "/home/alekstheod/projects/tnnlib/src/gmock",
-                "type": "STATIC_LIBRARY"
+                "name": "ocr",
+                "sourceDirectory": "/home/alekstheod/projects/tnnlib/src/ocr",
+                "type": "EXECUTABLE"
               },
               {
                 "artifacts": [
@@ -572,7 +573,7 @@
                 "buildDirectory": "/home/alekstheod/projects/tnnlib/src/build/gmock/gtest",
                 "fileGroups": [
                   {
-                    "compileFlags": "-g    -Wall -Wshadow -DGTEST_HAS_PTHREAD=1 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers",
+                    "compileFlags": "-g    -Wall -Wshadow -DGTEST_HAS_PTHREAD=1 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -std=gnu++1z",
                     "includePath": [
                       {
                         "path": "/home/alekstheod/projects/tnnlib/src/gmock/gtest/include"
@@ -601,7 +602,7 @@
                 "buildDirectory": "/home/alekstheod/projects/tnnlib/src/build/gmock/gtest",
                 "fileGroups": [
                   {
-                    "compileFlags": "-g    -Wall -Wshadow -DGTEST_HAS_PTHREAD=1 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers",
+                    "compileFlags": "-g    -Wall -Wshadow -DGTEST_HAS_PTHREAD=1 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -std=gnu++1z",
                     "includePath": [
                       {
                         "path": "/home/alekstheod/projects/tnnlib/src/gmock/gtest/include"
@@ -621,6 +622,46 @@
                 "linkerLanguage": "CXX",
                 "name": "gtest_main",
                 "sourceDirectory": "/home/alekstheod/projects/tnnlib/src/gmock/gtest",
+                "type": "STATIC_LIBRARY"
+              },
+              {
+                "artifacts": [
+                  "/home/alekstheod/projects/tnnlib/src/build/Utilities/libUtilities.a"
+                ],
+                "buildDirectory": "/home/alekstheod/projects/tnnlib/src/build/Utilities",
+                "fileGroups": [
+                  {
+                    "compileFlags": "-g   -std=gnu++1z",
+                    "includePath": [
+                      {
+                        "path": "/home/alekstheod/projects/tnnlib/src"
+                      }
+                    ],
+                    "isGenerated": false,
+                    "language": "CXX",
+                    "sources": [
+                      "System/Time.cpp"
+                    ]
+                  },
+                  {
+                    "isGenerated": false,
+                    "sources": [
+                      "Design/Factory.h",
+                      "Design/Singleton.h",
+                      "Design/StateMachine.h",
+                      "MPL/Tuple.h",
+                      "MPL/TypeList.h",
+                      "MPL/TypeTraits.h",
+                      "Memory/LRUCache.h",
+                      "StrUtil/StrUtil.h",
+                      "System/Time.h"
+                    ]
+                  }
+                ],
+                "fullName": "libUtilities.a",
+                "linkerLanguage": "CXX",
+                "name": "Utilities",
+                "sourceDirectory": "/home/alekstheod/projects/tnnlib/src/Utilities",
                 "type": "STATIC_LIBRARY"
               },
               {
@@ -664,7 +705,7 @@
                     ]
                   },
                   {
-                    "compileFlags": " -std=c++11 -g  ",
+                    "compileFlags": "-g   -std=gnu++1z",
                     "includePath": [
                       {
                         "path": "/home/alekstheod/projects/tnnlib/src/NeuralNetwork/."
@@ -691,12 +732,85 @@
               },
               {
                 "artifacts": [
+                  "/home/alekstheod/projects/tnnlib/src/build/gmock/libgmock.a"
+                ],
+                "buildDirectory": "/home/alekstheod/projects/tnnlib/src/build/gmock",
+                "fileGroups": [
+                  {
+                    "compileFlags": "-g    -Wall -Wshadow -DGTEST_HAS_PTHREAD=1 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -std=gnu++1z",
+                    "includePath": [
+                      {
+                        "path": "/home/alekstheod/projects/tnnlib/src/gmock/include"
+                      },
+                      {
+                        "path": "/home/alekstheod/projects/tnnlib/src/gmock"
+                      },
+                      {
+                        "path": "/home/alekstheod/projects/tnnlib/src/gmock/gtest/include"
+                      },
+                      {
+                        "path": "/home/alekstheod/projects/tnnlib/src/gmock/gtest"
+                      }
+                    ],
+                    "isGenerated": false,
+                    "language": "CXX",
+                    "sources": [
+                      "gtest/src/gtest-all.cc",
+                      "src/gmock-all.cc"
+                    ]
+                  }
+                ],
+                "fullName": "libgmock.a",
+                "linkerLanguage": "CXX",
+                "name": "gmock",
+                "sourceDirectory": "/home/alekstheod/projects/tnnlib/src/gmock",
+                "type": "STATIC_LIBRARY"
+              },
+              {
+                "artifacts": [
+                  "/home/alekstheod/projects/tnnlib/src/build/gmock/libgmock_main.a"
+                ],
+                "buildDirectory": "/home/alekstheod/projects/tnnlib/src/build/gmock",
+                "fileGroups": [
+                  {
+                    "compileFlags": "-g    -Wall -Wshadow -DGTEST_HAS_PTHREAD=1 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers -std=gnu++1z",
+                    "includePath": [
+                      {
+                        "path": "/home/alekstheod/projects/tnnlib/src/gmock/include"
+                      },
+                      {
+                        "path": "/home/alekstheod/projects/tnnlib/src/gmock"
+                      },
+                      {
+                        "path": "/home/alekstheod/projects/tnnlib/src/gmock/gtest/include"
+                      },
+                      {
+                        "path": "/home/alekstheod/projects/tnnlib/src/gmock/gtest"
+                      }
+                    ],
+                    "isGenerated": false,
+                    "language": "CXX",
+                    "sources": [
+                      "gtest/src/gtest-all.cc",
+                      "src/gmock-all.cc",
+                      "src/gmock_main.cc"
+                    ]
+                  }
+                ],
+                "fullName": "libgmock_main.a",
+                "linkerLanguage": "CXX",
+                "name": "gmock_main",
+                "sourceDirectory": "/home/alekstheod/projects/tnnlib/src/gmock",
+                "type": "STATIC_LIBRARY"
+              },
+              {
+                "artifacts": [
                   "/home/alekstheod/projects/tnnlib/src/build/NeuralNetwork/NeuralNetwork_ut/NeuralNetwork_ut"
                 ],
                 "buildDirectory": "/home/alekstheod/projects/tnnlib/src/build/NeuralNetwork/NeuralNetwork_ut",
                 "fileGroups": [
                   {
-                    "compileFlags": " -std=c++11 -std=c++11 -g  ",
+                    "compileFlags": " -std=c++11 -g   -std=gnu++1z",
                     "includePath": [
                       {
                         "path": "/home/alekstheod/projects/tnnlib/src/NeuralNetwork/NeuralNetwork_ut"
@@ -729,7 +843,7 @@
                 ],
                 "fullName": "NeuralNetwork_ut",
                 "linkFlags": "-rdynamic",
-                "linkLanguageFlags": "-std=c++11 -std=c++11 -g",
+                "linkLanguageFlags": "-std=c++11 -g",
                 "linkLibraries": "../libNeuralNetwork.a ../../gmock/gtest/libgtest.a ../../gmock/libgmock.a ../../Utilities/libUtilities.a -lboost_serialization -lboost_filesystem -lboost_system -lpthread",
                 "linkerLanguage": "CXX",
                 "name": "NeuralNetwork_ut",
@@ -743,7 +857,7 @@
                 "buildDirectory": "/home/alekstheod/projects/tnnlib/src/build/Test",
                 "fileGroups": [
                   {
-                    "compileFlags": " -std=c++11 -g  ",
+                    "compileFlags": "-g   -std=gnu++1z",
                     "includePath": [
                       {
                         "path": "/home/alekstheod/projects/tnnlib/src/NeuralNetwork/."
@@ -764,125 +878,11 @@
                 ],
                 "fullName": "Test",
                 "linkFlags": "-rdynamic",
-                "linkLanguageFlags": "-std=c++11 -g",
+                "linkLanguageFlags": "-g",
                 "linkLibraries": "../NeuralNetwork/libNeuralNetwork.a ../Utilities/libUtilities.a -lboost_system -lboost_filesystem -lboost_serialization",
                 "linkerLanguage": "CXX",
                 "name": "Test",
                 "sourceDirectory": "/home/alekstheod/projects/tnnlib/src/Test",
-                "type": "EXECUTABLE"
-              },
-              {
-                "artifacts": [
-                  "/home/alekstheod/projects/tnnlib/src/build/gmock/libgmock.a"
-                ],
-                "buildDirectory": "/home/alekstheod/projects/tnnlib/src/build/gmock",
-                "fileGroups": [
-                  {
-                    "compileFlags": "-g    -Wall -Wshadow -DGTEST_HAS_PTHREAD=1 -fexceptions -Wextra -Wno-unused-parameter -Wno-missing-field-initializers",
-                    "includePath": [
-                      {
-                        "path": "/home/alekstheod/projects/tnnlib/src/gmock/include"
-                      },
-                      {
-                        "path": "/home/alekstheod/projects/tnnlib/src/gmock"
-                      },
-                      {
-                        "path": "/home/alekstheod/projects/tnnlib/src/gmock/gtest/include"
-                      },
-                      {
-                        "path": "/home/alekstheod/projects/tnnlib/src/gmock/gtest"
-                      }
-                    ],
-                    "isGenerated": false,
-                    "language": "CXX",
-                    "sources": [
-                      "gtest/src/gtest-all.cc",
-                      "src/gmock-all.cc"
-                    ]
-                  }
-                ],
-                "fullName": "libgmock.a",
-                "linkerLanguage": "CXX",
-                "name": "gmock",
-                "sourceDirectory": "/home/alekstheod/projects/tnnlib/src/gmock",
-                "type": "STATIC_LIBRARY"
-              },
-              {
-                "artifacts": [
-                  "/home/alekstheod/projects/tnnlib/src/build/Utilities/libUtilities.a"
-                ],
-                "buildDirectory": "/home/alekstheod/projects/tnnlib/src/build/Utilities",
-                "fileGroups": [
-                  {
-                    "compileFlags": " -std=c++11 -g  ",
-                    "includePath": [
-                      {
-                        "path": "/home/alekstheod/projects/tnnlib/src"
-                      }
-                    ],
-                    "isGenerated": false,
-                    "language": "CXX",
-                    "sources": [
-                      "System/Time.cpp"
-                    ]
-                  },
-                  {
-                    "isGenerated": false,
-                    "sources": [
-                      "Design/Factory.h",
-                      "Design/Singleton.h",
-                      "Design/StateMachine.h",
-                      "MPL/Tuple.h",
-                      "MPL/TypeList.h",
-                      "MPL/TypeTraits.h",
-                      "Memory/LRUCache.h",
-                      "StrUtil/StrUtil.h",
-                      "System/Time.h"
-                    ]
-                  }
-                ],
-                "fullName": "libUtilities.a",
-                "linkerLanguage": "CXX",
-                "name": "Utilities",
-                "sourceDirectory": "/home/alekstheod/projects/tnnlib/src/Utilities",
-                "type": "STATIC_LIBRARY"
-              },
-              {
-                "artifacts": [
-                  "/home/alekstheod/projects/tnnlib/src/build/ocr/ocr"
-                ],
-                "buildDirectory": "/home/alekstheod/projects/tnnlib/src/build/ocr",
-                "fileGroups": [
-                  {
-                    "compileFlags": " -std=c++11 -g  ",
-                    "defines": [
-                      "_SCL_SECURE_NO_WARNINGS"
-                    ],
-                    "includePath": [
-                      {
-                        "path": "/home/alekstheod/projects/tnnlib/src/NeuralNetwork/."
-                      },
-                      {
-                        "path": "/home/alekstheod/projects/tnnlib/src/NeuralNetwork/../Utilities"
-                      },
-                      {
-                        "path": "/home/alekstheod/projects/tnnlib/src"
-                      }
-                    ],
-                    "isGenerated": false,
-                    "language": "CXX",
-                    "sources": [
-                      "src/main.cpp"
-                    ]
-                  }
-                ],
-                "fullName": "ocr",
-                "linkFlags": "-rdynamic",
-                "linkLanguageFlags": "-std=c++11 -g",
-                "linkLibraries": "../NeuralNetwork/libNeuralNetwork.a -lboost_filesystem -lboost_system -lboost_serialization -lpng -lz ../Utilities/libUtilities.a",
-                "linkerLanguage": "CXX",
-                "name": "ocr",
-                "sourceDirectory": "/home/alekstheod/projects/tnnlib/src/ocr",
                 "type": "EXECUTABLE"
               }
             ]
@@ -890,7 +890,7 @@
         ]
       }
     ],
-    "cookie": "0.9373768479768927",
+    "cookie": "0.973535131212016",
     "inReplyTo": "codemodel",
     "type": "reply"
   }

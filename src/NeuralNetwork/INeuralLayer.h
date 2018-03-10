@@ -1,7 +1,6 @@
 #ifndef INEURALLAYER_H
 #define INEURALLAYER_H
 
-#include <boost/config.hpp>
 #include <cstdlib>
 
 namespace nn {
@@ -9,15 +8,12 @@ namespace nn {
     template< typename NeuralLayerType >
     class INeuralLayer {
       public:
-        typedef NeuralLayerType NeuralLayer;
-        typedef typename NeuralLayerType::Memento Memento;
-        typedef typename NeuralLayer::Var Var;
-        typedef typename NeuralLayer::Neuron Neuron;
-        typedef typename NeuralLayer::const_iterator const_iterator;
-        typedef typename NeuralLayer::iterator iterator;
-        typedef typename NeuralLayer::reverse_iterator reverse_iterator;
-        typedef typename NeuralLayer::const_reverse_iterator const_reverse_iterator;
-        BOOST_STATIC_CONSTEXPR std::size_t CONST_INPUTS_NUMBER = NeuralLayer::CONST_INPUTS_NUMBER;
+        using NeuralLayer = NeuralLayerType;
+        using Memento = typename NeuralLayerType::Memento;
+        using Var = typename NeuralLayer::Var;
+        using Neuron = typename NeuralLayer::Neuron;
+
+        static constexpr std::size_t CONST_INPUTS_NUMBER = NeuralLayer::CONST_INPUTS_NUMBER;
 
       private:
         NeuralLayer m_neuralLayer;
@@ -38,43 +34,23 @@ namespace nn {
         INeuralLayer(NeuralLayer neuralLayer) : m_neuralLayer(neuralLayer) {
         }
 
-        const_iterator find(std::size_t neuronId) const {
-            return m_neuralLayer.find(neuronId);
-        }
-
-        const_iterator begin() const {
+        auto cbegin() const -> decltype(m_neuralLayer.cbegin()) {
             return m_neuralLayer.begin();
         }
 
-        const_iterator end() const {
+        auto cend() const -> decltype(m_neuralLayer.cend()) {
             return m_neuralLayer.end();
         }
 
-        iterator begin() {
+        auto begin() -> decltype(m_neuralLayer.begin()) {
             return m_neuralLayer.begin();
         }
 
-        iterator end() {
+        auto end() -> decltype(m_neuralLayer.end()) {
             return m_neuralLayer.end();
         }
 
-        reverse_iterator rbegin() {
-            return m_neuralLayer.rbegin();
-        }
-
-        reverse_iterator rend() {
-            return m_neuralLayer.rend();
-        }
-
-        const_reverse_iterator rbegin() const {
-            return m_neuralLayer.rbegin();
-        }
-
-        const_reverse_iterator rend() const {
-            return m_neuralLayer.rend();
-        }
-
-        std::size_t size() const {
+        auto size() const -> decltype(m_neuralLayer.size()) {
             return m_neuralLayer.size();
         }
 
@@ -143,9 +119,6 @@ namespace nn {
 
         void calculateOutputs() {
             m_neuralLayer.calculateOutputs();
-        }
-
-        ~INeuralLayer() {
         }
     };
 

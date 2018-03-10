@@ -1,10 +1,5 @@
 project(Utilities)
 cmake_minimum_required(VERSION 2.8)
-#SET( CMAKE_CXX_COMPILER clang++ )
-
-if(NOT MSVC)
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-endif()
 
 SET(BOOST_MIN_VERSION "1.46.0")
 find_package(Boost ${BOOST_MIN_VERSION} REQUIRED) 

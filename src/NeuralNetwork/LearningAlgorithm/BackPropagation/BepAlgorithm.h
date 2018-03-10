@@ -48,27 +48,30 @@ namespace nn {
 
     namespace bp {
 
-        template < typename PerceptronType, template < class > class ErrorCalculator = SquaredError > class BepAlgorithm {
-            private:
+        template< typename PerceptronType, template< class > class ErrorCalculator = SquaredError >
+        class BepAlgorithm {
+          private:
             typedef typename PerceptronType::Var Var;
 
             BOOST_STATIC_CONSTEXPR unsigned int inputsNumber = PerceptronType::CONST_INPUTS_NUMBER;
-            BOOST_STATIC_CONSTEXPR unsigned int outputsNumber = PerceptronType::CONST_OUTPUTS_NUMBER;
+            BOOST_STATIC_CONSTEXPR unsigned int outputsNumber =
+             PerceptronType::CONST_OUTPUTS_NUMBER;
 
-            private:
-            typedef typename PerceptronType::template wrap< BPNeuralLayer >::type Perceptron;
-            typedef typename Perceptron::Layers Layers;
+          private:
+            using Perceptron = typename PerceptronType::template wrap< BPNeuralLayer >;
+            using Layers = typename Perceptron::Layers;
 
-            public:
-            typedef typename std::tuple< std::array< Var, inputsNumber >, std::array< Var, outputsNumber > > Prototype;
+          public:
+            using Prototype =
+             typename std::tuple< std::array< Var, inputsNumber >, std::array< Var, outputsNumber > >;
             using Memento = typename Perceptron::Memento;
 
-            private:
+          private:
             /// @brief current perceptron.
             Perceptron m_perceptron;
 
-            /// @brief error limit, algorithm will stop execution when we reach this error
-            /// limit.
+            /// @brief error limit, algorithm will stop execution when we reach
+            /// this error limit.
             Var m_maxError;
 
             /// @brief the learning rate.
@@ -81,67 +84,81 @@ namespace nn {
             ErrorCalculator< typename PerceptronType::Var > m_errorCalculator;
 
             struct DummyMomentum {
-                Var operator() (const Var& oldDelta, const Var& newDelta) {
+                Var operator()(const Var& oldDelta, const Var& newDelta) {
                     return newDelta;
                 }
             };
 
-            template < unsigned int index, typename MomentumFunc > void calculateDelta (Layers& layers, MomentumFunc momentum, int) {
+            template< unsigned int index, typename MomentumFunc >
+            void calculateDelta(Layers& layers, MomentumFunc momentum, int) {
             }
 
-            template < unsigned int index, typename MomentumFunc > void calculateDelta (Layers& layers, MomentumFunc momentum, bool) {
-                std::get< index - 1 > (layers).calculateHiddenDeltas (std::get< index > (layers), momentum);
+            template< unsigned int index, typename MomentumFunc >
+            void calculateDelta(Layers& layers, MomentumFunc momentum, bool) {
+                std::get< index - 1 >(layers).calculateHiddenDeltas(std::get< index >(layers),
+                                                                    momentum);
 
                 typedef typename std::conditional< (index > 1), bool, int >::type ArgType;
-                calculateDelta< index - 1 > (layers, momentum, ArgType (0));
+                calculateDelta< index - 1 >(layers, momentum, ArgType(0));
             }
 
             struct CalculateWeights {
                 Var& m_learningRate;
-                CalculateWeights (Var& learningRate) : m_learningRate (learningRate) {
+                CalculateWeights(Var& learningRate)
+                 : m_learningRate(learningRate) {
                 }
-                template < typename Layer > void operator() (Layer& layer) {
-                    layer.calculateWeights (m_learningRate);
+                template< typename Layer >
+                void operator()(Layer& layer) {
+                    layer.calculateWeights(m_learningRate);
                 }
             };
 
-            public:
-            /// @brief constructor will initialize the object with a learning rate and
-            /// maximum error limit.
+          public:
+            /// @brief constructor will initialize the object with a learning
+            /// rate and maximum error limit.
             /// @param varP the learning rate.
-            /// @param maxError the limit for the error. Algorithm will stop when we reach
-            /// the limit.
-            BepAlgorithm (Var learningRate, Var maxError) : m_maxError (maxError), m_leariningRate (learningRate) {
+            /// @param maxError the limit for the error. Algorithm will stop
+            /// when we reach the limit.
+            BepAlgorithm(Var learningRate, Var maxError)
+             : m_maxError(maxError), m_leariningRate(learningRate) {
             }
 
             /// @brief execution of the single learning step in this algorithm.
             /// @param prototype a prototype used for this step.
-            /// @param momentum a callback which will calculate a new delta, used in order
-            /// to introduce momentum.
+            /// @param momentum a callback which will calculate a new delta,
+            /// used in order to introduce momentum.
             /// @return error on this step.
-            template < typename MomentumFunc > Var executeTrainingStep (Prototype& prototype, MomentumFunc momentum) {
+            template< typename MomentumFunc >
+            Var executeTrainingStep(Prototype& prototype, MomentumFunc momentum) {
                 // Calculate values with current inputs
-                m_perceptron.calculate (std::get< 0 > (prototype).begin (), std::get< 0 > (prototype).end (), m_outputs.begin ());
+                m_perceptron.calculate(std::get< 0 >(prototype).begin(),
+                                       std::get< 0 >(prototype).end(), m_outputs.begin());
 
                 // Calculate deltas
-                std::get< Perceptron::CONST_LAYERS_NUMBER - 1 > (m_perceptron.layers ()).calculateDeltas (prototype, momentum);
-                calculateDelta< Perceptron::CONST_LAYERS_NUMBER - 1 > (m_perceptron.layers (), momentum, true);
+                std::get< Perceptron::CONST_LAYERS_NUMBER - 1 >(m_perceptron.layers())
+                 .calculateDeltas(prototype, momentum);
+                calculateDelta< Perceptron::CONST_LAYERS_NUMBER - 1 >(
+                 m_perceptron.layers(), momentum, true);
 
                 // Calculate weights
-                utils::for_each (m_perceptron.layers (), CalculateWeights (m_leariningRate));
-                m_perceptron.calculate (std::get< 0 > (prototype).begin (), std::get< 0 > (prototype).end (), m_outputs.begin ());
+                utils::for_each(m_perceptron.layers(), CalculateWeights(m_leariningRate));
+                m_perceptron.calculate(std::get< 0 >(prototype).begin(),
+                                       std::get< 0 >(prototype).end(), m_outputs.begin());
 
                 // Calculate error
-                return m_errorCalculator (m_outputs.begin (), m_outputs.end (), std::get< 1 > (prototype).begin ());
+                return m_errorCalculator(m_outputs.begin(), m_outputs.end(),
+                                         std::get< 1 >(prototype).begin());
             }
 
-            template < typename Iterator, typename ErrorFunc >
-            PerceptronType calculate (Iterator begin, Iterator end, ErrorFunc func, unsigned int maxNumberOfEpochs = std::numeric_limits< unsigned int >::max ()) {
-                return calculate (begin, end, func, maxNumberOfEpochs, DummyMomentum ());
+            template< typename Iterator, typename ErrorFunc >
+            PerceptronType
+            calculate(Iterator begin, Iterator end, ErrorFunc func,
+                      unsigned int maxNumberOfEpochs = std::numeric_limits< unsigned int >::max()) {
+                return calculate(begin, end, func, maxNumberOfEpochs, DummyMomentum());
             }
 
-            void setMemento (Memento memento) {
-                m_perceptron.setMemento (memento);
+            void setMemento(Memento memento) {
+                m_perceptron.setMemento(memento);
             }
 
             /// @brief will calculate a perceptron with appropriate weights.
@@ -150,33 +167,40 @@ namespace nn {
             /// @param ReportFunc error report function (callback).
             /// @param MomentumFunc function which will calculate a momentum.
             /// @return a calculated perceptron.
-            template < typename Iterator, typename ErrorFunc, typename MomentumFunc >
+            template< typename Iterator, typename ErrorFunc, typename MomentumFunc >
             PerceptronType
-            calculate (Iterator begin, Iterator end, ErrorFunc func, unsigned int limit = std::numeric_limits< unsigned int >::max (), MomentumFunc momentum = DummyMomentum ()) {
-                Var error = boost::numeric_cast< Var > (0.f);
+            calculate(Iterator begin, Iterator end, ErrorFunc func,
+                      unsigned int limit = std::numeric_limits< unsigned int >::max(),
+                      MomentumFunc momentum = DummyMomentum()) {
+                Var error = boost::numeric_cast< Var >(0.f);
                 unsigned int epochCounter = 0;
-                typename std::vector< Prototype > prototypes (begin, end);
+                typename std::vector< Prototype > prototypes(begin, end);
 
                 do {
                     error = 0;
-                    auto seed = std::chrono::system_clock::now ().time_since_epoch ().count ();
-                    std::shuffle (prototypes.begin (), prototypes.end (), std::default_random_engine (static_cast< unsigned int > (seed)));
+                    auto seed =
+                     std::chrono::system_clock::now().time_since_epoch().count();
+                    std::shuffle(prototypes.begin(), prototypes.end(),
+                                 std::default_random_engine(static_cast< unsigned int >(seed)));
 
                     error =
-                     std::accumulate (prototypes.begin (), prototypes.end (), error, [&](Var& init, Prototype& first) -> Var { return init + executeTrainingStep (first, momentum); });
+                     std::accumulate(prototypes.begin(), prototypes.end(), error,
+                                     [&](Var& init, Prototype& first) -> Var {
+                                         return init + executeTrainingStep(first, momentum);
+                                     });
 
-                    func (error);
+                    func(error);
                     epochCounter += epochCounter < limit ? 1 : 0;
-                } while (epochCounter < limit && error > m_maxError);
+                } while(epochCounter < limit && error > m_maxError);
 
                 PerceptronType perceptron;
-                perceptron.setMemento (m_perceptron.getMemento ());
+                perceptron.setMemento(m_perceptron.getMemento());
 
                 return perceptron;
             }
         };
         //---------------------------------------------------------------------------
-    }
-}
+    } // namespace bp
+} // namespace nn
 
 #endif

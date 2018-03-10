@@ -37,8 +37,9 @@
 #include <memory>
 #include <boost/bind.hpp>
 
-template < typename VarType, std::size_t neurons, std::size_t inputs > class MockedNeuralLayer {
-    public:
+template< typename VarType, std::size_t neurons, std::size_t inputs >
+class MockedNeuralLayer {
+  public:
     typedef typename nn::NeuralLayerMemento< VarType, inputs > Memento;
     typedef VarType Var;
     typedef typename std::vector< Var >::const_iterator VarIterator;
@@ -52,114 +53,121 @@ template < typename VarType, std::size_t neurons, std::size_t inputs > class Moc
     BOOST_STATIC_CONSTEXPR std::size_t CONST_NEURONS_NUMBER = neurons;
     BOOST_STATIC_CONSTEXPR std::size_t CONST_INPUTS_NUMBER = neurons;
 
-    template < typename NewType > struct rebindNeuron { typedef MockedNeuralLayer type; };
-
-    template < typename V > using use = MockedNeuralLayer< V, neurons, inputs >;
-
-    template < std::size_t new_inputs > using resize = MockedNeuralLayer< VarType, neurons, new_inputs >;
-
-    public:
-    /// Need this because the googlemock does not allow to copy the mock objects.
-    class Mock {
-        public:
-        MOCK_CONST_METHOD0_T (begin, const_iterator ());
-        MOCK_CONST_METHOD0_T (end, const_iterator ());
-        MOCK_METHOD0_T (begin, iterator ());
-        MOCK_METHOD0_T (end, iterator ());
-        MOCK_METHOD0_T (rbegin, reverse_iterator ());
-        MOCK_METHOD0_T (rend, reverse_iterator ());
-        MOCK_CONST_METHOD0_T (rbegin, const_reverse_iterator ());
-        MOCK_CONST_METHOD0_T (rend, const_reverse_iterator ());
-        MOCK_CONST_METHOD0_T (getInputsNumber, unsigned int());
-        MOCK_METHOD2_T (setInput, void(unsigned int, const Var&));
-        MOCK_CONST_METHOD1_T (getOutput, Var (unsigned int));
-        MOCK_METHOD1_T (getNeuron, const Neuron&(unsigned int));
-        MOCK_CONST_METHOD2_T (getInputWeight, const Var&(unsigned int, unsigned int));
-        MOCK_CONST_METHOD0_T (getMemento, const Memento ());
-        MOCK_METHOD1_T (setMemento, void(const Memento&));
-        MOCK_METHOD1_T (calculateOutputs, void(int));
-        MOCK_METHOD0_T (calculateOutputs, void());
+    template< typename NewType >
+    struct rebindNeuron {
+        typedef MockedNeuralLayer type;
     };
 
-    public:
+    template< typename V >
+    using use = MockedNeuralLayer< V, neurons, inputs >;
+
+    template< std::size_t new_inputs >
+    using resize = MockedNeuralLayer< VarType, neurons, new_inputs >;
+
+  public:
+    /// Need this because the googlemock does not allow to copy the mock
+    /// objects.
+    class Mock {
+      public:
+        MOCK_CONST_METHOD0_T(begin, const_iterator());
+        MOCK_CONST_METHOD0_T(end, const_iterator());
+        MOCK_METHOD0_T(begin, iterator());
+        MOCK_METHOD0_T(end, iterator());
+        MOCK_METHOD0_T(rbegin, reverse_iterator());
+        MOCK_METHOD0_T(rend, reverse_iterator());
+        MOCK_CONST_METHOD0_T(rbegin, const_reverse_iterator());
+        MOCK_CONST_METHOD0_T(rend, const_reverse_iterator());
+        MOCK_CONST_METHOD0_T(getInputsNumber, unsigned int());
+        MOCK_METHOD2_T(setInput, void(unsigned int, const Var&));
+        MOCK_CONST_METHOD1_T(getOutput, Var(unsigned int));
+        MOCK_METHOD1_T(getNeuron, const Neuron&(unsigned int));
+        MOCK_CONST_METHOD2_T(getInputWeight, const Var&(unsigned int, unsigned int));
+        MOCK_CONST_METHOD0_T(getMemento, const Memento());
+        MOCK_METHOD1_T(setMemento, void(const Memento&));
+        MOCK_METHOD1_T(calculateOutputs, void(int));
+        MOCK_METHOD0_T(calculateOutputs, void());
+    };
+
+  public:
     unsigned int m_inputsNumber;
 
-    private:
+  private:
     std::shared_ptr< Mock > m_mock;
 
-    public:
-    MockedNeuralLayer () : m_mock (new Mock) {
+  public:
+    MockedNeuralLayer() : m_mock(new Mock) {
     }
 
-    unsigned int size () const {
+    unsigned int size() const {
         return neurons;
     }
 
-    Mock& operator* () {
-        return (*m_mock.get ());
+    Mock& operator*() {
+        return (*m_mock.get());
     }
 
-    const_iterator find (unsigned int neuronId) const {
+    const_iterator find(unsigned int neuronId) const {
     }
 
-    const_iterator begin () const {
-        return m_mock->begin ();
+    const_iterator begin() const {
+        return m_mock->begin();
     }
 
-    const_iterator end () const {
-        return m_mock->end ();
+    const_iterator end() const {
+        return m_mock->end();
     }
 
-    iterator begin () {
-        return m_mock->begin ();
+    iterator begin() {
+        return m_mock->begin();
     }
 
-    iterator end () {
-        return m_mock->end ();
+    iterator end() {
+        return m_mock->end();
     }
 
-    reverse_iterator rbegin () {
-        return m_mock->rbegin ();
+    reverse_iterator rbegin() {
+        return m_mock->rbegin();
     }
 
-    reverse_iterator rend () {
-        return m_mock->rend ();
+    reverse_iterator rend() {
+        return m_mock->rend();
     }
 
-    const_reverse_iterator rbegin () const {
-        return m_mock->rbegin ();
+    const_reverse_iterator rbegin() const {
+        return m_mock->rbegin();
     }
 
-    const_reverse_iterator rend () const {
-        return m_mock->rend ();
+    const_reverse_iterator rend() const {
+        return m_mock->rend();
     }
 
-    const Neuron& operator[] (unsigned int id) const {
-        return m_mock->getNeuron (id);
+    const Neuron& operator[](unsigned int id) const {
+        return m_mock->getNeuron(id);
     }
 
-    const Var& getInputWeight (unsigned int neuronId, unsigned int weightId) const {
-        return m_mock->getInputWeight (neuronId, weightId);
+    const Var& getInputWeight(unsigned int neuronId, unsigned int weightId) const {
+        return m_mock->getInputWeight(neuronId, weightId);
     }
 
-    const Memento getMemento () const {
-        return m_mock->getMemento ();
+    const Memento getMemento() const {
+        return m_mock->getMemento();
     }
 
-    void setMemento (const Memento& memento) {
-        return m_mock->setMemento (memento);
+    void setMemento(const Memento& memento) {
+        return m_mock->setMemento(memento);
     }
 
-    void setInput (unsigned int inputId, const Var& value) {
-        m_mock->setInput (inputId, value);
+    void setInput(unsigned int inputId, const Var& value) {
+        m_mock->setInput(inputId, value);
     }
 
-    template < typename Layer > void calculateOutputs (Layer& nextLayer) {
-        return m_mock->calculateOutputs (0);
+    template< typename Layer >
+    void calculateOutputs(Layer& nextLayer) {
+        return m_mock->calculateOutputs(0);
     }
 
-    void calculateOutputs () {
-        return m_mock->calculateOutputs ();
+    void calculateOutputs() {
+        return m_mock->calculateOutputs();
     }
 };
 
