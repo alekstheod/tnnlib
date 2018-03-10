@@ -55,7 +55,7 @@ namespace nn {
         template< typename VarType, typename LayerTypes, std::size_t inputs = 1 >
         class Perceptron {
           private:
-            typedef typename mpl::rebindVar< VarType, LayerTypes >::type TmplLayers;
+            using TmplLayers = typename mpl::rebindVar< VarType, LayerTypes >::type;
 
           public:
             static constexpr std::size_t CONST_LAYERS_NUMBER =
