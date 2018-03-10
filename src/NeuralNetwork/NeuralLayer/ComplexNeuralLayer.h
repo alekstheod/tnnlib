@@ -30,9 +30,9 @@
 #ifndef NeuralLayerH
 #define NeuralLayerH
 
-#include <NeuralNetwork/INeuralLayer.h>
 #include <NeuralNetwork/Neuron/INeuron.h>
 #include <NeuralNetwork/Serialization/NeuralLayerMemento.h>
+#include <NeuralNetwork/INeuralLayer.h>
 
 #include <boost/bind.hpp>
 #include <boost/bind/placeholders.hpp>
@@ -48,14 +48,21 @@ namespace nn {
         /**
          * Represent the NeuralLayer in perceptron.
          */
-        template< class NeuronType, std::size_t neuronsNumber, std::size_t inputsNumber >
+        template< std::size_t inputsNumber, typename... NeuronType >
         class NeuralLayer {
           public:
-            typedef INeuron< typename NeuronType::template resize< inputsNumber > > Neuron;
+            using Neuron =
+             typedef INeuron< typename NeuronType::template resize< inputsNumber >... >;
+
             typedef typename Neuron::Var Var;
             typedef typename Neuron::Memento NeuronMemento;
             typedef NeuralLayerMemento< NeuronMemento, neuronsNumber > Memento;
             typedef typename std::vector< Neuron > Container;
+
+            typedef typename Container::const_iterator const_iterator;
+            typedef typename Container::iterator iterator;
+            typedef typename Container::reverse_iterator reverse_iterator;
+            typedef typename Container::const_reverse_iterator const_reverse_iterator;
 
             template< template< class > class NewType >
             using wrap =
@@ -67,8 +74,8 @@ namespace nn {
             template< typename VarType >
             using use =
              NeuralLayer< typename NeuronType::template use< VarType >, neuronsNumber, inputsNumber >;
-            static constexpr unsigned int CONST_NEURONS_NUMBER = neuronsNumber;
-            static constexpr unsigned int CONST_INPUTS_NUMBER = inputsNumber;
+            BOOST_STATIC_CONSTEXPR unsigned int CONST_NEURONS_NUMBER = neuronsNumber;
+            BOOST_STATIC_CONSTEXPR unsigned int CONST_INPUTS_NUMBER = inputsNumber;
 
           private:
             /**
@@ -92,35 +99,35 @@ namespace nn {
             /**
              * @see {INeuralLayer}
              */
-            auto cbegin() const -> decltype(m_neurons.cbegin()) {
+            const_iterator cbegin() const {
                 return m_neurons.cbegin();
             }
 
             /**
              * @see {INeuralLayer}
              */
-            auto cend() const -> decltype(m_neurons.cend()) {
+            const_iterator cend() const {
                 return m_neurons.cend();
             }
 
             /**
              * @see {INeuralLayer}
              */
-            auto begin() -> decltype(m_neurons.begin()) {
+            iterator begin() {
                 return m_neurons.begin();
             }
 
             /**
              * @see {INeuralLayer}
              */
-            auto end() -> decltype(m_neurons.end()) {
+            iterator end() {
                 return m_neurons.end();
             }
 
             /**
              * @see {INeuralLayer}
              */
-            auto size() const -> decltype(m_neurons.size()) {
+            unsigned int size() const {
                 return m_neurons.size();
             }
 

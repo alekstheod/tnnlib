@@ -27,8 +27,8 @@
 *  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE
 */
 
-#ifndef BEPNeuronH
-#define BEPNeuronH
+#pragma once
+
 #include <NeuralNetwork/Neuron/INeuron.h>
 #include <boost/numeric/conversion/cast.hpp>
 #include <functional>
@@ -38,25 +38,28 @@ namespace nn {
     namespace bp {
 
         /*
-        * Represent the back error propagation Neuron trainer.
-        * This class holds a pointer to neuron which should
-        * be trained with back error propagation algorithm.
-        */
-        template < class NeuronType > class BPNeuron : public INeuron< NeuronType > {
-            public:
+         * Represent the back error propagation Neuron trainer.
+         * This class holds a pointer to neuron which should
+         * be trained with back error propagation algorithm.
+         */
+        template< class NeuronType >
+        class BPNeuron : public INeuron< NeuronType > {
+          public:
             using Neuron = nn::INeuron< NeuronType >;
             using Var = typename Neuron::Var;
             using Memento = typename Neuron::Memento;
             using OutputFunction = typename Neuron::OutputFunction;
 
-            template < typename EquationType > using use = BPNeuron< typename NeuronType::template use< EquationType > >;
+            template< typename EquationType >
+            using use = BPNeuron< typename NeuronType::template use< EquationType > >;
 
-            template < unsigned int inputs > using resize = BPNeuron< typename NeuronType::template resize< inputs > >;
+            template< unsigned int inputs >
+            using resize = BPNeuron< typename NeuronType::template resize< inputs > >;
 
-            private:
+          private:
             /**
-            * Neurons error delta
-            */
+             * Neurons error delta
+             */
             Var m_delta;
 
             /**
@@ -64,56 +67,51 @@ namespace nn {
              */
             OutputFunction m_outputFunction;
 
-            public:
+          public:
             /**
-            * @brief Default constructor will initialize the BPNeuron with 0.
-            */
-            BPNeuron () : m_delta (boost::numeric_cast< Var > (0.f)) {
+             * @brief Default constructor will initialize the BPNeuron with 0.
+             */
+            BPNeuron() : m_delta(boost::numeric_cast< Var >(0.f)) {
             }
 
             /**
-            * @brief Initialization constructor
-            * @param neuron the pointer to the neuron which need to be trained
-            */
-            BPNeuron (unsigned int inputsNumber) : m_delta (boost::numeric_cast< Var > (0.f)), Neuron (inputsNumber) {
+             * @brief Initialization constructor
+             * @param neuron the pointer to the neuron which need to be trained
+             */
+            BPNeuron(unsigned int inputsNumber)
+             : m_delta(boost::numeric_cast< Var >(0.f)), Neuron(inputsNumber) {
             }
 
             /**
-            * @brief Will return the errors delta for the trained neuron.
-            * @returns the error deltas value.
-            */
-            const Var& getDelta (void) const {
+             * @brief Will return the errors delta for the trained neuron.
+             * @returns the error deltas value.
+             */
+            const Var& getDelta(void) const {
                 return m_delta;
             }
 
-            void setDelta (const Var& delta) {
+            void setDelta(const Var& delta) {
                 m_delta = delta;
             }
 
-            void setMemento (const Memento& memento) {
-                (*this)->setMemento (memento);
+            void setMemento(const Memento& memento) {
+                (*this)->setMemento(memento);
             }
 
             /*!
-            *  Will calculate the differential value.
-            *  @return the calculated value.
-            */
-            template < typename MomentumFunc > const Var& calculateDelta (const Var& expectedOutput, MomentumFunc momentum) {
-                m_delta = momentum (m_delta, m_outputFunction.delta (Neuron::getOutput (), expectedOutput));
+             *  Will calculate the differential value.
+             *  @return the calculated value.
+             */
+            template< typename MomentumFunc >
+            const Var& calculateDelta(const Var& expectedOutput, MomentumFunc momentum) {
+                m_delta =
+                 momentum(m_delta, m_outputFunction.delta(Neuron::getOutput(), expectedOutput));
                 return m_delta;
             }
 
-            const Var calculateDerivate () const {
-                return m_outputFunction.derivate (Neuron::getOutput ());
-            }
-
-            /**
-            * Destructor.
-            */
-            ~BPNeuron () {
+            const Var calculateDerivate() const {
+                return m_outputFunction.derivate(Neuron::getOutput());
             }
         };
-    }
-}
-//---------------------------------------------------------------------------
-#endif
+    } // namespace bp
+} // namespace nn

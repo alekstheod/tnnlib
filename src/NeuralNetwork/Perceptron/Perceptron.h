@@ -49,97 +49,102 @@ namespace nn {
     namespace detail {
 
         /*! \class Perceptron
-         *  \briefs Contains an input neurons layer one output and one or more hidden layers.
+         *  \briefs Contains an input neurons layer one output and one or more
+         * hidden layers.
          */
-        template < typename VarType, typename LayerTypes, std::size_t inputs = 1 > class Perceptron {
-            private:
+        template< typename VarType, typename LayerTypes, std::size_t inputs = 1 >
+        class Perceptron {
+          private:
             typedef typename mpl::rebindVar< VarType, LayerTypes >::type TmplLayers;
 
-            public:
-            BOOST_STATIC_CONSTEXPR std::size_t CONST_LAYERS_NUMBER = std::tuple_size< TmplLayers >::value;
+          public:
+            static constexpr std::size_t CONST_LAYERS_NUMBER =
+             std::tuple_size< TmplLayers >::value;
             using InputLayerType = typename std::tuple_element< 0, TmplLayers >::type;
 
-            /// @brief the number of inputs is taken out of the argument if and only if
-            /// it is bigger than 1, otherwise the number of inputs from the input layer is used.
-            BOOST_STATIC_CONSTEXPR std::size_t CONST_INPUTS_NUMBER = (inputs > 1) ? inputs : InputLayerType::CONST_INPUTS_NUMBER;
-            using Layers = typename mpl::rebindInputs< CONST_INPUTS_NUMBER, TmplLayers >::type;
-            using OutputLayerType = typename std::tuple_element< CONST_LAYERS_NUMBER - 1, Layers >::type;
+            /// @brief the number of inputs is taken out of the argument if and
+            /// only if it is bigger than 1, otherwise the number of inputs from
+            /// the input layer is used.
+            static constexpr std::size_t CONST_INPUTS_NUMBER =
+             (inputs > 1) ? inputs : InputLayerType::CONST_INPUTS_NUMBER;
+            using Layers =
+             typename mpl::rebindInputs< CONST_INPUTS_NUMBER, TmplLayers >::type;
+            using OutputLayerType =
+             typename std::tuple_element< CONST_LAYERS_NUMBER - 1, Layers >::type;
 
-            BOOST_STATIC_CONSTEXPR std::size_t CONST_OUTPUTS_NUMBER = OutputLayerType::CONST_NEURONS_NUMBER;
+            static constexpr std::size_t CONST_OUTPUTS_NUMBER =
+             OutputLayerType::CONST_NEURONS_NUMBER;
 
-            typedef VarType Var;
-            template < template < class > class Layer > struct wrap {
-                typedef typename utils::rebind_tuple< Layer, Layers >::type NewLayers;
-                typedef detail::Perceptron< VarType, NewLayers > type;
-            };
+            using Var = VarType;
+
+            template< template< class > class Layer >
+            using wrap =
+             detail::Perceptron< VarType, typename utils::rebind_tuple< Layer, Layers >::type >;
 
             using LayersMemento = typename detail::mpl::ToMemento< Layers >::type;
             typedef PerceptronMemento< LayersMemento > Memento;
 
-            template < typename T > using use = Perceptron< T, LayerTypes >;
+            template< typename T >
+            using use = Perceptron< T, LayerTypes >;
 
-            template < std::size_t in > using resize = Perceptron< VarType, LayerTypes, in >;
+            template< std::size_t in >
+            using resize = Perceptron< VarType, LayerTypes, in >;
             using reverse = Perceptron< VarType, utils::reverse< LayerTypes > >;
 
-            private:
+          private:
             /*!
              * Hidden layers.
              */
             Layers m_layers;
 
-            template < std::size_t index > void setMem (const LayersMemento& layers, int) {
+            template< std::size_t index >
+            void setMem(const LayersMemento& layers) {
+                std::get< index >(m_layers).setMemento(std::get< index >(layers));
+                if constexpr(index < CONST_LAYERS_NUMBER - 1) {
+                    setMem< index + 1 >(layers);
+                }
             }
 
-            template < std::size_t index > void setMem (const LayersMemento& layers, bool) {
-                std::get< index > (m_layers).setMemento (std::get< index > (layers));
-                enum { enable = (index < CONST_LAYERS_NUMBER - 1) };
-                typedef typename std::conditional< enable, bool, int >::type ArgType;
-                setMem< index + 1 > (layers, ArgType (0));
+            template< std::size_t index >
+            void getMem(LayersMemento& layers) const {
+                std::get< index >(layers) = std::get< index >(m_layers).getMemento();
+                if constexpr(index < CONST_LAYERS_NUMBER - 1) {
+                    getMem< index + 1 >(layers);
+                }
             }
 
-            template < std::size_t index > void getMem (LayersMemento& layers, int) const {
+            template< unsigned int index >
+            void calculate(Layers& layers) {
+                std::get< index >(layers).calculateOutputs(std::get< index + 1 >(layers));
+                if constexpr(index < CONST_LAYERS_NUMBER - 2) {
+                    calculate< index + 1 >(layers);
+                }
             }
 
-            template < std::size_t index > void getMem (LayersMemento& layers, bool) const {
-                std::get< index > (layers) = std::get< index > (m_layers).getMemento ();
-                enum { enable = (index < CONST_LAYERS_NUMBER - 1) };
-                typedef typename std::conditional< enable, bool, int >::type ArgType;
-                getMem< index + 1 > (layers, ArgType (0));
+            static_assert(std::tuple_size< Layers >::value > 1,
+                          "Invalid number of layers, at least two layers need "
+                          "to be set");
+
+          public:
+            Perceptron() {
             }
 
-            template < unsigned int index > void calculate (Layers&, int) {
+            Perceptron(const Layers& layers) : m_layers(layers) {
             }
 
-            template < unsigned int index > void calculate (Layers& layers, bool) {
-                std::get< index > (layers).calculateOutputs (std::get< index + 1 > (layers));
-
-                enum { enable = (index < CONST_LAYERS_NUMBER - 2) };
-                typedef typename std::conditional< enable, bool, int >::type ArgType;
-                calculate< index + 1 > (layers, ArgType (0));
-            }
-
-            static_assert (std::tuple_size< Layers >::value > 1, "Invalid number of layers, at least two layers need to be set");
-
-            public:
-            Perceptron () {
-            }
-
-            Perceptron (const Layers& layers) : m_layers (layers) {
-            }
-
-            Layers& layers () {
+            Layers& layers() {
                 return m_layers;
             }
 
-            void setMemento (const Memento& memento) {
-                setMem< 0 > (memento.getLayers (), true);
+            void setMemento(const Memento& memento) {
+                setMem< 0 >(memento.getLayers());
             }
 
-            Memento getMemento () const {
+            Memento getMemento() const {
                 LayersMemento layers;
-                getMem< 0 > (layers, true);
+                getMem< 0 >(layers);
                 Memento memento;
-                memento.setLayers (layers);
+                memento.setLayers(layers);
                 return memento;
             }
 
@@ -147,24 +152,25 @@ namespace nn {
              * @brief this method will calculate the outputs of perceptron.
              * @param begin is the iterator which is pointing to the first input
              * @param end the iterator which is pointing to the last input
-             * @param out the output iterator where the results of the calculation will be stored.
+             * @param out the output iterator where the results of the
+             * calculation will be stored.
              */
-            template < typename Iterator, typename OutputIterator > void calculate (Iterator begin, Iterator end, OutputIterator out) {
+            template< typename Iterator, typename OutputIterator >
+            void calculate(Iterator begin, Iterator end, OutputIterator out) {
                 unsigned int inputId = 0;
-                while (begin != end) {
-                    std::get< 0 > (m_layers).setInput (inputId, *begin);
+                while(begin != end) {
+                    std::get< 0 >(m_layers).setInput(inputId, *begin);
                     begin++;
                     inputId++;
                 }
 
-<<<<<<< Updated upstream
-                calculate< 0 > (m_layers, true);
-                typedef typename std::tuple_element< CONST_LAYERS_NUMBER - 1, Layers >::type OutputLayer;
-                std::get< CONST_LAYERS_NUMBER - 1 > (m_layers).calculateOutputs ();
-                std::transform (std::get< CONST_LAYERS_NUMBER - 1 > (m_layers).begin (), std::get< CONST_LAYERS_NUMBER - 1 > (m_layers).end (), out,
-                                std::bind (&OutputLayer::Neuron::getOutput, std::placeholders::_1));
-=======
                 calculate< 0 >(m_layers);
+                typedef typename std::tuple_element< CONST_LAYERS_NUMBER - 1, Layers >::type OutputLayer;
+                std::get< CONST_LAYERS_NUMBER - 1 >(m_layers).calculateOutputs();
+                std::transform(std::get< CONST_LAYERS_NUMBER - 1 >(m_layers).begin(),
+                               std::get< CONST_LAYERS_NUMBER - 1 >(m_layers).end(), out,
+                               std::bind(&OutputLayer::Neuron::getOutput,
+                                         std::placeholders::_1));
                 using OutputLayer =
                  typename std::tuple_element< CONST_LAYERS_NUMBER - 1, Layers >::type;
                 std::get< CONST_LAYERS_NUMBER - 1 >(m_layers).calculateOutputs();
@@ -179,11 +185,13 @@ namespace nn {
              * @brief only for the testing purpose.
              * @brief please don't use this function.
              */
-            template < typename Test > void supportTest (Test&);
+            template< typename Test >
+            void supportTest(Test&);
         };
-    }
+    } // namespace detail
 
-    template < typename VarType, typename... NeuralLayers > using Perceptron = detail::Perceptron< VarType, std::tuple< NeuralLayers... > >;
-}
+    template< typename VarType, typename... NeuralLayers >
+    using Perceptron = detail::Perceptron< VarType, std::tuple< NeuralLayers... > >;
+} // namespace nn
 
 #endif
