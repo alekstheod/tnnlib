@@ -45,9 +45,10 @@ namespace nn {
         class BPNeuralLayer
          : public nn::INeuralLayer< typename NeuralLayerType::template wrap< BPNeuron > > {
           public:
-            typedef INeuralLayer< typename NeuralLayerType::template wrap< BPNeuron > > NeuralLayer;
-            typedef typename NeuralLayer::Neuron Neuron;
-            typedef typename NeuralLayer::Var Var;
+            using NeuralLayer =
+             INeuralLayer< typename NeuralLayerType::template wrap< BPNeuron > >;
+            using Neuron = typename NeuralLayer::Neuron;
+            using Var = typename NeuralLayer::Var;
 
             template< typename VarType >
             using use =
@@ -60,23 +61,6 @@ namespace nn {
             using resize =
              BPNeuralLayer< typename NeuralLayerType::template resize< inputs > >;
 
-          private:
-            void calculateWeight(Var learningRate, Neuron& neuron) {
-                std::size_t inputsNumber = neuron->size();
-                Var delta = neuron->getDelta();
-                for(std::size_t i = 0; i < inputsNumber; i++) {
-                    Var input = neuron[i].value;
-                    Var weight = neuron[i].weight;
-                    Var newWeight = weight - learningRate * input * delta;
-                    neuron.setWeight(i, newWeight);
-                }
-
-                Var weight = neuron->getBias();
-                Var newWeight = weight - learningRate * delta;
-                neuron->setBias(newWeight);
-            }
-
-          public:
             BPNeuralLayer() {
             }
 
@@ -132,7 +116,20 @@ namespace nn {
                 return NeuralLayer::operator[](neuronId)->getDelta();
             }
 
-            ~BPNeuralLayer() {
+          private:
+            void calculateWeight(Var learningRate, Neuron& neuron) {
+                std::size_t inputsNumber = neuron->size();
+                Var delta = neuron->getDelta();
+                for(std::size_t i = 0; i < inputsNumber; i++) {
+                    Var input = neuron[i].value;
+                    Var weight = neuron[i].weight;
+                    Var newWeight = weight - learningRate * input * delta;
+                    neuron.setWeight(i, newWeight);
+                }
+
+                Var weight = neuron->getBias();
+                Var newWeight = weight - learningRate * delta;
+                neuron->setBias(newWeight);
             }
         };
     } // namespace bp

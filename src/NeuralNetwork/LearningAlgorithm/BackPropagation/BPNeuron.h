@@ -36,7 +36,6 @@
 namespace nn {
 
     namespace bp {
-
         /*
          * Represent the back error propagation Neuron trainer.
          * This class holds a pointer to neuron which should
@@ -55,17 +54,6 @@ namespace nn {
 
             template< unsigned int inputs >
             using resize = BPNeuron< typename NeuronType::template resize< inputs > >;
-
-          private:
-            /**
-             * Neurons error delta
-             */
-            Var m_delta;
-
-            /**
-             * Equation needed in order to calculate the differential value;
-             */
-            OutputFunction m_outputFunction;
 
           public:
             /**
@@ -112,6 +100,17 @@ namespace nn {
             const Var calculateDerivate() const {
                 return m_outputFunction.derivate(Neuron::getOutput());
             }
+
+          private:
+            /**
+             * Neurons error delta
+             */
+            Var m_delta;
+
+            /**
+             * Equation needed in order to calculate the differential value;
+             */
+            OutputFunction m_outputFunction;
         };
     } // namespace bp
 } // namespace nn

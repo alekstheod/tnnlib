@@ -44,9 +44,11 @@
 #include <Utilities/StrUtil/StrUtil.h>
 #include <Utilities/StrUtil/StrUtil.h>
 #include <Utilities/System/Time.h>
-#include <array>
+
 #include <boost/archive/xml_iarchive.hpp>
 #include <boost/archive/xml_oarchive.hpp>
+
+#include <array>
 #include <iostream>
 #include <sstream>
 #include <time.h>
@@ -60,15 +62,13 @@ using namespace utils;
  *
  */
 int main(int argc, char** argv) {
-    using Test = std::tuple< int, float, double, char, std::string, float >;
-
     using Perceptron =
      nn::Perceptron< float, nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, 2, 2 >,
                      nn::NeuralLayer< nn::Neuron, nn::TanhFunction, 20 >,
                      nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, 1 > >;
 
     typedef BepAlgorithm< Perceptron > Algo;
-    Algo algorithm(0.09f, 0.01f);
+    Algo algorithm(0.09f);
     std::array< Algo::Prototype, 4 > prototypes = {
      Algo::Prototype{{0.f, 1.f}, {1.f}}, Algo::Prototype{{1.f, 0.f}, {1.f}},
      Algo::Prototype{{1.f, 1.f}, {0.f}}, Algo::Prototype{{0.f, 0.f}, {0.f}}};
@@ -79,7 +79,11 @@ int main(int argc, char** argv) {
 
     Perceptron perceptron =
      algorithm.calculate(prototypes.begin(), prototypes.end(),
-                         [](float error) { std::cout << error << std::endl; }, numOfEpochs);
+                         [numOfEpochs](unsigned int epoch, float error) {
+                             std::cout << "Epoch: " << epoch
+                                       << " error: " << error << std::endl;
+                             return error > 0.01f && epoch < numOfEpochs;
+                         });
 
     using Memento = Perceptron::Memento;
     Memento memento = perceptron.getMemento();

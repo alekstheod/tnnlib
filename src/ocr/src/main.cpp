@@ -64,12 +64,7 @@ using Perceptron =
                  nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, 80, 10, 1000 >,
                  nn::NeuralLayer< nn::Neuron, nn::SoftmaxFunction, 10, 1000 > >;
 
-typedef nn::Perceptron< VarType, nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, 20, inputsNumber, 1000 >,
-                        nn::NeuralLayer< nn::Neuron, nn::SoftmaxFunction, inputsNumber, 80, 1000 > >
- AutoEncoder;
-
-typedef nn::bp::BepAlgorithm< AutoEncoder, nn::bp::CrossEntropyError > AutoEncAlgo;
-typedef nn::bp::BepAlgorithm< Perceptron, nn::bp::CrossEntropyError > Algo;
+using Algo = nn::bp::BepAlgorithm< Perceptron, nn::bp::CrossEntropyError >;
 
 template< typename Out >
 struct halfdiff_cast_channels {
@@ -165,40 +160,6 @@ void save(const Perc& perc, std::string name) {
     strm.flush();
 }
 
-template< typename Files >
-AutoEncoder calculateAutoEncoder(Files files) {
-    std::cout << "AutoEncoder calculation started" << std::endl;
-    std::vector< AutoEncAlgo::Prototype > prototypes;
-    for(auto image : files) {
-        if(!boost::filesystem::is_directory(image)) {
-            try {
-                AutoEncAlgo::Prototype proto;
-                readImage(image, std::get< 0 >(proto).begin());
-                std::copy(std::get< 0 >(proto).begin(), std::get< 0 >(proto).end(),
-                          std::get< 1 >(proto).begin());
-
-                prototypes.push_back(proto);
-            } catch(const std::exception&) {
-                std::cout << "Invalid image found :" << image << std::endl;
-            }
-        }
-    }
-
-    static AutoEncAlgo autoEncAlgo(0.005f, 0.01f);
-
-    static std::size_t counter = 0;
-    static AutoEncoder enc =
-     autoEncAlgo.calculate(prototypes.begin(), prototypes.end(), [](VarType error) {
-         counter++;
-         if(counter > 0) {
-             counter = 0;
-             std::cout << error << std::endl;
-         }
-     });
-
-    save(enc, "autoencoder.xml");
-}
-
 void calculateWeights(std::string imagesPath) {
     using namespace boost::filesystem;
     path directory(imagesPath);
@@ -213,11 +174,9 @@ void calculateWeights(std::string imagesPath) {
         }
     }
 
-    // static AutoEncoder autoEnc = calculateAutoEncoder(files);
-
     std::cout << "Perceptron calculation started" << std::endl;
     static Perceptron tmp = readPerceptron("perceptron.xml");
-    static Algo algorithm(0.003f, 0.001f);
+    static Algo algorithm(0.003f);
     algorithm.setMemento(tmp.getMemento());
 
     std::vector< Algo::Prototype > prototypes;
@@ -237,13 +196,12 @@ void calculateWeights(std::string imagesPath) {
         }
     }
 
-    static std::size_t counter = 0;
-    auto errorFunc = [](VarType error) {
-        counter++;
-        if(counter > 1000) {
-            counter = 0;
-            std::cout << error << std::endl;
+    auto errorFunc = [](VarType error, unsigned int epoch) {
+        if(epoch % 1000 == 0) {
+            std::cout << "Epoch:" << epoch << " error:" << error << std::endl;
         }
+
+        return error > 0.001f;
     };
 
     static Perceptron perceptron =
