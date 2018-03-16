@@ -28,12 +28,18 @@
 
 #ifndef NEURALLAYERMOCK_H
 #define NEURALLAYERMOCK_H
-#include <gmock/gmock.h>
-#include <NeuralNetwork/Serialization/NeuralLayerMemento.h>
-#include <NeuralNetwork/Neuron/MockedNeuron.h>
-#include <NeuralNetwork/Neuron/INeuron.h>
-#include <NeuralNetwork/Neuron/ActivationFunction/MockedActivationFunction.h>
+
 #include <NeuralNetwork/INeuralLayer.h>
+#include <NeuralNetwork/Neuron/ActivationFunction/MockedActivationFunction.h>
+#include <NeuralNetwork/Neuron/INeuron.h>
+#include <NeuralNetwork/Neuron/MockedNeuron.h>
+#include <NeuralNetwork/Serialization/NeuralLayerMemento.h>
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wnull-dereference"
+#include <gmock/gmock.h>
+#pragma clang diagnostic pop
+
 #include <memory>
 #include <boost/bind.hpp>
 

@@ -28,20 +28,23 @@
 
 #ifndef PERCEPTRONTEST_H
 #define PERCEPTRONTEST_H
-#include <gtest/gtest.h>
+
 #include <NeuralNetwork/Perceptron/Perceptron.h>
 #include <NeuralNetwork/Perceptron/NeuralLayer/MockedNeuralLayer.h>
 #include <NeuralNetwork/Neuron/MockedNeuron.h>
+
+#include <gtest/gtest.h>
+
 #include <array>
 
 class PerceptronTest : public ::testing::Test {
-    public:
-    PerceptronTest ();
-    ~PerceptronTest ();
-    void SetUp ();
-    void TearDown ();
+  public:
+    PerceptronTest();
+    ~PerceptronTest();
+    void SetUp();
+    void TearDown();
 
-    public:
+  public:
     typedef std::array< int, 4 >::iterator Iterator;
     typedef MockedNeuralLayer< float, 5, 1 > NeuralLayer1;
     typedef MockedNeuralLayer< float, 2, 5 > NeuralLayer2;

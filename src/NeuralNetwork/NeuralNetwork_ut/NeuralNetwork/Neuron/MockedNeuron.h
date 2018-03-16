@@ -29,66 +29,76 @@
 #ifndef NeuronMock_H
 #define NeuronMock_H
 
-#include <gmock/gmock.h>
 #include <NeuralNetwork/Neuron/ActivationFunction/IActivationFunction.h>
 #include <NeuralNetwork/Serialization/NeuronMemento.h>
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wnull-dereference"
+#include <gmock/gmock.h>
+#pragma clang diagnostic pop
+
 #include <utility>
 #include <memory>
 
-template < typename OutputFunctionType, std::size_t inputsNumber > class MockedNeuron {
-    public:
+template< typename OutputFunctionType, std::size_t inputsNumber >
+class MockedNeuron {
+  public:
     typedef typename nn::IActivationFunction< OutputFunctionType > OutputFunction;
     typedef typename OutputFunction::Var Var;
     typedef typename nn::NeuronMemento< Var, inputsNumber > Memento;
     typedef typename std::pair< Var, Var > Input;
 
-    template < typename OutputFunc > struct rebind { typedef MockedNeuron< OutputFunc, inputsNumber > type; };
-
-    public:
-    class Mock;
-
-    private:
-    std::shared_ptr< Mock > m_mock;
-
-    public:
-    class Mock {
-        public:
-        MOCK_METHOD2_T (setInput, void(unsigned int, const Var&));
-        MOCK_CONST_METHOD0_T (getOutput, Var ());
-        MOCK_CONST_METHOD0_T (calculateOutput, const Var&());
+    template< typename OutputFunc >
+    struct rebind {
+        typedef MockedNeuron< OutputFunc, inputsNumber > type;
     };
 
-    unsigned int size () const {
+  public:
+    class Mock;
+
+  private:
+    std::shared_ptr< Mock > m_mock;
+
+  public:
+    class Mock {
+      public:
+        MOCK_METHOD2_T(setInput, void(unsigned int, const Var&));
+        MOCK_CONST_METHOD0_T(getOutput, Var());
+        MOCK_CONST_METHOD0_T(calculateOutput, const Var&());
+    };
+
+    unsigned int size() const {
         return inputsNumber;
     }
 
     using TMock = MockedNeuron< OutputFunctionType, inputsNumber >;
-    TMock& operator= (TMock other) {
+    TMock& operator=(TMock other) {
         m_mock = other.m_mock;
         return *this;
     }
 
-    void setInput (unsigned int id, const Var& value) {
-        m_mock->setInput (id, value);
+    void setInput(unsigned int id, const Var& value) {
+        m_mock->setInput(id, value);
     }
 
-    Var getOutput () const {
-        return m_mock->getOutput ();
+    Var getOutput() const {
+        return m_mock->getOutput();
     }
 
-    template < typename Iterator > const Var& calculateOutput (Iterator begin, Iterator end) {
-        return m_mock->calculateOutput ();
+    template< typename Iterator >
+    const Var& calculateOutput(Iterator begin, Iterator end) {
+        return m_mock->calculateOutput();
     }
 
-    Mock& operator* () {
-        return (*m_mock.get ());
+    Mock& operator*() {
+        return (*m_mock.get());
     }
 
-    void clear () {
-        m_mock.reset ();
+    void clear() {
+        m_mock.reset();
     }
 
-    MockedNeuron () : m_mock (new Mock) {
+    MockedNeuron() : m_mock(new Mock) {
     }
 };
 

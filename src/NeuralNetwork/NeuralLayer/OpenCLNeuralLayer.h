@@ -76,10 +76,6 @@ namespace nn {
             using Neuron = typename Internal::Neuron;
             using Var = typename Internal::Var;
             using Memento = typename Internal::Memento;
-            using const_iterator = typename Internal::const_iterator;
-            using iterator = typename Internal::iterator;
-            using reverse_iterator = typename Internal::reverse_iterator;
-            using const_reverse_iterator = typename Internal::const_reverse_iterator;
 
             template< template< class > class NewType >
             using wrap =
@@ -181,28 +177,28 @@ namespace nn {
             /**
              * @see {INeuralLayer}
              */
-            const_iterator cbegin() const {
+            auto cbegin() const {
                 return m_internal.cbegin();
             }
 
             /**
              * @see {INeuralLayer}
              */
-            const_iterator cend() const {
+            auto cend() const {
                 return m_internal.cend();
             }
 
             /**
              * @see {INeuralLayer}
              */
-            iterator begin() {
+            auto begin() {
                 return m_internal.begin();
             }
 
             /**
              * @see {INeuralLayer}
              */
-            iterator end() {
+            auto end() {
                 return m_internal.end();
             }
 

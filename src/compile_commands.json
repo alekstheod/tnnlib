@@ -1,0 +1,77 @@
+[
+{
+  "directory": "/home/alekstheod/projects/tnnlib/src/build/Utilities",
+  "command": "/usr/bin/clang++   -I/home/alekstheod/projects/tnnlib/src  -g   -std=gnu++1z -o CMakeFiles/Utilities.dir/System/Time.cpp.o -c /home/alekstheod/projects/tnnlib/src/Utilities/System/Time.cpp",
+  "file": "/home/alekstheod/projects/tnnlib/src/Utilities/System/Time.cpp"
+},
+{
+  "directory": "/home/alekstheod/projects/tnnlib/src/build/NeuralNetwork",
+  "command": "/usr/bin/clang++   -I/home/alekstheod/projects/tnnlib/src/NeuralNetwork/. -I/home/alekstheod/projects/tnnlib/src/NeuralNetwork/../Utilities -I/home/alekstheod/projects/tnnlib/src  -g   -std=gnu++1z -o CMakeFiles/NeuralNetwork.dir/NeuralNetwork.cpp.o -c /home/alekstheod/projects/tnnlib/src/NeuralNetwork/NeuralNetwork.cpp",
+  "file": "/home/alekstheod/projects/tnnlib/src/NeuralNetwork/NeuralNetwork.cpp"
+},
+{
+  "directory": "/home/alekstheod/projects/tnnlib/src/build/NeuralNetwork/NeuralNetwork_ut",
+  "command": "/usr/bin/clang++   -I/home/alekstheod/projects/tnnlib/src/NeuralNetwork/NeuralNetwork_ut -I/home/alekstheod/projects/tnnlib/src/gmock/include -I/home/alekstheod/projects/tnnlib/src/gmock/gtest/include -I/home/alekstheod/projects/tnnlib/src/NeuralNetwork/. -I/home/alekstheod/projects/tnnlib/src/NeuralNetwork/../Utilities -I/home/alekstheod/projects/tnnlib/src   -std=c++11 -g   -std=gnu++1z -o CMakeFiles/NeuralNetwork_ut.dir/main.cpp.o -c /home/alekstheod/projects/tnnlib/src/NeuralNetwork/NeuralNetwork_ut/main.cpp",
+  "file": "/home/alekstheod/projects/tnnlib/src/NeuralNetwork/NeuralNetwork_ut/main.cpp"
+},
+{
+  "directory": "/home/alekstheod/projects/tnnlib/src/build/NeuralNetwork/NeuralNetwork_ut",
+  "command": "/usr/bin/clang++   -I/home/alekstheod/projects/tnnlib/src/NeuralNetwork/NeuralNetwork_ut -I/home/alekstheod/projects/tnnlib/src/gmock/include -I/home/alekstheod/projects/tnnlib/src/gmock/gtest/include -I/home/alekstheod/projects/tnnlib/src/NeuralNetwork/. -I/home/alekstheod/projects/tnnlib/src/NeuralNetwork/../Utilities -I/home/alekstheod/projects/tnnlib/src   -std=c++11 -g   -std=gnu++1z -o CMakeFiles/NeuralNetwork_ut.dir/NeuralNetwork/Neuron/NeuronTest.cpp.o -c /home/alekstheod/projects/tnnlib/src/NeuralNetwork/NeuralNetwork_ut/NeuralNetwork/Neuron/NeuronTest.cpp",
+  "file": "/home/alekstheod/projects/tnnlib/src/NeuralNetwork/NeuralNetwork_ut/NeuralNetwork/Neuron/NeuronTest.cpp"
+},
+{
+  "directory": "/home/alekstheod/projects/tnnlib/src/build/NeuralNetwork/NeuralNetwork_ut",
+  "command": "/usr/bin/clang++   -I/home/alekstheod/projects/tnnlib/src/NeuralNetwork/NeuralNetwork_ut -I/home/alekstheod/projects/tnnlib/src/gmock/include -I/home/alekstheod/projects/tnnlib/src/gmock/gtest/include -I/home/alekstheod/projects/tnnlib/src/NeuralNetwork/. -I/home/alekstheod/projects/tnnlib/src/NeuralNetwork/../Utilities -I/home/alekstheod/projects/tnnlib/src   -std=c++11 -g   -std=gnu++1z -o CMakeFiles/NeuralNetwork_ut.dir/NeuralNetwork/Perceptron/PerceptronTest.cpp.o -c /home/alekstheod/projects/tnnlib/src/NeuralNetwork/NeuralNetwork_ut/NeuralNetwork/Perceptron/PerceptronTest.cpp",
+  "file": "/home/alekstheod/projects/tnnlib/src/NeuralNetwork/NeuralNetwork_ut/NeuralNetwork/Perceptron/PerceptronTest.cpp"
+},
+{
+  "directory": "/home/alekstheod/projects/tnnlib/src/build/NeuralNetwork/NeuralNetwork_ut",
+  "command": "/usr/bin/clang++   -I/home/alekstheod/projects/tnnlib/src/NeuralNetwork/NeuralNetwork_ut -I/home/alekstheod/projects/tnnlib/src/gmock/include -I/home/alekstheod/projects/tnnlib/src/gmock/gtest/include -I/home/alekstheod/projects/tnnlib/src/NeuralNetwork/. -I/home/alekstheod/projects/tnnlib/src/NeuralNetwork/../Utilities -I/home/alekstheod/projects/tnnlib/src   -std=c++11 -g   -std=gnu++1z -o CMakeFiles/NeuralNetwork_ut.dir/NeuralNetwork/Neuron/ActivationFunction/BinaryTest.cpp.o -c /home/alekstheod/projects/tnnlib/src/NeuralNetwork/NeuralNetwork_ut/NeuralNetwork/Neuron/ActivationFunction/BinaryTest.cpp",
+  "file": "/home/alekstheod/projects/tnnlib/src/NeuralNetwork/NeuralNetwork_ut/NeuralNetwork/Neuron/ActivationFunction/BinaryTest.cpp"
+},
+{
+  "directory": "/home/alekstheod/projects/tnnlib/src/build/Test",
+  "command": "/usr/bin/clang++   -I/home/alekstheod/projects/tnnlib/src/NeuralNetwork/. -I/home/alekstheod/projects/tnnlib/src/NeuralNetwork/../Utilities -I/home/alekstheod/projects/tnnlib/src  -g   -std=gnu++1z -o CMakeFiles/Test.dir/src/Test.cpp.o -c /home/alekstheod/projects/tnnlib/src/Test/src/Test.cpp",
+  "file": "/home/alekstheod/projects/tnnlib/src/Test/src/Test.cpp"
+},
+{
+  "directory": "/home/alekstheod/projects/tnnlib/src/build/gmock",
+  "command": "/usr/bin/clang++   -I/home/alekstheod/projects/tnnlib/src/gmock/include -I/home/alekstheod/projects/tnnlib/src/gmock -I/home/alekstheod/projects/tnnlib/src/gmock/gtest/include -I/home/alekstheod/projects/tnnlib/src/gmock/gtest  -g     -DGTEST_HAS_PTHREAD=1   -std=gnu++1z -o CMakeFiles/gmock.dir/gtest/src/gtest-all.cc.o -c /home/alekstheod/projects/tnnlib/src/gmock/gtest/src/gtest-all.cc",
+  "file": "/home/alekstheod/projects/tnnlib/src/gmock/gtest/src/gtest-all.cc"
+},
+{
+  "directory": "/home/alekstheod/projects/tnnlib/src/build/gmock",
+  "command": "/usr/bin/clang++   -I/home/alekstheod/projects/tnnlib/src/gmock/include -I/home/alekstheod/projects/tnnlib/src/gmock -I/home/alekstheod/projects/tnnlib/src/gmock/gtest/include -I/home/alekstheod/projects/tnnlib/src/gmock/gtest  -g     -DGTEST_HAS_PTHREAD=1   -std=gnu++1z -o CMakeFiles/gmock.dir/src/gmock-all.cc.o -c /home/alekstheod/projects/tnnlib/src/gmock/src/gmock-all.cc",
+  "file": "/home/alekstheod/projects/tnnlib/src/gmock/src/gmock-all.cc"
+},
+{
+  "directory": "/home/alekstheod/projects/tnnlib/src/build/gmock",
+  "command": "/usr/bin/clang++   -I/home/alekstheod/projects/tnnlib/src/gmock/include -I/home/alekstheod/projects/tnnlib/src/gmock -I/home/alekstheod/projects/tnnlib/src/gmock/gtest/include -I/home/alekstheod/projects/tnnlib/src/gmock/gtest  -g     -DGTEST_HAS_PTHREAD=1   -std=gnu++1z -o CMakeFiles/gmock_main.dir/gtest/src/gtest-all.cc.o -c /home/alekstheod/projects/tnnlib/src/gmock/gtest/src/gtest-all.cc",
+  "file": "/home/alekstheod/projects/tnnlib/src/gmock/gtest/src/gtest-all.cc"
+},
+{
+  "directory": "/home/alekstheod/projects/tnnlib/src/build/gmock",
+  "command": "/usr/bin/clang++   -I/home/alekstheod/projects/tnnlib/src/gmock/include -I/home/alekstheod/projects/tnnlib/src/gmock -I/home/alekstheod/projects/tnnlib/src/gmock/gtest/include -I/home/alekstheod/projects/tnnlib/src/gmock/gtest  -g     -DGTEST_HAS_PTHREAD=1   -std=gnu++1z -o CMakeFiles/gmock_main.dir/src/gmock-all.cc.o -c /home/alekstheod/projects/tnnlib/src/gmock/src/gmock-all.cc",
+  "file": "/home/alekstheod/projects/tnnlib/src/gmock/src/gmock-all.cc"
+},
+{
+  "directory": "/home/alekstheod/projects/tnnlib/src/build/gmock",
+  "command": "/usr/bin/clang++   -I/home/alekstheod/projects/tnnlib/src/gmock/include -I/home/alekstheod/projects/tnnlib/src/gmock -I/home/alekstheod/projects/tnnlib/src/gmock/gtest/include -I/home/alekstheod/projects/tnnlib/src/gmock/gtest  -g     -DGTEST_HAS_PTHREAD=1   -std=gnu++1z -o CMakeFiles/gmock_main.dir/src/gmock_main.cc.o -c /home/alekstheod/projects/tnnlib/src/gmock/src/gmock_main.cc",
+  "file": "/home/alekstheod/projects/tnnlib/src/gmock/src/gmock_main.cc"
+},
+{
+  "directory": "/home/alekstheod/projects/tnnlib/src/build/gmock/gtest",
+  "command": "/usr/bin/clang++   -I/home/alekstheod/projects/tnnlib/src/gmock/gtest/include -I/home/alekstheod/projects/tnnlib/src/gmock/gtest  -g     -DGTEST_HAS_PTHREAD=1   -std=gnu++1z -o CMakeFiles/gtest.dir/src/gtest-all.cc.o -c /home/alekstheod/projects/tnnlib/src/gmock/gtest/src/gtest-all.cc",
+  "file": "/home/alekstheod/projects/tnnlib/src/gmock/gtest/src/gtest-all.cc"
+},
+{
+  "directory": "/home/alekstheod/projects/tnnlib/src/build/gmock/gtest",
+  "command": "/usr/bin/clang++   -I/home/alekstheod/projects/tnnlib/src/gmock/gtest/include -I/home/alekstheod/projects/tnnlib/src/gmock/gtest  -g     -DGTEST_HAS_PTHREAD=1   -std=gnu++1z -o CMakeFiles/gtest_main.dir/src/gtest_main.cc.o -c /home/alekstheod/projects/tnnlib/src/gmock/gtest/src/gtest_main.cc",
+  "file": "/home/alekstheod/projects/tnnlib/src/gmock/gtest/src/gtest_main.cc"
+},
+{
+  "directory": "/home/alekstheod/projects/tnnlib/src/build/ocr",
+  "command": "/usr/bin/clang++  -D_SCL_SECURE_NO_WARNINGS -I/home/alekstheod/projects/tnnlib/src/NeuralNetwork/. -I/home/alekstheod/projects/tnnlib/src/NeuralNetwork/../Utilities -I/home/alekstheod/projects/tnnlib/src  -g   -std=gnu++1z -o CMakeFiles/ocr.dir/src/main.cpp.o -c /home/alekstheod/projects/tnnlib/src/ocr/src/main.cpp",
+  "file": "/home/alekstheod/projects/tnnlib/src/ocr/src/main.cpp"
+}
+]

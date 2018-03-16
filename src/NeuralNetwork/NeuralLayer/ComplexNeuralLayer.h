@@ -30,9 +30,9 @@
 #ifndef NeuralLayerH
 #define NeuralLayerH
 
+#include <NeuralNetwork/INeuralLayer.h>
 #include <NeuralNetwork/Neuron/INeuron.h>
 #include <NeuralNetwork/Serialization/NeuralLayerMemento.h>
-#include <NeuralNetwork/INeuralLayer.h>
 
 #include <boost/bind.hpp>
 #include <boost/bind/placeholders.hpp>

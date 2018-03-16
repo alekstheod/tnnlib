@@ -28,6 +28,7 @@
 */
 
 #include <NeuralNetwork/LearningAlgorithm/BackPropagation/BepAlgorithm.h>
+#include <NeuralNetwork/NeuralLayer/ConvolutionLayer.h>
 #include <NeuralNetwork/NeuralLayer/NeuralLayer.h>
 #include <NeuralNetwork/Neuron/ActivationFunction/SigmoidFunction.h>
 #include <NeuralNetwork/Neuron/ActivationFunction/SoftmaxFunction.h>
@@ -39,6 +40,7 @@
 #include <NeuralNetwork/SOM/K2DPosition.h>
 #include <NeuralNetwork/SOM/KNode.h>
 #include <NeuralNetwork/SOM/KohonenMap.h>
+
 #include <Utilities/Design/Factory.h>
 #include <Utilities/Design/Singleton.h>
 #include <Utilities/StrUtil/StrUtil.h>
@@ -62,23 +64,32 @@ using namespace utils;
  *
  */
 int main(int argc, char** argv) {
-    using Perceptron =
-     nn::Perceptron< float, nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, 2, 2 >,
-                     nn::NeuralLayer< nn::Neuron, nn::TanhFunction, 20 >,
-                     nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, 1 > >;
+    using ConvLayer =
+     ConvolutionLayer< nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, 2, 2 >,
+                       Connection< InputRange< 0, 1 >, 0 >,
+                       Connection< InputRange< 0, 1 >, 1 > >;
+
+    using Perceptron = nn::Perceptron<
+     float,
+     ConvLayer,
+     // nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, 2, 2 >,
+     nn::NeuralLayer< nn::Neuron, nn::TanhFunction, 20 >,
+     nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, 1 > >;
 
     typedef BepAlgorithm< Perceptron > Algo;
     Algo algorithm(0.09f);
-    std::array< Algo::Prototype, 4 > prototypes = {
-     Algo::Prototype{{0.f, 1.f}, {1.f}}, Algo::Prototype{{1.f, 0.f}, {1.f}},
-     Algo::Prototype{{1.f, 1.f}, {0.f}}, Algo::Prototype{{0.f, 0.f}, {0.f}}};
+    std::array< Algo::Prototype, 4 > prototypes = {Algo::Prototype{{0.f, 1.f}, {1.f}},
+                                                   Algo::Prototype{{1.f, 0.f}, {1.f}},
+                                                   Algo::Prototype{{1.f, 1.f}, {0.f}},
+                                                   Algo::Prototype{{0.f, 0.f}, {0.f}}};
 
     unsigned int numOfEpochs =
      argc < 2 ? std::numeric_limits< unsigned int >::max() :
                 numOfEpochs = utils::lexical_cast< unsigned int >(argv[1]);
 
     Perceptron perceptron =
-     algorithm.calculate(prototypes.begin(), prototypes.end(),
+     algorithm.calculate(prototypes.begin(),
+                         prototypes.end(),
                          [numOfEpochs](unsigned int epoch, float error) {
                              std::cout << "Epoch: " << epoch
                                        << " error: " << error << std::endl;
