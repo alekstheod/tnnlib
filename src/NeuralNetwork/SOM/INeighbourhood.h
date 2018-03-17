@@ -13,16 +13,16 @@
  *     names of its contributors may be used to endorse or promote products
  *     derived from this software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY Alex Theodoridis <alekstheod@gmail.com> ''AS IS'' AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL Alex Theodoridis <email> BE LIABLE FOR ANY
- * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
- * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY Alex Theodoridis <alekstheod@gmail.com> ''AS
+ * IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL Alex Theodoridis <email> BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  */
 
@@ -36,41 +36,48 @@ namespace nn {
 
     namespace kohonen {
 
-        template < typename NeighbourhoodType > class INeighbourhood {
-            public:
+        template< typename NeighbourhoodType >
+        class INeighbourhood {
+          public:
             typedef typename NeighbourhoodType::Position Position;
             typedef typename NeighbourhoodType::Node Node;
             typedef typename Position::Var Var;
             typedef typename NeighbourhoodType::iterator iterator;
             typedef typename NeighbourhoodType::const_iterator const_iterator;
 
-            private:
+          private:
             NeighbourhoodType m_neighbourhood;
 
-            public:
-            template < typename... Args > INeighbourhood (Args... args) : m_neighbourhood (args...) {
+          public:
+            template< typename... Args >
+            INeighbourhood(Args... args) : m_neighbourhood(args...) {
             }
 
-            template < typename Iterator > INeighbourhood (Position center, Var radius, Iterator begin, Iterator end) : m_neighbourhood (center, radius, begin, end) {
+            template< typename Iterator >
+            INeighbourhood(Position center, Var radius, Iterator begin, Iterator end)
+             : m_neighbourhood(center, radius, begin, end) {
             }
 
-            template < typename NodeType > bool applyWeightModifications (const Var& learningRate, std::vector< INode< NodeType > >& nodes, const std::vector< Var >& inputs) {
-                return m_neighbourhood.applyWeightModifications (learningRate, nodes, inputs);
+            template< typename NodeType >
+            bool applyWeightModifications(const Var& learningRate,
+                                          std::vector< INode< NodeType > >& nodes,
+                                          const std::vector< Var >& inputs) {
+                return m_neighbourhood.applyWeightModifications(learningRate, nodes, inputs);
             }
 
-            iterator begin () {
-                return m_neighbourhood.begin ();
+            iterator begin() {
+                return m_neighbourhood.begin();
             }
 
-            iterator end () {
-                return m_neighbourhood.end ();
+            iterator end() {
+                return m_neighbourhood.end();
             }
 
-            ~INeighbourhood () {
+            ~INeighbourhood() {
             }
         };
-    }
-}
+    } // namespace kohonen
+} // namespace nn
 
 
 #endif

@@ -83,7 +83,8 @@ namespace nn {
             Var executeTrainingStep(const Prototype& prototype, MomentumFunc momentum) {
                 // Calculate values with current inputs
                 m_perceptron.calculate(std::get< 0 >(prototype).begin(),
-                                       std::get< 0 >(prototype).end(), m_outputs.begin());
+                                       std::get< 0 >(prototype).end(),
+                                       m_outputs.begin());
 
                 // Calculate deltas
                 std::get< Perceptron::CONST_LAYERS_NUMBER - 1 >(m_perceptron.layers())
@@ -97,10 +98,12 @@ namespace nn {
                 });
 
                 m_perceptron.calculate(std::get< 0 >(prototype).begin(),
-                                       std::get< 0 >(prototype).end(), m_outputs.begin());
+                                       std::get< 0 >(prototype).end(),
+                                       m_outputs.begin());
 
                 // Calculate error
-                return m_errorCalculator(m_outputs.begin(), m_outputs.end(),
+                return m_errorCalculator(m_outputs.begin(),
+                                         m_outputs.end(),
                                          std::get< 1 >(prototype).begin());
             }
 
@@ -120,7 +123,9 @@ namespace nn {
             /// @param MomentumFunc function which will calculate a momentum.
             /// @return a calculated perceptron.
             template< typename Iterator, typename ErrorFunc, typename MomentumFunc >
-            PerceptronType calculate(Iterator begin, Iterator end, ErrorFunc errorFunc,
+            PerceptronType calculate(Iterator begin,
+                                     Iterator end,
+                                     ErrorFunc errorFunc,
                                      MomentumFunc momentum = DummyMomentum()) {
                 unsigned int epochCounter = 0;
                 typename std::vector< Prototype > prototypes(begin, end);
@@ -129,7 +134,8 @@ namespace nn {
                 do {
                     auto seed =
                      std::chrono::system_clock::now().time_since_epoch().count();
-                    std::shuffle(prototypes.begin(), prototypes.end(),
+                    std::shuffle(prototypes.begin(),
+                                 prototypes.end(),
                                  std::default_random_engine(static_cast< unsigned int >(seed)));
 
                     const auto runTrainingStep = [&](const Var& init,
@@ -137,8 +143,10 @@ namespace nn {
                         return init + executeTrainingStep(first, momentum);
                     };
 
-                    error = std::accumulate(prototypes.begin(), prototypes.end(),
-                                            boost::numeric_cast< Var >(0.f), runTrainingStep);
+                    error = std::accumulate(prototypes.begin(),
+                                            prototypes.end(),
+                                            boost::numeric_cast< Var >(0.f),
+                                            runTrainingStep);
 
                     epochCounter++;
                 } while(errorFunc(epochCounter, error));

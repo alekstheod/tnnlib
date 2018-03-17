@@ -10,49 +10,49 @@ namespace util {
 
     namespace detail {
 
-        template < typename Internal >
+        template< typename Internal >
         class Operation {
-            public:
-            Operation (Internal& internal, Action before, Action& after)
-             : m_internal (internal), m_after (after) {
-                before ();
+          public:
+            Operation(Internal& internal, Action before, Action& after)
+             : m_internal(internal), m_after(after) {
+                before();
             }
 
-            ~Operation () {
-                m_after ();
+            ~Operation() {
+                m_after();
             }
 
             auto operator-> () -> Internal* {
                 return &m_internal;
             }
 
-            private:
+          private:
             Internal& m_internal;
             Action& m_after;
         };
     } // namespace detail
 
-    template < typename Internal >
+    template< typename Internal >
     class Decorator {
-        public:
-        Decorator (Internal& internal, const Action& before, const Action& after)
-         : m_internal (internal), m_before (before), m_after (after) {
+      public:
+        Decorator(Internal& internal, const Action& before, const Action& after)
+         : m_internal(internal), m_before(before), m_after(after) {
         }
 
         auto operator-> () -> detail::Operation< Internal > {
-            return detail::Operation< Internal > (m_internal, m_before, m_after);
+            return detail::Operation< Internal >(m_internal, m_before, m_after);
         }
 
-        private:
+      private:
         Internal& m_internal;
         Action m_before;
         Action m_after;
     };
 
-    template < typename Internal >
-    auto decorate (Internal& internal, const Action& before, const Action& after)
+    template< typename Internal >
+    auto decorate(Internal& internal, const Action& before, const Action& after)
      -> Decorator< Internal > {
-        return Decorator< Internal > (internal, before, after);
+        return Decorator< Internal >(internal, before, after);
     }
 } // namespace util
 

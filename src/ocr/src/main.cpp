@@ -60,7 +60,8 @@ static const unsigned int height = 67;
 static const unsigned int inputsNumber = width * height;
 
 using Perceptron =
- nn::Perceptron< VarType, nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, 10, inputsNumber, 1000 >,
+ nn::Perceptron< VarType,
+                 nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, 10, inputsNumber, 1000 >,
                  nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, 80, 10, 1000 >,
                  nn::NeuralLayer< nn::Neuron, nn::SoftmaxFunction, 10, 1000 > >;
 

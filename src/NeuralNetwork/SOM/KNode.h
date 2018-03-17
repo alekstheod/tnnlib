@@ -13,16 +13,16 @@
  *     names of its contributors may be used to endorse or promote products
  *     derived from this software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY Alex Theodoridis <alekstheod@gmail.com> ''AS IS'' AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL Alex Theodoridis <email> BE LIABLE FOR ANY
- * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
- * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY Alex Theodoridis <alekstheod@gmail.com> ''AS
+ * IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL Alex Theodoridis <email> BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  */
 
@@ -41,51 +41,58 @@ namespace nn {
 
     namespace kohonen {
 
-        template < typename PositionType, unsigned int inputsNumber = 10 > class KNode {
-            public:
+        template< typename PositionType, unsigned int inputsNumber = 10 >
+        class KNode {
+          public:
             typedef IPosition< PositionType > Position;
             typedef typename Position::Var Var;
             typedef std::array< Var, inputsNumber > InputType;
 
-            public:
+          public:
             /// @brief rebind the current node to a different number of inputs.
-            template < unsigned int numOfInputs > struct rebindInputsNumber { typedef KNode< PositionType, numOfInputs > Type; };
+            template< unsigned int numOfInputs >
+            struct rebindInputsNumber {
+                typedef KNode< PositionType, numOfInputs > Type;
+            };
 
-            private:
+          private:
             Position m_position;
             InputType m_weights;
 
-            public:
+          public:
             /**
              * @brief constructor will initialize the object.
-             * @param inputsNumber the number of the inputs for the current object.
+             * @param inputsNumber the number of the inputs for the current
+             * object.
              * @param position a position inside the map.
              */
-            KNode (const Position& position) : m_weights ({Var (0.f), Var (0.f), Var (0.f)}), m_position (position) {
-                Var weight (0.0f);
-                for (unsigned int i = 0; i < inputsNumber; i++) {
-                    weight = (Var (utils::createRandom< Var > (1)));
+            KNode(const Position& position)
+             : m_weights({Var(0.f), Var(0.f), Var(0.f)}), m_position(position) {
+                Var weight(0.0f);
+                for(unsigned int i = 0; i < inputsNumber; i++) {
+                    weight = (Var(utils::createRandom< Var >(1)));
                     m_weights[i] = weight;
                 }
             }
 
             /**
-             * @brief Will calculate the distance of the input from the input weight.
+             * @brief Will calculate the distance of the input from the input
+             * weight.
              * @param inputs the list of the input values.
              * @return the calulated euclidean distance.
              */
-            Var calculateDistance (const InputType& input) const {
-                Var result (0);
-                for (unsigned int i = 0; i < m_weights.size (); i++) {
-                    result += std::pow (m_weights[i] - input[i], 2);
+            Var calculateDistance(const InputType& input) const {
+                Var result(0);
+                for(unsigned int i = 0; i < m_weights.size(); i++) {
+                    result += std::pow(m_weights[i] - input[i], 2);
                 }
 
-                return std::sqrt (result);
+                return std::sqrt(result);
             }
 
             /// @brief getter for the weights
             /// @return the reference to the weights array.
-            const InputType& getWeights () const {
+            const InputType& getWeights() const {
                 return m_weights;
             }
 
@@ -93,17 +100,18 @@ namespace nn {
              * @brief will return the position of the Node in the map.
              * @return the position of the node.
              */
-            const Position& getPosition () const {
+            const Position& getPosition() const {
                 return m_position;
             }
 
-            void applyWeightModifications (Var learningRate, Var influence, const InputType& input) {
-                for (unsigned int i = 0; i < m_weights.size (); i++) {
-                    m_weights[i] += learningRate * influence * (input[i] - m_weights[i]);
+            void applyWeightModifications(Var learningRate, Var influence, const InputType& input) {
+                for(unsigned int i = 0; i < m_weights.size(); i++) {
+                    m_weights[i] +=
+                     learningRate * influence * (input[i] - m_weights[i]);
                 }
             }
         };
-    }
-}
+    } // namespace kohonen
+} // namespace nn
 
 #endif // NODE_H

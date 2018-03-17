@@ -100,16 +100,20 @@ namespace nn {
             void calculateDeltas(const Prototype& prototype, MomentumFunc momentum) {
                 std::size_t neuronId = 0;
                 for(auto curNeuron = NeuralLayer::begin();
-                    curNeuron != NeuralLayer::end(); curNeuron++) {
+                    curNeuron != NeuralLayer::end();
+                    curNeuron++) {
                     (*curNeuron)->calculateDelta(std::get< 1 >(prototype)[neuronId], momentum);
                     neuronId++;
                 }
             }
 
             void calculateWeights(Var learningRate) {
-                std::for_each(NeuralLayer::begin(), NeuralLayer::end(),
-                              std::bind(&BPNeuralLayer::calculateWeight, this,
-                                        learningRate, std::placeholders::_1));
+                std::for_each(NeuralLayer::begin(),
+                              NeuralLayer::end(),
+                              std::bind(&BPNeuralLayer::calculateWeight,
+                                        this,
+                                        learningRate,
+                                        std::placeholders::_1));
             }
 
             const Var& getDelta(std::size_t neuronId) const {

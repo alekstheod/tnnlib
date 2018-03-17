@@ -68,4 +68,4 @@ OutputNeuralLayer<Var>::~OutputNeuralLayer() throw () {
 */
 #endif /* _OUTPUTNEURALLAYER_H */
 
-// kate: indent-mode cstyle; space-indent on; indent-width 0;
+        // kate: indent-mode cstyle; space-indent on; indent-width 0;

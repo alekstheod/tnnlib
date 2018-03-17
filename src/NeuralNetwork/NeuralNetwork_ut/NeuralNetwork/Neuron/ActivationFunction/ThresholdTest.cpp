@@ -35,27 +35,27 @@ typedef MockedActivationFunction< float > Func;
 using ::testing::Return;
 
 
-INSTANTIATE_TEST_CASE_P (TestThreshold,
-                         ThresholdTest,
-                         ::testing::Values (Param (0.1f, 0.f),
-                                            Param (0.f, 0.f),
-                                            Param (0.01f, 0.f),
-                                            Param (0.18f, 0.f),
-                                            Param (0.19f, 0.f),
-                                            Param (-0.1f, 0.f),
-                                            Param (0.20f, 0.f),
-                                            Param (0.21f, 1.f),
-                                            Param (0.99f, 1.f),
-                                            Param (0.6f, 1.f),
-                                            Param (0.8f, 1.f),
-                                            Param (1.1f, 1.f),
-                                            Param (0.5f, 1.f)));
+INSTANTIATE_TEST_CASE_P(TestThreshold,
+                        ThresholdTest,
+                        ::testing::Values(Param(0.1f, 0.f),
+                                          Param(0.f, 0.f),
+                                          Param(0.01f, 0.f),
+                                          Param(0.18f, 0.f),
+                                          Param(0.19f, 0.f),
+                                          Param(-0.1f, 0.f),
+                                          Param(0.20f, 0.f),
+                                          Param(0.21f, 1.f),
+                                          Param(0.99f, 1.f),
+                                          Param(0.6f, 1.f),
+                                          Param(0.8f, 1.f),
+                                          Param(1.1f, 1.f),
+                                          Param(0.5f, 1.f)));
 
 
-TEST_P (ThresholdTest, TestThreshold) {
+TEST_P(ThresholdTest, TestThreshold) {
     nn::Threshold< Func, 20 > func;
     std::array< float, 3 > inputs;
-    auto param = GetParam ();
-    EXPECT_CALL (*func, calcEquation ()).WillOnce (Return (param.activation));
-    ASSERT_EQ (param.result, func.calculate (0, inputs.begin (), inputs.end ()));
+    auto param = GetParam();
+    EXPECT_CALL(*func, calcEquation()).WillOnce(Return(param.activation));
+    ASSERT_EQ(param.result, func.calculate(0, inputs.begin(), inputs.end()));
 }

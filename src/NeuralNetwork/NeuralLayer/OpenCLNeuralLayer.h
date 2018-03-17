@@ -23,7 +23,8 @@ namespace nn {
             // Select the default platform and create a context using this
             // platform and the GPU
             cl_context_properties cps[3] = {CL_CONTEXT_PLATFORM,
-                                            (cl_context_properties)(platforms[0])(), 0};
+                                            (cl_context_properties)(platforms[0])(),
+                                            0};
 
             return cl::Context(CL_DEVICE_TYPE_GPU, cps);
         }
@@ -131,19 +132,26 @@ namespace nn {
                         }
                     }
 
-                    queue.enqueueWriteBuffer(weights, CL_TRUE, 0,
+                    queue.enqueueWriteBuffer(weights,
+                                             CL_TRUE,
+                                             0,
                                              m_weights.size() * sizeof(float),
                                              m_weights.data());
-                    queue.enqueueWriteBuffer(values, CL_TRUE, 0,
+                    queue.enqueueWriteBuffer(values,
+                                             CL_TRUE,
+                                             0,
                                              m_values.size() * sizeof(float),
                                              m_values.data());
                     for(int offset = 0; offset < CONST_NEURONS_NUMBER; ++offset) {
                         std::size_t rangeSize = CONST_INPUTS_NUMBER;
-                        queue.enqueueNDRangeKernel(m_kernel, cl::NDRange(offset),
+                        queue.enqueueNDRangeKernel(m_kernel,
+                                                   cl::NDRange(offset),
                                                    cl::NDRange(rangeSize));
                     }
 
-                    queue.enqueueReadBuffer(product, CL_TRUE, 0,
+                    queue.enqueueReadBuffer(product,
+                                            CL_TRUE,
+                                            0,
                                             CONST_NEURONS_NUMBER * sizeof(float),
                                             dotProducts.data());
                     for(std::size_t i = 0; i < CONST_NEURONS_NUMBER; ++i) {
@@ -301,8 +309,11 @@ namespace nn {
     /// @param scaleFactor a factor which will be applied during the weight
     /// initialization a final weight will be calculated in a following way
     /// random(0, 1)/scaleFactor
-    template< template< template< class > class, class, std::size_t, int > class NeuronType, template< class > class ActivationFunctionType,
-              std::size_t size, std::size_t inputsNumber = 2, int scaleFactor = 1 >
+    template< template< template< class > class, class, std::size_t, int > class NeuronType,
+              template< class > class ActivationFunctionType,
+              std::size_t size,
+              std::size_t inputsNumber = 2,
+              int scaleFactor = 1 >
 
     using OpenCLNeuralLayer =
      detail::OpenCLNeuralLayer< NeuralLayer< NeuronType, ActivationFunctionType, size, inputsNumber, scaleFactor > >;

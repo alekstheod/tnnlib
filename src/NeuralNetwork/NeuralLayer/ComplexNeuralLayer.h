@@ -149,9 +149,9 @@ namespace nn {
              * @see {INeuralLayer}
              */
             void setInput(unsigned int inputId, const Var& value) {
-                std::for_each(m_neurons.begin(), m_neurons.end(),
-                              std::bind(&Neuron::setInput,
-                                        std::placeholders::_1, inputId, value));
+                std::for_each(m_neurons.begin(),
+                              m_neurons.end(),
+                              std::bind(&Neuron::setInput, std::placeholders::_1, inputId, value));
             }
 
             const Var& getBias(unsigned int neuronId) const {
@@ -171,7 +171,9 @@ namespace nn {
             const Memento getMemento() const {
                 Memento memento;
                 std::vector< NeuronMemento > neurons(CONST_NEURONS_NUMBER);
-                std::transform(m_neurons.begin(), m_neurons.end(), neurons.begin(),
+                std::transform(m_neurons.begin(),
+                               m_neurons.end(),
+                               neurons.begin(),
                                std::bind(&Neuron::getMemento, std::placeholders::_1));
 
                 memento.setNeurons(neurons);
@@ -184,14 +186,17 @@ namespace nn {
             void setMemento(const Memento& memento) {
                 auto neurons = memento.getNeurons();
                 std::vector< Neuron > internalNeurons(CONST_NEURONS_NUMBER);
-                std::transform(neurons.begin(), neurons.end(),
-                               internalNeurons.begin(), [](NeuronMemento& m) {
+                std::transform(neurons.begin(),
+                               neurons.end(),
+                               internalNeurons.begin(),
+                               [](NeuronMemento& m) {
                                    Neuron neuron;
                                    neuron->setMemento(m);
                                    return neuron;
                                });
 
-                std::copy(internalNeurons.begin(), internalNeurons.end(),
+                std::copy(internalNeurons.begin(),
+                          internalNeurons.end(),
                           m_neurons.begin());
             }
 
@@ -229,16 +234,22 @@ namespace nn {
                  boost::make_transform_iterator(m_neurons.end(),
                                                 boost::bind(&Neuron::calcDotProduct, ::_1));
                 using IteratorType = decltype(begin);
-                std::for_each(m_neurons.begin(), m_neurons.end(),
+                std::for_each(m_neurons.begin(),
+                              m_neurons.end(),
                               std::bind(&Neuron::template calculateOutput< IteratorType >,
-                                        std::placeholders::_1, begin, end));
+                                        std::placeholders::_1,
+                                        begin,
+                                        end));
             }
         };
     } // namespace detail
 
     template< template< template< class > class, class, std::size_t, int > class NeuronType,
-              template< class > class ActivationFunctionType, std::size_t size,
-              std::size_t inputsNumber = 2, int scaleFactor = 1, typename Var = float >
+              template< class > class ActivationFunctionType,
+              std::size_t size,
+              std::size_t inputsNumber = 2,
+              int scaleFactor = 1,
+              typename Var = float >
     using NeuralLayer =
      detail::NeuralLayer< NeuronType< ActivationFunctionType, Var, inputsNumber, scaleFactor >, size, inputsNumber >;
 } // namespace nn

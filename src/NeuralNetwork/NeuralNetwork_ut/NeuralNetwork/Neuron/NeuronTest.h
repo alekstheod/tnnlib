@@ -4,13 +4,13 @@
 #include <gtest/gtest.h>
 
 class NeuronTest : public ::testing::Test {
-    protected:
-    NeuronTest ();
-    ~NeuronTest ();
-    void SetUp ();
-    void TearDown ();
+  protected:
+    NeuronTest();
+    ~NeuronTest();
+    void SetUp();
+    void TearDown();
 
-    public:
+  public:
     float m_result;
 };
 

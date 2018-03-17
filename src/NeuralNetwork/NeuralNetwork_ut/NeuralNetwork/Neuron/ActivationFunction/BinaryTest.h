@@ -31,7 +31,7 @@
 #include <gtest/gtest.h>
 
 struct Param {
-    Param (float act, float res) : activation (act), result (res) {
+    Param(float act, float res) : activation(act), result(res) {
     }
     const float activation;
     const float result;

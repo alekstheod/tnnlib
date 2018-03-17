@@ -45,28 +45,31 @@
 namespace nn {
 
     /**s
-    * @author alekstheod
-    * Represents the Neuron's memento (state)
-    * class. The instance of this class is enough in order
-    * to restore the Neuron's state.
-    */
+     * @author alekstheod
+     * Represents the Neuron's memento (state)
+     * class. The instance of this class is enough in order
+     * to restore the Neuron's state.
+     */
 
     namespace detail {
         constexpr bool useStdArray = BOOST_VERSION >= 106000;
     }
 
-    template < class Var, std::size_t inputsNumber >
+    template< class Var, std::size_t inputsNumber >
     class NeuronMemento {
-        private:
+      private:
         typedef nn::Input< Var > Input;
 
-        public:
+      public:
         /**
          * The list of the neuron's inputs.
          */
-        using Inputs = typename std::conditional< detail::useStdArray, std::array< nn::Input< Var >, inputsNumber >, boost::array< nn::Input< Var >, inputsNumber > >::type;
+        using Inputs =
+         typename std::conditional< detail::useStdArray,
+                                    std::array< nn::Input< Var >, inputsNumber >,
+                                    boost::array< nn::Input< Var >, inputsNumber > >::type;
 
-        private:
+      private:
         Inputs m_inputs;
 
         /**
@@ -75,20 +78,20 @@ namespace nn {
         Var m_bias;
         friend class boost::serialization::access;
 
-        template < class Archive >
-        void serialize (Archive& ar, const unsigned int version) {
-            ar& BOOST_SERIALIZATION_NVP (m_bias);
-            ar& BOOST_SERIALIZATION_NVP (m_inputs);
+        template< class Archive >
+        void serialize(Archive& ar, const unsigned int version) {
+            ar& BOOST_SERIALIZATION_NVP(m_bias);
+            ar& BOOST_SERIALIZATION_NVP(m_inputs);
         }
 
-        public:
+      public:
         /**
          * Will set the given inputs list.
          * The given inputs list should contain at least 1 element
          * in order to be assigned to the inputs list member variable.
          * @return true if succeed, false otherwise.
          */
-        bool setInputs (const Inputs& inputs) {
+        bool setInputs(const Inputs& inputs) {
             bool result = false;
             m_inputs = inputs;
             return result;
@@ -99,15 +102,15 @@ namespace nn {
          * neuron weight member variable.
          * @param weight the value to be set.
          */
-        void setBias (const Var& weight) {
+        void setBias(const Var& weight) {
             m_bias = weight;
         }
 
         /**
-        * Will return the list of assigned inputs.
-        * @return the list of assigned inputs.
-        */
-        const Inputs& getInputs () const {
+         * Will return the list of assigned inputs.
+         * @return the list of assigned inputs.
+         */
+        const Inputs& getInputs() const {
             return m_inputs;
         }
 
@@ -115,11 +118,11 @@ namespace nn {
          * Will return the neuron's weight value.
          * @return the neuron's weight value.
          */
-        const Var& getBias () const {
+        const Var& getBias() const {
             return m_bias;
         }
     };
-}
+} // namespace nn
 
 #endif // NEURONMEMENTO_H
 // kate: indent-mode cstyle; indent-width 4; replace-tabs on;

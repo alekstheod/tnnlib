@@ -33,45 +33,50 @@ namespace nn {
 
     namespace kohonen {
 
-        template < typename NodeType > class INode {
-            public:
+        template< typename NodeType >
+        class INode {
+          public:
             typedef NodeType Node;
             typedef typename NodeType::Var Var;
             typedef typename NodeType::Position Position;
             typedef typename NodeType::InputType InputType;
 
-            private:
+          private:
             NodeType m_node;
 
-            public:
-            template < unsigned int inputsNumber > struct rebindInputsNumber { typedef INode< typename NodeType::template rebindInputsNumber< inputsNumber >::Type > Type; };
+          public:
+            template< unsigned int inputsNumber >
+            struct rebindInputsNumber {
+                typedef INode< typename NodeType::template rebindInputsNumber< inputsNumber >::Type > Type;
+            };
 
 
-            public:
-            template < typename... Args > INode (Args... args) : m_node (args...) {
+          public:
+            template< typename... Args >
+            INode(Args... args) : m_node(args...) {
             }
 
-            Var calculateDistance (const InputType& input) const {
-                return m_node.calculateDistance (input);
+            Var calculateDistance(const InputType& input) const {
+                return m_node.calculateDistance(input);
             }
 
-            void applyWeightModifications (Var learningRate, Var influence, const InputType& input) {
-                m_node.applyWeightModifications (learningRate, influence, input);
+            void applyWeightModifications(Var learningRate, Var influence, const InputType& input) {
+                m_node.applyWeightModifications(learningRate, influence, input);
             }
 
-            const InputType& getWeights () const {
-                return m_node.getWeights ();
+            const InputType& getWeights() const {
+                return m_node.getWeights();
             }
 
-            const Position& getPosition () const {
-                return m_node.getPosition ();
+            const Position& getPosition() const {
+                return m_node.getPosition();
             }
 
-            ~INode () {
+            ~INode() {
             }
         };
-    }
-}
+    } // namespace kohonen
+} // namespace nn
 
 
 #endif // INODE_H

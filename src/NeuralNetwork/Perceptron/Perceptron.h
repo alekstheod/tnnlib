@@ -169,7 +169,8 @@ namespace nn {
                  typename std::tuple_element< CONST_LAYERS_NUMBER - 1, Layers >::type;
                 std::get< CONST_LAYERS_NUMBER - 1 >(m_layers).calculateOutputs();
                 std::transform(std::get< CONST_LAYERS_NUMBER - 1 >(m_layers).begin(),
-                               std::get< CONST_LAYERS_NUMBER - 1 >(m_layers).end(), out,
+                               std::get< CONST_LAYERS_NUMBER - 1 >(m_layers).end(),
+                               out,
                                std::bind(&OutputLayer::Neuron::getOutput,
                                          std::placeholders::_1));
             }

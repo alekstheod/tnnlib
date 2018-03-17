@@ -33,35 +33,36 @@
 namespace utils {
 
     /**
-    * Represent the singleton template.
-    * Example of usage:
-    *  utils::Singleton< ClassName >::getInstance();
-    */
-    template < class T > class Singleton : public T {
-        private:
+     * Represent the singleton template.
+     * Example of usage:
+     *  utils::Singleton< ClassName >::getInstance();
+     */
+    template< class T >
+    class Singleton : public T {
+      private:
         /**
          * Constructor.
          */
-        Singleton () {
+        Singleton() {
         }
 
         /**
          * Destructor.
          */
-        ~Singleton () {
+        ~Singleton() {
         }
 
-        public:
+      public:
         /**
          * Will return a new instance of
          * the current class.
          */
-        static T& getInstance () {
+        static T& getInstance() {
             static Singleton< T > single;
             return single;
         }
     };
-}
+} // namespace utils
 
 
 #endif // SINGLETON_H

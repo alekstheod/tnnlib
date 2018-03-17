@@ -36,13 +36,14 @@
 namespace nn {
 
     class NNException : public std::logic_error {
-        public:
-        NNException (const std::string& message, const std::string& file, int line)
-         : std::logic_error (message + "\nin: " + file + "\nline: " + utils::lexical_cast< std::string, int > (line)) {
+      public:
+        NNException(const std::string& message, const std::string& file, int line)
+         : std::logic_error(message + "\nin: " + file +
+                            "\nline: " + utils::lexical_cast< std::string, int >(line)) {
         }
-        virtual ~NNException () throw () {
+        virtual ~NNException() throw() {
         }
     };
-}
+} // namespace nn
 
 #endif /* _NNEXCEPTION_H */

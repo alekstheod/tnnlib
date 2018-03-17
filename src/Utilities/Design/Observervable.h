@@ -38,41 +38,42 @@ namespace utils {
      * The Observer design
      * pattern implementation.
      */
-    template < class T > class Observable {
-        private:
-        bool operator== (const Observer& other) const;
-        Observer (const Observer& other);
+    template< class T >
+    class Observable {
+      private:
+        bool operator==(const Observer& other) const;
+        Observer(const Observer& other);
 
-        private:
+      private:
         /**
          * List of the listeners, objects
          * of observer.
          */
         std::set< T* > _listeners;
 
-        protected:
+      protected:
         /**
-      * Empty constructor
-      * will initialize the object.
-      */
-        Observable () {
+         * Empty constructor
+         * will initialize the object.
+         */
+        Observable() {
         }
 
-        std::set< T* > getListeners () {
+        std::set< T* > getListeners() {
             return _listeners;
         }
 
         /**
          * Destructor.
          */
-        ~Observer () {
+        ~Observer() {
         }
 
-        public:
+      public:
         /**
-        * Assign operator overload.
-        */
-        Observable& operator= (const Observable& other) {
+         * Assign operator overload.
+         */
+        Observable& operator=(const Observable& other) {
             _listeners = other._listeners;
         }
 
@@ -84,11 +85,11 @@ namespace utils {
          * @param listener instance of the listener.
          * @return true if succeed, false otherwise.
          */
-        bool addListener (T* listener) {
+        bool addListener(T* listener) {
             bool result = false;
 
-            if (_listeners.find (listener) == _listeners.end ()) {
-                _listeners.insert (listener);
+            if(_listeners.find(listener) == _listeners.end()) {
+                _listeners.insert(listener);
                 result = true;
             }
 
@@ -101,16 +102,16 @@ namespace utils {
          * @param listener instance of the listener.
          * @return true if succeed, false otherwise.
          */
-        bool removeListener (T* listener) {
+        bool removeListener(T* listener) {
             bool result = false;
-            if (_listeners.find (listener) == _listeners.end ()) {
-                _listeners.erase (listener);
+            if(_listeners.find(listener) == _listeners.end()) {
+                _listeners.erase(listener);
                 result = true;
             }
 
             return result;
         }
     };
-}
+} // namespace utils
 
 #endif // OBSERVER_H

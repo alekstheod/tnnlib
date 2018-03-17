@@ -36,36 +36,41 @@ namespace nn {
 
     namespace kohonen {
 
-        template < typename VarType, unsigned int rowSize > class K2DPosition {
-            public:
+        template< typename VarType, unsigned int rowSize >
+        class K2DPosition {
+          public:
             typedef VarType Var;
 
-            private:
+          private:
             Var m_x;
             Var m_y;
 
-            public:
-            K2DPosition (unsigned int id) : m_x (boost::numeric_cast< Var > (id % rowSize)), m_y (boost::numeric_cast< Var > (id / rowSize)) {
+          public:
+            K2DPosition(unsigned int id)
+             : m_x(boost::numeric_cast< Var >(id % rowSize)),
+               m_y(boost::numeric_cast< Var >(id / rowSize)) {
             }
 
-            K2DPosition (const K2DPosition& other) : m_x (other.m_x), m_y (other.m_y) {
+            K2DPosition(const K2DPosition& other)
+             : m_x(other.m_x), m_y(other.m_y) {
             }
 
-            Var calculateDistance (const K2DPosition& other) const {
-                return sqrt (std::pow ((m_x - other.m_x), 2) + std::pow ((m_y - other.m_y), 2));
+            Var calculateDistance(const K2DPosition& other) const {
+                return sqrt(std::pow((m_x - other.m_x), 2) +
+                            std::pow((m_y - other.m_y), 2));
             }
 
-            bool operator== (const K2DPosition& other) const {
+            bool operator==(const K2DPosition& other) const {
                 return (m_x == other.m_x && m_y == other.m_y);
             }
 
-            unsigned int calculateId () const {
+            unsigned int calculateId() const {
                 return m_x + (m_y * rowSize);
             }
 
-            ~K2DPosition () {
+            ~K2DPosition() {
             }
         };
-    }
-}
+    } // namespace kohonen
+} // namespace nn
 #endif

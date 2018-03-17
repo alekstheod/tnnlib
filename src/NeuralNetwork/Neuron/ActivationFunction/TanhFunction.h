@@ -38,25 +38,32 @@
 
 namespace nn {
 
-    template < class VarType > class TanhFunction {
-        public:
+    template< class VarType >
+    class TanhFunction {
+      public:
         typedef VarType Var;
 
-        template < typename V > using use = TanhFunction< V >;
+        template< typename V >
+        using use = TanhFunction< V >;
 
-        public:
-        TanhFunction () {
+      public:
+        TanhFunction() {
         }
-        ~TanhFunction () {
+        ~TanhFunction() {
         }
 
         // 2 / (1 + exp(-2 * x)) - 1
-        template < typename Iterator > Var calculate (const Var& sum, Iterator begin, Iterator end) const {
-            return boost::numeric_cast< Var > (2.f) / (boost::numeric_cast< Var > (1.f) + std::exp (boost::numeric_cast< Var > (-2.f) * sum)) - boost::numeric_cast< Var > (1.f);
+        template< typename Iterator >
+        Var calculate(const Var& sum, Iterator begin, Iterator end) const {
+            return boost::numeric_cast< Var >(2.f) /
+                    (boost::numeric_cast< Var >(1.f) +
+                     std::exp(boost::numeric_cast< Var >(-2.f) * sum)) -
+                   boost::numeric_cast< Var >(1.f);
         }
 
-        template < typename Iterator > Var sum (Iterator begin, Iterator end, const Var& start) const {
-            return std::accumulate (begin, end, start);
+        template< typename Iterator >
+        Var sum(Iterator begin, Iterator end, const Var& start) const {
+            return std::accumulate(begin, end, start);
         }
 
         /**
@@ -64,14 +71,14 @@ namespace nn {
          * @param output the output value of the neuron.
          * @return calculated differential for given input value.
          */
-        Var delta (const Var& output, const Var& expectedOutput) const {
-            return (output - expectedOutput) * calculateDerivate (output);
+        Var delta(const Var& output, const Var& expectedOutput) const {
+            return (output - expectedOutput) * calculateDerivate(output);
         }
 
-        Var derivate (const Var& output) const {
-            return boost::numeric_cast< Var > (1.f) - output * output;
+        Var derivate(const Var& output) const {
+            return boost::numeric_cast< Var >(1.f) - output * output;
         }
     };
-}
+} // namespace nn
 
 #endif // SOFTMAXFUNCTION_H

@@ -13,16 +13,16 @@
  *     names of its contributors may be used to endorse or promote products
  *     derived from this software without specific prior written permission.
  *
- * THIS SOFTWARE IS PROVIDED BY Alex Theodoridis <alekstheod@gmail.com> ''AS IS'' AND ANY
- * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL Alex Theodoridis <email> BE LIABLE FOR ANY
- * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
- * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * THIS SOFTWARE IS PROVIDED BY Alex Theodoridis <alekstheod@gmail.com> ''AS
+ * IS'' AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+ * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL Alex Theodoridis <email> BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  *
  */
 
@@ -34,46 +34,48 @@ namespace nn {
 
     namespace kohonen {
 
-        template < typename PositionType > class IPosition {
-            public:
+        template< typename PositionType >
+        class IPosition {
+          public:
             typedef typename PositionType::Var Var;
 
-            private:
+          private:
             PositionType m_position;
 
-            public:
-            template < typename... Args > IPosition (Args... args) : m_position (args...) {
+          public:
+            template< typename... Args >
+            IPosition(Args... args) : m_position(args...) {
             }
 
-            IPosition (const PositionType& pos) : m_position (pos) {
+            IPosition(const PositionType& pos) : m_position(pos) {
             }
 
-            IPosition (const IPosition& other) : m_position (other.m_position) {
+            IPosition(const IPosition& other) : m_position(other.m_position) {
             }
 
-            bool operator== (const IPosition& other) const {
+            bool operator==(const IPosition& other) const {
                 return m_position == other.m_position;
             }
 
-            bool operator== (const PositionType& other) const {
+            bool operator==(const PositionType& other) const {
                 return m_position == other;
             }
 
-            Var calculateDistance (const IPosition< PositionType >& other) const {
-                return m_position.calculateDistance (other.m_position);
+            Var calculateDistance(const IPosition< PositionType >& other) const {
+                return m_position.calculateDistance(other.m_position);
             }
 
-            operator PositionType () {
+            operator PositionType() {
                 return m_position;
             }
 
-            unsigned int calculateId () const {
-                return m_position.calculateId ();
+            unsigned int calculateId() const {
+                return m_position.calculateId();
             }
 
-            ~IPosition () {
+            ~IPosition() {
             }
         };
-    }
-}
+    } // namespace kohonen
+} // namespace nn
 #endif

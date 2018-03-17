@@ -42,30 +42,37 @@
 
 namespace nn {
 
-    template < typename VarType > class BiopolarSigmoidFunction {
-        public:
+    template< typename VarType >
+    class BiopolarSigmoidFunction {
+      public:
         typedef VarType Var;
 
-        template < typename V > using use = BiopolarSigmoidFunction< V >;
+        template< typename V >
+        using use = BiopolarSigmoidFunction< V >;
 
-        public:
-        template < typename Iterator > Var calculateEquation (const Var& sum, Iterator begin, Iterator end) const {
-            Var tmp = sum * boost::numeric_cast< Var > (-2.0f);
-            return boost::numeric_cast< Var > (2.0f) / (boost::numeric_cast< Var > (1.0f) + std::exp (tmp)) - boost::numeric_cast< Var > (1.0f);
+      public:
+        template< typename Iterator >
+        Var calculateEquation(const Var& sum, Iterator begin, Iterator end) const {
+            Var tmp = sum * boost::numeric_cast< Var >(-2.0f);
+            return boost::numeric_cast< Var >(2.0f) /
+                    (boost::numeric_cast< Var >(1.0f) + std::exp(tmp)) -
+                   boost::numeric_cast< Var >(1.0f);
         }
 
-        Var delta (const Var& output, const Var& expectedOutput) const {
-            return (output - expectedOutput) * calculateDerivate (output);
+        Var delta(const Var& output, const Var& expectedOutput) const {
+            return (output - expectedOutput) * calculateDerivate(output);
         }
 
-        template < typename Iterator > Var sum (Iterator begin, Iterator end, const Var& start) const {
-            return std::accumulate (begin, end, start);
+        template< typename Iterator >
+        Var sum(Iterator begin, Iterator end, const Var& start) const {
+            return std::accumulate(begin, end, start);
         }
 
-        Var derivate (const Var& output) const {
-            return (boost::numeric_cast< Var > (1.0f) - output * output) / boost::numeric_cast< Var > (2.0f);
+        Var derivate(const Var& output) const {
+            return (boost::numeric_cast< Var >(1.0f) - output * output) /
+                   boost::numeric_cast< Var >(2.0f);
         }
     };
-}
+} // namespace nn
 
 #endif // BIOPOLARSIGMOIDFUNCTION_H

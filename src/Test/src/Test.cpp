@@ -69,12 +69,8 @@ int main(int argc, char** argv) {
                        Connection< InputRange< 0, 1 >, 0 >,
                        Connection< InputRange< 0, 1 >, 1 > >;
 
-    using Perceptron = nn::Perceptron<
-     float,
-     ConvLayer,
-     // nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, 2, 2 >,
-     nn::NeuralLayer< nn::Neuron, nn::TanhFunction, 20 >,
-     nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, 1 > >;
+    using Perceptron =
+     nn::Perceptron< float, ConvLayer, nn::NeuralLayer< nn::Neuron, nn::TanhFunction, 20 >, nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, 1 > >;
 
     typedef BepAlgorithm< Perceptron > Algo;
     Algo algorithm(0.09f);

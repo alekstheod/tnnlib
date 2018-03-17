@@ -21,8 +21,8 @@
     (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
     LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
     ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
-    (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
-    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+    (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
+   THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
 
@@ -31,17 +31,18 @@
 
 namespace nn {
 
-    template < class NeuralNetwork > class INeuralNetwork {
-        private:
+    template< class NeuralNetwork >
+    class INeuralNetwork {
+      private:
         NeuralNetwork m_neuralNetwork;
 
-        public:
-        INeuralNetwork () {
+      public:
+        INeuralNetwork() {
         }
-        bool calculateOutputs (){};
-        virtual ~INeuralNetwork () {
+        bool calculateOutputs(){};
+        virtual ~INeuralNetwork() {
         }
     };
-}
+} // namespace nn
 
 #endif // INEURALNETWORK_H

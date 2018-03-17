@@ -54,8 +54,7 @@ void PerceptronTest::SetUp() {
 void PerceptronTest::TearDown() {
 }
 
-USING_SUPPORT_TEST_T_NN(PerceptronTest, TestCalculateOutputsForOneLayerPerceptron,
-                        nn, detail, Perceptron)
+USING_SUPPORT_TEST_T_NN(PerceptronTest, TestCalculateOutputsForOneLayerPerceptron, nn, detail, Perceptron)
 TEST_F(PerceptronTest, TestCalculateOutputsForOneLayerPerceptron) {
     Perceptron perceptron;
     perceptron.supportTest(*this);

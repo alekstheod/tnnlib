@@ -43,22 +43,24 @@ namespace nn {
      * Sigmoid function implementation.
      * Used by not-linear neural networks.
      */
-    template < class VarType > class SigmoidFunction {
-        public:
+    template< class VarType >
+    class SigmoidFunction {
+      public:
         typedef VarType Var;
-        template < typename V > using use = SigmoidFunction< V >;
+        template< typename V >
+        using use = SigmoidFunction< V >;
 
-        private:
+      private:
         /**
          * Slope value.
          */
         Var m_slope;
 
-        public:
+      public:
         /**
          * Empty constructor.
          */
-        SigmoidFunction () : m_slope (1.0f) {
+        SigmoidFunction() : m_slope(1.0f) {
         }
 
         /**
@@ -66,14 +68,17 @@ namespace nn {
          * for the given input value.
          * @return the calculation result.
          */
-        template < typename Iterator > Var calculate (const Var& sum, Iterator begin, Iterator end) const {
-            Var tmp (m_slope * sum);
-            Var tmp2 = tmp * boost::numeric_cast< Var > (-1.0f);
-            return boost::numeric_cast< Var > (1.0f) / (boost::numeric_cast< Var > (1.0f) + std::exp (tmp2));
+        template< typename Iterator >
+        Var calculate(const Var& sum, Iterator begin, Iterator end) const {
+            Var tmp(m_slope * sum);
+            Var tmp2 = tmp * boost::numeric_cast< Var >(-1.0f);
+            return boost::numeric_cast< Var >(1.0f) /
+                   (boost::numeric_cast< Var >(1.0f) + std::exp(tmp2));
         }
 
-        template < typename Iterator > Var sum (Iterator begin, Iterator end, const Var& start) const {
-            return std::accumulate (begin, end, start);
+        template< typename Iterator >
+        Var sum(Iterator begin, Iterator end, const Var& start) const {
+            return std::accumulate(begin, end, start);
         }
 
         /**
@@ -82,21 +87,21 @@ namespace nn {
          * @param output the output value of the neuron.
          * @return result of calculation.
          */
-        Var delta (const Var& output, const Var& expectedOutput) const {
-            return (output - expectedOutput) * derivate (output);
+        Var delta(const Var& output, const Var& expectedOutput) const {
+            return (output - expectedOutput) * derivate(output);
         }
 
-        Var derivate (const Var& output) const {
-            return m_slope * output * (boost::numeric_cast< Var > (1.0f) - output);
+        Var derivate(const Var& output) const {
+            return m_slope * output * (boost::numeric_cast< Var >(1.0f) - output);
         }
 
         /**
          * Destructor.
          */
-        ~SigmoidFunction () {
+        ~SigmoidFunction() {
         }
     };
-}
+} // namespace nn
 
 #endif
 // kate: indent-mode cstyle; replace-tabs on;
