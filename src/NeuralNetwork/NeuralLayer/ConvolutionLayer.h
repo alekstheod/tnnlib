@@ -61,7 +61,8 @@ namespace nn {
             for(auto& neuron : *this) {
                 utils::for_each(m_connections, [&](auto connection) {
                     if(inputId >= connection.inputRange.from &&
-                       inputId <= connection.inputRange.to) {
+                       inputId <= connection.inputRange.to &&
+                       neuronId == connection.neuronId) {
                         neuron.setInput(inputId, value);
                     }
                 });

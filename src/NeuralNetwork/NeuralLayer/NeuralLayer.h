@@ -64,7 +64,7 @@ namespace nn {
             using resize = NeuralLayer< NeuronType, neuronsNumber, inputs >;
 
             template< typename VarType >
-            a using use =
+            using use =
              NeuralLayer< typename NeuronType::template use< VarType >, neuronsNumber, inputsNumber >;
             static constexpr unsigned int CONST_NEURONS_NUMBER = neuronsNumber;
             static constexpr unsigned int CONST_INPUTS_NUMBER = inputsNumber;
