@@ -11,7 +11,10 @@ link_directories(${Boost_LIBRARY_DIRS})
 
 add_executable(Test src/Test.cpp)
 
-include_directories(${Boost_INCLUDE_DIRS})
+target_include_directories(Test
+    PRIVATE
+        ${CMAKE_SOURCE_DIR}/libs
+        ${Boost_INCLUDE_DIRS})
 
 
 link_directories(${Boost_LIBRARY_DIRS})

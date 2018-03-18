@@ -19,7 +19,7 @@ add_definitions(-D_SCL_SECURE_NO_WARNINGS)
 
 target_include_directories(ocr
     PRIVATE
-        ${CMAKE_SOURCE_DIR}/Utilities
+        ${CMAKE_SOURCE_DIR}/libs
         ${Boost_INCLUDE_DIRS}
         ${PNG_INCLUDE_DIRS})
 

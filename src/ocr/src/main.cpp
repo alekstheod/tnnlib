@@ -9,7 +9,6 @@
 #include <NeuralNetwork/Neuron/ActivationFunction/LogScaleSoftmaxFunction.h>
 //#include <NeuralNetwork/NeuralLayer/OpenCLNeuralLayer.h>
 #include <NeuralNetwork/Config.h>
-#include <cmath>
 
 #ifndef BOOST_SYSTEM_NO_DEPRECATED
 #define BOOST_SYSTEM_NO_DEPRECATED 1
@@ -17,8 +16,7 @@
 #undef BOOST_SYSTEM_NO_DEPRECATED
 #endif
 
-#include <boost/archive/xml_iarchive.hpp>
-#include <boost/archive/xml_oarchive.hpp>
+#include <cmath>
 #include <fstream>
 #include <iomanip>
 #include <iostream>
