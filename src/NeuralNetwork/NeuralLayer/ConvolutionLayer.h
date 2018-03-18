@@ -8,8 +8,9 @@
 namespace nn {
     template< std::size_t From, std::size_t To >
     struct InputRange {
-        static constexpr std::size_t from = From;
-        static constexpr std::size_t to = To;
+        bool contains(std::size_t inputId) {
+            return inputId >= From && inputId < To;
+        }
     };
 
     template< typename Range, std::size_t NeuronId >
@@ -60,15 +61,14 @@ namespace nn {
             std::size_t neuronId = 0;
             for(auto& neuron : *this) {
                 utils::for_each(m_connections, [&](auto connection) {
-                    if(inputId >= connection.inputRange.from &&
-                       inputId <= connection.inputRange.to &&
+                    if(connection.inputRange.contains(inputId) &&
                        neuronId == connection.neuronId) {
                         neuron.setInput(inputId, value);
                     }
                 });
-
-                neuronId++;
             }
+
+            neuronId++;
         }
 
       private:

@@ -34,9 +34,9 @@
 #include <NeuralNetwork/Neuron/INeuron.h>
 #include <NeuralNetwork/Serialization/NeuralLayerMemento.h>
 
-#include <boost/bind.hpp>
-#include <boost/bind/placeholders.hpp>
 #include <boost/iterator/transform_iterator.hpp>
+#include <boost/bind/placeholders.hpp>
+#include <boost/bind.hpp>
 
 #include <range/v3/all.hpp>
 

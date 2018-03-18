@@ -1,3 +1,4 @@
+#include <NeuralNetwork/NeuralLayer/ConvolutionLayer.h>
 #include <NeuralNetwork/NeuralLayer/NeuralLayer.h>
 #include <NeuralNetwork/Neuron/ActivationFunction/SigmoidFunction.h>
 #include <NeuralNetwork/Neuron/ActivationFunction/TanhFunction.h>
@@ -31,11 +32,11 @@ namespace {
 
 SCENARIO("Perceptron calculation", "[perceptron][precalculated][forward]") {
     GIVEN(
-     "A 2 layer perceptron which has 2 inputs and one output and precalculated "
+     "A 3 layer perceptron which has 2 inputs and one output and precalculated "
      "weights such that perceptron can recognise a XOR gate") {
         using Perceptron =
          nn::Perceptron< float,
-                         nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, 2 >,
+                         nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, 2, 2 >,
                          nn::NeuralLayer< nn::Neuron, nn::TanhFunction, 3 >,
                          nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, 1 > >;
 

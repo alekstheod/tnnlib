@@ -1,7 +1,5 @@
 #pragma once
 
-#include <boost/numeric/conversion/cast.hpp>
-
 #include <cereal/cereal.hpp>
 
 namespace nn {

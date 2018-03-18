@@ -136,7 +136,6 @@ namespace nn {
                m_output(boost::numeric_cast< Var >(0)),
                m_sum(boost::numeric_cast< Var >(0)) {
                 static_assert(inputsNumber > 0, "Invalid number of inputs");
-                rand_inputs< Var >(m_inputs.begin(), m_inputs.end(), scaleFactor);
             }
 
             /// @brief see @ref INeuron

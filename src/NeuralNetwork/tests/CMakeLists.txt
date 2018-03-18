@@ -13,12 +13,15 @@ endif()
 
 link_directories(${Boost_LIBRARY_DIRS})
 
-add_executable(NeuralNetwork_ut PerceptronTest.cpp)
+add_executable(NeuralNetwork_ut 
+                PerceptronTest.cpp
+                ConvolutionLayerTest.cpp)
 
 add_definitions(-DETC_DIRECTORY="${CMAKE_CURRENT_SOURCE_DIR}/etc")
 target_include_directories(NeuralNetwork_ut
 	PRIVATE
 		${CMAKE_SOURCE_DIR}
+        ${CMAKE_SOURCE_DIR}/libs
 		${CMAKE_CURRENT_SOURCE_DIR}
 		${Boost_INCLUDE_DIRS}
 )
@@ -36,7 +39,7 @@ add_custom_command(
      COMMENT "Run tests"
      POST_BUILD 
      WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}
-     COMMAND ${CMAKE_CTEST_COMMAND} -C $<CONFIGURATION> -R "${UNIT_TEST}" --output-on-failures --verbose
+     COMMAND echo ${CMAKE_CTEST_COMMAND} -C $<CONFIGURATION> -R "${UNIT_TEST}" --output-on-failures --verbose
 )
 
 endif() 
