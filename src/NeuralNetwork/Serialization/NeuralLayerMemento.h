@@ -32,42 +32,29 @@
 
 #include <NeuralNetwork/Serialization/NeuronMemento.h>
 
-#include <boost/serialization/serialization.hpp>
-#include <boost/serialization/vector.hpp>
+#include <cereal/cereal.hpp>
 
 #include <vector>
 
 namespace nn {
 
     template< typename NeuronMemento, std::size_t neuronsNumber >
-    class NeuralLayerMemento {
-      private:
+    struct NeuralLayerMemento {
         using Container = std::vector< NeuronMemento >;
-        Container m_neurons;
-
-      private:
-        friend class boost::serialization::access;
+        NeuralLayerMemento() : neurons(neuronsNumber) {
+        }
 
         template< class Archive >
-        void serialize(Archive& ar, const unsigned int version) {
-            ar& BOOST_SERIALIZATION_NVP(m_neurons);
+        void save(Archive& archive) const {
+            archive(CEREAL_NVP(neurons));
         }
 
-      public:
-        NeuralLayerMemento() : m_neurons(neuronsNumber) {
+        template< class Archive >
+        void load(Archive& archive) {
+            archive(CEREAL_NVP(neurons));
         }
 
-        void setNeurons(const Container& neurons) {
-            m_neurons = neurons;
-        }
-
-        const Container& getNeurons() const {
-            return m_neurons;
-        }
-
-        unsigned int getNeuronsNumber() const {
-            return m_neurons.size();
-        }
+        Container neurons;
     };
 } // namespace nn
 

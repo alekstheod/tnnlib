@@ -1,27 +1,28 @@
 #pragma once
 
-#include <boost/serialization/nvp.hpp>
-#include <boost/serialization/serialization.hpp>
 #include <boost/numeric/conversion/cast.hpp>
+
+#include <cereal/cereal.hpp>
 
 namespace nn {
 
     template< typename Var >
     struct Input {
-        Input()
-         : weight(boost::numeric_cast< Var >(0)),
-           value(boost::numeric_cast< Var >(0)) {
+        Input(const Var& w = Var{0}, const Var& v = Var{0})
+         : weight(w), value(v) {
         }
-        Input(const Var& w, const Var& v) : weight(w), value(v) {
+
+        template< class Archive >
+        void save(Archive& ar) const {
+            ar(CEREAL_NVP(weight));
         }
+
+        template< class Archive >
+        void load(Archive& ar) {
+            ar(CEREAL_NVP(weight));
+        }
+
         Var weight;
         Var value;
-
-      private:
-        friend class boost::serialization::access;
-        template< class Archive >
-        void serialize(Archive& ar, const unsigned int version) {
-            ar& BOOST_SERIALIZATION_NVP(weight);
-        }
     };
 } // namespace nn

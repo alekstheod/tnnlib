@@ -17,9 +17,11 @@ add_executable(ocr src/main.cpp )
 
 add_definitions(-D_SCL_SECURE_NO_WARNINGS)
 
-include_directories(
-	${Boost_INCLUDE_DIRS}
-	${PNG_INCLUDE_DIRS})
+target_include_directories(ocr
+    PRIVATE
+        ${CMAKE_SOURCE_DIR}/Utilities
+        ${Boost_INCLUDE_DIRS}
+        ${PNG_INCLUDE_DIRS})
 
 target_link_libraries(ocr  
 	NeuralNetwork

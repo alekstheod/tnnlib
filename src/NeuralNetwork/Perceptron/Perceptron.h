@@ -30,13 +30,13 @@
 #ifndef PerceptronH
 #define PerceptronH
 
-#include <NeuralNetwork/Serialization/PerceptronMemento.h>
 #include <NeuralNetwork/INeuralLayer.h>
-#include <NeuralNetwork/NNException.h>
-#include <NeuralNetwork/Utils/Utils.h>
 #include <NeuralNetwork/Neuron/ActivationFunction/SigmoidFunction.h>
-#include <Utilities/MPL/Tuple.h>
+#include <NeuralNetwork/Serialization/PerceptronMemento.h>
+
 #include <NeuralNetwork/Utils/Utils.h>
+
+#include <Utilities/MPL/Tuple.h>
 
 #include <vector>
 #include <cassert>
@@ -137,15 +137,13 @@ namespace nn {
             }
 
             void setMemento(const Memento& memento) {
-                setMem< 0 >(memento.getLayers());
+                setMem< 0 >(memento.layers);
             }
 
             Memento getMemento() const {
                 LayersMemento layers;
                 getMem< 0 >(layers);
-                Memento memento;
-                memento.setLayers(layers);
-                return memento;
+                return Memento{layers};
             }
 
             /*!

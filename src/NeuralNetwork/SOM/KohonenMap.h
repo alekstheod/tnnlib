@@ -29,14 +29,17 @@
 #ifndef KOHONENMAP_H
 #define KOHONENMAP_H
 
-#include <vector>
-#include <algorithm>
-#include <type_traits>
+
 #include <NeuralNetwork/SOM/INeighbourhood.h>
-#include <NeuralNetwork/NNException.h>
+
 #include <Utilities/System/Time.h>
+
 #include <boost/numeric/conversion/cast.hpp>
+
+#include <algorithm>
 #include <cmath>
+#include <type_traits>
+#include <vector>
 
 namespace nn {
 

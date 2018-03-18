@@ -32,15 +32,9 @@
 
 #include <NeuralNetwork/Neuron/Input.h>
 
-#include <boost/array.hpp>
-#include <boost/serialization/array.hpp>
-#include <boost/serialization/nvp.hpp>
-#include <boost/serialization/serialization.hpp>
-#include <boost/serialization/utility.hpp>
-#include <boost/version.hpp>
+#include <cereal/cereal.hpp>
 
 #include <utility>
-#include <map>
 
 namespace nn {
 
@@ -51,78 +45,22 @@ namespace nn {
      * to restore the Neuron's state.
      */
 
-    namespace detail {
-        constexpr bool useStdArray = BOOST_VERSION >= 106000;
-    }
-
     template< class Var, std::size_t inputsNumber >
-    class NeuronMemento {
-      private:
-        typedef nn::Input< Var > Input;
-
-      public:
-        /**
-         * The list of the neuron's inputs.
-         */
-        using Inputs =
-         typename std::conditional< detail::useStdArray,
-                                    std::array< nn::Input< Var >, inputsNumber >,
-                                    boost::array< nn::Input< Var >, inputsNumber > >::type;
-
-      private:
-        Inputs m_inputs;
-
-        /**
-         * Value of the neuron's weight.
-         */
-        Var m_bias;
-        friend class boost::serialization::access;
+    struct NeuronMemento {
+        template< class Archive >
+        void save(Archive& ar) const {
+            ar(CEREAL_NVP(bias), CEREAL_NVP(inputs));
+        }
 
         template< class Archive >
-        void serialize(Archive& ar, const unsigned int version) {
-            ar& BOOST_SERIALIZATION_NVP(m_bias);
-            ar& BOOST_SERIALIZATION_NVP(m_inputs);
+        void load(Archive& ar) {
+            ar(CEREAL_NVP(bias), CEREAL_NVP(inputs));
         }
 
-      public:
-        /**
-         * Will set the given inputs list.
-         * The given inputs list should contain at least 1 element
-         * in order to be assigned to the inputs list member variable.
-         * @return true if succeed, false otherwise.
-         */
-        bool setInputs(const Inputs& inputs) {
-            bool result = false;
-            m_inputs = inputs;
-            return result;
-        }
-
-        /**
-         * Will set the given value to the
-         * neuron weight member variable.
-         * @param weight the value to be set.
-         */
-        void setBias(const Var& weight) {
-            m_bias = weight;
-        }
-
-        /**
-         * Will return the list of assigned inputs.
-         * @return the list of assigned inputs.
-         */
-        const Inputs& getInputs() const {
-            return m_inputs;
-        }
-
-        /**
-         * Will return the neuron's weight value.
-         * @return the neuron's weight value.
-         */
-        const Var& getBias() const {
-            return m_bias;
-        }
+        using Inputs = std::array< nn::Input< Var >, inputsNumber >;
+        Var bias;
+        Inputs inputs;
     };
 } // namespace nn
 
 #endif // NEURONMEMENTO_H
-// kate: indent-mode cstyle; indent-width 4; replace-tabs on;

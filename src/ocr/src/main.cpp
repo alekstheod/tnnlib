@@ -33,16 +33,22 @@
 #pragma warning(disable : 4996)
 #endif
 
-#include <boost/gil/gil_all.hpp>
 #include <boost/gil/channel_algorithm.hpp>
 #include <boost/gil/channel.hpp>
-#include <boost/gil/image.hpp>
-#include <boost/gil/extension/io/png_dynamic_io.hpp>
-#include <boost/gil/extension/io/dynamic_io.hpp>
 #include <boost/gil/extension/dynamic_image/any_image.hpp>
 #include <boost/gil/extension/dynamic_image/dynamic_image_all.hpp>
+#include <boost/gil/extension/io/dynamic_io.hpp>
+#include <boost/gil/extension/io/png_dynamic_io.hpp>
+#include <boost/gil/gil_all.hpp>
+#include <boost/gil/image.hpp>
+
 #include "gil/extension/numeric/sampler.hpp"
 #include "gil/extension/numeric/resample.hpp"
+
+#include <cereal/archives/xml.hpp>
+#include <cereal/types/array.hpp>
+#include <cereal/types/tuple.hpp>
+#include <cereal/types/vector.hpp>
 
 #if defined(NN_CC_MSVC)
 #pragma warning(pop)
@@ -120,12 +126,12 @@ Perceptron readPerceptron(std::string fileName) {
         std::ifstream file(fileName);
         if(file.good()) {
             Perceptron::Memento memento;
-            boost::archive::xml_iarchive ia(file);
-            ia >> BOOST_SERIALIZATION_NVP(memento);
+            cereal::XMLInputArchive ia(file);
+            ia >> memento;
 
             perceptron.setMemento(memento);
         } else {
-            throw nn::NNException("Invalid perceptron file name", __FILE__, __LINE__);
+            throw std::logic_error("Invalid perceptron file name");
         }
     }
 
@@ -142,9 +148,6 @@ void recognize(std::string perceptron, std::string image) {
         for(unsigned int i = 0; i < result.size(); i++) {
             std::cout << "Symbol: " << alphabet[i] << " " << result[i] << std::endl;
         }
-
-    } catch(const nn::NNException& e) {
-        std::cout << e.what() << std::endl;
     } catch(const std::exception& e) {
         std::cout << e.what() << std::endl;
     } catch(...) {
@@ -156,8 +159,8 @@ template< typename Perc >
 void save(const Perc& perc, std::string name) {
     typename Perc::Memento memento = perc.getMemento();
     std::ofstream strm(name);
-    boost::archive::xml_oarchive oa(strm);
-    oa << BOOST_SERIALIZATION_NVP(memento);
+    cereal::XMLOutputArchive oa(strm);
+    oa << memento;
     strm.flush();
 }
 

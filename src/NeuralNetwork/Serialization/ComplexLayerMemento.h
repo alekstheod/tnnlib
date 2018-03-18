@@ -1,32 +1,25 @@
 #ifndef COMPLEXLAYER_MEMENTO_H
 #define COMPLEXLAYER_MEMENTO_H
+
 #include <NeuralNetwork/Serialization/PerceptronMemento.h>
+
+#include <cereal/cereal.hpp>
 
 namespace nn {
 
     template< typename Var >
-    class ComplexLayerMemento {
-      private:
-        PerceptronMemento< Var > m_perceptron;
-
-        friend class boost::serialization::access;
+    struct ComplexLayerMemento {
+        template< class Archive >
+        void save(Archive& archive) const {
+            archive(CEREAL_NVP(perceptron));
+        }
 
         template< class Archive >
-        void serialize(Archive& ar, const unsigned int version) {
-            ar& BOOST_SERIALIZATION_NVP(m_perceptron);
+        void load(Archive& archive) {
+            archive(CEREAL_NVP(perceptron));
         }
 
-      public:
-        const PerceptronMemento< Var >& getPerceptron() const {
-            return m_perceptron;
-        }
-
-        void setPerceptron(const PerceptronMemento< Var >& perceptron) {
-            m_perceptron = m_perceptron;
-        }
-
-        ~ComplexLayerMemento() {
-        }
+        PerceptronMemento< Var > perceptron;
     };
 } // namespace nn
 

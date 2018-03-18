@@ -10,7 +10,6 @@ find_package(OpenCL)
 add_library(NeuralNetwork
 	  NeuralNetwork.cpp
 	  INeuralLayer.h
-	  NNException.h
 	  Config.h
 	  LearningAlgorithm/BackPropagation/BepAlgorithm.h
 	  LearningAlgorithm/BackPropagation/BPNeuralLayer.h
@@ -43,8 +42,8 @@ add_library(NeuralNetwork
 set_target_properties(NeuralNetwork PROPERTIES LINKER_LANGUAGE CXX)
 target_include_directories(NeuralNetwork
 		  PUBLIC
-			.
-			../Utilities
+            ${CMAKE_SOURCE_DIR}/Utilities
+            ${CMAKE_CURRENT_SOURCE_DIR}
 			${Boost_INCLUDE_DIRS}
 			${OPENCL_INCLUDE_DIR})
 	
@@ -53,5 +52,5 @@ target_link_libraries(NeuralNetwork
 		      ${Boost_LIBRARIES}
 		      ${OPENCL_LIBRARIES})
 		      
-		      
-add_subdirectory(NeuralNetwork_ut)
+enable_testing()	      
+add_subdirectory(tests)

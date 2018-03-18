@@ -34,7 +34,6 @@
 #include <NeuralNetwork/Neuron/Input.h>
 #include <NeuralNetwork/Serialization/NeuronMemento.h>
 #include <NeuralNetwork/Neuron/ActivationFunction/IActivationFunction.h>
-#include <NeuralNetwork/NNException.h>
 
 #include <Utilities/System/Time.h>
 
@@ -181,17 +180,14 @@ namespace nn {
 
             /// @brief see @ref INeuron
             const Memento getMemento() const {
-                Memento memento;
-                memento.setInputs(m_inputs);
-                memento.setBias(m_bias);
-                return memento;
+                return Memento{m_bias, m_inputs};
             }
 
             /// @brief see @ref INeuron
             void setMemento(const Memento& memento) {
-                auto inputs = memento.getInputs();
+                const auto& inputs = memento.inputs;
                 std::copy(inputs.begin(), inputs.end(), m_inputs.begin());
-                m_bias = memento.getBias();
+                m_bias = memento.bias;
             }
 
             /// @brief see @ref INeuron

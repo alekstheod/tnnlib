@@ -33,7 +33,6 @@
 #include <array>
 #include <Utilities/System/Time.h>
 #include <NeuralNetwork/SOM/IPosition.h>
-#include <NeuralNetwork/NNException.h>
 #include <iostream>
 #include <cmath>
 

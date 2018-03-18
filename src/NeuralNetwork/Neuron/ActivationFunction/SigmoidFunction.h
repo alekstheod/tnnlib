@@ -30,11 +30,12 @@
 #ifndef SigmaEquationH
 #define SigmaEquationH
 #include <NeuralNetwork/Neuron/ActivationFunction/IActivationFunction.h>
-#include <NeuralNetwork/NNException.h>
+
 #include <vector>
 #include <functional>
 #include <numeric>
 #include <utility>
+
 #include <boost/numeric/conversion/cast.hpp>
 
 namespace nn {

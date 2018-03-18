@@ -10,13 +10,10 @@ endif()
 add_subdirectory(Utilities)
 add_subdirectory(NeuralNetwork)
 add_subdirectory(Test)
-add_subdirectory(gmock)
 add_subdirectory(doc)
 
 IF(NOT DEFINED ENV{DISABLE_OCR})
 add_subdirectory(ocr)
 ENDIF()
 
-enable_testing()
-add_test(NeuralNetwork_ut NeuralNetwork_ut/NeuralNetwork_ut)
 

@@ -13,7 +13,6 @@ add_library(Utilities
 	    MPL/TypeList.h
 	    MPL/TypeTraits.h
 	    Memory/LRUCache.h
-	    StrUtil/StrUtil.h
 	    System/Time.h
 	    System/Time.cpp)
 

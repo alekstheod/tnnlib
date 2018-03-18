@@ -43,12 +43,12 @@
 
 #include <Utilities/Design/Factory.h>
 #include <Utilities/Design/Singleton.h>
-#include <Utilities/StrUtil/StrUtil.h>
-#include <Utilities/StrUtil/StrUtil.h>
 #include <Utilities/System/Time.h>
 
-#include <boost/archive/xml_iarchive.hpp>
-#include <boost/archive/xml_oarchive.hpp>
+#include <cereal/archives/xml.hpp>
+#include <cereal/types/tuple.hpp>
+#include <cereal/types/vector.hpp>
+#include <cereal/types/array.hpp>
 
 #include <array>
 #include <iostream>
@@ -70,7 +70,7 @@ int main(int argc, char** argv) {
                        Connection< InputRange< 0, 1 >, 1 > >;
 
     using Perceptron =
-     nn::Perceptron< float, ConvLayer, nn::NeuralLayer< nn::Neuron, nn::TanhFunction, 20 >, nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, 1 > >;
+     nn::Perceptron< float, ConvLayer, nn::NeuralLayer< nn::Neuron, nn::TanhFunction, 3 >, nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, 1 > >;
 
     typedef BepAlgorithm< Perceptron > Algo;
     Algo algorithm(0.09f);
@@ -81,7 +81,7 @@ int main(int argc, char** argv) {
 
     unsigned int numOfEpochs =
      argc < 2 ? std::numeric_limits< unsigned int >::max() :
-                numOfEpochs = utils::lexical_cast< unsigned int >(argv[1]);
+                numOfEpochs = std::atoi(argv[1]);
 
     Perceptron perceptron =
      algorithm.calculate(prototypes.begin(),
@@ -98,15 +98,16 @@ int main(int argc, char** argv) {
     {
         std::stringstream strm;
         {
-            // Archive has to be destroyed before using the stream
-            boost::archive::xml_oarchive oa(strm);
-            // write class instance to archive
-            oa << BOOST_SERIALIZATION_NVP(memento);
+            cereal::XMLOutputArchive oa(strm);
+            oa << cereal::make_nvp("perceptron", memento);
         }
 
         Memento memento2;
-        boost::archive::xml_iarchive ia(strm);
-        ia >> BOOST_SERIALIZATION_NVP(memento2);
+
+        std::string str = strm.str();
+        std::stringstream strStream(str);
+        cereal::XMLInputArchive ia(strStream);
+        ia >> memento2;
         perceptron2.setMemento(memento);
     }
 

@@ -38,6 +38,8 @@
 #include <boost/bind/placeholders.hpp>
 #include <boost/iterator/transform_iterator.hpp>
 
+#include <range/v3/all.hpp>
+
 #include <algorithm>
 #include <array>
 #include <functional>
@@ -162,14 +164,11 @@ namespace nn {
              * @see {INeuralLayer}
              */
             const Memento getMemento() const {
+                using namespace ranges;
                 Memento memento;
-                std::vector< NeuronMemento > neurons(CONST_NEURONS_NUMBER);
-                std::transform(m_neurons.begin(),
-                               m_neurons.end(),
-                               neurons.begin(),
-                               std::bind(&Neuron::getMemento, std::placeholders::_1));
-
-                memento.setNeurons(neurons);
+                memento.neurons =
+                 m_neurons |
+                 view::transform([](const Neuron& n) { return n.getMemento(); });
                 return memento;
             }
 
@@ -177,20 +176,12 @@ namespace nn {
              * @see {INeuralLayer}
              */
             void setMemento(const Memento& memento) {
-                auto neurons = memento.getNeurons();
-                std::vector< Neuron > internalNeurons(CONST_NEURONS_NUMBER);
-                std::transform(neurons.begin(),
-                               neurons.end(),
-                               internalNeurons.begin(),
-                               [](NeuronMemento& m) {
-                                   Neuron neuron;
-                                   neuron->setMemento(m);
-                                   return neuron;
-                               });
-
-                std::copy(internalNeurons.begin(),
-                          internalNeurons.end(),
-                          m_neurons.begin());
+                using namespace ranges;
+                m_neurons = memento.neurons | view::transform([](const NeuronMemento& m) {
+                                Neuron neuron;
+                                neuron->setMemento(m);
+                                return neuron;
+                            });
             }
 
             /**
