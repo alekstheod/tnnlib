@@ -38,11 +38,12 @@
 
 #include <Utilities/MPL/Tuple.h>
 
-#include <vector>
+#include <algorithm>
 #include <cassert>
+#include <functional>
 #include <tuple>
 #include <type_traits>
-#include <functional>
+#include <vector>
 
 namespace nn {
 
