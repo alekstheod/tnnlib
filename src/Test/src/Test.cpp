@@ -66,8 +66,8 @@ using namespace utils;
 int main(int argc, char** argv) {
     using ConvLayer =
      ConvolutionLayer< nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, 2, 2 >,
-                       Connection< InputRange< 0, 1 >, 0 >,
-                       Connection< InputRange< 0, 1 >, 1 > >;
+                       Connection< Range< 0, 1 >, 0 >,
+                       Connection< Range< 0, 1 >, 1 > >;
 
     using Perceptron =
      nn::Perceptron< float, ConvLayer, nn::NeuralLayer< nn::Neuron, nn::TanhFunction, 3 >, nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, 1 > >;
@@ -79,9 +79,8 @@ int main(int argc, char** argv) {
                                                    Algo::Prototype{{1.f, 1.f}, {0.f}},
                                                    Algo::Prototype{{0.f, 0.f}, {0.f}}};
 
-    unsigned int numOfEpochs =
-     argc < 2 ? std::numeric_limits< unsigned int >::max() :
-                numOfEpochs = std::atoi(argv[1]);
+    unsigned int numOfEpochs = argc < 2 ? std::numeric_limits< unsigned int >::max() :
+                                          numOfEpochs = std::atoi(argv[1]);
 
     Perceptron perceptron =
      algorithm.calculate(prototypes.begin(),
