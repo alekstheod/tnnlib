@@ -14,8 +14,7 @@ endif()
 link_directories(${Boost_LIBRARY_DIRS})
 
 add_executable(NeuralNetwork_ut 
-                PerceptronTest.cpp
-                ConvolutionLayerTest.cpp)
+                main.cpp)
 
 add_definitions(-DETC_DIRECTORY="${CMAKE_CURRENT_SOURCE_DIR}/etc")
 target_include_directories(NeuralNetwork_ut

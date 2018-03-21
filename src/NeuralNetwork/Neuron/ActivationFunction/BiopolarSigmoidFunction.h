@@ -51,7 +51,7 @@ namespace nn {
 
       public:
         template< typename Iterator >
-        Var calculateEquation(const Var& sum, Iterator begin, Iterator end) const {
+        Var calculate(const Var& sum, Iterator begin, Iterator end) const {
             Var tmp = sum * boost::numeric_cast< Var >(-2.0f);
             return boost::numeric_cast< Var >(2.0f) /
                     (boost::numeric_cast< Var >(1.0f) + std::exp(tmp)) -
