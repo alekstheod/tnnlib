@@ -314,7 +314,6 @@ namespace nn {
               std::size_t size,
               std::size_t inputsNumber = 2,
               int scaleFactor = 1 >
-
     using OpenCLNeuralLayer =
      detail::OpenCLNeuralLayer< NeuralLayer< NeuronType, ActivationFunctionType, size, inputsNumber, scaleFactor > >;
 } // namespace nn

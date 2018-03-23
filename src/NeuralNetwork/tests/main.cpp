@@ -18,12 +18,16 @@
 #include <cereal/types/vector.hpp>
 #include <cereal/types/array.hpp>
 
+#include <vector>
+#include <iostream>
+
 namespace {
     template< typename Neuron >
     bool hasValidInputs(const Neuron& neuron, const std::vector< float >& expected) {
         for(int i = 0; i < expected.size(); i++) {
-            if(neuron[i].value != expected[i])
+            if(neuron[i].value != expected[i] || neuron[i].weight != 0) {
                 return false;
+            }
         }
 
         return true;
@@ -95,11 +99,14 @@ SCENARIO("Convolution layer set inputs", "[layer][convolution][forward]") {
      "[4-9]->3,\n"
      "[6-10]->4") {
         using ConvolutionLayer =
-         nn::ConvolutionLayer< nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, 4, 10 >,
-                               nn::Connection< nn::Range< 0, 5 >, 0 >,
-                               nn::Connection< nn::Range< 2, 7 >, 1 >,
-                               nn::Connection< nn::Range< 4, 9 >, 2 >,
-                               nn::Connection< nn::Range< 6, 10 >, 3 > >;
+         nn::ConvolutionLayer< nn::NeuralLayer,
+                               nn::Neuron,
+                               nn::SigmoidFunction,
+                               10,
+                               std::tuple< nn::Connection< nn::Range< 0, 5 >, 0 >,
+                                           nn::Connection< nn::Range< 2, 7 >, 1 >,
+                                           nn::Connection< nn::Range< 4, 9 >, 2 >,
+                                           nn::Connection< nn::Range< 6, 10 >, 3 > > >;
 
         WHEN("Input is [0,1,2,3,4,5,6,7,8,9]") {
             ConvolutionLayer layer;
@@ -125,13 +132,52 @@ SCENARIO("Convolution layer set inputs", "[layer][convolution][forward]") {
     }
 }
 
-SCENARIO("Test neuron with sigmoid activation function",
-         "[neuron][binary][forward]") {
-    GIVEN("A neuron with a binary activation function and 2 inputs") {
-        using Neuron = nn::Neuron< nn::SigmoidFunction, float, 2 >;
-        WHEN("Input is [0,1,2,3,4,5,6,7,8,9]") {
+SCENARIO("Convolution grid set inputs", "[layer][convolution][grid][forward]") {
+    GIVEN("A convolution layer for an image 5*5, stride = 2 and margin = 1") {
+        constexpr std::size_t width = 5;
+        constexpr std::size_t height = 5;
+        constexpr std::size_t inputsNumber = width * height;
+        constexpr std::size_t margin = 1;
+        constexpr std::size_t stride = 2;
+        using ConvolutionGrid =
+         typename nn::ConvolutionGrid< width, height, stride, margin >::define;
 
-            THEN("") {
+        using ConvolutionLayer =
+         nn::ConvolutionLayer< nn::NeuralLayer, nn::Neuron, nn::SigmoidFunction, 25, ConvolutionGrid >;
+        auto layer = ConvolutionLayer{};
+        WHEN(
+         "input is a grid filled with the increasing sequence of integers") {
+            for(auto i : ranges::v3::view::ints(0, 25)) {
+                layer.setInput(i, i + 1);
+            }
+
+            THEN("The expected inputs can be described as a following") {
+                // clang-format off
+                std::vector< std::vector< float > > inputs = {
+                 {1,  2,  3,  0,  0,  
+                  6,  7,  8,  0,  0, 
+                  11, 12, 13, 0,  0, 
+                  0,  0,  0,  0,  0, 
+                  0,  0,  0,  0,  0},
+                 {0,  0,  3,  4,  5,  
+                  0,  0,  8,  9,  10, 
+                  0,  0,  13, 14, 15, 
+                  0,  0,  0,  0,  0, 
+                  0,  0,  0,  0,  0},
+                 {0,  0,  0,  0,  0,  
+                  0,  0,  0,  0,  0, 
+                  11, 12, 13, 0,  0, 
+                  16, 17, 18, 0,  0, 
+                  21, 22, 23, 0,  0},
+                 {0,  0,  0,  0,  0,  
+                  0,  0,  0,  0,  0, 
+                  0,  0,  13, 14, 15, 
+                  0,  0,  18, 19, 20, 
+                  0,  0,  23, 24, 25}};
+                // clang-format on
+                for(const auto id : ranges::v3::view::ints(0, 4)) {
+                    REQUIRE(hasValidInputs(layer[0], inputs[0]));
+                }
             }
         }
     }

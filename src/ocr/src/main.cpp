@@ -1,14 +1,17 @@
-#include <NeuralNetwork/Perceptron/Perceptron.h>
-#include <NeuralNetwork/Neuron/Neuron.h>
-#include <NeuralNetwork/NeuralLayer/NeuralLayer.h>
-#include <NeuralNetwork/Neuron/ActivationFunction/SigmoidFunction.h>
-#include <NeuralNetwork/Neuron/ActivationFunction/TanhFunction.h>
-#include <NeuralNetwork/Neuron/ActivationFunction/SoftmaxFunction.h>
-#include <NeuralNetwork/Neuron/ActivationFunction/BiopolarSigmoidFunction.h>
 #include <NeuralNetwork/LearningAlgorithm/BackPropagation/BepAlgorithm.h>
+#include <NeuralNetwork/NeuralLayer/ConvolutionLayer.h>
+#include <NeuralNetwork/NeuralLayer/NeuralLayer.h>
+#include <NeuralNetwork/Neuron/ActivationFunction/BiopolarSigmoidFunction.h>
 #include <NeuralNetwork/Neuron/ActivationFunction/LogScaleSoftmaxFunction.h>
+#include <NeuralNetwork/Neuron/ActivationFunction/SigmoidFunction.h>
+#include <NeuralNetwork/Neuron/ActivationFunction/SoftmaxFunction.h>
+#include <NeuralNetwork/Neuron/ActivationFunction/TanhFunction.h>
+#include <NeuralNetwork/Neuron/Neuron.h>
+#include <NeuralNetwork/Perceptron/Perceptron.h>
 //#include <NeuralNetwork/NeuralLayer/OpenCLNeuralLayer.h>
 #include <NeuralNetwork/Config.h>
+
+#include <Utilities/MPL/Tuple.h>
 
 #ifndef BOOST_SYSTEM_NO_DEPRECATED
 #define BOOST_SYSTEM_NO_DEPRECATED 1
@@ -54,19 +57,29 @@
 
 #include "Var.h"
 
+#include <tuple>
+
 typedef long double VarType;
 
-using namespace boost::gil;
-using namespace boost::gil::detail;
-static const std::string alphabet("0123456789");
-static const unsigned int width = 49;
-static const unsigned int height = 67;
-static const unsigned int inputsNumber = width * height;
+namespace {
+    using namespace boost::gil;
+    using namespace boost::gil::detail;
+    const std::string alphabet("0123456789");
+    constexpr std::size_t width = 49;
+    constexpr std::size_t height = 67;
+    constexpr std::size_t inputsNumber = width * height;
+    constexpr std::size_t margin = 20;
+    constexpr std::size_t stride = 15;
+} // namespace
+
+
+using ConvolutionGrid =
+ typename nn::ConvolutionGrid< width, height, stride, margin >::define;
 
 using Perceptron =
  nn::Perceptron< VarType,
-                 nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, 10, inputsNumber, 1000 >,
-                 nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, 80, 10, 1000 >,
+                 nn::ConvolutionLayer< nn::NeuralLayer, nn::Neuron, nn::SigmoidFunction, inputsNumber, ConvolutionGrid >,
+                 nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, 8 >,
                  nn::NeuralLayer< nn::Neuron, nn::SoftmaxFunction, 10, 1000 > >;
 
 using Algo = nn::bp::BepAlgorithm< Perceptron, nn::bp::CrossEntropyError >;

@@ -65,9 +65,11 @@ using namespace utils;
  */
 int main(int argc, char** argv) {
     using ConvLayer =
-     ConvolutionLayer< nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, 2, 2 >,
-                       Connection< Range< 0, 1 >, 0 >,
-                       Connection< Range< 0, 1 >, 1 > >;
+     ConvolutionLayer< nn::NeuralLayer,
+                       nn::Neuron,
+                       nn::SigmoidFunction,
+                       2,
+                       std::tuple< Connection< Range< 0, 1 >, 0 >, Connection< Range< 0, 1 >, 1 > > >;
 
     using Perceptron =
      nn::Perceptron< float, ConvLayer, nn::NeuralLayer< nn::Neuron, nn::TanhFunction, 3 >, nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, 1 > >;
