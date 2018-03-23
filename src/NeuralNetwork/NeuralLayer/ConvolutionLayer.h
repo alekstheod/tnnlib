@@ -5,6 +5,9 @@
 #include <cstddef>
 #include <tuple>
 
+#include <tuple>
+#include <utility>
+
 namespace nn {
     template< int From, int To >
     struct Range {
