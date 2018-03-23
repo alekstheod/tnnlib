@@ -224,23 +224,6 @@ namespace nn {
                 return m_internal[id];
             }
 
-            reverse_iterator rbegin() {
-                return m_internal.rbegin();
-            }
-
-            reverse_iterator rend() {
-                return m_internal.rend();
-            }
-
-            const_reverse_iterator rbegin() const {
-                return m_internal.rbegin();
-            }
-
-            const_reverse_iterator rend() const {
-                return m_internal.rend();
-            }
-
-
             /**
              * @see {INeuralLayer}
              */
@@ -313,7 +296,8 @@ namespace nn {
               template< class > class ActivationFunctionType,
               std::size_t size,
               std::size_t inputsNumber = 2,
-              int scaleFactor = 1 >
+              int scaleFactor = 1,
+              typename Var = float >
     using OpenCLNeuralLayer =
      detail::OpenCLNeuralLayer< NeuralLayer< NeuronType, ActivationFunctionType, size, inputsNumber, scaleFactor > >;
 } // namespace nn
