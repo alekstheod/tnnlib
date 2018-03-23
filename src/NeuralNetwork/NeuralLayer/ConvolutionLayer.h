@@ -49,7 +49,7 @@ namespace nn {
         };
 
         template< std::size_t... ints >
-        static constexpr auto make(std::integer_sequence< std::size_t, ints... >) {
+        static constexpr auto make(std::index_sequence< ints... >) {
             return std::tuple< Connection< Area< calcPoint(ints) >, ints >... >{};
         }
 
