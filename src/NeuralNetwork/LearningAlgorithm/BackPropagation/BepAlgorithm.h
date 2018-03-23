@@ -148,8 +148,7 @@ namespace nn {
                                             boost::numeric_cast< Var >(0.f),
                                             runTrainingStep);
 
-                    epochCounter++;
-                } while(errorFunc(epochCounter, error));
+                } while(errorFunc(++epochCounter, error));
 
                 PerceptronType perceptron;
                 perceptron.setMemento(m_perceptron.getMemento());

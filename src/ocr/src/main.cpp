@@ -68,8 +68,8 @@ namespace {
     constexpr std::size_t width = 49;
     constexpr std::size_t height = 67;
     constexpr std::size_t inputsNumber = width * height;
-    constexpr std::size_t margin = 20;
-    constexpr std::size_t stride = 15;
+    constexpr std::size_t margin = 15;
+    constexpr std::size_t stride = 10;
 } // namespace
 
 
@@ -79,7 +79,6 @@ using ConvolutionGrid =
 using Perceptron =
  nn::Perceptron< VarType,
                  nn::ConvolutionLayer< nn::NeuralLayer, nn::Neuron, nn::SigmoidFunction, inputsNumber, ConvolutionGrid >,
-                 nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, 8 >,
                  nn::NeuralLayer< nn::Neuron, nn::SoftmaxFunction, 10, 1000 > >;
 
 using Algo = nn::bp::BepAlgorithm< Perceptron, nn::bp::CrossEntropyError >;
@@ -125,7 +124,7 @@ void readImage(std::string fileName, Iterator out) {
     for(int y = 0; y < srcView.height(); ++y) {
         gray8c_view_t::x_iterator src_it(srcView.row_begin(y));
         for(int x = 0; x < srcView.width(); ++x) {
-            *out = src_it[x] / 255.f; // < 130? 1.f: -1.f;//255.f;
+            *out = src_it[x] < 130 ? 1.f : -1.f; // 255.f;
             out++;
         }
     }
@@ -211,10 +210,10 @@ void calculateWeights(std::string imagesPath) {
         }
     }
 
-    auto errorFunc = [](VarType error, unsigned int epoch) {
-        if(epoch % 1000 == 0) {
-            std::cout << "Epoch:" << epoch << " error:" << error << std::endl;
-        }
+    auto errorFunc = [](unsigned int epoch, VarType error) {
+        // if(epoch % 100 == 0) {
+        std::cout << "Epoch:" << epoch << " error:" << error << std::endl;
+        // }
 
         return error > 0.001f;
     };
