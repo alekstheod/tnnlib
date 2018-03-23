@@ -6,7 +6,7 @@ addons:
     - ubuntu-toolchain-r-test
     - kalakris-cmake
     packages:
-    - clang-5.0.1
+    - clang-5.0
     - libboost1.54-all-dev
     - cmake
     - valgrind
