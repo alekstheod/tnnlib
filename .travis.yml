@@ -11,7 +11,7 @@ addons:
     - cmake
     - valgrind
 compiler:
-- gcc
+- clang
 notifications:
   email:
     recipients:
@@ -22,9 +22,6 @@ before_script:
 - cd src
 script:
 - apt-cache search boost
-- export CXX="clang++" CC="clang"
-- clang --version
-- echo $CXX $CC
 - cmake -DCMAKE_DISABLE_FIND_PACKAGE_OpenCL:bool=TRUE CMakeLists.txt
 - make
 - valgrind --leak-check=full --error-exitcode=1 ./Test/Test 1000 > /dev/null
