@@ -7,10 +7,6 @@ set(BOOST_MIN_VERSION "1.46.0")
 find_package(Boost ${BOOST_MIN_VERSION} COMPONENTS ${BOOST_COMPONENTS_NEEDED} REQUIRED)
 if(Boost_FOUND)
 
-if(NOT MSVC)
-	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
-endif()
-
 link_directories(${Boost_LIBRARY_DIRS})
 
 add_executable(NeuralNetwork_ut 
