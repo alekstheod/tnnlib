@@ -31,7 +31,6 @@ before_script:
 - ls /usr/include/c++
 - apt-cache search boost
 - cmake -DCMAKE_DISABLE_FIND_PACKAGE_OpenCL:bool=TRUE CMakeLists.txt
-- cat compile_commands.json
 - make
 - valgrind --leak-check=full --error-exitcode=1 ./Test/Test 1000 > /dev/null
 after_success:
