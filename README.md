@@ -38,7 +38,7 @@ Calculating perceptron by using BEP algorithm:
     Perceptron perceptron = algorithm.calculatePerceptron ( prototypes.begin(), prototypes.end(),
                                                             [] ( unsigned int epoch, float error, ) {
                                                                 std::cout << error << std::endl;
-                                                                return error <= 0.01.f
+                                                                return error >= 0.01.f
                                                             },
                                                             numOfEpochs);
 ```                                     
