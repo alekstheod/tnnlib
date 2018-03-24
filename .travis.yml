@@ -26,14 +26,13 @@ notifications:
     - alekstheod@gmail.com
     on_success: always
     on_failure: always
+
+script:
+  mkdir src/build && cd src/build && cmake -DCMAKE_DISABLE_FIND_PACKAGE_OpenCL:bool=TRUE ../CMakeLists.txt && make && make test
 before_script:
-- cd src
-- ls /usr/include/c++
-- apt-cache search boost
-- cmake -DCMAKE_DISABLE_FIND_PACKAGE_OpenCL:bool=TRUE CMakeLists.txt
-- make
-- valgrind --leak-check=full --error-exitcode=1 ./Test/Test 1000 > /dev/null
+
 after_success:
+- valgrind --leak-check=full --error-exitcode=1 ./Test/Test 1000 > /dev/null
 - cd ..
 - if [ $TRAVIS_BRANCH == $TRAVIS_TAG ]; then rake deploy; fi
 - git checkout -b master
