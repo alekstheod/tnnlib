@@ -28,7 +28,7 @@ notifications:
     on_failure: always
 
 script:
-  mkdir src/build && cd src/build && cmake -DCMAKE_DISABLE_FIND_PACKAGE_OpenCL:bool=TRUE ../CMakeLists.txt && make && make test
+   cd src && cmake -DCMAKE_DISABLE_FIND_PACKAGE_OpenCL:bool=TRUE CMakeLists.txt && make
 before_script:
 
 after_success:
