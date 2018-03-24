@@ -19,12 +19,6 @@
 #undef BOOST_SYSTEM_NO_DEPRECATED
 #endif
 
-#include <cmath>
-#include <fstream>
-#include <iomanip>
-#include <iostream>
-#include <set>
-
 #define png_infopp_NULL (png_infopp) NULL
 #define int_p_NULL (int*)NULL
 
@@ -58,6 +52,11 @@
 #include "Var.h"
 
 #include <tuple>
+#include <cmath>
+#include <fstream>
+#include <iomanip>
+#include <iostream>
+#include <set>
 
 typedef long double VarType;
 

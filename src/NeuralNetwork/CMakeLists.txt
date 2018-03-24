@@ -1,7 +1,6 @@
 project(NeuralNetwork)
 cmake_minimum_required(VERSION 2.8)
 
-list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/NeuralNetwork/cmake")
 SET(BOOST_MIN_VERSION "1.46.0")
 find_package(Boost ${BOOST_MIN_VERSION} REQUIRED) 
 find_package(OpenCL)
@@ -49,7 +48,7 @@ target_include_directories(NeuralNetwork
 target_link_libraries(NeuralNetwork 
 		      Utilities
 		      ${Boost_LIBRARIES}
-		      ${OPENCL_LIBRARIES})
+		      ${OpenCL_LIBRARY})
 		      
 enable_testing()	      
 add_subdirectory(tests)
