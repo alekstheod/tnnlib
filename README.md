@@ -35,12 +35,12 @@ Calculating perceptron by using BEP algorithm:
       numOfEpochs = utils::lexical_cast< unsigned int >(argv[1]);
     }
     
-    Perceptron perceptron = algorithm.calculatePerceptron ( prototypes.begin(), prototypes.end(),
-                                                            [] ( unsigned int epoch, float error, ) {
-                                                                std::cout << error << std::endl;
-                                                                return error >= 0.01.f
-                                                            },
-                                                            numOfEpochs);
+    Perceptron perceptron = algorithm.calculate ( prototypes.begin(), prototypes.end(),
+                                                  [] ( unsigned int epoch, float error, ) {
+                                                        std::cout << error << std::endl;
+                                                        return error >= 0.01.f
+                                                  },
+                                                  numOfEpochs);
 ```                                     
 In order to generate a VS solution please use a CMake with the following options:
 
