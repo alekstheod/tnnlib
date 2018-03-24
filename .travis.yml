@@ -5,13 +5,16 @@ addons:
     - boost-latest
     - ubuntu-toolchain-r-test
     - kalakris-cmake
+    - llvm-toolchain-trusty-5.0
     packages:
-    - clang
+    - clang-5.0
     - libboost1.54-all-dev
     - cmake
     - valgrind
 compiler:
-- clang
+  - clang-5.0
+before-install:
+  -eval CC=clang-5.0 && CXX=clang++-5.0
 notifications:
   email:
     recipients:
@@ -20,10 +23,7 @@ notifications:
     on_failure: always
 before_script:
 - cd src
-- ls /usr/include/c++
-- apt-cache search boost
 - cmake -DCMAKE_DISABLE_FIND_PACKAGE_OpenCL:bool=TRUE CMakeLists.txt
-- cat compile_commands.json
 - make
 - valgrind --leak-check=full --error-exitcode=1 ./Test/Test 1000 > /dev/null
 after_success:
