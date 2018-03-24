@@ -22,7 +22,7 @@ Calculating perceptron by using BEP algorithm:
 
 ```cpp
     typedef BepAlgorithm< Perceptron > Algo;
-    Algo algorithm (0.09f, 0.01f );
+    Algo algorithm (0.09f );
 
     std::array< Algo::Prototype, 4> prototypes= { Algo::Prototype{{0.f, 1.f}, {1.f}} ,
         Algo::Prototype{{1.f, 0.f}, {1.f}} ,
@@ -36,8 +36,9 @@ Calculating perceptron by using BEP algorithm:
     }
     
     Perceptron perceptron = algorithm.calculatePerceptron ( prototypes.begin(), prototypes.end(),
-                                                            [] ( float error ) {
+                                                            [] ( unsigned int epoch, float error, ) {
                                                                 std::cout << error << std::endl;
+                                                                return error <= 0.01.f
                                                             },
                                                             numOfEpochs);
 ```                                     
