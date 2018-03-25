@@ -54,3 +54,6 @@ note
 ====
 If your system does not have installed OpenCL you can disable it using the following flag:
 -DCMAKE_DISABLE_FIND_PACKAGE_OpenCL:bool=TRUE
+
+====
+The convolution layer is not yet ready
