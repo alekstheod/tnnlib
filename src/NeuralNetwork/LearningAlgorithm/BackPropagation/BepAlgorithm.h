@@ -54,9 +54,8 @@ namespace nn {
           private:
             using Var = typename PerceptronType::Var;
 
-            BOOST_STATIC_CONSTEXPR unsigned int inputsNumber = PerceptronType::CONST_INPUTS_NUMBER;
-            BOOST_STATIC_CONSTEXPR unsigned int outputsNumber =
-             PerceptronType::CONST_OUTPUTS_NUMBER;
+            static constexpr unsigned int inputsNumber = PerceptronType::CONST_INPUTS_NUMBER;
+            static constexpr unsigned int outputsNumber = PerceptronType::CONST_OUTPUTS_NUMBER;
 
             using Perceptron = typename PerceptronType::template wrap< BPNeuralLayer >;
             using Layers = typename Perceptron::Layers;

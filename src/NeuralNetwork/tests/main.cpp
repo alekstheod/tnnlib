@@ -91,47 +91,6 @@ SCENARIO("Perceptron calculation", "[perceptron][precalculated][forward]") {
     }
 }
 
-SCENARIO("Convolution layer set inputs", "[layer][convolution][forward]") {
-    GIVEN(
-     "A convolution layer with a set of connections:\n"
-     "[0-5]->0,\n"
-     "[2-7]->2,\n"
-     "[4-9]->3,\n"
-     "[6-10]->4") {
-        using ConvolutionLayer =
-         nn::ConvolutionLayer< nn::NeuralLayer,
-                               nn::Neuron,
-                               nn::SigmoidFunction,
-                               10,
-                               std::tuple< nn::Connection< nn::Range< 0, 5 >, 0 >,
-                                           nn::Connection< nn::Range< 2, 7 >, 1 >,
-                                           nn::Connection< nn::Range< 4, 9 >, 2 >,
-                                           nn::Connection< nn::Range< 6, 10 >, 3 > > >;
-
-        WHEN("Input is [0,1,2,3,4,5,6,7,8,9]") {
-            ConvolutionLayer layer;
-            for(const auto input : ranges::v3::view::ints(0, 10)) {
-                layer.setInput(input, input);
-            }
-            THEN(
-             "neuron 0 has inputs = [0,1,2,3,4,0,0,0,0,0]\n"
-             "neuron 1 has inputs = [0,0,2,3,4,5,6,0,0,0]\n"
-             "neuron 2 has inputs = [0,0,0,0,4,5,6,7,8,0]\n"
-             "neuron 3 has inputs = [0,0,0,0,0,0,6,7,8,9]\n") {
-                std::vector< std::vector< float > > inputs = {
-                 {0, 1, 2, 3, 4, 0, 0, 0, 0, 0},
-                 {0, 0, 2, 3, 4, 5, 6, 0, 0, 0},
-                 {0, 0, 0, 0, 4, 5, 6, 7, 8, 0},
-                 {0, 0, 0, 0, 0, 0, 6, 7, 8, 9}};
-
-                for(const auto id : ranges::v3::view::ints(0, 4)) {
-                    REQUIRE(hasValidInputs(layer[id], inputs[id]));
-                }
-            }
-        }
-    }
-}
-
 SCENARIO("Convolution grid set inputs", "[layer][convolution][grid][forward]") {
     GIVEN("A convolution layer for an image 5*5, stride = 2 and margin = 1") {
         constexpr std::size_t width = 5;
@@ -152,32 +111,67 @@ SCENARIO("Convolution grid set inputs", "[layer][convolution][grid][forward]") {
             }
 
             THEN("The expected inputs can be described as a following") {
-                // clang-format off
                 std::vector< std::vector< float > > inputs = {
-                 {1,  2,  3,  0,  0,  
-                  6,  7,  8,  0,  0, 
-                  11, 12, 13, 0,  0, 
-                  0,  0,  0,  0,  0, 
-                  0,  0,  0,  0,  0},
-                 {0,  0,  3,  4,  5,  
-                  0,  0,  8,  9,  10, 
-                  0,  0,  13, 14, 15, 
-                  0,  0,  0,  0,  0, 
-                  0,  0,  0,  0,  0},
-                 {0,  0,  0,  0,  0,  
-                  0,  0,  0,  0,  0, 
-                  11, 12, 13, 0,  0, 
-                  16, 17, 18, 0,  0, 
-                  21, 22, 23, 0,  0},
-                 {0,  0,  0,  0,  0,  
-                  0,  0,  0,  0,  0, 
-                  0,  0,  13, 14, 15, 
-                  0,  0,  18, 19, 20, 
-                  0,  0,  23, 24, 25}};
-                // clang-format on
+                 {1, 2, 3, 6, 7, 8, 11, 12, 13},
+                 {3, 4, 5, 8, 9, 10, 13, 14, 15},
+                 {11, 12, 13, 16, 17, 18, 21, 22, 23},
+                 {13, 14, 15, 18, 19, 20, 23, 24, 25}};
                 for(const auto id : ranges::v3::view::ints(0, 4)) {
-                    REQUIRE(hasValidInputs(layer[0], inputs[0]));
+                    REQUIRE(hasValidInputs(layer[id], inputs[id]));
                 }
+            }
+        }
+    }
+}
+
+SCENARIO("Neuron output calculation", "[neuron][forward]") {
+    GIVEN("Neuron with 3 inputs and sigmoid activation function") {
+        nn::Neuron< nn::SigmoidFunction, float, 3 > neuron;
+        std::vector< float > dotProducts;
+        WHEN("Weights are set to 1 and bias is equal to 1") {
+            neuron.setBias(1);
+            for(auto i : ranges::v3::view::ints(0, 3)) {
+                neuron.setWeight(i, 1);
+                neuron.setInput(i, 1);
+            }
+
+            THEN("The output of the neuron is 1/(1+exp(-4)) -> 0.982") {
+                const auto output =
+                 neuron.calculateOutput(dotProducts.begin(), dotProducts.end());
+                REQUIRE(output == Approx(0.982f).margin(0.001));
+            }
+        }
+        WHEN("Weights are set to 0 and bias is equal to 0") {
+            neuron.setBias(0);
+            for(auto i : ranges::v3::view::ints(0, 3)) {
+                neuron.setWeight(i, 0);
+                neuron.setInput(i, 1);
+            }
+            THEN("The output of the neuron is 1/1+exp(0) -> 0.5") {
+                const auto output =
+                 neuron.calculateOutput(dotProducts.begin(), dotProducts.end());
+                REQUIRE(output == Approx(0.5f).margin(0.001));
+            }
+        }
+        WHEN(
+         "Weights are set to 1 bias is equal to 0 and inputs are set to 0") {
+            neuron.setBias(0);
+            for(auto i : ranges::v3::view::ints(0, 3)) {
+                neuron.setWeight(i, 1);
+                neuron.setInput(i, 0);
+            }
+            THEN("The output of the neuron is 1/1+exp(0) -> 0.5") {
+                const auto output =
+                 neuron.calculateOutput(dotProducts.begin(), dotProducts.end());
+                REQUIRE(output == Approx(0.5f).margin(0.001));
+            }
+        }
+    }
+
+    GIVEN("Neuron with 3 inputs and tahn activation function") {
+        nn::Neuron< nn::TanhFunction, float, 3 > neuron;
+        WHEN("Weights are set to 1 and bias is equal to 1") {
+            THEN("The output of neuron is") {
             }
         }
     }

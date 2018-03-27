@@ -64,15 +64,11 @@ using namespace utils;
  *
  */
 int main(int argc, char** argv) {
-    using ConvLayer =
-     ConvolutionLayer< nn::NeuralLayer,
-                       nn::Neuron,
-                       nn::SigmoidFunction,
-                       2,
-                       std::tuple< Connection< Range< 0, 1 >, 0 >, Connection< Range< 0, 1 >, 1 > > >;
-
     using Perceptron =
-     nn::Perceptron< float, ConvLayer, nn::NeuralLayer< nn::Neuron, nn::TanhFunction, 3 >, nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, 1 > >;
+     nn::Perceptron< float,
+                     nn::NeuralLayer< nn::Neuron, nn::TanhFunction, 2 >,
+                     nn::NeuralLayer< nn::Neuron, nn::TanhFunction, 4 >,
+                     nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, 1 > >;
 
     typedef BepAlgorithm< Perceptron > Algo;
     Algo algorithm(0.09f);
