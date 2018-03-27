@@ -123,7 +123,7 @@ void readImage(std::string fileName, Iterator out) {
     for(int y = 0; y < srcView.height(); ++y) {
         gray8c_view_t::x_iterator src_it(srcView.row_begin(y));
         for(int x = 0; x < srcView.width(); ++x) {
-            *out = src_it[x] < 130 ? 1.f : -1.f; // 255.f;
+            *out = src_it[x];
             out++;
         }
     }

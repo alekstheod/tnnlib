@@ -56,6 +56,7 @@ namespace nn {
         struct Grid {
             static constexpr std::size_t frameSize = (margin * 2 + 1) * (margin * 2 + 1);
             static constexpr std::size_t size = std::tuple_size< Connections >::value;
+            static constexpr std::size_t inputsNumber = width * height;
             Connections connections;
         };
 
@@ -96,7 +97,7 @@ namespace nn {
             template< typename VarType >
             using use =
              ConvolutionLayer< typename Internal::template use< VarType >, Grid >;
-            using Internal::CONST_INPUTS_NUMBER;
+            static constexpr std::size_t CONST_INPUTS_NUMBER = Grid::inputsNumber;
             using Internal::CONST_NEURONS_NUMBER;
 
             /**
