@@ -15,6 +15,8 @@ namespace utils {
 
         enum { value = sizeof(hasArrow< T >(0)) == sizeof(char) };
     };
+
+    struct empty {};
 } // namespace utils
 
 #endif

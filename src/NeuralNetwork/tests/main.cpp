@@ -167,12 +167,4 @@ SCENARIO("Neuron output calculation", "[neuron][forward]") {
             }
         }
     }
-
-    GIVEN("Neuron with 3 inputs and tahn activation function") {
-        nn::Neuron< nn::TanhFunction, float, 3 > neuron;
-        WHEN("Weights are set to 1 and bias is equal to 1") {
-            THEN("The output of neuron is") {
-            }
-        }
-    }
 }

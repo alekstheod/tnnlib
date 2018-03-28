@@ -55,8 +55,10 @@ namespace nn {
         template< typename Connections >
         struct Grid {
             static constexpr std::size_t frameSize = (margin * 2 + 1) * (margin * 2 + 1);
-            static constexpr std::size_t size = std::tuple_size< Connections >::value;
-            static constexpr std::size_t inputsNumber = width * height;
+            static constexpr std::size_t framesNumber =
+             std::tuple_size< Connections >::value;
+
+            static constexpr std::size_t size = width * height;
             Connections connections;
         };
 
@@ -91,13 +93,12 @@ namespace nn {
              ConvolutionLayer< typename Internal::template wrap< NewType >, Grid >;
 
             template< unsigned int inputs >
-            using resize =
-             ConvolutionLayer< typename Internal::template resize< inputs >, Grid >;
+            using resize = ConvolutionLayer;
 
             template< typename VarType >
             using use =
              ConvolutionLayer< typename Internal::template use< VarType >, Grid >;
-            static constexpr std::size_t CONST_INPUTS_NUMBER = Grid::inputsNumber;
+            static constexpr std::size_t CONST_INPUTS_NUMBER = Grid::size;
             using Internal::CONST_NEURONS_NUMBER;
 
             /**
@@ -131,10 +132,9 @@ namespace nn {
                         typename Var = float > class NeuralLayerType,
               template< template< class > class, class, std::size_t, int > class NeuronType,
               template< class > class ActivationFunctionType,
-              std::size_t inputsNumber,
+              std::size_t,
               typename Grid,
               typename Var = float >
-    using ConvolutionLayer = detail::ConvolutionLayer<
-     typename NeuralLayerType< NeuronType, ActivationFunctionType, Grid::size, inputsNumber >::template resize< Grid::frameSize >,
-     Grid >;
+    using ConvolutionLayer =
+     detail::ConvolutionLayer< NeuralLayerType< NeuronType, ActivationFunctionType, Grid::framesNumber, Grid::frameSize >, Grid >;
 } // namespace nn

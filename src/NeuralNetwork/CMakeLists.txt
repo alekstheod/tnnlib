@@ -13,7 +13,6 @@ add_library(NeuralNetwork
 	  LearningAlgorithm/BackPropagation/BPNeuralLayer.h
 	  LearningAlgorithm/BackPropagation/BPNeuron.h
 	  LearningAlgorithm/BackPropagation/ErrorFunction.h
-	  LearningAlgorithm/BackPropagation/OutputNeuralLayer.h
 	  Neuron/INeuron.h
 	  Neuron/Neuron.h
 	  Neuron/ActivationFunction/BiopolarSigmoidFunction.h
