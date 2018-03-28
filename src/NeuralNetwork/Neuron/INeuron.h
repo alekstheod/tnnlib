@@ -35,11 +35,11 @@ namespace nn {
     template< class Neuron >
     class INeuron {
       public:
-        typedef typename Neuron::Var Var;
-        typedef typename Neuron::OutputFunction OutputFunction;
-        typedef typename Neuron::Memento Memento;
-        typedef typename Neuron::Input Input;
-        typedef Neuron NeuronType;
+        using Var = typename Neuron::Var;
+        using OutputFunction = typename Neuron::OutputFunction;
+        using Memento = typename Neuron::Memento;
+        using Input = typename Neuron::Input;
+        using NeuronType = Neuron;
 
       private:
         Neuron m_neuron;

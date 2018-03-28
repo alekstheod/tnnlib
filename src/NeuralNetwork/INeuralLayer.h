@@ -8,30 +8,29 @@ namespace nn {
     template< typename NeuralLayerType >
     class INeuralLayer {
       public:
-        using NeuralLayer = NeuralLayerType;
+        using Internal = NeuralLayerType;
         using Memento = typename NeuralLayerType::Memento;
-        using Var = typename NeuralLayer::Var;
-        using Neuron = typename NeuralLayer::Neuron;
+        using Var = typename Internal::Var;
+        using Neuron = typename Internal::Neuron;
 
-        static constexpr std::size_t CONST_INPUTS_NUMBER = NeuralLayer::CONST_INPUTS_NUMBER;
+        static constexpr std::size_t CONST_INPUTS_NUMBER = Internal::CONST_INPUTS_NUMBER;
 
       private:
-        NeuralLayer m_neuralLayer;
+        Internal m_neuralLayer;
 
       public:
         template< typename... Args >
         INeuralLayer(Args... args) : m_neuralLayer(args...) {
         }
 
-        INeuralLayer(const NeuralLayer& neuralLayer)
-         : m_neuralLayer(neuralLayer) {
+        INeuralLayer(const Internal& neuralLayer) : m_neuralLayer(neuralLayer) {
         }
 
-        NeuralLayer& operator*() {
+        Internal& operator*() {
             return m_neuralLayer;
         }
 
-        INeuralLayer(NeuralLayer neuralLayer) : m_neuralLayer(neuralLayer) {
+        INeuralLayer(Internal neuralLayer) : m_neuralLayer(neuralLayer) {
         }
 
         auto cbegin() const -> decltype(m_neuralLayer.cbegin()) {
@@ -68,7 +67,7 @@ namespace nn {
             return m_neuralLayer.getOutput(outputId);
         }
 
-        NeuralLayer* operator->() {
+        Internal* operator->() {
             return &m_neuralLayer;
         }
 
@@ -83,7 +82,7 @@ namespace nn {
             return m_neuralLayer[id];
         }
 
-        operator NeuralLayerType&() {
+        operator Internal&() {
             return &m_neuralLayer;
         }
 

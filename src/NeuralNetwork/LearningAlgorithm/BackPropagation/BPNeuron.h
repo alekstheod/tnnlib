@@ -30,30 +30,57 @@
 #pragma once
 
 #include <NeuralNetwork/Neuron/INeuron.h>
+
+#include <Utilities/MPL/TypeTraits.h>
+
 #include <boost/numeric/conversion/cast.hpp>
+
 #include <functional>
+#include <type_traits>
 
 namespace nn {
 
     namespace bp {
+
+        template< typename Internal >
+        class BPNeuron;
+
+        // TODO please throw this out
+        // This code fixes the blowing object when using
+        // rebind functionality
+        namespace detail {
+            template< typename Internal >
+            struct unwrapNeuron {
+                using type = Internal;
+            };
+
+            template< typename Internal >
+            struct unwrapNeuron< BPNeuron< Internal > > {
+                using type = typename unwrapNeuron< Internal >::type;
+            };
+        } // namespace detail
+
         /*
          * Represent the back error propagation Neuron trainer.
          * This class holds a pointer to neuron which should
          * be trained with back error propagation algorithm.
          */
         template< class NeuronType >
-        class BPNeuron : public INeuron< NeuronType > {
+        class BPNeuron
+         : public INeuron< typename detail::unwrapNeuron< NeuronType >::type > {
           public:
-            using Neuron = nn::INeuron< NeuronType >;
+            using Internal = typename detail::unwrapNeuron< NeuronType >::type;
+            using Neuron = nn::INeuron< Internal >;
             using Var = typename Neuron::Var;
             using Memento = typename Neuron::Memento;
             using OutputFunction = typename Neuron::OutputFunction;
+            using Input = typename Neuron::Input;
 
             template< typename EquationType >
-            using use = BPNeuron< typename NeuronType::template use< EquationType > >;
+            using use = BPNeuron< typename Internal::template use< EquationType > >;
 
             template< unsigned int inputs >
-            using resize = BPNeuron< typename NeuronType::template resize< inputs > >;
+            using resize = BPNeuron< typename Internal::template resize< inputs > >;
 
           public:
             /**
