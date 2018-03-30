@@ -6,6 +6,7 @@
 #include <NeuralNetwork/Neuron/ActivationFunction/SigmoidFunction.h>
 #include <NeuralNetwork/Neuron/ActivationFunction/SoftmaxFunction.h>
 #include <NeuralNetwork/Neuron/ActivationFunction/TanhFunction.h>
+#include <NeuralNetwork/Neuron/ActivationFunction/ReluFunction.h>
 #include <NeuralNetwork/Neuron/Neuron.h>
 #include <NeuralNetwork/Perceptron/Perceptron.h>
 //#include <NeuralNetwork/NeuralLayer/OpenCLNeuralLayer.h>
@@ -77,7 +78,7 @@ using ConvolutionGrid =
 
 using Perceptron =
  nn::Perceptron< VarType,
-                 nn::ConvolutionLayer< nn::NeuralLayer, nn::Neuron, nn::SigmoidFunction, inputsNumber, ConvolutionGrid >,
+                 nn::ConvolutionLayer< nn::NeuralLayer, nn::Neuron, nn::ReluFunction, inputsNumber, ConvolutionGrid >,
                  nn::NeuralLayer< nn::Neuron, nn::SoftmaxFunction, 10, 1000 > >;
 
 using Algo = nn::bp::BepAlgorithm< Perceptron, nn::bp::CrossEntropyError >;
