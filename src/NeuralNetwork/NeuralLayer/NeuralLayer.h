@@ -53,7 +53,7 @@ namespace nn {
         template< class NeuronType, std::size_t neuronsNumber, std::size_t inputsNumber >
         class NeuralLayer {
           public:
-            using Neuron = INeuron< typename NeuronType::template resize< inputsNumber > >;
+            using Neuron = INeuron< typename NeuronType::template adjust< inputsNumber > >;
             using Var = typename Neuron::Var;
             using NeuronMemento = typename Neuron::Memento;
             using Memento = NeuralLayerMemento< NeuronMemento, neuronsNumber >;
@@ -63,7 +63,7 @@ namespace nn {
              NeuralLayer< NewType< NeuronType >, neuronsNumber, inputsNumber >;
 
             template< unsigned int inputs >
-            using resize = NeuralLayer< NeuronType, neuronsNumber, inputs >;
+            using adjust = NeuralLayer< NeuronType, neuronsNumber, inputs >;
 
             template< typename VarType >
             using use =
@@ -228,14 +228,13 @@ namespace nn {
         };
     } // namespace detail
 
-    template< template< template< class > class, class, std::size_t, int > class NeuronType,
+    template< template< template< class > class, class, std::size_t > class NeuronType,
               template< class > class ActivationFunctionType,
               std::size_t size,
               std::size_t inputsNumber = 2,
-              int scaleFactor = 1,
               typename Var = float >
     using NeuralLayer =
-     detail::NeuralLayer< NeuronType< ActivationFunctionType, Var, inputsNumber, scaleFactor >, size, inputsNumber >;
+     detail::NeuralLayer< NeuronType< ActivationFunctionType, Var, inputsNumber >, size, inputsNumber >;
 } // namespace nn
 
 #endif

@@ -83,8 +83,8 @@ namespace nn {
              OpenCLNeuralLayer< typename Internal::template wrap< NewType > >;
 
             template< unsigned int inputs >
-            using resize =
-             OpenCLNeuralLayer< typename Internal::template resize< inputs > >;
+            using adjust =
+             OpenCLNeuralLayer< typename Internal::template adjust< inputs > >;
 
             template< typename VarType >
             using use =
@@ -289,17 +289,15 @@ namespace nn {
     /// neuron.
     /// @param size ammount of neurons in a layer.
     /// @param inputsNumber the number of inputs of each neuron in a layer.
-    /// @param scaleFactor a factor which will be applied during the weight
     /// initialization a final weight will be calculated in a following way
     /// random(0, 1)/scaleFactor
     template< template< template< class > class, class, std::size_t, int > class NeuronType,
               template< class > class ActivationFunctionType,
               std::size_t size,
               std::size_t inputsNumber = 2,
-              int scaleFactor = 1,
               typename Var = float >
     using OpenCLNeuralLayer =
-     detail::OpenCLNeuralLayer< NeuralLayer< NeuronType, ActivationFunctionType, size, inputsNumber, scaleFactor > >;
+     detail::OpenCLNeuralLayer< NeuralLayer< NeuronType, ActivationFunctionType, size, inputsNumber > >;
 } // namespace nn
 
 #endif

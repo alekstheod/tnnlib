@@ -1,12 +1,14 @@
 #pragma once
 
+#include <Utilities/System/Time.h>
+
 #include <cereal/cereal.hpp>
 
 namespace nn {
-
     template< typename Var >
     struct Input {
-        Input(const Var& w = Var{0}, const Var& v = Var{0})
+        Input(const Var& w = utils::createRandom< Var >(1) / Var{100.f},
+              const Var& v = Var{0})
          : weight(w), value(v) {
         }
 

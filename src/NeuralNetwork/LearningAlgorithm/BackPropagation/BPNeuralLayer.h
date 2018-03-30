@@ -57,6 +57,27 @@ namespace nn {
             struct unwrapLayer< BPNeuralLayer< Internal > > {
                 using type = typename unwrapLayer< Internal >::type;
             };
+
+            template< typename It, typename Layer, typename MomentumFunc >
+            void calculateHiddenDeltas(It begin, It end, Layer& affectedLayer, MomentumFunc momentum) {
+                auto start = begin;
+                using Var = typename Layer::Var;
+                while(begin != end) {
+                    Var sum = 0.0f; // sum(aDelta*aWeight)
+                    for(std::size_t i = 0; i < affectedLayer.size(); i++) {
+                        Var affectedDelta = affectedLayer.getDelta(i);
+                        Var affectedWeight =
+                         affectedLayer.getInputWeight(i, begin - start);
+                        sum += affectedDelta * affectedWeight;
+                        sum += affectedDelta * affectedLayer->getBias(i);
+                    }
+
+                    (*begin)->setDelta(momentum((**begin).getDelta(),
+                                                sum * (**begin).calculateDerivate()));
+
+                    begin++;
+                }
+            }
         } // namespace detail
 
         template< typename NeuralLayerType >
@@ -77,8 +98,8 @@ namespace nn {
              NeuralLayerType::CONST_NEURONS_NUMBER;
 
             template< std::size_t inputs >
-            using resize =
-             BPNeuralLayer< typename NeuralLayerType::template resize< inputs > >;
+            using adjust =
+             BPNeuralLayer< typename NeuralLayerType::template adjust< inputs > >;
 
             /**
              * @brief Will calculate the deltas for the current layer. This
@@ -89,21 +110,7 @@ namespace nn {
              */
             template< typename Layer, typename MomentumFunc >
             void calculateHiddenDeltas(Layer& affectedLayer, MomentumFunc momentum) {
-                std::size_t neuronId = 0;
-                for(auto& neuron : *this) {
-                    Var sum = 0.0f; // sum(aDelta*aWeight)
-                    for(std::size_t i = 0; i < affectedLayer.size(); i++) {
-                        Var affectedDelta = affectedLayer.getDelta(i);
-                        Var affectedWeight = affectedLayer.getInputWeight(i, neuronId);
-                        sum += affectedDelta * affectedWeight;
-                        sum += affectedDelta * affectedLayer->getBias(i);
-                    }
-
-                    neuron->setDelta(momentum(neuron->getDelta(),
-                                              sum * neuron->calculateDerivate()));
-
-                    neuronId++;
-                }
+                detail::calculateHiddenDeltas(this->begin(), this->end(), affectedLayer, momentum);
             }
 
             /**
@@ -115,8 +122,8 @@ namespace nn {
             template< typename Prototype, typename MomentumFunc >
             void calculateDeltas(const Prototype& prototype, MomentumFunc momentum) {
                 std::size_t neuronId = 0;
-                for(auto curNeuron = Base::begin(); curNeuron != Base::end(); curNeuron++) {
-                    (*curNeuron)->calculateDelta(std::get< 1 >(prototype)[neuronId], momentum);
+                for(auto& neuron : *this) {
+                    neuron->calculateDelta(std::get< 1 >(prototype)[neuronId], momentum);
                     neuronId++;
                 }
             }
@@ -145,10 +152,10 @@ namespace nn {
 
         template< typename LayerType, typename Grid >
         class BPNeuralLayer< nn::detail::ConvolutionLayer< LayerType, Grid > >
-         : public nn::INeuralLayer< typename nn::detail::ConvolutionLayer< LayerType, Grid >::template wrap< BPNeuron > > {
+         : public nn::INeuralLayer< nn::detail::ConvolutionLayer< typename LayerType::template wrap< BPNeuron >, Grid > > {
           public:
             using Base =
-             nn::INeuralLayer< typename nn::detail::ConvolutionLayer< LayerType, Grid >::template wrap< BPNeuron > >;
+             nn::INeuralLayer< nn::detail::ConvolutionLayer< typename LayerType::template wrap< BPNeuron >, Grid > >;
 
             using NeuralLayerType =
              typename nn::detail::ConvolutionLayer< LayerType, Grid >;
@@ -163,8 +170,7 @@ namespace nn {
              NeuralLayerType::CONST_NEURONS_NUMBER;
 
             template< std::size_t inputs >
-            using resize =
-             BPNeuralLayer< typename NeuralLayerType::template resize< inputs > >;
+            using adjust = BPNeuralLayer;
 
             BPNeuralLayer() {
                 auto firstNeuron = this->begin();
@@ -173,7 +179,6 @@ namespace nn {
                 }
 
                 for(auto& neuron : *this) {
-                    auto delta = neuron->getDelta();
                     for(std::size_t i = 0; i < Grid::frameSize; i++) {
                         neuron.setWeight(i, m_weights[i]);
                     }
@@ -188,21 +193,7 @@ namespace nn {
              */
             template< typename Layer, typename MomentumFunc >
             void calculateHiddenDeltas(Layer& affectedLayer, MomentumFunc momentum) {
-                std::size_t neuronId = 0;
-                for(auto& neuron : *this) {
-                    Var sum = 0.0f; // sum(aDelta*aWeight)
-                    for(std::size_t i = 0; i < affectedLayer.size(); i++) {
-                        Var affectedDelta = affectedLayer.getDelta(i);
-                        Var affectedWeight = affectedLayer.getInputWeight(i, neuronId);
-                        sum += affectedDelta * affectedWeight;
-                        sum += affectedDelta * affectedLayer->getBias(i);
-                    }
-
-                    neuron->setDelta(momentum(neuron->getDelta(),
-                                              sum * neuron->calculateDerivate()));
-
-                    neuronId++;
-                }
+                detail::calculateHiddenDeltas(this->begin(), this->end(), affectedLayer, momentum);
             }
 
             void calculateWeights(Var learningRate) {
@@ -212,7 +203,7 @@ namespace nn {
                     for(std::size_t i = 0; i < inputsNumber; i++) {
                         auto input = neuron[i].value;
                         auto weight = neuron[i].weight;
-                        m_weights[i] += weight - learningRate * input * delta;
+                        m_weights[i] += (weight - learningRate * input * delta) / inputsNumber;
                     }
 
                     Var weight = neuron->getBias();

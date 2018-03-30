@@ -88,12 +88,11 @@ namespace nn {
             using Internal::setInput;
             using Internal::setMemento;
 
-            template< template< class > class NewType >
-            using wrap =
-             ConvolutionLayer< typename Internal::template wrap< NewType >, Grid >;
-
+            // We can't adjust this layer as the
+            // number of inputs and neurons depends
+            // on the convolution grid and frame sizes
             template< unsigned int inputs >
-            using resize = ConvolutionLayer;
+            using adjust = ConvolutionLayer;
 
             template< typename VarType >
             using use =
@@ -124,13 +123,12 @@ namespace nn {
         };
     } // namespace detail
 
-    template< template< template< template< class > class, class, std::size_t, int > class NeuronType,
+    template< template< template< template< class > class, class, std::size_t > class NeuronType,
                         template< class > class ActivationFunctionType,
                         std::size_t size,
                         std::size_t inputsNumber = 2,
-                        int scaleFactor = 1,
                         typename Var = float > class NeuralLayerType,
-              template< template< class > class, class, std::size_t, int > class NeuronType,
+              template< template< class > class, class, std::size_t > class NeuronType,
               template< class > class ActivationFunctionType,
               std::size_t,
               typename Grid,
