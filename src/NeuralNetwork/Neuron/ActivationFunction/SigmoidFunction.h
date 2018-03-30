@@ -51,13 +51,6 @@ namespace nn {
         template< typename V >
         using use = SigmoidFunction< V >;
 
-      private:
-        /**
-         * Slope value.
-         */
-        Var m_slope;
-
-      public:
         /**
          * Empty constructor.
          */
@@ -96,11 +89,11 @@ namespace nn {
             return m_slope * output * (boost::numeric_cast< Var >(1.0f) - output);
         }
 
+      private:
         /**
-         * Destructor.
+         * Slope value.
          */
-        ~SigmoidFunction() {
-        }
+        Var m_slope;
     };
 } // namespace nn
 

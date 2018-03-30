@@ -80,7 +80,7 @@ namespace nn {
             using use = BPNeuron< typename Internal::template use< EquationType > >;
 
             template< unsigned int inputs >
-            using resize = BPNeuron< typename Internal::template resize< inputs > >;
+            using adjust = BPNeuron< typename Internal::template adjust< inputs > >;
 
           public:
             /**

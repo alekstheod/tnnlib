@@ -41,16 +41,6 @@ namespace nn {
         using Input = typename Neuron::Input;
         using NeuronType = Neuron;
 
-      private:
-        Neuron m_neuron;
-
-      public:
-        INeuron() {
-        }
-
-        INeuron(Neuron neuron) : m_neuron(neuron) {
-        }
-
         /**
          * @brief will calculate the output of the neuron.
          * @return the calculated value.
@@ -139,7 +129,7 @@ namespace nn {
             return &m_neuron;
         }
 
-        ~INeuron() {
-        }
+      private:
+        Neuron m_neuron;
     };
 } // namespace nn

@@ -25,7 +25,7 @@ namespace {
     template< typename Neuron >
     bool hasValidInputs(const Neuron& neuron, const std::vector< float >& expected) {
         for(int i = 0; i < expected.size(); i++) {
-            if(neuron[i].value != expected[i] || neuron[i].weight != 0) {
+            if(neuron[i].value != expected[i]) {
                 return false;
             }
         }

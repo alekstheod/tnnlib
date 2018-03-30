@@ -28,7 +28,7 @@ namespace nn {
             template< std::size_t FirstInputs, typename RebindedTuple, typename FirstLayer, typename... Layers >
             struct RebindInputsHelper< FirstInputs, RebindedTuple, std::tuple< FirstLayer, Layers... > > {
                 typedef
-                 typename utils::push_back< typename FirstLayer::template resize< FirstInputs >, RebindedTuple >::type CurrentRebindedTuple;
+                 typename utils::push_back< typename FirstLayer::template adjust< FirstInputs >, RebindedTuple >::type CurrentRebindedTuple;
                 typedef typename std::conditional<
                  sizeof...(Layers) == 0,
                  CurrentRebindedTuple,
