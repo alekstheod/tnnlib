@@ -1,5 +1,13 @@
 project(NeuralNetwork_ut)
 
+add_library(catch INTERFACE)
+target_include_directories(catch INTERFACE
+  ${CMAKE_CURRENT_SOURCE_DIR})
+
+# Deprecated std::uncaught_exception() usage (MSVC 17)
+target_compile_definitions(catch INTERFACE
+  _SILENCE_CXX17_UNCAUGHT_EXCEPTION_DEPRECATION_WARNING)
+
 set(BOOST_COMPONENTS_NEEDED filesystem system)
 set(BOOST_MIN_VERSION "1.46.0")
 find_package(Boost ${BOOST_MIN_VERSION} COMPONENTS ${BOOST_COMPONENTS_NEEDED} REQUIRED)
@@ -13,13 +21,13 @@ if(Boost_FOUND)
   target_include_directories(NeuralNetwork_ut
     PRIVATE
     ${CMAKE_SOURCE_DIR}
-    ${CMAKE_CURRENT_SOURCE_DIR}
     ${Boost_INCLUDE_DIRS}
     )
 
   target_link_libraries(NeuralNetwork_ut
     NeuralNetwork
     Utilities
+    catch
     ${Boost_LIBRARIES}
     )
 

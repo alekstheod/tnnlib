@@ -24,7 +24,7 @@
 namespace {
     template< typename Neuron >
     bool hasValidInputs(const Neuron& neuron, const std::vector< float >& expected) {
-        for(int i = 0; i < expected.size(); i++) {
+        for(std::size_t i = 0; i < expected.size(); i++) {
             if(neuron[i].value != expected[i]) {
                 return false;
             }
@@ -107,7 +107,7 @@ SCENARIO("Convolution grid set inputs", "[layer][convolution][grid][forward]") {
         WHEN(
          "input is a grid filled with the increasing sequence of integers") {
             for(auto i : ranges::v3::view::ints(0, 25)) {
-                layer.setInput(i, i + 1);
+                layer.setInput(i, static_cast<float>(i + 1));
             }
 
             THEN("The expected inputs can be described as a following") {
