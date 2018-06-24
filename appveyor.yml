@@ -13,6 +13,14 @@ platform:
   - x86
   #- x64
 
+notifications:
+  - provider: Email
+    to:
+      - alekstheod@gmail.com
+      - grish.vanika@gmail.com
+    on_build_success: true|false
+    on_build_failure: true|false
+
 before_build:
   # see AppVeyor doc for vcpkg: https://www.appveyor.com/docs/lang/cpp/#vc-packaging-tool
   # Boost is pre-installed: https://www.appveyor.com/docs/build-environment/#boost
