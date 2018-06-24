@@ -24,6 +24,7 @@ cache:
   - c:\tools\vcpkg\installed
 
 build_script:
+  - cd src
   - mkdir build_msvc
   - cd build_msvc
   - cmake -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake ..
