@@ -42,13 +42,50 @@ Calculating perceptron by using BEP algorithm:
                                                   },
                                                   numOfEpochs);
 ```                                     
-In order to generate a VS solution please use a CMake with the following options:
 
-```bash
-cmake -DBoost_USE_STATIC_LIBS=ON -DZLIB_INCLUDE_DIR="C:\Program Files (x86)\GnuWin32\include" -DPNG_LIBRARY_DEBUG="C:/Program Files (x86)/GnuWin32/lib/libpng.lib" -DPNG_LIBRARY_RELEASE="C:/Program Files (x86)/GnuWin32/lib/libpng.lib" -DPNG_PNG_INCLUDE_DIR="C:\Program Files (x86)\GnuWin32\include" -DCMAKE_MODULE_LINKER_FLAGS="/machine:X86 /LIBPATH:C:\local\boost_1_57_0\lib32-msvc-12.0/" -DBoost_SERIALIZATION_LIBRARY_DEBUG="C:\local\boost_1_57_0\lib32-msvc-12.0/libboost_serialization-vc120-mt-sgd-1_57.lib" -DBoost_SERIALIZATION_LIBRARY_RELEASE="C:\local\boost_1_57_0\lib32-msvc-12.0/libboost_serialization-vc120-mt-s-1_57.lib" -DBoost_SYSTEM_LIBRARY_DEBUG="C:\local\boost_1_57_0\lib32-msvc-12.0/libboost_system-vc120-mt-sgd-1_57.lib" -DBoost_SYSTEM_LIBRARY_RELEASE="C:\local\boost_1_57_0\lib32-msvc-12.0/libboost_system-vc120-mt-s-1_57.lib" -DBoost_FILESYSTEM_LIBRARY_RELEASE="C:\local\boost_1_57_0\lib32-msvc-12.0/libboost_filesystem-vc120-mt-s-1_57.lib" -DBoost_FILESYSTEM_LIBRARY_DEBUG="C:\local\boost_1_57_0\lib32-msvc-12.0\libboost_filesystem-vc120-mt-sgd-1_57.lib" -DCMAKE_SHARED_LINKER_FLAGS="/machine:X86 /LIBPATH:C:\local\boost_1_57_0\lib32-msvc-12.0" -DCMAKE_EXE_LINKER_FLAGS="/machine:X86 /LIBPATH:C:\local\boost_1_57_0\lib32-msvc-12.0" -DCMAKE_CXX_FLAGS="/DWIN32 /D_WINDOWS /W3 /GR /EHsc" -DCMAKE_CXX_FLAGS_DEBUG="/D_DEBUG /MTd /Zi /Ob0 /Od /RTC1" .
+Building on Windows
+===================
+
+Library and tests depend on:
+- Boost (serialization, system, filesystem)
+- ZLIB
+- LibPNG
+- OpenCL
+- range-v3
+- cereal
+
+`cereal` and `range-v3` libraries are supplied with this sources itself
+(see src/libs folder).
+
+Rest of libraries should be installed in the system.
+
+The easiest way to do it on Windows is by using [vcpkg].
+See [Quick Start] for installing instructions. Assume you have it in `C:\vcpkg`.
+
+Install dependencies with next commands (by default, you will have 32 bit versions):
+
+```
+vcpkg install boost
+vcpkg install zlib
+vcpkg install libpng
+vcpkg install opencl
 ```
 
-You have to define your boost libraries, libpng and zlib. In this case we have boost_1_57 and libpng + zlib as a binary distributions.
+For range-v3 you need to replace original sources with [Microsoft's fork for ranges]
+in order to be able to compile it with VS. Replace src/libs/meta and src/libs/range
+folders with corresponding folders from Range-V3-VS2015/include.
+
+Now, run CMake as usual, but with specifying vcpkg tool-set (see [vcpkg] page for details):
+
+```
+mkdir build
+cd build
+cmake -G "Visual Studio 15 2017" -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake ..
+```
+
+[vcpkg]: https://github.com/Microsoft/vcpkg
+[Quick Start]: https://github.com/Microsoft/vcpkg#quick-start
+[Microsoft's fork for ranges]: https://github.com/Microsoft/Range-V3-VS2015
 
 note
 ====
