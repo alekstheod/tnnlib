@@ -1,0 +1,35 @@
+version: 1.0.{build}
+image: Visual Studio 2017
+
+environment:
+  matrix:
+    - compiler: cl
+
+configuration:
+  #- Debug
+  - Release
+
+platform:
+  - x86
+  #- x64
+
+before_build:
+  # see AppVeyor doc for vcpkg: https://www.appveyor.com/docs/lang/cpp/#vc-packaging-tool
+  - pushd C:\tools\vcpkg
+  # Boost is pre-installed: https://www.appveyor.com/docs/build-environment/#boost
+  - vcpkg install zlib
+  - vcpkg install libpng
+  - vcpkg install opencl
+  - popd
+
+cache:
+  - c:\tools\vcpkg\installed
+
+build_script:
+  - mkdir build_msvc
+  - cd build_msvc
+  - cmake -DCMAKE_TOOLCHAIN_FILE=c:/tools/vcpkg/scripts/buildsystems/vcpkg.cmake ..
+  - cmake --build . --config %configuration%
+
+# test_script:
+#   - ctest -C %configuration% --verbose
