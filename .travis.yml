@@ -50,4 +50,4 @@ branches:
   email: alekstheod@gmail.com
 os:
 - linux
-dist: trusty
+dist: xenial
