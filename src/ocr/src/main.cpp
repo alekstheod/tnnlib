@@ -41,6 +41,7 @@
 #include <boost/gil/extension/dynamic_image/any_image.hpp>
 #include <boost/gil/extension/dynamic_image/dynamic_image_all.hpp>
 
+
 #include <cereal/archives/xml.hpp>
 #include <cereal/types/array.hpp>
 #include <cereal/types/tuple.hpp>
@@ -75,6 +76,9 @@ namespace {
 
 using ConvolutionGrid =
  typename nn::ConvolutionGrid< width, height, stride, margin >::define;
+
+using ConvolutionGrid2 =
+ typename nn::ConvolutionGrid< width / stride, height / stride, 2, 5 >::define;
 
 using Perceptron =
  nn::Perceptron< VarType,
@@ -190,7 +194,7 @@ void calculateWeights(std::string imagesPath) {
 
     std::cout << "Perceptron calculation started" << std::endl;
     static Perceptron tmp = readPerceptron("perceptron.xml");
-    static Algo algorithm(0.003f);
+    static Algo algorithm(0.05f);
     algorithm.setMemento(tmp.getMemento());
 
     std::vector< Algo::Prototype > prototypes;
@@ -211,9 +215,9 @@ void calculateWeights(std::string imagesPath) {
     }
 
     auto errorFunc = [](unsigned int epoch, VarType error) {
-        // if(epoch % 100 == 0) {
+        // if(epoch % 3 == 0) {
         std::cout << "Epoch:" << epoch << " error:" << error << std::endl;
-        // }
+        //}
 
         return error > 0.001f;
     };

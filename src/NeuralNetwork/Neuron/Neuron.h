@@ -143,12 +143,12 @@ namespace nn {
 
             /// @brief see @ref INeuron
             Var calcDotProduct() const {
-                auto begin =
-                 boost::make_transform_iterator(m_inputs.cbegin(),
-                                                boost::bind(&Neuron::sumInput, this, _1));
-                auto end =
-                 boost::make_transform_iterator(m_inputs.cend(),
-                                                boost::bind(&Neuron::sumInput, this, _1));
+                const auto calcInput = [](const Input& input) {
+                    return input.value * input.weight;
+                };
+
+                auto begin = boost::make_transform_iterator(m_inputs.cbegin(), calcInput);
+                auto end = boost::make_transform_iterator(m_inputs.cend(), calcInput);
                 return m_activationFunction.sum(begin, end, m_bias);
             }
 
@@ -213,11 +213,6 @@ namespace nn {
              * @brief Needed in order to calculate the neurons output value.
              */
             Var m_sum;
-
-            /// @brief needed in order to calculate the neurons output.
-            Var sumInput(const Input& input) const {
-                return input.value * input.weight;
-            }
         };
     } // namespace detail
 
