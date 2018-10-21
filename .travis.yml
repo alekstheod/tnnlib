@@ -9,7 +9,7 @@ addons:
     - ppa:mhier/libboost-latest
     packages:
     - clang
-    - boost1.68
+    - boost1.67
     - cmake
     - valgrind
     - g++-7
