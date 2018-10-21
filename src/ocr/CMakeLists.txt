@@ -4,7 +4,7 @@ find_package(PNG REQUIRED)
 message(STATUS "LibPNG package was found with include dir: '${PNG_INCLUDE_DIRS}'")
 
 set(BOOST_COMPONENTS_NEEDED filesystem system serialization)
-set(BOOST_MIN_VERSION "1.68.0")
+set(BOOST_MIN_VERSION "1.67.0")
 find_package(Boost ${BOOST_MIN_VERSION} COMPONENTS ${BOOST_COMPONENTS_NEEDED} REQUIRED)
 
 set(NeuralNetworkDir ${PROJECT_SOURCE_DIR}/../NeuralNetwork)

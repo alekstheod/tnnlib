@@ -1,6 +1,6 @@
 project(Test)
 
-SET(BOOST_MIN_VERSION "1.68.0")
+SET(BOOST_MIN_VERSION "1.67.0")
 find_package(Boost ${BOOST_MIN_VERSION} REQUIRED COMPONENTS system filesystem serialization)
 
 link_directories(${Boost_LIBRARY_DIRS})
