@@ -31,7 +31,6 @@
 
 #include <boost/gil/channel_algorithm.hpp>
 #include <boost/gil/channel.hpp>
-
 #include <boost/gil/gil_all.hpp>
 #include <boost/gil/image.hpp>
 
@@ -40,18 +39,6 @@
 #include <boost/gil/extension/numeric/resample.hpp>
 #include <boost/gil/extension/dynamic_image/any_image.hpp>
 #include <boost/gil/extension/dynamic_image/dynamic_image_all.hpp>
-
-
-#include <cereal/archives/xml.hpp>
-#include <cereal/types/array.hpp>
-#include <cereal/types/tuple.hpp>
-#include <cereal/types/vector.hpp>
-
-#if defined(NN_CC_MSVC)
-#pragma warning(pop)
-#endif
-
-#include "Var.h"
 
 #include <tuple>
 #include <cmath>
