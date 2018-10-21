@@ -40,6 +40,11 @@
 #include <boost/gil/extension/dynamic_image/any_image.hpp>
 #include <boost/gil/extension/dynamic_image/dynamic_image_all.hpp>
 
+ #include <cereal/archives/xml.hpp>
+ #include <cereal/types/array.hpp>
+ #include <cereal/types/tuple.hpp>
+ #include <cereal/types/vector.hpp>
+
 #include <tuple>
 #include <cmath>
 #include <fstream>
