@@ -8,7 +8,7 @@ addons:
     - llvm-toolchain-trusty-5.0
     packages:
     - clang
-    - libboost1.54-all-dev
+    - libboost1.68-all-dev
     - cmake
     - valgrind
     - g++-7
