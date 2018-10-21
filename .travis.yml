@@ -6,10 +6,10 @@ addons:
     - ubuntu-toolchain-r-test
     - kalakris-cmake
     - llvm-toolchain-trusty-5.0
-    - sourceline: 'ppa:mhier/libboost-latest'
+    - sourceline: 'ppa:dluxen/boost'
     packages:
     - clang
-    - boost1.67
+    - boost1.68
     - cmake
     - valgrind
     - g++-7
