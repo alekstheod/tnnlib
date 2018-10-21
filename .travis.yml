@@ -28,11 +28,10 @@ notifications:
     on_failure: always
 
 script:
-   cd src && cmake -DCMAKE_DISABLE_FIND_PACKAGE_OpenCL:bool=TRUE CMakeLists.txt && make
+   apt search boost && cd src && cmake -DCMAKE_DISABLE_FIND_PACKAGE_OpenCL:bool=TRUE CMakeLists.txt && make
 before_script:
 
 after_success:
-- apt search boost
 - valgrind --leak-check=full --error-exitcode=1 ./Test/Test 1000 > /dev/null
 - cd ..
 - if [ $TRAVIS_BRANCH == $TRAVIS_TAG ]; then rake deploy; fi
