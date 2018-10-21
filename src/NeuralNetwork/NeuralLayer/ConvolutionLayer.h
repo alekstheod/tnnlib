@@ -16,6 +16,8 @@ namespace nn {
         static constexpr std::size_t neuronId = NeuronId;
     };
 
+    /// The idea behind the convolution grid is that each input
+    /// is checked against the
     template< std::size_t width, std::size_t height, std::size_t stride, std::size_t margin >
     struct ConvolutionGrid {
       private:
@@ -48,23 +50,24 @@ namespace nn {
         };
 
         template< std::size_t... ints >
-        static constexpr auto make(std::index_sequence< ints... >) {
+        static constexpr auto makeArea(std::index_sequence< ints... >) {
             return std::tuple< Connection< Area< calcPoint(ints) >, ints >... >{};
         }
 
         template< typename Connections >
         struct Grid {
-            static constexpr std::size_t frameSize = (margin * 2 + 1) * (margin * 2 + 1);
+            static constexpr std::size_t filterWidth = margin * 2 + 1;
+            static constexpr std::size_t frameSize = filterWidth * filterWidth;
             static constexpr std::size_t framesNumber =
              std::tuple_size< Connections >::value;
-
             static constexpr std::size_t size = width * height;
+            static constexpr std::size_t rowSize = width / stride;
             Connections connections;
         };
 
       public:
         using define =
-         Grid< decltype(make(std::make_index_sequence< (width / stride) * (height / stride) >{})) >;
+         Grid< decltype(makeArea(std::make_index_sequence< (width / stride) * (height / stride) >{})) >;
     };
 
     namespace detail {

@@ -1,6 +1,6 @@
 project(NeuralNetwork)
 
-SET(BOOST_MIN_VERSION "1.46.0")
+SET(BOOST_MIN_VERSION "1.68.0")
 find_package(Boost ${BOOST_MIN_VERSION} REQUIRED)
 find_package(OpenCL)
 
@@ -41,6 +41,11 @@ target_include_directories(NeuralNetwork
   ${CMAKE_CURRENT_SOURCE_DIR}
   ${Boost_INCLUDE_DIRS}
   ${OPENCL_INCLUDE_DIR})
+
+set_target_properties(NeuralNetwork PROPERTIES
+  CXX_STANDARD 17
+  CXX_EXTENSIONS OFF
+)
 
 target_link_libraries(NeuralNetwork
   Utilities

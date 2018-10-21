@@ -36,6 +36,8 @@
 
 #include <Utilities/MPL/TypeTraits.h>
 
+#include <range/v3/all.hpp>
+
 #include <algorithm>
 #include <functional>
 #include <tuple>
@@ -176,6 +178,20 @@ namespace nn {
                 auto firstNeuron = this->begin();
                 for(int i = 0; i < Grid::frameSize; i++) {
                     m_weights[i] = firstNeuron->getWeight(i);
+                    m_originalIdx[i] = i;
+                }
+
+                m_reversedIdx = m_originalIdx;
+                m_flippedIdx = m_originalIdx;
+
+                std::reverse(m_reversedIdx.begin(), m_reversedIdx.end());
+                m_reversedFlippedIdx = m_reversedIdx;
+                for(auto i = 0; i < Grid::frameSize; i += Grid::filterWidth) {
+                    std::reverse(m_flippedIdx.begin() + i,
+                                 m_flippedIdx.begin() + i + Grid::filterWidth);
+
+                    std::reverse(m_reversedFlippedIdx.begin() + i,
+                                 m_reversedFlippedIdx.begin() + i + Grid::filterWidth);
                 }
 
                 for(auto& neuron : *this) {
@@ -197,13 +213,32 @@ namespace nn {
             }
 
             void calculateWeights(Var learningRate) {
-                for(auto& neuron : *this) {
-                    std::size_t inputsNumber = neuron->size();
+                for(auto neuronId : ranges::v3::view::indices(this->size())) {
+                    auto& neuron = (*this)[neuronId];
                     auto delta = neuron->getDelta();
-                    for(std::size_t i = 0; i < inputsNumber; i++) {
-                        auto input = neuron[i].value;
-                        auto weight = neuron[i].weight;
-                        m_weights[i] += (weight - learningRate * input * delta) / inputsNumber;
+
+                    auto calculateWeight =
+                     [&](const std::array< Var, Grid::frameSize >& weightIdxs) {
+                         for(auto inputId : ranges::v3::view::indices(neuron->size())) {
+                             auto input = neuron[inputId].value;
+                             auto weight = neuron[inputId].weight;
+                             m_weights[weightIdxs[inputId]] +=
+                              (weight - learningRate * input * delta);
+                         }
+                     };
+
+                    if((neuronId / Grid::rowSize) % 2) {
+                        if(neuronId % Grid::rowSize % 2) {
+                            calculateWeight(m_reversedFlippedIdx);
+                        } else {
+                            calculateWeight(m_flippedIdx);
+                        }
+                    } else {
+                        if(neuronId % Grid::rowSize % 2) {
+                            calculateWeight(m_reversedIdx);
+                        } else {
+                            calculateWeight(m_originalIdx);
+                        }
                     }
 
                     Var weight = neuron->getBias();
@@ -211,11 +246,10 @@ namespace nn {
                     neuron->setBias(newWeight);
                 }
 
-                for(auto& neuron : *this) {
-                    std::size_t inputsNumber = neuron->size();
-                    auto delta = neuron->getDelta();
-                    for(std::size_t i = 0; i < inputsNumber; i++) {
-                        neuron.setWeight(i, m_weights[i]);
+                for(auto neuronId : ranges::v3::view::indices(this->size())) {
+                    auto& neuron = (*this)[neuronId];
+                    for(auto inputId : ranges::v3::view::indices(neuron->size())) {
+                        neuron.setWeight(inputId, m_weights[inputId]);
                     }
                 }
             }
@@ -225,8 +259,13 @@ namespace nn {
             }
 
           private:
+            std::array< Var, Grid::frameSize > m_originalIdx;
+            std::array< Var, Grid::frameSize > m_reversedIdx;
+            std::array< Var, Grid::frameSize > m_flippedIdx;
+            std::array< Var, Grid::frameSize > m_reversedFlippedIdx;
+
             std::array< Var, Grid::frameSize > m_weights;
-        };
+        }; // namespace bp
     } // namespace bp
 } // namespace nn
 

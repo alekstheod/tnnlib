@@ -15,12 +15,15 @@ if(Boost_FOUND)
   link_directories(${Boost_LIBRARY_DIRS})
 
   add_executable(NeuralNetwork_ut
-    main.cpp)
+    main.cpp
+    TestConvolutionLayer.cpp
+    TestNeuron.cpp)
 
   add_definitions(-DETC_DIRECTORY="${CMAKE_CURRENT_SOURCE_DIR}/etc")
   target_include_directories(NeuralNetwork_ut
     PRIVATE
     ${CMAKE_SOURCE_DIR}
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
     ${Boost_INCLUDE_DIRS}
     )
 

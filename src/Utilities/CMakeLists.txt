@@ -1,6 +1,6 @@
 project(Utilities)
 
-SET(BOOST_MIN_VERSION "1.46.0")
+set(BOOST_MIN_VERSION "1.68.0")
 find_package(Boost ${BOOST_MIN_VERSION} REQUIRED)
 if(Boost_FOUND)
   add_library(Utilities

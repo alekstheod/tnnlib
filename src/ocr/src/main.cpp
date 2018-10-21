@@ -33,13 +33,13 @@
 #include <boost/gil/channel.hpp>
 #include <boost/gil/extension/dynamic_image/any_image.hpp>
 #include <boost/gil/extension/dynamic_image/dynamic_image_all.hpp>
-#include <boost/gil/extension/io/dynamic_io.hpp>
-#include <boost/gil/extension/io/png_dynamic_io.hpp>
+#include <boost/gil/extension/io/png/old.hpp>
+#include <boost/gil/extension/io/png.hpp>
 #include <boost/gil/gil_all.hpp>
 #include <boost/gil/image.hpp>
 
-#include "gil/extension/numeric/sampler.hpp"
-#include "gil/extension/numeric/resample.hpp"
+#include <boost/gil/extension/numeric/sampler.hpp>
+#include <boost/gil/extension/numeric/resample.hpp>
 
 #include <cereal/archives/xml.hpp>
 #include <cereal/types/array.hpp>
@@ -75,6 +75,9 @@ namespace {
 
 using ConvolutionGrid =
  typename nn::ConvolutionGrid< width, height, stride, margin >::define;
+
+using ConvolutionGrid2 =
+ typename nn::ConvolutionGrid< width / stride, height / stride, 2, 5 >::define;
 
 using Perceptron =
  nn::Perceptron< VarType,
@@ -190,7 +193,7 @@ void calculateWeights(std::string imagesPath) {
 
     std::cout << "Perceptron calculation started" << std::endl;
     static Perceptron tmp = readPerceptron("perceptron.xml");
-    static Algo algorithm(0.003f);
+    static Algo algorithm(0.05f);
     algorithm.setMemento(tmp.getMemento());
 
     std::vector< Algo::Prototype > prototypes;
@@ -211,9 +214,9 @@ void calculateWeights(std::string imagesPath) {
     }
 
     auto errorFunc = [](unsigned int epoch, VarType error) {
-        // if(epoch % 100 == 0) {
+        // if(epoch % 3 == 0) {
         std::cout << "Epoch:" << epoch << " error:" << error << std::endl;
-        // }
+        //}
 
         return error > 0.001f;
     };
