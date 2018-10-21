@@ -30,15 +30,15 @@
 
 #include <boost/gil/channel_algorithm.hpp>
 #include <boost/gil/channel.hpp>
-#include <boost/gil/extension/dynamic_image/any_image.hpp>
-#include <boost/gil/extension/dynamic_image/dynamic_image_all.hpp>
-#include <boost/gil/extension/io/dynamic_io.hpp>
-#include <boost/gil/extension/io/png_dynamic_io.hpp>
+
 #include <boost/gil/gil_all.hpp>
 #include <boost/gil/image.hpp>
 
-#include "gil/extension/numeric/sampler.hpp"
-#include "gil/extension/numeric/resample.hpp"
+#include <boost/gil/extension/io/png/old.hpp>
+#include <boost/gil/extension/numeric/sampler.hpp>
+#include <boost/gil/extension/numeric/resample.hpp>
+#include <boost/gil/extension/dynamic_image/any_image.hpp>
+#include <boost/gil/extension/dynamic_image/dynamic_image_all.hpp>
 
 #include <cereal/archives/xml.hpp>
 #include <cereal/types/array.hpp>
