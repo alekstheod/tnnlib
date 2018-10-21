@@ -5,7 +5,7 @@ addons:
     - boost-latest
     - ubuntu-toolchain-r-test
     - kalakris-cmake
-    - llvm-toolchain-trusty-5.0
+    - lvm-toolchain-xenial-5.0
     - sourceline: 'ppa:dluxen/boost'
     packages:
     - clang
