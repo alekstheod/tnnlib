@@ -9,7 +9,7 @@ addons:
     - sourceline: 'ppa:mhier/libboost-latest'
     packages:
     - clang
-    - libboost
+    #- libboost
     - cmake
     - valgrind
     - g++-7
@@ -19,7 +19,7 @@ addons:
     - CXXSTD=-std=c++17
 
 install: 
-  - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-7 90
+  - apt search boost && sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-7 90
 
 notifications:
   email:
