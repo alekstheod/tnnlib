@@ -6,10 +6,10 @@ addons:
     - ubuntu-toolchain-r-test
     - kalakris-cmake
     - lvm-toolchain-xenial-5.0
-    - sourceline: 'ppa:mamarley/updates'
+    - sourceline: 'ppa:mhier/libboost-latest'
     packages:
     - clang
-    - boost1.68
+    - libboost
     - cmake
     - valgrind
     - g++-7
@@ -29,7 +29,7 @@ notifications:
     on_failure: always
 
 script:
-   apt search boost && cd src && cmake -DCMAKE_DISABLE_FIND_PACKAGE_OpenCL:bool=TRUE CMakeLists.txt && make
+   cd src && cmake -DCMAKE_DISABLE_FIND_PACKAGE_OpenCL:bool=TRUE CMakeLists.txt && make
 before_script:
 
 after_success:
