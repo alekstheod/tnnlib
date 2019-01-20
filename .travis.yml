@@ -9,6 +9,8 @@ addons:
     - sourceline: 'ppa:dluxen/boost'
     packages:
     - clang
+    - libboost1.68 
+    - libboost1.68-dev
     - cmake
     - valgrind
     - g++-7
