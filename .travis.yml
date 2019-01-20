@@ -9,7 +9,7 @@ addons:
     - sourceline: 'ppa:mamarley/updates'
     packages:
     - clang
-    - boost1.69 
+    #- boost1.69 
     - cmake
     - valgrind
     - g++-7
