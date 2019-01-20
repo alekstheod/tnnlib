@@ -6,11 +6,10 @@ addons:
     - ubuntu-toolchain-r-test
     - kalakris-cmake
     - lvm-toolchain-xenial-5.0
-    - sourceline: 'ppa:mhier/libboost-latest'
+    - sourceline: 'ppa:mamarley/updates'
     packages:
     - clang
-    - libboost1.68 
-    - libboost1.68-dev
+    - boost1.69 
     - cmake
     - valgrind
     - g++-7

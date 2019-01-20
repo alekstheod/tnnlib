@@ -31,7 +31,7 @@
 
 #include <boost/gil/channel_algorithm.hpp>
 #include <boost/gil/channel.hpp>
-#include <boost/gil/gil_all.hpp>
+#include <boost/gil.hpp>
 #include <boost/gil/image.hpp>
 
 #include <boost/gil/extension/io/png/old.hpp>
