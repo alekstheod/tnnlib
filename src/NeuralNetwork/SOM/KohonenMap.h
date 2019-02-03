@@ -30,9 +30,9 @@
 #define KOHONENMAP_H
 
 
-#include <NeuralNetwork/SOM/INeighbourhood.h>
+#include <SOM/INeighbourhood.h>
 
-#include <Utilities/System/Time.h>
+#include <System/Time.h>
 
 #include <boost/numeric/conversion/cast.hpp>
 

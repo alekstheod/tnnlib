@@ -1,6 +1,6 @@
 #ifndef NN_UTILS_H
 #define NN_UTILS_H
-#include <Utilities/MPL/Tuple.h>
+#include <MPL/Tuple.h>
 
 namespace nn {
 

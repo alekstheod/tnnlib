@@ -1,7 +1,7 @@
 #ifndef OPENCL_NEURAL_LAYER_H
 #define OPENCL_NEURAL_LAYER_H
 
-#include <NeuralNetwork/NeuralLayer/NeuralLayer.h>
+#include <NeuralLayer/NeuralLayer.h>
 
 #define __CL_ENABLE_EXCEPTIONS
 #include <CL/cl.hpp>

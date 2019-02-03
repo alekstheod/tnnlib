@@ -29,7 +29,7 @@
 
 #ifndef INEIGHBOURHOOD_H
 #define INEIGHBOURHOOD_H
-#include <NeuralNetwork/SOM/INode.h>
+#include <SOM/INode.h>
 #include <vector>
 
 namespace nn {

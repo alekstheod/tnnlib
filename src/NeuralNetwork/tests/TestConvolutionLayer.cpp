@@ -1,12 +1,12 @@
-#include <NeuralNetwork/NeuralLayer/ConvolutionLayer.h>
-#include <NeuralNetwork/NeuralLayer/NeuralLayer.h>
-#include <NeuralNetwork/Neuron/ActivationFunction/SigmoidFunction.h>
-#include <NeuralNetwork/Neuron/Neuron.h>
+#include <NeuralLayer/ConvolutionLayer.h>
+#include <NeuralLayer/NeuralLayer.h>
+#include <Neuron/ActivationFunction/SigmoidFunction.h>
+#include <Neuron/Neuron.h>
 
 #include <range/v3/all.hpp>
 
 #define CATCH_CONFIG_NO_CPP17_UNCAUGHT_EXCEPTIONS
-#include <catch.hpp>
+#include "catch.hpp"
 
 namespace {
     template< typename Neuron >

@@ -30,12 +30,12 @@
 #ifndef NeuronH
 #define NeuronH
 
-#include <NeuralNetwork/Neuron/INeuron.h>
-#include <NeuralNetwork/Neuron/Input.h>
-#include <NeuralNetwork/Serialization/NeuronMemento.h>
-#include <NeuralNetwork/Neuron/ActivationFunction/IActivationFunction.h>
+#include <Neuron/INeuron.h>
+#include <Neuron/Input.h>
+#include <Serialization/NeuronMemento.h>
+#include <Neuron/ActivationFunction/IActivationFunction.h>
 
-#include <Utilities/System/Time.h>
+#include <System/Time.h>
 
 #include <boost/array.hpp>
 #include <boost/bind.hpp>
@@ -196,18 +196,18 @@ namespace nn {
             Inputs m_inputs;
 
             /**
-             * @brief The neurons output.
-             * @brief The output will be calculated with using the instance of
-             * calculation equation.
-             */
-            Var m_output;
-
-            /**
              * @brief Neurons weight.
              * @brief Needed in order to improve the flexibility of neural
              * network.
              */
             Var m_bias;
+
+            /**
+             * @brief The neurons output.
+             * @brief The output will be calculated with using the instance of
+             * calculation equation.
+             */
+            Var m_output;
 
             /**
              * @brief Needed in order to calculate the neurons output value.

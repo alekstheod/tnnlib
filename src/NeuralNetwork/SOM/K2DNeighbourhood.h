@@ -29,8 +29,8 @@
 #ifndef K2DNEIGHBOURHOOD_H
 #define K2DNEIGHBOURHOOD_H
 
-#include <NeuralNetwork/SOM/IPosition.h>
-#include <NeuralNetwork/SOM/INode.h>
+#include <SOM/IPosition.h>
+#include <SOM/INode.h>
 #include <vector>
 #include <algorithm>
 #include <boost/iterator/filter_iterator.hpp>

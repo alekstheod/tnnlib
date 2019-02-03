@@ -29,115 +29,128 @@
 
 #pragma once
 
-#include <NeuralNetwork/Neuron/INeuron.h>
+#include <Neuron/INeuron.h>
 
-#include <Utilities/MPL/TypeTraits.h>
+#include <MPL/TypeTraits.h>
 
 #include <boost/numeric/conversion/cast.hpp>
 
 #include <functional>
 #include <type_traits>
 
-namespace nn {
+namespace nn
+{
 
-    namespace bp {
+namespace bp
+{
 
-        template< typename Internal >
-        class BPNeuron;
+template <typename Internal>
+class BPNeuron;
 
-        // TODO please throw this out
-        // This code fixes the blowing object when using
-        // rebind functionality
-        namespace detail {
-            template< typename Internal >
-            struct unwrapNeuron {
-                using type = Internal;
-            };
+// TODO please throw this out
+// This code fixes the blowing object when using
+// rebind functionality
+namespace detail
+{
+template <typename Internal>
+struct unwrapNeuron
+{
+    using type = Internal;
+};
 
-            template< typename Internal >
-            struct unwrapNeuron< BPNeuron< Internal > > {
-                using type = typename unwrapNeuron< Internal >::type;
-            };
-        } // namespace detail
+template <typename Internal>
+struct unwrapNeuron<BPNeuron<Internal>>
+{
+    using type = typename unwrapNeuron<Internal>::type;
+};
+} // namespace detail
 
-        /*
+/*
          * Represent the back error propagation Neuron trainer.
          * This class holds a pointer to neuron which should
          * be trained with back error propagation algorithm.
          */
-        template< class NeuronType >
-        class BPNeuron
-         : public INeuron< typename detail::unwrapNeuron< NeuronType >::type > {
-          public:
-            using Internal = typename detail::unwrapNeuron< NeuronType >::type;
-            using Neuron = nn::INeuron< Internal >;
-            using Var = typename Neuron::Var;
-            using Memento = typename Neuron::Memento;
-            using OutputFunction = typename Neuron::OutputFunction;
-            using Input = typename Neuron::Input;
+template <class NeuronType>
+class BPNeuron
+    : public INeuron<typename detail::unwrapNeuron<NeuronType>::type>
+{
+  public:
+    using Internal = typename detail::unwrapNeuron<NeuronType>::type;
+    using Neuron = nn::INeuron<Internal>;
+    using Var = typename Neuron::Var;
+    using Memento = typename Neuron::Memento;
+    using OutputFunction = typename Neuron::OutputFunction;
+    using Input = typename Neuron::Input;
 
-            template< typename EquationType >
-            using use = BPNeuron< typename Internal::template use< EquationType > >;
+    template <typename EquationType>
+    using use = BPNeuron<typename Internal::template use<EquationType>>;
 
-            template< unsigned int inputs >
-            using adjust = BPNeuron< typename Internal::template adjust< inputs > >;
+    template <unsigned int inputs>
+    using adjust = BPNeuron<typename Internal::template adjust<inputs>>;
 
-          public:
-            /**
+  public:
+    /**
              * @brief Default constructor will initialize the BPNeuron with 0.
              */
-            BPNeuron() : m_delta(boost::numeric_cast< Var >(0.f)) {
-            }
+    BPNeuron() : m_delta(boost::numeric_cast<Var>(0.f))
+    {
+    }
 
-            /**
+    /**
              * @brief Initialization constructor
              * @param neuron the pointer to the neuron which need to be trained
              */
-            BPNeuron(unsigned int inputsNumber)
-             : m_delta(boost::numeric_cast< Var >(0.f)), Neuron(inputsNumber) {
-            }
+    BPNeuron(unsigned int inputsNumber)
+        : m_delta(boost::numeric_cast<Var>(0.f)), Neuron(inputsNumber)
+    {
+    }
 
-            /**
+    /**
              * @brief Will return the errors delta for the trained neuron.
              * @returns the error deltas value.
              */
-            const Var& getDelta(void) const {
-                return m_delta;
-            }
+    const Var &getDelta(void) const
+    {
+        return m_delta;
+    }
 
-            void setDelta(const Var& delta) {
-                m_delta = delta;
-            }
+    void setDelta(const Var &delta)
+    {
+        m_delta = delta;
+    }
 
-            void setMemento(const Memento& memento) {
-                (*this)->setMemento(memento);
-            }
+    void setMemento(const Memento &memento)
+    {
+        (*this)->setMemento(memento);
+    }
 
-            /*!
+    /*!
              *  Will calculate the differential value.
              *  @return the calculated value.
              */
-            template< typename MomentumFunc >
-            const Var& calculateDelta(const Var& expectedOutput, MomentumFunc momentum) {
-                m_delta =
-                 momentum(m_delta, m_outputFunction.delta(Neuron::getOutput(), expectedOutput));
-                return m_delta;
-            }
+    template <typename MomentumFunc>
+    const Var &calculateDelta(const Var &expectedOutput, MomentumFunc momentum)
+    {
+        m_delta =
+            momentum(m_delta, m_outputFunction.delta(Neuron::getOutput(), expectedOutput));
+        return m_delta;
+    }
 
-            const Var calculateDerivate() const {
-                return m_outputFunction.derivate(Neuron::getOutput());
-            }
+    const Var calculateDerivate() const
+    {
+        return m_outputFunction.derivate(Neuron::getOutput());
+    }
 
-          private:
-            /**
+  private:
+    /**
              * Neurons error delta
              */
-            Var m_delta;
+    Var m_delta;
 
-            /**
+    /**
              * Equation needed in order to calculate the differential value;
              */
-            OutputFunction m_outputFunction;
-        };
-    } // namespace bp
+    OutputFunction m_outputFunction;
+};
+} // namespace bp
 } // namespace nn

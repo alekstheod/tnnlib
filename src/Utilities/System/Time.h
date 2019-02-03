@@ -1,5 +1,4 @@
-#ifndef TIME_H
-#define TIME_H
+#pragma once
 #include <boost/numeric/conversion/cast.hpp>
 
 namespace utils {
@@ -22,5 +21,3 @@ namespace utils {
         }
     }
 } // namespace utils
-
-#endif

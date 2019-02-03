@@ -29,7 +29,7 @@
 
 #ifndef SigmaEquationH
 #define SigmaEquationH
-#include <NeuralNetwork/Neuron/ActivationFunction/IActivationFunction.h>
+#include <Neuron/ActivationFunction/IActivationFunction.h>
 
 #include <vector>
 #include <functional>

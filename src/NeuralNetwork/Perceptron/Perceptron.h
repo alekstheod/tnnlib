@@ -30,13 +30,13 @@
 #ifndef PerceptronH
 #define PerceptronH
 
-#include <NeuralNetwork/INeuralLayer.h>
-#include <NeuralNetwork/Neuron/ActivationFunction/SigmoidFunction.h>
-#include <NeuralNetwork/Serialization/PerceptronMemento.h>
+#include <INeuralLayer.h>
+#include <Neuron/ActivationFunction/SigmoidFunction.h>
+#include <Serialization/PerceptronMemento.h>
 
-#include <NeuralNetwork/Utils/Utils.h>
+#include <Utils/Utils.h>
 
-#include <Utilities/MPL/Tuple.h>
+#include <MPL/Tuple.h>
 
 #include <algorithm>
 #include <cassert>

@@ -30,11 +30,11 @@
 #ifndef BEPNeuralLayerH
 #define BEPNeuralLayerH
 
-#include <NeuralNetwork/LearningAlgorithm/BackPropagation/BPNeuron.h>
-#include <NeuralNetwork/NeuralLayer/ConvolutionLayer.h>
-#include <NeuralNetwork/INeuralLayer.h>
+#include <LearningAlgorithm/BackPropagation/BPNeuron.h>
+#include <NeuralLayer/ConvolutionLayer.h>
+#include <INeuralLayer.h>
 
-#include <Utilities/MPL/TypeTraits.h>
+#include <MPL/TypeTraits.h>
 
 #include <range/v3/all.hpp>
 
@@ -176,7 +176,7 @@ namespace nn {
 
             BPNeuralLayer() {
                 auto firstNeuron = this->begin();
-                for(int i = 0; i < Grid::frameSize; i++) {
+                for(std::size_t i = 0u; i < Grid::frameSize; i++) {
                     m_weights[i] = firstNeuron->getWeight(i);
                     m_originalIdx[i] = i;
                 }
@@ -186,7 +186,7 @@ namespace nn {
 
                 std::reverse(m_reversedIdx.begin(), m_reversedIdx.end());
                 m_reversedFlippedIdx = m_reversedIdx;
-                for(auto i = 0; i < Grid::frameSize; i += Grid::filterWidth) {
+                for(auto i = 0u; i < Grid::frameSize; i += Grid::filterWidth) {
                     std::reverse(m_flippedIdx.begin() + i,
                                  m_flippedIdx.begin() + i + Grid::filterWidth);
 
@@ -195,7 +195,7 @@ namespace nn {
                 }
 
                 for(auto& neuron : *this) {
-                    for(std::size_t i = 0; i < Grid::frameSize; i++) {
+                    for(auto i = 0u; i < Grid::frameSize; i++) {
                         neuron.setWeight(i, m_weights[i]);
                     }
                 }

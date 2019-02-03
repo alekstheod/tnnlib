@@ -1,18 +1,18 @@
-#include <NeuralNetwork/LearningAlgorithm/BackPropagation/BepAlgorithm.h>
-#include <NeuralNetwork/NeuralLayer/ConvolutionLayer.h>
-#include <NeuralNetwork/NeuralLayer/NeuralLayer.h>
-#include <NeuralNetwork/Neuron/ActivationFunction/BiopolarSigmoidFunction.h>
-#include <NeuralNetwork/Neuron/ActivationFunction/LogScaleSoftmaxFunction.h>
-#include <NeuralNetwork/Neuron/ActivationFunction/SigmoidFunction.h>
-#include <NeuralNetwork/Neuron/ActivationFunction/SoftmaxFunction.h>
-#include <NeuralNetwork/Neuron/ActivationFunction/TanhFunction.h>
-#include <NeuralNetwork/Neuron/ActivationFunction/ReluFunction.h>
-#include <NeuralNetwork/Neuron/Neuron.h>
-#include <NeuralNetwork/Perceptron/Perceptron.h>
-//#include <NeuralNetwork/NeuralLayer/OpenCLNeuralLayer.h>
-#include <NeuralNetwork/Config.h>
+#include <LearningAlgorithm/BackPropagation/BepAlgorithm.h>
+#include <NeuralLayer/ConvolutionLayer.h>
+#include <NeuralLayer/NeuralLayer.h>
+#include <Neuron/ActivationFunction/BiopolarSigmoidFunction.h>
+#include <Neuron/ActivationFunction/LogScaleSoftmaxFunction.h>
+#include <Neuron/ActivationFunction/SigmoidFunction.h>
+#include <Neuron/ActivationFunction/SoftmaxFunction.h>
+#include <Neuron/ActivationFunction/TanhFunction.h>
+#include <Neuron/ActivationFunction/ReluFunction.h>
+#include <Neuron/Neuron.h>
+#include <Perceptron/Perceptron.h>
+//#include <NeuralLayer/OpenCLNeuralLayer.h>
+#include <Config.h>
 
-#include <Utilities/MPL/Tuple.h>
+#include <MPL/Tuple.h>
 
 #ifndef BOOST_SYSTEM_NO_DEPRECATED
 #define BOOST_SYSTEM_NO_DEPRECATED 1
@@ -40,10 +40,10 @@
 #include <boost/gil/extension/dynamic_image/any_image.hpp>
 #include <boost/gil/extension/dynamic_image/dynamic_image_all.hpp>
 
- #include <cereal/archives/xml.hpp>
- #include <cereal/types/array.hpp>
- #include <cereal/types/tuple.hpp>
- #include <cereal/types/vector.hpp>
+#include <cereal/archives/xml.hpp>
+#include <cereal/types/array.hpp>
+#include <cereal/types/tuple.hpp>
+#include <cereal/types/vector.hpp>
 
 #include <tuple>
 #include <cmath>

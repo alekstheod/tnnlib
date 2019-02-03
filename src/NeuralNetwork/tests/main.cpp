@@ -1,13 +1,13 @@
-#include <NeuralNetwork/NeuralLayer/ConvolutionLayer.h>
-#include <NeuralNetwork/NeuralLayer/NeuralLayer.h>
-#include <NeuralNetwork/Neuron/Neuron.h>
-#include <NeuralNetwork/Neuron/ActivationFunction/SigmoidFunction.h>
-#include <NeuralNetwork/Neuron/ActivationFunction/TanhFunction.h>
-#include <NeuralNetwork/Perceptron/Perceptron.h>
+#include <NeuralLayer/ConvolutionLayer.h>
+#include <NeuralLayer/NeuralLayer.h>
+#include <Neuron/Neuron.h>
+#include <Neuron/ActivationFunction/SigmoidFunction.h>
+#include <Neuron/ActivationFunction/TanhFunction.h>
+#include <Perceptron/Perceptron.h>
 
 #include <range/v3/all.hpp>
 
-#include <etc/xorXml.h>
+#include "etc/xorXml.h"
 
 #include <cereal/archives/xml.hpp>
 #include <cereal/types/tuple.hpp>

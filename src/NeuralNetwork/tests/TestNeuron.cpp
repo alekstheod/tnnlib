@@ -1,10 +1,10 @@
-#include <NeuralNetwork/Neuron/Neuron.h>
-#include <NeuralNetwork/Neuron/ActivationFunction/SigmoidFunction.h>
+#include <Neuron/Neuron.h>
+#include <Neuron/ActivationFunction/SigmoidFunction.h>
 
 #include <range/v3/all.hpp>
 
 #define CATCH_CONFIG_NO_CPP17_UNCAUGHT_EXCEPTIONS
-#include <catch.hpp>
+#include "catch.hpp"
 
 #include <vector>
 

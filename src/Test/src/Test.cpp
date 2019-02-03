@@ -27,23 +27,23 @@
 *  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE
 */
 
-#include <NeuralNetwork/LearningAlgorithm/BackPropagation/BepAlgorithm.h>
-#include <NeuralNetwork/NeuralLayer/ConvolutionLayer.h>
-#include <NeuralNetwork/NeuralLayer/NeuralLayer.h>
-#include <NeuralNetwork/Neuron/ActivationFunction/SigmoidFunction.h>
-#include <NeuralNetwork/Neuron/ActivationFunction/SoftmaxFunction.h>
-#include <NeuralNetwork/Neuron/ActivationFunction/TanhFunction.h>
-#include <NeuralNetwork/Neuron/Neuron.h>
-#include <NeuralNetwork/Perceptron/ComplexLayer.h>
-#include <NeuralNetwork/Perceptron/Perceptron.h>
-#include <NeuralNetwork/SOM/K2DNeighbourhood.h>
-#include <NeuralNetwork/SOM/K2DPosition.h>
-#include <NeuralNetwork/SOM/KNode.h>
-#include <NeuralNetwork/SOM/KohonenMap.h>
+#include <LearningAlgorithm/BackPropagation/BepAlgorithm.h>
+#include <NeuralLayer/ConvolutionLayer.h>
+#include <NeuralLayer/NeuralLayer.h>
+#include <Neuron/ActivationFunction/SigmoidFunction.h>
+#include <Neuron/ActivationFunction/SoftmaxFunction.h>
+#include <Neuron/ActivationFunction/TanhFunction.h>
+#include <Neuron/Neuron.h>
+#include <Perceptron/ComplexLayer.h>
+#include <Perceptron/Perceptron.h>
+#include <SOM/K2DNeighbourhood.h>
+#include <SOM/K2DPosition.h>
+#include <SOM/KNode.h>
+#include <SOM/KohonenMap.h>
 
-#include <Utilities/Design/Factory.h>
-#include <Utilities/Design/Singleton.h>
-#include <Utilities/System/Time.h>
+#include <Design/Factory.h>
+#include <Design/Singleton.h>
+#include <System/Time.h>
 
 #include <cereal/archives/xml.hpp>
 #include <cereal/types/tuple.hpp>
@@ -77,8 +77,8 @@ int main(int argc, char** argv) {
                                                    Algo::Prototype{{1.f, 1.f}, {0.f}},
                                                    Algo::Prototype{{0.f, 0.f}, {0.f}}};
 
-    unsigned int numOfEpochs = argc < 2 ? std::numeric_limits< unsigned int >::max() :
-                                          numOfEpochs = std::atoi(argv[1]);
+    unsigned int numOfEpochs =
+     argc < 2 ? std::numeric_limits< unsigned int >::max() : std::atoi(argv[1]);
 
     Perceptron perceptron =
      algorithm.calculate(prototypes.begin(),
