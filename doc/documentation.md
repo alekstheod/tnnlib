@@ -84,16 +84,17 @@ using NeuralLayer = detail::NeuralLayer< NeuronType<ActivationFunctionType, Var,
 ```
 
 ---------------------------------------------------------------------
-** NeuronType the type of the neurons used in this layer.
-** ActivationFunctionType the activation function type used in each of the corresponding neurons.
-** size the number of neurons in a neural layer.
-** inputs number the number of the inputs for the current layer.
-** isDynamic defines the underlying collection type if false then it will be the std::array otherwise std::vector
+* NeuronType the type of the neurons used in this layer.
+* ActivationFunctionType the activation function type used in each of the corresponding neurons.
+* size the number of neurons in a neural layer.
+* inputs number the number of the inputs for the current layer.
+* isDynamic defines the underlying collection type if false then it will be the std::array otherwise std::vector
 there are some learning algorithms which requires to have a floating number of neurons in a layer.
-** Var the variable type used in this layer.
+* Var the variable type used in this layer.
 ---------------------------------------------------------------------
 
-=== Perceptron
+Perceptron
+=== 
 Now lets take a look on one possible model of an artificial neural network, called 
 perceptron. Perceptron consists of the layers. Each layer has more than 0 neurons and amount of neurons in each
 level strongly depends on the problem definition. For instance if we want to solve a simple XOR problem so that
