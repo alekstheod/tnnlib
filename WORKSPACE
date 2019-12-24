@@ -6,7 +6,7 @@ load(
 
 git_repository(
     name = "com_github_nelhage_rules_boost",
-    commit = "9f9fb8b2f0213989247c9d5c0e814a8451d18d7f",
+    commit = "ed844db5990d21b75dc3553c057069f324b3916b",
     remote = "https://github.com/nelhage/rules_boost",
 )
 
