@@ -9,8 +9,6 @@ addons:
     - sourceline: 'ppa:mamarley/updates'
     packages:
     - clang
-    #- boost1.69 
-    - cmake
     - valgrind
     - g++-7
     - clang-5.0
@@ -19,7 +17,7 @@ addons:
     - CXXSTD=-std=c++17
 
 install: 
-  - apt search boost && sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-7 90
+  - sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-7 90
 
 notifications:
   email:
@@ -29,11 +27,11 @@ notifications:
     on_failure: always
 
 script:
-   cd src && cmake -DCMAKE_DISABLE_FIND_PACKAGE_OpenCL:bool=TRUE CMakeLists.txt && make
+   cd src && bazel build //... 
 before_script:
 
 after_success:
-- valgrind --leak-check=full --error-exitcode=1 ./Test/Test 1000 > /dev/null
+- valgrind --leak-check=full --error-exitcode=1 ./bazel-bin/src/Test/tnnlib_test 1000 > /dev/null
 - cd ..
 - if [ $TRAVIS_BRANCH == $TRAVIS_TAG ]; then rake deploy; fi
 - git checkout -b master
