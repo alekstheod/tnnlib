@@ -21,7 +21,6 @@ cc_library(
     ],
     hdrs = [
         "png.h",
-		"pnglibconf.h",
         "pngconf.h",
         "pngdebug.h",
         "pnginfo.h",
@@ -32,3 +31,4 @@ cc_library(
     visibility = ["//visibility:public"],
     deps = ["@zlib"],
 )
+

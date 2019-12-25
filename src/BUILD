@@ -25,6 +25,7 @@ cc_binary(
         ":tnnlib",
         ":tnnlib_utils",
         "//src/libs:cereal",
+        "//src/libs:libpng_config",
         "@boost//:filesystem",
         "@libpng",
         "@zlib",

@@ -1,4 +1,11 @@
 # https://docs.bazel.build/versions/master/be/c-cpp.html#cc_library
+
+cc_library(
+    name = "libpng_config",
+    hdrs = ["libpng/pnglibconf.h"],
+    visibility = ["//visibility:public"],
+)
+
 cc_library(
     name = "range-v3",
     hdrs = glob(["range-v3/nix/**/*.hpp"]),
