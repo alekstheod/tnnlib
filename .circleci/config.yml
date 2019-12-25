@@ -3,5 +3,6 @@ jobs:
     docker:
       - image: l.gcr.io/google/bazel:latest 
     steps:
-      - checkout
-      - run: bazel test //...
+        - checkout
+        - run: bazel build //...
+version: 2
