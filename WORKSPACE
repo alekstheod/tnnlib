@@ -24,6 +24,6 @@ new_git_repository(
 new_git_repository(
     name = "libpng",
     build_file = "libpng.BUILD",
-    commit = "eddf9023206dc40974c26f589ee2ad63a4227a1e",
+    commit = "c17d164b4467f099b4484dfd4a279da0bc1dbd4a",
     remote = "https://github.com/glennrp/libpng",
 )
