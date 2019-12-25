@@ -21,7 +21,7 @@ cc_library(
     ],
     hdrs = [
         "png.h",
-		"pnglibconf.h"
+		"pnglibconf.h",
         "pngconf.h",
         "pngdebug.h",
         "pnginfo.h",
