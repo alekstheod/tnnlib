@@ -1,8 +1,7 @@
-version: 2
- jobs:
-   build:
-     docker:
-       - image: circleci/ruby:2.4.1
-     steps:
-       - checkout
-       - run: bazel test //...
+jobs:
+  build:
+    docker:
+      - image: l.gcr.io/google/bazel:latest 
+    steps:
+      - checkout
+      - run: bazel test //...
