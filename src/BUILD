@@ -25,8 +25,9 @@ cc_binary(
         ":tnnlib",
         ":tnnlib_utils",
         "//src/libs:cereal",
-        "//src/libs:libpng_config",
         "@boost//:filesystem",
+        "@boost//:gil",
+        "@boost//:variant",
         "@libpng",
         "@zlib",
     ],
@@ -39,4 +40,5 @@ cc_library(
     includes = ["Utilities"],
     strip_include_prefix = "Utilities",
     visibility = ["//visibility:public"],
+    deps = ["@boost//:numeric_conversion"],
 )

@@ -29,6 +29,7 @@ cc_library(
     ],
     includes = ["."],
     visibility = ["//visibility:public"],
-    deps = ["@zlib"],
+    deps = ["@zlib",
+	"@libpng_config"],
 )
 

@@ -4,6 +4,11 @@ load(
     "new_git_repository",
 )
 
+local_repository(
+    name = "libpng_config",
+    path = "libpng_config",
+)
+
 git_repository(
     name = "com_github_nelhage_rules_boost",
     commit = "ed844db5990d21b75dc3553c057069f324b3916b",
