@@ -1,6 +1,7 @@
 cc_library(
     name = "tnnlib",
     hdrs = glob(["NeuralNetwork/**/*.h"]),
+    copts = ["-Werror"],
     includes = ["NeuralNetwork"],
     strip_include_prefix = "NeuralNetwork",
     visibility = [
@@ -20,7 +21,7 @@ cc_library(
 cc_binary(
     name = "ocr",
     srcs = glob(["ocr/**/*.cpp"]),
-    copts = [],
+    copts = ["-Werror"],
     deps = [
         ":tnnlib",
         ":tnnlib_utils",
@@ -37,6 +38,7 @@ cc_library(
     name = "tnnlib_utils",
     srcs = glob(["Utilities/**/*.cpp"]),
     hdrs = glob(["Utilities/**/*.h"]),
+    copts = ["-Werror"],
     includes = ["Utilities"],
     strip_include_prefix = "Utilities",
     visibility = ["//visibility:public"],
