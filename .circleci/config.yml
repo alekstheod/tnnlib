@@ -4,7 +4,7 @@ jobs:
       - image: l.gcr.io/google/bazel:latest 
     steps:
         - checkout
-        - run: yes | apt install valgrind
+        - run: yes | apt install valgrind || echo skip
         - run: bazel test //...
         - run: bazel run --run_under='valgrind --leak-check=full --error-exitcode=1' //src/Test:tnnlib_test
 version: 2
