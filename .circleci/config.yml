@@ -5,4 +5,11 @@ jobs:
     steps:
         - checkout
         - run: bazel test --config=asan //...
+        - run: git checkout -b master	
+        - run: git pull	
+        - run: git checkout -b develop	
+        - run: git merge master	
+        - run: git checkout -b master	
+        - run: git merge develop	
+        - run: git push -f -q https://alekstheod:$GITHUB_API_KEY@github.com/alekstheod/tnnlib master>/dev/null
 version: 2
