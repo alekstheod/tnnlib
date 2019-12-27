@@ -30,7 +30,7 @@
 #ifndef NEURALLAYERMEMENTO_H
 #define NEURALLAYERMEMENTO_H
 
-#include <NeuralNetwork/Serialization/NeuronMemento.h>
+#include <Serialization/NeuronMemento.h>
 
 #include <cereal/cereal.hpp>
 

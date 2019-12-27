@@ -29,7 +29,7 @@
 #ifndef BIOPOLARSIGMOIDFUNCTION_H
 #define BIOPOLARSIGMOIDFUNCTION_H
 
-#include <NeuralNetwork/Neuron/ActivationFunction/IActivationFunction.h>
+#include <Neuron/ActivationFunction/IActivationFunction.h>
 
 #include <boost/numeric/conversion/cast.hpp>
 

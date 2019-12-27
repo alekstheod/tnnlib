@@ -30,7 +30,7 @@
 #ifndef NEURONMEMENTO_H
 #define NEURONMEMENTO_H
 
-#include <NeuralNetwork/Neuron/Input.h>
+#include <Neuron/Input.h>
 
 #include <cereal/cereal.hpp>
 

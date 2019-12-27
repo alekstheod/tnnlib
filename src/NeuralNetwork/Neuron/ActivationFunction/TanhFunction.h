@@ -32,7 +32,7 @@
 #include <functional>
 #include <numeric>
 #include <utility>
-#include <NeuralNetwork/Neuron/ActivationFunction/IActivationFunction.h>
+#include <Neuron/ActivationFunction/IActivationFunction.h>
 #include <boost/numeric/conversion/cast.hpp>
 #include <cmath>
 

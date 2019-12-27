@@ -1,7 +1,7 @@
 #ifndef PERCEPTRON_LAYER_H
 #define PERCEPTRON_LAYER_H
 
-#include <NeuralNetwork/Serialization/ComplexLayerMemento.h>
+#include <Serialization/ComplexLayerMemento.h>
 
 namespace nn {
 

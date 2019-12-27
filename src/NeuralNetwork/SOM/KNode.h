@@ -31,8 +31,8 @@
 
 #include <vector>
 #include <array>
-#include <Utilities/System/Time.h>
-#include <NeuralNetwork/SOM/IPosition.h>
+#include <System/Time.h>
+#include <SOM/IPosition.h>
 #include <iostream>
 #include <cmath>
 
@@ -55,8 +55,8 @@ namespace nn {
             };
 
           private:
-            Position m_position;
             InputType m_weights;
+            Position m_position;
 
           public:
             /**

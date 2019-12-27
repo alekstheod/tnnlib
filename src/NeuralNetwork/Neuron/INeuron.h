@@ -35,21 +35,11 @@ namespace nn {
     template< class Neuron >
     class INeuron {
       public:
-        typedef typename Neuron::Var Var;
-        typedef typename Neuron::OutputFunction OutputFunction;
-        typedef typename Neuron::Memento Memento;
-        typedef typename Neuron::Input Input;
-        typedef Neuron NeuronType;
-
-      private:
-        Neuron m_neuron;
-
-      public:
-        INeuron() {
-        }
-
-        INeuron(Neuron neuron) : m_neuron(neuron) {
-        }
+        using Var = typename Neuron::Var;
+        using OutputFunction = typename Neuron::OutputFunction;
+        using Memento = typename Neuron::Memento;
+        using Input = typename Neuron::Input;
+        using NeuronType = Neuron;
 
         /**
          * @brief will calculate the output of the neuron.
@@ -139,7 +129,7 @@ namespace nn {
             return &m_neuron;
         }
 
-        ~INeuron() {
-        }
+      private:
+        Neuron m_neuron;
     };
 } // namespace nn

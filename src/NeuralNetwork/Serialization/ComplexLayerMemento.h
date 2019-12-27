@@ -1,7 +1,7 @@
 #ifndef COMPLEXLAYER_MEMENTO_H
 #define COMPLEXLAYER_MEMENTO_H
 
-#include <NeuralNetwork/Serialization/PerceptronMemento.h>
+#include <Serialization/PerceptronMemento.h>
 
 #include <cereal/cereal.hpp>
 

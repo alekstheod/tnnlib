@@ -35,7 +35,6 @@
 #include <algorithm>
 #include <boost/iterator/transform_iterator.hpp>
 #include <boost/numeric/conversion/cast.hpp>
-#include <boost/concept_check.hpp>
 #include <cmath>
 
 namespace nn {

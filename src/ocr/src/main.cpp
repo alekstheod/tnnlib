@@ -1,17 +1,18 @@
-#include <NeuralNetwork/LearningAlgorithm/BackPropagation/BepAlgorithm.h>
-#include <NeuralNetwork/NeuralLayer/ConvolutionLayer.h>
-#include <NeuralNetwork/NeuralLayer/NeuralLayer.h>
-#include <NeuralNetwork/Neuron/ActivationFunction/BiopolarSigmoidFunction.h>
-#include <NeuralNetwork/Neuron/ActivationFunction/LogScaleSoftmaxFunction.h>
-#include <NeuralNetwork/Neuron/ActivationFunction/SigmoidFunction.h>
-#include <NeuralNetwork/Neuron/ActivationFunction/SoftmaxFunction.h>
-#include <NeuralNetwork/Neuron/ActivationFunction/TanhFunction.h>
-#include <NeuralNetwork/Neuron/Neuron.h>
-#include <NeuralNetwork/Perceptron/Perceptron.h>
-//#include <NeuralNetwork/NeuralLayer/OpenCLNeuralLayer.h>
-#include <NeuralNetwork/Config.h>
+#include <LearningAlgorithm/BackPropagation/BepAlgorithm.h>
+#include <NeuralLayer/ConvolutionLayer.h>
+#include <NeuralLayer/NeuralLayer.h>
+#include <Neuron/ActivationFunction/BiopolarSigmoidFunction.h>
+#include <Neuron/ActivationFunction/LogScaleSoftmaxFunction.h>
+#include <Neuron/ActivationFunction/SigmoidFunction.h>
+#include <Neuron/ActivationFunction/SoftmaxFunction.h>
+#include <Neuron/ActivationFunction/TanhFunction.h>
+#include <Neuron/ActivationFunction/ReluFunction.h>
+#include <Neuron/Neuron.h>
+#include <Perceptron/Perceptron.h>
+//#include <NeuralLayer/OpenCLNeuralLayer.h>
+#include <Config.h>
 
-#include <Utilities/MPL/Tuple.h>
+#include <MPL/Tuple.h>
 
 #ifndef BOOST_SYSTEM_NO_DEPRECATED
 #define BOOST_SYSTEM_NO_DEPRECATED 1
@@ -30,26 +31,19 @@
 
 #include <boost/gil/channel_algorithm.hpp>
 #include <boost/gil/channel.hpp>
-#include <boost/gil/extension/dynamic_image/any_image.hpp>
-#include <boost/gil/extension/dynamic_image/dynamic_image_all.hpp>
-#include <boost/gil/extension/io/dynamic_io.hpp>
-#include <boost/gil/extension/io/png_dynamic_io.hpp>
-#include <boost/gil/gil_all.hpp>
+#include <boost/gil.hpp>
 #include <boost/gil/image.hpp>
 
-#include "gil/extension/numeric/sampler.hpp"
-#include "gil/extension/numeric/resample.hpp"
+#include <boost/gil/extension/io/png/old.hpp>
+#include <boost/gil/extension/numeric/sampler.hpp>
+#include <boost/gil/extension/numeric/resample.hpp>
+#include <boost/gil/extension/dynamic_image/any_image.hpp>
+#include <boost/gil/extension/dynamic_image/dynamic_image_all.hpp>
 
 #include <cereal/archives/xml.hpp>
 #include <cereal/types/array.hpp>
 #include <cereal/types/tuple.hpp>
 #include <cereal/types/vector.hpp>
-
-#if defined(NN_CC_MSVC)
-#pragma warning(pop)
-#endif
-
-#include "Var.h"
 
 #include <tuple>
 #include <cmath>
@@ -75,9 +69,12 @@ namespace {
 using ConvolutionGrid =
  typename nn::ConvolutionGrid< width, height, stride, margin >::define;
 
+using ConvolutionGrid2 =
+ typename nn::ConvolutionGrid< width / stride, height / stride, 2, 5 >::define;
+
 using Perceptron =
  nn::Perceptron< VarType,
-                 nn::ConvolutionLayer< nn::NeuralLayer, nn::Neuron, nn::SigmoidFunction, inputsNumber, ConvolutionGrid >,
+                 nn::ConvolutionLayer< nn::NeuralLayer, nn::Neuron, nn::ReluFunction, inputsNumber, ConvolutionGrid >,
                  nn::NeuralLayer< nn::Neuron, nn::SoftmaxFunction, 10, 1000 > >;
 
 using Algo = nn::bp::BepAlgorithm< Perceptron, nn::bp::CrossEntropyError >;
@@ -123,7 +120,7 @@ void readImage(std::string fileName, Iterator out) {
     for(int y = 0; y < srcView.height(); ++y) {
         gray8c_view_t::x_iterator src_it(srcView.row_begin(y));
         for(int x = 0; x < srcView.width(); ++x) {
-            *out = src_it[x] < 130 ? 1.f : -1.f; // 255.f;
+            *out = src_it[x];
             out++;
         }
     }
@@ -189,7 +186,7 @@ void calculateWeights(std::string imagesPath) {
 
     std::cout << "Perceptron calculation started" << std::endl;
     static Perceptron tmp = readPerceptron("perceptron.xml");
-    static Algo algorithm(0.003f);
+    static Algo algorithm(0.05f);
     algorithm.setMemento(tmp.getMemento());
 
     std::vector< Algo::Prototype > prototypes;
@@ -210,9 +207,9 @@ void calculateWeights(std::string imagesPath) {
     }
 
     auto errorFunc = [](unsigned int epoch, VarType error) {
-        // if(epoch % 100 == 0) {
+        // if(epoch % 3 == 0) {
         std::cout << "Epoch:" << epoch << " error:" << error << std::endl;
-        // }
+        //}
 
         return error > 0.001f;
     };
