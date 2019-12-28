@@ -8,7 +8,7 @@ cc_library(
         "//visibility:public",
     ],
     deps = [
-        "//src/libs:cereal",
+        "@cereal",
         "//src/libs:range-v3",
         ":tnnlib_utils",
         "@boost//:array",
@@ -25,10 +25,10 @@ cc_binary(
     deps = [
         ":tnnlib",
         ":tnnlib_utils",
-        "//src/libs:cereal",
         "@boost//:filesystem",
         "@boost//:gil",
         "@boost//:variant",
+        "@cereal",
         "@libpng",
         "@zlib",
     ],
