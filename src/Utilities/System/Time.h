@@ -11,7 +11,6 @@ namespace utils {
         Var rnd(unsigned int maxValue);
     } // namespace priv
 
-
     template< typename Var >
     Var createRandom(unsigned int maxValue) {
         if(maxValue <= 1) {
