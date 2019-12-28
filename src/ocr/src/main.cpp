@@ -40,7 +40,7 @@
 #include <boost/gil/extension/dynamic_image/any_image.hpp>
 #include <boost/gil/extension/dynamic_image/dynamic_image_all.hpp>
 
-#include <cereal/archives/xml.hpp>
+#include <cereal/archives/json.hpp>
 #include <cereal/types/array.hpp>
 #include <cereal/types/tuple.hpp>
 #include <cereal/types/vector.hpp>
@@ -132,7 +132,7 @@ Perceptron readPerceptron(std::string fileName) {
         std::ifstream file(fileName);
         if(file.good()) {
             Perceptron::Memento memento;
-            cereal::XMLInputArchive ia(file);
+            cereal::JSONInputArchive ia(file);
             ia >> memento;
 
             perceptron.setMemento(memento);
@@ -165,7 +165,7 @@ template< typename Perc >
 void save(const Perc& perc, std::string name) {
     typename Perc::Memento memento = perc.getMemento();
     std::ofstream strm(name);
-    cereal::XMLOutputArchive oa(strm);
+    cereal::JSONOutputArchive oa(strm);
     oa << memento;
     strm.flush();
 }
@@ -185,7 +185,7 @@ void calculateWeights(std::string imagesPath) {
     }
 
     std::cout << "Perceptron calculation started" << std::endl;
-    static Perceptron tmp = readPerceptron("perceptron.xml");
+    static Perceptron tmp = readPerceptron("perceptron.json");
     static Algo algorithm(0.05f);
     algorithm.setMemento(tmp.getMemento());
 
@@ -217,7 +217,7 @@ void calculateWeights(std::string imagesPath) {
     static Perceptron perceptron =
      algorithm.calculate(prototypes.begin(), prototypes.end(), errorFunc);
 
-    save(perceptron, "perceptron.xml");
+    save(perceptron, "perceptron.json");
 }
 
 int main(int argc, char** argv) {
@@ -230,11 +230,12 @@ int main(int argc, char** argv) {
         result = 0;
     } else {
         std::cout << std::endl << "Usage : " << std::endl << std::endl;
-        std::cout << "./ocr [folder] where  [folder] is a directory with your "
-                     "samples, this command will generate a perceptron.xml file"
-                  << std::endl
-                  << std::endl;
-        std::cout << "./ocr perceptron.xml [file] where [file] is a png image "
+        std::cout
+         << "./ocr [folder] where  [folder] is a directory with your "
+            "samples, this command will generate a perceptron.json file"
+         << std::endl
+         << std::endl;
+        std::cout << "./ocr perceptron.json [file] where [file] is a png image "
                      "which has to be recognized"
                   << std::endl
                   << std::endl;

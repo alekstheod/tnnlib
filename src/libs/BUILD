@@ -9,11 +9,3 @@ cc_library(
     strip_include_prefix = "range-v3/nix",
     visibility = ["//visibility:public"],
 )
-
-cc_library(
-    name = "cereal",
-    hdrs = glob(["cereal/**/*.hpp"]),
-    includes = ["cereal"],
-    strip_include_prefix = ".",
-    visibility = ["//visibility:public"],
-)
