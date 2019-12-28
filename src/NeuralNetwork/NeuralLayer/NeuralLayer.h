@@ -168,7 +168,7 @@ namespace nn {
                 Memento memento;
                 memento.neurons =
                  m_neurons |
-                 view::transform([](const Neuron& n) { return n.getMemento(); }) |
+                 views::transform([](const Neuron& n) { return n.getMemento(); }) |
                  ranges::to< decltype(memento.neurons) >;
                 return memento;
             }
@@ -179,7 +179,7 @@ namespace nn {
             void setMemento(const Memento& memento) {
                 using namespace ranges;
                 m_neurons = memento.neurons |
-                            view::transform([](const NeuronMemento& m) {
+                            views::transform([](const NeuronMemento& m) {
                                 Neuron neuron;
                                 neuron->setMemento(m);
                                 return neuron;

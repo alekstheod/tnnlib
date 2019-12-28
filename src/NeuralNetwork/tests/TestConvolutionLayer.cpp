@@ -38,7 +38,7 @@ namespace {
             WHEN(
              "input is a grid filled with the increasing sequence of "
              "integers") {
-                for(auto i : ranges::v3::view::ints(0, 25)) {
+                for(auto i : ranges::views::ints(0, 25)) {
                     layer.setInput(i, static_cast< float >(i + 1));
                 }
 
@@ -48,7 +48,7 @@ namespace {
                      {3, 4, 5, 8, 9, 10, 13, 14, 15},
                      {11, 12, 13, 16, 17, 18, 21, 22, 23},
                      {13, 14, 15, 18, 19, 20, 23, 24, 25}};
-                    for(const auto id : ranges::v3::view::ints(0, 4)) {
+                    for(const auto id : ranges::views::ints(0, 4)) {
                         REQUIRE(hasValidInputs(layer[id], inputs[id]));
                     }
                 }

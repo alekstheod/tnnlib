@@ -15,7 +15,7 @@ namespace {
             std::vector< float > dotProducts;
             WHEN("Weights are set to 1 and bias is equal to 1") {
                 neuron.setBias(1);
-                for(auto i : ranges::v3::view::ints(0, 3)) {
+                for(auto i : ranges::views::ints(0, 3)) {
                     neuron.setWeight(i, 1);
                     neuron.setInput(i, 1);
                 }
@@ -28,7 +28,7 @@ namespace {
             }
             WHEN("Weights are set to 0 and bias is equal to 0") {
                 neuron.setBias(0);
-                for(auto i : ranges::v3::view::ints(0, 3)) {
+                for(auto i : ranges::views::ints(0, 3)) {
                     neuron.setWeight(i, 0);
                     neuron.setInput(i, 1);
                 }
@@ -42,7 +42,7 @@ namespace {
              "Weights are set to 1 bias is equal to 0 and inputs are set to "
              "0") {
                 neuron.setBias(0);
-                for(auto i : ranges::v3::view::ints(0, 3)) {
+                for(auto i : ranges::views::ints(0, 3)) {
                     neuron.setWeight(i, 1);
                     neuron.setInput(i, 0);
                 }
@@ -54,4 +54,4 @@ namespace {
             }
         }
     }
-}
+} // namespace
