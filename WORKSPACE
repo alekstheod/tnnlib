@@ -39,3 +39,10 @@ new_git_repository(
     commit = "02eace19a99ce3cd564ca4e379753d69af08c2c8",
     remote = "https://github.com/USCiLab/cereal",
 )
+
+new_git_repository(
+    name = "range-v3",
+    build_file = "range-v3.BUILD",
+    commit = "4d6a463bca51bc316f9b565edd94e82388206093",
+    remote = "https://github.com/ericniebler/range-v3",
+)

@@ -213,13 +213,13 @@ namespace nn {
             }
 
             void calculateWeights(Var learningRate) {
-                for(auto neuronId : ranges::v3::view::indices(this->size())) {
+                for(auto neuronId : ranges::views::indices(this->size())) {
                     auto& neuron = (*this)[neuronId];
                     auto delta = neuron->getDelta();
 
                     auto calculateWeight =
                      [&](const std::array< Var, Grid::frameSize >& weightIdxs) {
-                         for(auto inputId : ranges::v3::view::indices(neuron->size())) {
+                         for(auto inputId : ranges::views::indices(neuron->size())) {
                              auto input = neuron[inputId].value;
                              auto weight = neuron[inputId].weight;
                              m_weights[weightIdxs[inputId]] +=
@@ -246,9 +246,9 @@ namespace nn {
                     neuron->setBias(newWeight);
                 }
 
-                for(auto neuronId : ranges::v3::view::indices(this->size())) {
+                for(auto neuronId : ranges::views::indices(this->size())) {
                     auto& neuron = (*this)[neuronId];
-                    for(auto inputId : ranges::v3::view::indices(neuron->size())) {
+                    for(auto inputId : ranges::views::indices(neuron->size())) {
                         neuron.setWeight(inputId, m_weights[inputId]);
                     }
                 }

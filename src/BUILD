@@ -9,7 +9,7 @@ cc_library(
     ],
     deps = [
         "@cereal",
-        "//src/libs:range-v3",
+        "@range-v3",
         ":tnnlib_utils",
         "@boost//:array",
         "@boost//:bind",

@@ -168,7 +168,8 @@ namespace nn {
                 Memento memento;
                 memento.neurons =
                  m_neurons |
-                 view::transform([](const Neuron& n) { return n.getMemento(); });
+                 views::transform([](const Neuron& n) { return n.getMemento(); }) |
+                 ranges::to< decltype(memento.neurons) >;
                 return memento;
             }
 
@@ -177,11 +178,13 @@ namespace nn {
              */
             void setMemento(const Memento& memento) {
                 using namespace ranges;
-                m_neurons = memento.neurons | view::transform([](const NeuronMemento& m) {
+                m_neurons = memento.neurons |
+                            views::transform([](const NeuronMemento& m) {
                                 Neuron neuron;
                                 neuron->setMemento(m);
                                 return neuron;
-                            });
+                            }) |
+                            ranges::to< decltype(m_neurons) >;
             }
 
             /**
@@ -229,7 +232,8 @@ namespace nn {
     } // namespace detail
 
     template< template< template< class > class, class, std::size_t > class NeuronType,
-              template< class > class ActivationFunctionType,
+              template< class >
+              class ActivationFunctionType,
               std::size_t size,
               std::size_t inputsNumber = 2,
               typename Var = float >
