@@ -2,89 +2,72 @@
 
 const auto xorXml = R"++(<?xml version="1.0" encoding="utf-8"?>
 <cereal>
-    <value0>
-        <layers>
-            <tuple_element0>
-                <neurons size="dynamic">
-                    <value0>
-                        <bias>-2.1020605564117432</bias>
-                        <inputs>
-                            <value0>
-                                <weight>2.1383101940155029</weight>
-                            </value0>
-                            <value1>
-                                <weight>2.3194994926452637</weight>
-                            </value1>
-                        </inputs>
-                    </value0>
-                    <value1>
-                        <bias>3.170325756072998</bias>
-                        <inputs>
-                            <value0>
-                                <weight>-2.4048829078674316</weight>
-                            </value0>
-                            <value1>
-                                <weight>-2.4974827766418457</weight>
-                            </value1>
-                        </inputs>
-                    </value1>
-                </neurons>
-            </tuple_element0>
-            <tuple_element1>
-                <neurons size="dynamic">
-                    <value0>
-                        <bias>-1.3590652942657471</bias>
-                        <inputs>
-                            <value0>
-                                <weight>4.2251906394958496</weight>
-                            </value0>
-                            <value1>
-                                <weight>-0.42676317691802979</weight>
-                            </value1>
-                        </inputs>
-                    </value0>
-                    <value1>
-                        <bias>-0.024215273559093475</bias>
-                        <inputs>
-                            <value0>
-                                <weight>2.680720329284668</weight>
-                            </value0>
-                            <value1>
-                                <weight>-4.9770078659057617</weight>
-                            </value1>
-                        </inputs>
-                    </value1>
-                    <value2>
-                        <bias>1.0682463645935059</bias>
-                        <inputs>
-                            <value0>
-                                <weight>0.70759475231170654</weight>
-                            </value0>
-                            <value1>
-                                <weight>0.62712466716766357</weight>
-                            </value1>
-                        </inputs>
-                    </value2>
-                </neurons>
-            </tuple_element1>
-            <tuple_element2>
-                <neurons size="dynamic">
-                    <value0>
-                        <bias>-3.8316440582275391</bias>
-                        <inputs>
-                            <value0>
-                                <weight>4.3007397651672363</weight>
-                            </value0>
-                            <value1>
-                                <weight>-4.2804865837097168</weight>
-                            </value1>
-                            <value2>
-                                <weight>0.59768253564834595</weight>
-                            </value2>
-                        </inputs>
-                    </value0>
-                </neurons>
-            </tuple_element2>
-        </layers>
-    </value0>
-</cereal>)++";
+	<perceptron>
+		<layers>
+			<tuple_element0>
+				<neurons size="dynamic">
+					<value0>
+						<bias>1.2191612720489502</bias>
+						<value0 size="dynamic">
+							<value0>-0.96680629253387451</value0>
+							<value1>-0.96659904718399048</value1>
+						</value0>
+					</value0>
+					<value1>
+						<bias>0.96928209066390991</bias>
+						<value0 size="dynamic">
+							<value0>-2.6039395332336426</value0>
+							<value1>-2.6032414436340332</value1>
+						</value0>
+					</value1>
+				</neurons>
+			</tuple_element0>
+			<tuple_element1>
+				<neurons size="dynamic">
+					<value0>
+						<bias>1.0041816234588623</bias>
+						<value0 size="dynamic">
+							<value0>-1.6931211948394775</value0>
+							<value1>1.4869790077209473</value1>
+						</value0>
+					</value0>
+					<value1>
+						<bias>0.086349532008171082</bias>
+						<value0 size="dynamic">
+							<value0>-0.75158333778381348</value0>
+							<value1>0.5257878303527832</value1>
+						</value0>
+					</value1>
+					<value2>
+						<bias>-0.11378110945224762</bias>
+						<value0 size="dynamic">
+							<value0>-0.60852372646331787</value0>
+							<value1>0.37949547171592712</value1>
+						</value0>
+					</value2>
+					<value3>
+						<bias>1.0227124691009521</bias>
+						<value0 size="dynamic">
+							<value0>-1.7144192457199097</value0>
+							<value1>1.5094144344329834</value1>
+						</value0>
+					</value3>
+				</neurons>
+			</tuple_element1>
+			<tuple_element2>
+				<neurons size="dynamic">
+					<value0>
+						<bias>-0.51470929384231567</bias>
+						<value0 size="dynamic">
+							<value0>-2.2422444820404053</value0>
+							<value1>-0.57537704706192017</value1>
+							<value2>-0.33102467656135559</value2>
+							<value3>-2.2881741523742676</value3>
+						</value0>
+					</value0>
+				</neurons>
+			</tuple_element2>
+		</layers>
+	</perceptron>
+</cereal>
+)++";

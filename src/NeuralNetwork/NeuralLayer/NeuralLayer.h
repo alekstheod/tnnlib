@@ -51,8 +51,7 @@ namespace nn {
          * Represent the NeuralLayer in perceptron.
          */
         template< class NeuronType, std::size_t neuronsNumber, std::size_t inputsNumber >
-        class NeuralLayer {
-          public:
+        struct NeuralLayer {
             using Neuron = INeuron< typename NeuronType::template adjust< inputsNumber > >;
             using Var = typename Neuron::Var;
             using NeuronMemento = typename Neuron::Memento;
@@ -76,12 +75,9 @@ namespace nn {
              * A list of the neurons.
              */
             typedef typename std::vector< Neuron > Container;
-            Container m_neurons;
+            Container m_neurons{neuronsNumber};
 
           public:
-            NeuralLayer() : m_neurons(neuronsNumber) {
-            }
-
             /**
              * Constructor will initialize the layer by the given inputs number
              * and neurons number.
