@@ -21,6 +21,7 @@
 #include <vector>
 #include <string>
 
+
 namespace {
 
     template< typename Memento >
@@ -39,8 +40,8 @@ namespace {
          "weights such that perceptron can recognise a XOR gate") {
             using Perceptron =
              nn::Perceptron< float,
-                             nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, 2, 2 >,
-                             nn::NeuralLayer< nn::Neuron, nn::TanhFunction, 3 >,
+                             nn::NeuralLayer< nn::Neuron, nn::TanhFunction, 2 >,
+                             nn::NeuralLayer< nn::Neuron, nn::TanhFunction, 4 >,
                              nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, 1 > >;
 
             Perceptron perceptron;
