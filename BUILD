@@ -25,6 +25,7 @@ cc_binary(
     deps = [
         ":tnnlib",
         ":tnnlib_utils",
+        "@OpenCL",
         "@boost//:filesystem",
         "@boost//:gil",
         "@boost//:variant",
