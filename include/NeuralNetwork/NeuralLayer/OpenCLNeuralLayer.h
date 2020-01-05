@@ -3,12 +3,14 @@
 #include <NeuralNetwork/NeuralLayer/NeuralLayer.h>
 #include <assert.h>
 
-#define __CL_ENABLE_EXCEPTIONS
-#include <CL/cl.hpp>
+#define CL_HPP_TARGET_OPENCL_VERSION 200
+#define CL_HPP_ENABLE_EXCEPTIONS
+#include <CL/cl2.hpp>
 
 #include <array>
 #include <exception>
 #include <fstream>
+
 
 namespace nn {
 
@@ -31,7 +33,6 @@ namespace nn {
 
         cl::Program createProgram(const cl::Context& context) {
             using namespace cl;
-
             // Get a list of devices on this platform
             std::vector< Device > devices = context.getInfo< CL_CONTEXT_DEVICES >();
             // clang-format off
@@ -51,19 +52,18 @@ namespace nn {
                               "}";
             // clang-format on
 
-            Program::Sources source(1, std::make_pair(src.c_str(), src.length() + 1));
-            // Make program of the source code in the context
-            cl::Program program = cl::Program(context, source);
+            Program::Sources source{1, {src}};
+            cl::Program program = cl::Program{context, source};
 
             // Build program for these specific devices
             try {
                 program.build(devices);
             } catch(const cl::Error& e) {
                 cl_int err;
-                cl::STRING_CLASS buildlog =
+                const auto buildlog =
                  program.getBuildInfo< CL_PROGRAM_BUILD_LOG >(devices[0], &err);
                 std::cerr << "Building error! Log: " << buildlog << std::endl;
-                throw std::runtime_error{buildlog};
+                throw std::runtime_error{"Build opencl program error"};
             }
 
             return program;
@@ -114,7 +114,6 @@ namespace nn {
                 Buffer values(m_context, CL_MEM_READ_ONLY, size * sizeof(float));
                 Buffer product(m_context, CL_MEM_WRITE_ONLY, CONST_NEURONS_NUMBER * sizeof(float));
 
-
                 // Set arguments to kernel
                 m_kernel.setArg(0, weights);
                 m_kernel.setArg(1, values);
@@ -123,7 +122,7 @@ namespace nn {
                 CommandQueue queue(m_context, devices[0]);
 
                 try {
-                    std::vector< float > dotProducts{CONST_NEURONS_NUMBER, 0.f};
+                    std::vector< float > dotProducts(CONST_NEURONS_NUMBER);
                     for(std::size_t i = 0; i < CONST_NEURONS_NUMBER; ++i) {
                         // Create memory buffers
                         for(std::size_t j = 0; j < CONST_INPUTS_NUMBER; ++j) {
@@ -160,13 +159,9 @@ namespace nn {
                                                       dotProducts.end());
                     }
                 } catch(const cl::Error& e) {
-                    cl_int err;
-                    cl::STRING_CLASS buildlog =
-                     m_program.getBuildInfo< CL_PROGRAM_BUILD_LOG >(devices[0], &err);
-                    std::cout << "Calculation error: " << buildlog << std::endl;
+                    std::cout << "Calculation error" << std::endl;
                 }
             }
-
 
           public:
             OpenCLNeuralLayer()
@@ -178,7 +173,8 @@ namespace nn {
                           "Invalid template argument neuronsNumber == 0");
             static_assert(CONST_INPUTS_NUMBER > 0,
                           "Invalid template argument inputsNumber <= 1");
-            static_assert(std::is_same_v< float, Var >, "VarType must be float");
+            static_assert(std::is_same< float, Var >::value,
+                          "VarType must be float");
 
             using Internal::begin;
             using Internal::cbegin;
