@@ -150,13 +150,6 @@ namespace nn {
             /**
              * @see {INeuralLayer}
              */
-            const Var& getInputWeight(unsigned int neuronId, unsigned int weightId) const {
-                return m_neurons[neuronId].getWeight(weightId);
-            }
-
-            /**
-             * @see {INeuralLayer}
-             */
             const Memento getMemento() const {
                 using namespace ranges;
                 Memento memento;

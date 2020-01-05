@@ -85,7 +85,6 @@ namespace nn {
             using Internal::operator[];
             using Internal::calculateOutputs;
             using Internal::getBias;
-            using Internal::getInputWeight;
             using Internal::getMemento;
             using Internal::getOutput;
             using Internal::setInput;

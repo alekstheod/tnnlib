@@ -73,7 +73,7 @@ namespace nn {
         /// for a larg ammount of neurons. This layer will use the openCL in
         /// order to calculate a dot product for the neuros inputs.
         template< class Internal >
-        class OpenCLNeuralLayer : public Internal {
+        class OpenCLNeuralLayer : Internal {
           public:
             using Neuron = typename Internal::Neuron;
             using Var = typename Internal::Var;
