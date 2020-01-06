@@ -124,7 +124,6 @@ namespace nn {
                 try {
                     std::vector< float > dotProducts(CONST_NEURONS_NUMBER);
                     for(std::size_t i = 0; i < CONST_NEURONS_NUMBER; ++i) {
-                        // Create memory buffers
                         for(std::size_t j = 0; j < CONST_INPUTS_NUMBER; ++j) {
                             const std::size_t index = i * CONST_INPUTS_NUMBER + j;
                             in_weights[index] = operator[](i)[j].weight;
