@@ -1,14 +1,16 @@
-#ifndef OPENCL_NEURAL_LAYER_H
-#define OPENCL_NEURAL_LAYER_H
+#pragma once
 
-#include <NeuralLayer/NeuralLayer.h>
+#include <NeuralNetwork/NeuralLayer/NeuralLayer.h>
+#include <assert.h>
 
-#define __CL_ENABLE_EXCEPTIONS
-#include <CL/cl.hpp>
+#define CL_HPP_TARGET_OPENCL_VERSION 200
+#define CL_HPP_ENABLE_EXCEPTIONS
+#include <CL/cl2.hpp>
 
 #include <array>
 #include <exception>
 #include <fstream>
+
 
 namespace nn {
 
@@ -31,7 +33,6 @@ namespace nn {
 
         cl::Program createProgram(const cl::Context& context) {
             using namespace cl;
-
             // Get a list of devices on this platform
             std::vector< Device > devices = context.getInfo< CL_CONTEXT_DEVICES >();
             // clang-format off
@@ -41,28 +42,28 @@ namespace nn {
                                                         "__const unsigned int sz){"
                                 "float dot = 0.f;"
                                 "unsigned int i;"
-                                "unsigned int offset = get_global_id(0) * sz;"
+								"unsigned int idx = get_global_id(0);"
+                                "unsigned int offset = idx * sz;"
                                 "for( i = 0; i < sz; ++i )"
                                 "{"
                                     "dot += weights[ offset + i ] * values[ offset + i ];"
                                 "}"
-                                "result[get_global_id(0)] = dot;"
+                                "result[idx] = dot;"
                               "}";
             // clang-format on
 
-            Program::Sources source(1, std::make_pair(src.c_str(), src.length() + 1));
-            // Make program of the source code in the context
-            cl::Program program = cl::Program(context, source);
+            Program::Sources source{1, {src}};
+            cl::Program program = cl::Program{context, source};
 
             // Build program for these specific devices
             try {
                 program.build(devices);
             } catch(const cl::Error& e) {
                 cl_int err;
-                cl::STRING_CLASS buildlog =
+                const auto buildlog =
                  program.getBuildInfo< CL_PROGRAM_BUILD_LOG >(devices[0], &err);
                 std::cerr << "Building error! Log: " << buildlog << std::endl;
-                throw std::runtime_error{buildlog};
+                throw std::runtime_error{"Build opencl program error"};
             }
 
             return program;
@@ -72,7 +73,7 @@ namespace nn {
         /// for a larg ammount of neurons. This layer will use the openCL in
         /// order to calculate a dot product for the neuros inputs.
         template< class Internal >
-        class OpenCLNeuralLayer {
+        class OpenCLNeuralLayer : Internal {
           public:
             using Neuron = typename Internal::Neuron;
             using Var = typename Internal::Var;
@@ -97,22 +98,21 @@ namespace nn {
 
           private:
             cl::Context m_context;
-            Internal m_internal;
             cl::Program m_program;
             cl::Kernel m_kernel;
-            std::array< float, CONST_INPUTS_NUMBER * CONST_NEURONS_NUMBER > m_weights;
-            std::array< float, CONST_INPUTS_NUMBER * CONST_NEURONS_NUMBER > m_values;
 
           private:
             void calculate() {
                 using namespace cl;
+                std::array< float, CONST_INPUTS_NUMBER * CONST_NEURONS_NUMBER > in_weights;
+                std::array< float, CONST_INPUTS_NUMBER * CONST_NEURONS_NUMBER > in_values;
                 // Create a command queue and use the first device
-                const std::size_t size = m_weights.size();
+                const std::size_t size = in_weights.size();
                 std::vector< Device > devices =
                  m_context.getInfo< CL_CONTEXT_DEVICES >();
                 Buffer weights(m_context, CL_MEM_READ_ONLY, size * sizeof(float));
                 Buffer values(m_context, CL_MEM_READ_ONLY, size * sizeof(float));
-                Buffer product(m_context, CL_MEM_WRITE_ONLY, size * sizeof(float));
+                Buffer product(m_context, CL_MEM_WRITE_ONLY, CONST_NEURONS_NUMBER * sizeof(float));
 
                 // Set arguments to kernel
                 m_kernel.setArg(0, weights);
@@ -124,48 +124,43 @@ namespace nn {
                 try {
                     std::vector< float > dotProducts(CONST_NEURONS_NUMBER);
                     for(std::size_t i = 0; i < CONST_NEURONS_NUMBER; ++i) {
-                        // Create memory buffers
                         for(std::size_t j = 0; j < CONST_INPUTS_NUMBER; ++j) {
                             const std::size_t index = i * CONST_INPUTS_NUMBER + j;
-                            m_weights[index] = m_internal[i][j].weight;
-                            m_values[index] = m_internal[i][j].value;
+                            in_weights[index] = operator[](i)[j].weight;
+                            in_values[index] = operator[](i)[j].value;
                         }
                     }
 
                     queue.enqueueWriteBuffer(weights,
                                              CL_TRUE,
                                              0,
-                                             m_weights.size() * sizeof(float),
-                                             m_weights.data());
+                                             in_weights.size() * sizeof(float),
+                                             in_weights.data());
+
                     queue.enqueueWriteBuffer(values,
                                              CL_TRUE,
                                              0,
-                                             m_values.size() * sizeof(float),
-                                             m_values.data());
-                    for(int offset = 0; offset < CONST_NEURONS_NUMBER; ++offset) {
-                        std::size_t rangeSize = CONST_INPUTS_NUMBER;
-                        queue.enqueueNDRangeKernel(m_kernel,
-                                                   cl::NDRange(offset),
-                                                   cl::NDRange(rangeSize));
-                    }
+                                             in_values.size() * sizeof(float),
+                                             in_values.data());
+
+                    queue.enqueueNDRangeKernel(m_kernel,
+                                               cl::NullRange,
+                                               cl::NDRange(CONST_NEURONS_NUMBER));
 
                     queue.enqueueReadBuffer(product,
                                             CL_TRUE,
                                             0,
                                             CONST_NEURONS_NUMBER * sizeof(float),
                                             dotProducts.data());
+
                     for(std::size_t i = 0; i < CONST_NEURONS_NUMBER; ++i) {
-                        m_internal[i].calculateOutput(dotProducts.begin(),
+                        operator[](i).calculateOutput(dotProducts.begin(),
                                                       dotProducts.end());
                     }
                 } catch(const cl::Error& e) {
-                    cl_int err;
-                    cl::STRING_CLASS buildlog =
-                     m_program.getBuildInfo< CL_PROGRAM_BUILD_LOG >(devices[0], &err);
-                    std::cout << "Building error! Log: " << buildlog << std::endl;
+                    std::cout << "Calculation error" << std::endl;
                 }
             }
-
 
           public:
             OpenCLNeuralLayer()
@@ -173,95 +168,24 @@ namespace nn {
                m_kernel(m_program, "dot_product") {
             }
 
-            /**
-             * Constructor will initialize the layer by the given inputs number
-             * and neurons number.
-             */
             static_assert(CONST_NEURONS_NUMBER > 0,
                           "Invalid template argument neuronsNumber == 0");
             static_assert(CONST_INPUTS_NUMBER > 0,
                           "Invalid template argument inputsNumber <= 1");
+            static_assert(std::is_same< float, Var >::value,
+                          "VarType must be float");
 
-            /**
-             * @see {INeuralLayer}
-             */
-            auto cbegin() const {
-                return m_internal.cbegin();
-            }
-
-            /**
-             * @see {INeuralLayer}
-             */
-            auto cend() const {
-                return m_internal.cend();
-            }
-
-            /**
-             * @see {INeuralLayer}
-             */
-            auto begin() {
-                return m_internal.begin();
-            }
-
-            /**
-             * @see {INeuralLayer}
-             */
-            auto end() {
-                return m_internal.end();
-            }
-
-            /**
-             * @see {INeuralLayer}
-             */
-            unsigned int size() const {
-                return m_internal.size();
-            }
-
-            /**
-             * @see {INeuralLayer}
-             */
-            const Neuron& operator[](unsigned int id) const {
-                return m_internal[id];
-            }
-
-            /**
-             * @see {INeuralLayer}
-             */
-            void setInput(unsigned int inputId, const Var& value) {
-                m_internal.setInput(inputId, value);
-            }
-
-            const Var& getBias(unsigned int neuronId) const {
-                return m_internal.getBias(neuronId);
-            }
-
-            /**
-             * @see {INeuralLayer}
-             */
-            const Var& getInputWeight(unsigned int neuronId, unsigned int weightId) const {
-                return m_internal.getInputWeight(neuronId, weightId);
-            }
-
-            /**
-             * @see {INeuralLayer}
-             */
-            const Memento getMemento() const {
-                return m_internal.getMemento();
-            }
-
-            /**
-             * @see {INeuralLayer}
-             */
-            void setMemento(const Memento& memento) {
-                m_internal.setMemento(memento);
-            }
-
-            /**
-             * @see {INeuralLayer}
-             */
-            Var getOutput(unsigned int outputId) const {
-                return m_internal.getOutput(outputId);
-            }
+            using Internal::begin;
+            using Internal::cbegin;
+            using Internal::cend;
+            using Internal::end;
+            using Internal::size;
+            using Internal::operator[];
+            using Internal::getBias;
+            using Internal::getMemento;
+            using Internal::getOutput;
+            using Internal::setInput;
+            using Internal::setMemento;
 
             /**
              * @see {INeuralLayer}
@@ -270,7 +194,7 @@ namespace nn {
             void calculateOutputs(Layer& nextLayer) {
                 calculate();
                 for(unsigned int i = 0; i < CONST_NEURONS_NUMBER; i++) {
-                    nextLayer.setInput(i, m_internal[i].getOutput());
+                    nextLayer.setInput(i, operator[](i).getOutput());
                 }
             }
 
@@ -291,13 +215,12 @@ namespace nn {
     /// @param inputsNumber the number of inputs of each neuron in a layer.
     /// initialization a final weight will be calculated in a following way
     /// random(0, 1)/scaleFactor
-    template< template< template< class > class, class, std::size_t, int > class NeuronType,
-              template< class > class ActivationFunctionType,
+    template< template< template< class > class, class, std::size_t > class NeuronType,
+              template< class >
+              class ActivationFunctionType,
               std::size_t size,
               std::size_t inputsNumber = 2,
               typename Var = float >
     using OpenCLNeuralLayer =
      detail::OpenCLNeuralLayer< NeuralLayer< NeuronType, ActivationFunctionType, size, inputsNumber > >;
 } // namespace nn
-
-#endif

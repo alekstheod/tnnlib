@@ -9,6 +9,12 @@ local_repository(
     path = "libpng_config",
 )
 
+new_local_repository(
+    name = "OpenCL",
+    build_file = "OpenCL/OpenCL.BUILD",
+    path = "/usr/",
+)
+
 git_repository(
     name = "com_github_nelhage_rules_boost",
     commit = "ed844db5990d21b75dc3553c057069f324b3916b",

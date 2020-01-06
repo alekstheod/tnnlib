@@ -90,10 +90,6 @@ namespace nn {
             return m_neuralLayer.getBias(neuronId);
         }
 
-        const Var& getInputWeight(unsigned int neuronId, unsigned int weightId) const {
-            return m_neuralLayer.getInputWeight(neuronId, weightId);
-        }
-
         const Memento getMemento() const {
             return m_neuralLayer.getMemento();
         }

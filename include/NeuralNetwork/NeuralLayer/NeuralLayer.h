@@ -26,9 +26,7 @@
 *  ANY WAY OUT OF THE USE OF THIS SOFTWARE,
 *  EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE
 */
-
-#ifndef NeuralLayerH
-#define NeuralLayerH
+#pragma once
 
 #include <NeuralNetwork/INeuralLayer.h>
 #include <NeuralNetwork/Neuron/INeuron.h>
@@ -152,13 +150,6 @@ namespace nn {
             /**
              * @see {INeuralLayer}
              */
-            const Var& getInputWeight(unsigned int neuronId, unsigned int weightId) const {
-                return m_neurons[neuronId].getWeight(weightId);
-            }
-
-            /**
-             * @see {INeuralLayer}
-             */
             const Memento getMemento() const {
                 using namespace ranges;
                 Memento memento;
@@ -236,5 +227,3 @@ namespace nn {
     using NeuralLayer =
      detail::NeuralLayer< NeuronType< ActivationFunctionType, Var, inputsNumber >, size, inputsNumber >;
 } // namespace nn
-
-#endif

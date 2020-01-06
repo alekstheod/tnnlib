@@ -68,8 +68,7 @@ namespace nn {
                     Var sum = 0.0f; // sum(aDelta*aWeight)
                     for(std::size_t i = 0; i < affectedLayer.size(); i++) {
                         Var affectedDelta = affectedLayer.getDelta(i);
-                        Var affectedWeight =
-                         affectedLayer.getInputWeight(i, begin - start);
+                        Var affectedWeight = affectedLayer[i][begin - start].weight;
                         sum += affectedDelta * affectedWeight;
                         sum += affectedDelta * affectedLayer->getBias(i);
                     }

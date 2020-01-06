@@ -1,3 +1,4 @@
+#include "NeuralNetwork/NeuralLayer/OpenCLNeuralLayer.h"
 #include <NeuralNetwork/LearningAlgorithm/BackPropagation/BepAlgorithm.h>
 #include <NeuralNetwork/NeuralLayer/ConvolutionLayer.h>
 #include <NeuralNetwork/NeuralLayer/NeuralLayer.h>
@@ -9,7 +10,7 @@
 #include <NeuralNetwork/Neuron/ActivationFunction/ReluFunction.h>
 #include <NeuralNetwork/Neuron/Neuron.h>
 #include <NeuralNetwork/Perceptron/Perceptron.h>
-//#include <NeuralLayer/OpenCLNeuralLayer.h>
+#include <NeuralNetwork/NeuralLayer/OpenCLNeuralLayer.h>
 #include <NeuralNetwork/Config.h>
 
 #include <MPL/Tuple.h>
@@ -52,7 +53,7 @@
 #include <iostream>
 #include <set>
 
-typedef long double VarType;
+typedef float VarType;
 
 namespace {
     using namespace boost::gil;
@@ -74,7 +75,7 @@ using ConvolutionGrid2 =
 
 using Perceptron =
  nn::Perceptron< VarType,
-                 nn::ConvolutionLayer< nn::NeuralLayer, nn::Neuron, nn::ReluFunction, inputsNumber, ConvolutionGrid >,
+                 nn::ConvolutionLayer< nn::OpenCLNeuralLayer, nn::Neuron, nn::ReluFunction, inputsNumber, ConvolutionGrid >,
                  nn::NeuralLayer< nn::Neuron, nn::SoftmaxFunction, 10, 1000 > >;
 
 using Algo = nn::bp::BepAlgorithm< Perceptron, nn::bp::CrossEntropyError >;
