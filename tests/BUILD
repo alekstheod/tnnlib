@@ -9,7 +9,9 @@ cc_library(
 cc_test(
     name = "tnnlib_utest",
     srcs = glob([
-        "*.cpp",
+        "TestConvolutionLayer.cpp",
+        "TestNeuron.cpp",
+        "main.cpp",
         "etc/**/*.h",
     ]),
     includes = ["include"],
@@ -17,5 +19,20 @@ cc_test(
         ":catch2",
         "//:tnnlib",
         "//:tnnlib_utils",
+    ],
+)
+
+cc_test(
+    name = "tnnlib_opencl_utest",
+    srcs = glob([
+        "TestOpenCLNeuralLayer.cpp",
+        "etc/**/*.h",
+    ]),
+    includes = ["include"],
+    deps = [
+        ":catch2",
+        "//:tnnlib",
+        "//:tnnlib_utils",
+        "@OpenCL",
     ],
 )

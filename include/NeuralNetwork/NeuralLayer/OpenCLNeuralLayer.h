@@ -35,22 +35,21 @@ namespace nn {
             using namespace cl;
             // Get a list of devices on this platform
             std::vector< Device > devices = context.getInfo< CL_CONTEXT_DEVICES >();
-            // clang-format off
-            std::string src = "__kernel void dot_product(__global float* weights,"
-                                                        "__global float* values,"
-                                                        "__global float* result,"
-                                                        "__const unsigned int sz){"
-                                "float dot = 0.f;"
-                                "unsigned int i;"
-								"unsigned int idx = get_global_id(0);"
-                                "unsigned int offset = idx * sz;"
-                                "for( i = 0; i < sz; ++i )"
-                                "{"
-                                    "dot += weights[ offset + i ] * values[ offset + i ];"
-                                "}"
-                                "result[idx] = dot;"
-                              "}";
-            // clang-format on
+            std::string src =
+             "__kernel void dot_product(__global float* weights,         \
+                                        __global float* values,          \
+                                        __global float* result,          \
+                                        __const unsigned int sz){        \
+                                float dot = 0.f;                                         \
+                                unsigned int i;                                          \
+                                unsigned int idx = get_global_id(0);                     \
+                                unsigned int offset = idx * sz;                          \
+                                for( i = 0; i < sz; ++i )                                \
+                                {                                                        \
+                                    dot += weights[ offset + i ] * values[ offset + i ]; \
+                                }                                                        \
+                                result[idx] = dot;                                       \
+                              }";
 
             Program::Sources source{1, {src}};
             cl::Program program = cl::Program{context, source};
@@ -100,16 +99,15 @@ namespace nn {
             cl::Context m_context;
             cl::Program m_program;
             cl::Kernel m_kernel;
+            std::vector< cl::Device > m_devices;
 
           private:
             void calculate() {
                 using namespace cl;
-                std::array< float, CONST_INPUTS_NUMBER * CONST_NEURONS_NUMBER > in_weights;
-                std::array< float, CONST_INPUTS_NUMBER * CONST_NEURONS_NUMBER > in_values;
+                constexpr auto size = CONST_INPUTS_NUMBER * CONST_NEURONS_NUMBER;
+                std::array< float, size > in_weights;
+                std::array< float, size > in_values;
                 // Create a command queue and use the first device
-                const std::size_t size = in_weights.size();
-                std::vector< Device > devices =
-                 m_context.getInfo< CL_CONTEXT_DEVICES >();
                 Buffer weights(m_context, CL_MEM_READ_ONLY, size * sizeof(float));
                 Buffer values(m_context, CL_MEM_READ_ONLY, size * sizeof(float));
                 Buffer product(m_context, CL_MEM_WRITE_ONLY, CONST_NEURONS_NUMBER * sizeof(float));
@@ -119,15 +117,14 @@ namespace nn {
                 m_kernel.setArg(1, values);
                 m_kernel.setArg(2, product);
                 m_kernel.setArg(3, CONST_INPUTS_NUMBER);
-                CommandQueue queue(m_context, devices[0]);
+                CommandQueue queue(m_context, m_devices[0]);
 
                 try {
-                    std::vector< float > dotProducts(CONST_NEURONS_NUMBER);
                     for(std::size_t i = 0; i < CONST_NEURONS_NUMBER; ++i) {
                         for(std::size_t j = 0; j < CONST_INPUTS_NUMBER; ++j) {
-                            const std::size_t index = i * CONST_INPUTS_NUMBER + j;
-                            in_weights[index] = operator[](i)[j].weight;
-                            in_values[index] = operator[](i)[j].value;
+                            const std::size_t idx = i * CONST_INPUTS_NUMBER + j;
+                            in_weights[idx] = operator[](i)[j].weight;
+                            in_values[idx] = operator[](i)[j].value;
                         }
                     }
 
@@ -147,25 +144,31 @@ namespace nn {
                                                cl::NullRange,
                                                cl::NDRange(CONST_NEURONS_NUMBER));
 
+                    std::array< float, CONST_NEURONS_NUMBER > dotProducts;
                     queue.enqueueReadBuffer(product,
                                             CL_TRUE,
                                             0,
                                             CONST_NEURONS_NUMBER * sizeof(float),
                                             dotProducts.data());
 
+                    for(std::size_t i = 0; i < CONST_NEURONS_NUMBER; i++) {
+                        dotProducts[i] += operator[](i).getBias();
+                    }
+
                     for(std::size_t i = 0; i < CONST_NEURONS_NUMBER; ++i) {
                         operator[](i).calculateOutput(dotProducts.begin(),
                                                       dotProducts.end());
                     }
                 } catch(const cl::Error& e) {
-                    std::cout << "Calculation error" << std::endl;
+                    std::cerr << "Calculation error" << std::endl;
                 }
             }
 
           public:
             OpenCLNeuralLayer()
              : m_context(createContext()), m_program(createProgram(m_context)),
-               m_kernel(m_program, "dot_product") {
+               m_kernel(m_program, "dot_product"),
+               m_devices(m_context.getInfo< CL_CONTEXT_DEVICES >()) {
             }
 
             static_assert(CONST_NEURONS_NUMBER > 0,
