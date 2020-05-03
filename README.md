@@ -46,6 +46,5 @@ Calculating perceptron by using BEP algorithm:
                                                   numOfEpochs);
 ```                                     
 
-====
 
 The convolution layer is not yet ready
