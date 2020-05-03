@@ -47,5 +47,4 @@ Calculating perceptron by using BEP algorithm:
 ```                                     
 
 
-
 The convolution layer is not yet ready
