@@ -1,7 +1,8 @@
 #pragma once
 
 #include <NeuralNetwork/NeuralLayer/NeuralLayer.h>
-#include <assert.h>
+
+#include <range/v3/all.hpp>
 
 #define CL_HPP_TARGET_OPENCL_VERSION 200
 #define CL_HPP_ENABLE_EXCEPTIONS
@@ -120,8 +121,8 @@ namespace nn {
                 CommandQueue queue(m_context, m_devices[0]);
 
                 try {
-                    for(std::size_t i = 0; i < CONST_NEURONS_NUMBER; ++i) {
-                        for(std::size_t j = 0; j < CONST_INPUTS_NUMBER; ++j) {
+                    for(const auto i : ranges::views::indices(CONST_NEURONS_NUMBER)) {
+                        for(const auto j : ranges::views::indices(CONST_INPUTS_NUMBER)) {
                             const std::size_t idx = i * CONST_INPUTS_NUMBER + j;
                             in_weights[idx] = operator[](i)[j].weight;
                             in_values[idx] = operator[](i)[j].value;
@@ -151,11 +152,11 @@ namespace nn {
                                             CONST_NEURONS_NUMBER * sizeof(float),
                                             dotProducts.data());
 
-                    for(std::size_t i = 0; i < CONST_NEURONS_NUMBER; i++) {
+                    for(const auto i : ranges::views::indices(CONST_NEURONS_NUMBER)) {
                         dotProducts[i] += operator[](i).getBias();
                     }
 
-                    for(std::size_t i = 0; i < CONST_NEURONS_NUMBER; ++i) {
+                    for(const auto i : ranges::views::indices(CONST_NEURONS_NUMBER)) {
                         operator[](i).calculateOutput(dotProducts.begin(),
                                                       dotProducts.end());
                     }
