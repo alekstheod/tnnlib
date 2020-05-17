@@ -66,11 +66,11 @@ namespace nn {
                 using Var = typename Layer::Var;
                 while(begin != end) {
                     Var sum = 0.0f; // sum(aDelta*aWeight)
-                    for(std::size_t i = 0; i < affectedLayer.size(); i++) {
-                        Var affectedDelta = affectedLayer.getDelta(i);
-                        Var affectedWeight = affectedLayer[i][begin - start].weight;
+                    for(const auto& neuron : affectedLayer) {
+                        auto affectedDelta = neuron->getDelta();
+                        auto affectedWeight = neuron[begin - start].weight;
                         sum += affectedDelta * affectedWeight;
-                        sum += affectedDelta * affectedLayer->getBias(i);
+                        sum += affectedDelta * neuron->getBias();
                     }
 
                     (*begin)->setDelta(momentum((**begin).getDelta(),

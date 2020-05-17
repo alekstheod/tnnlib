@@ -143,9 +143,6 @@ namespace nn {
                               std::bind(&Neuron::setInput, std::placeholders::_1, inputId, value));
             }
 
-            const Var& getBias(unsigned int neuronId) const {
-                return m_neurons[neuronId].getBias();
-            }
 
             /**
              * @see {INeuralLayer}

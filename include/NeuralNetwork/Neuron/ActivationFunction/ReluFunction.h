@@ -7,8 +7,7 @@ namespace nn {
      * Usually used by convolution layer
      */
     template< class VarType >
-    class ReluFunction {
-      public:
+    struct ReluFunction {
         typedef VarType Var;
         template< typename V >
         using use = ReluFunction< V >;

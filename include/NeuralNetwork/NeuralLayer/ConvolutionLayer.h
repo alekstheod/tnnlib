@@ -84,10 +84,8 @@ namespace nn {
             using Internal::size;
             using Internal::operator[];
             using Internal::calculateOutputs;
-            using Internal::getBias;
             using Internal::getMemento;
             using Internal::getOutput;
-            using Internal::setInput;
             using Internal::setMemento;
 
             // We can't adjust this layer as the
