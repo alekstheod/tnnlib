@@ -17,7 +17,9 @@ namespace nn {
     };
 
     /// The idea behind the convolution grid is that each input
-    /// is checked against the
+    /// is checked against the areas [windows] and if it has
+    /// overlap with one particular area then the input will be set.
+    /// otherwise it will be dropped.each area covers a set of inputs - neurons
     template< std::size_t width, std::size_t height, std::size_t stride, std::size_t margin >
     struct ConvolutionGrid {
       private:
@@ -35,7 +37,7 @@ namespace nn {
             static constexpr std::size_t right = X + margin;
             static constexpr std::size_t left = X - margin;
             static constexpr std::size_t top = Y - margin;
-            bool intersect(std::size_t inputId) {
+            bool doesIntersect(std::size_t inputId) {
                 std::size_t bottom = Y + margin;
                 std::size_t x = inputId % width;
                 std::size_t y = inputId / width;
@@ -108,7 +110,7 @@ namespace nn {
                 for(auto& neuron : *this) {
                     utils::for_each(m_grid.connections, [&](auto& connection) {
                         if(neuronId == connection.neuronId &&
-                           connection.area.intersect(inputId)) {
+                           connection.area.doesIntersect(inputId)) {
                             const auto localInputId = connection.area.localize(inputId);
                             neuron.setInput(localInputId, value);
                         }

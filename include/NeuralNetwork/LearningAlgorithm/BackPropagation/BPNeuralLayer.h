@@ -62,21 +62,21 @@ namespace nn {
 
             template< typename It, typename Layer, typename MomentumFunc >
             void calculateHiddenDeltas(It begin, It end, Layer& affectedLayer, MomentumFunc momentum) {
-                auto start = begin;
+                auto current = begin;
                 using Var = typename Layer::Var;
-                while(begin != end) {
-                    Var sum = 0.0f; // sum(aDelta*aWeight)
+                while(current != end) {
+                    Var sum{}; // sum(aDelta*aWeight)
                     for(const auto& neuron : affectedLayer) {
                         auto affectedDelta = neuron->getDelta();
-                        auto affectedWeight = neuron[begin - start].weight;
+                        auto affectedWeight = neuron[current - begin].weight;
                         sum += affectedDelta * affectedWeight;
                         sum += affectedDelta * neuron->getBias();
                     }
 
-                    (*begin)->setDelta(momentum((**begin).getDelta(),
-                                                sum * (**begin).calculateDerivate()));
+                    (*current)->setDelta(momentum((**current).getDelta(),
+                                                  sum * (**current).calculateDerivate()));
 
-                    begin++;
+                    current = std::next(current);
                 }
             }
         } // namespace detail
