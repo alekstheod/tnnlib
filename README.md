@@ -5,7 +5,7 @@
 | |_| | | | | | | | | |_) |
  \__|_| |_|_| |_|_|_|_.__/ 
 ```
-======
+
 [![Build Status (Windows)](https://ci.appveyor.com/api/projects/status/gb8229o85xap8c9i?svg=true
 )](https://ci.appveyor.com/project/grishavanika/tnnlib)
 [![Build Status (Linux)](https://travis-ci.org/alekstheod/tnnlib.svg)](https://travis-ci.org/alekstheod/tnnlib)
