@@ -86,9 +86,6 @@ namespace nn {
             return &m_neuralLayer;
         }
 
-        const Var& getBias(std::size_t neuronId) const {
-            return m_neuralLayer.getBias(neuronId);
-        }
 
         const Memento getMemento() const {
             return m_neuralLayer.getMemento();

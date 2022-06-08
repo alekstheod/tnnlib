@@ -14,18 +14,15 @@ template neural network library v3
 
 Flexible interface which allows to define a neural network with different types of layers, Neurons and Activation functions:
 
-```cpp                        
-    typedef nn::Perceptron<float, 
-                           nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, 2>, 
-                           nn::NeuralLayer<nn::Neuron, nn::TanhFunction, 20>, 
+```cpp
+    typedef nn::Perceptron<float,
+                           nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, 2>,
+                           nn::NeuralLayer<nn::Neuron, nn::TanhFunction, 20>,
                            nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, 1>
                            > Perceptron;
-                           
+
     typedef nn::bp::BepAlgorithm< Perceptron, nn::bp::CrossEntropyError> Algo;
 ```
-
-
-
 
 Calculating perceptron by using BEP algorithm:
 
@@ -43,13 +40,13 @@ Calculating perceptron by using BEP algorithm:
     if( argc == 2 ){
       numOfEpochs = utils::lexical_cast< unsigned int >(argv[1]);
     }
-    
+
     Perceptron perceptron = algorithm.calculate ( prototypes.begin(), prototypes.end(),
                                                   [] ( unsigned int epoch, float error, ) {
                                                         std::cout << error << std::endl;
                                                         return error >= 0.01.f
                                                   },
                                                   numOfEpochs);
-```                                     
+```
 
 The convolution layer is not yet ready

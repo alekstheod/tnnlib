@@ -3,10 +3,18 @@ load(
     "git_repository",
     "new_git_repository",
 )
+load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 local_repository(
     name = "libpng_config",
     path = "libpng_config",
+)
+
+http_archive(
+    name = "catch2",
+    sha256 = "b9b592bd743c09f13ee4bf35fc30eeee2748963184f6bea836b146e6cc2a585a",
+    strip_prefix = "Catch2-2.13.8",
+    urls = ["https://github.com/catchorg/Catch2/archive/v2.13.8.tar.gz"],
 )
 
 new_local_repository(

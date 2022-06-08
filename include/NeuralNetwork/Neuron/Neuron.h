@@ -54,8 +54,7 @@ namespace nn {
      */
     namespace detail {
         template< typename OutputFunctionType, std::size_t inputsNumber >
-        class Neuron {
-          public:
+        struct Neuron {
             using OutputFunction = IActivationFunction< OutputFunctionType >;
             using Var = typename OutputFunction::Var;
             using Memento = NeuronMemento< Var, inputsNumber >;
@@ -79,9 +78,7 @@ namespace nn {
              * @exception NNException thrown on object initialization failure.
              */
             Neuron()
-             : m_bias(utils::createRandom< Var >(1)),
-               m_output(boost::numeric_cast< Var >(0)),
-               m_sum(boost::numeric_cast< Var >(0)) {
+             : m_bias(utils::createRandom< Var >(1)), m_output{}, m_sum{} {
                 static_assert(inputsNumber > 0, "Invalid number of inputs");
             }
 
