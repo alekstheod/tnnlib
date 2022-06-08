@@ -6,7 +6,7 @@
 #include <range/v3/all.hpp>
 
 #define CATCH_CONFIG_NO_CPP17_UNCAUGHT_EXCEPTIONS
-#include "catch.hpp"
+#include <catch2/catch.hpp>
 
 namespace {
     template< typename Neuron >
@@ -26,7 +26,6 @@ namespace {
          "A convolution layer for an image 5*5, stride = 2 and margin = 1") {
             constexpr std::size_t width = 5;
             constexpr std::size_t height = 5;
-            constexpr std::size_t inputsNumber = width * height;
             constexpr std::size_t margin = 1;
             constexpr std::size_t stride = 2;
             using ConvolutionGrid =
