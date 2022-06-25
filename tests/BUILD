@@ -2,9 +2,9 @@
 cc_test(
     name = "tnnlib_utest",
     srcs = glob([
-        "TestConvolutionLayer.cpp",
-        "TestNeuron.cpp",
-        "main.cpp",
+        "ConvolutionLayerTest.cpp",
+        "NeuronTest.cpp",
+        "PerceptronTest.cpp",
         "etc/**/*.h",
     ]),
     includes = ["include"],
@@ -18,7 +18,7 @@ cc_test(
 cc_test(
     name = "tnnlib_opencl_utest",
     srcs = glob([
-        "TestOpenCLNeuralLayer.cpp",
+        "OpenCLNeuralLayerTest.cpp",
         "etc/**/*.h",
     ]),
     includes = ["include"],
