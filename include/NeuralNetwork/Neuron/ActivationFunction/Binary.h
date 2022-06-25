@@ -21,11 +21,10 @@ namespace nn {
         template< typename Iterator >
         Var calculate(const Var& sum, Iterator begin, Iterator end) const {
             Var t = threshold / boost::numeric_cast< Var >(100.f);
-            Var result = m_func.calculate(sum, begin, end) > t ?
-                          boost::numeric_cast< Var >(1.0f) :
-                          boost::numeric_cast< Var >(0.0f);
+            return m_func.calculate(sum, begin, end) > t ?
+                          Var{1.0f} :
+                          Var{0.0f};
 
-            return result;
         }
 
         template< typename Iterator >

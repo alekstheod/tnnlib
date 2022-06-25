@@ -69,7 +69,7 @@ namespace nn {
              */
             KNode(const Position& position)
              : m_weights({Var(0.f), Var(0.f), Var(0.f)}), m_position(position) {
-                Var weight(0.0f);
+                Var weight{};
                 for(unsigned int i = 0; i < inputsNumber; i++) {
                     weight = (Var(utils::createRandom< Var >(1)));
                     m_weights[i] = weight;
