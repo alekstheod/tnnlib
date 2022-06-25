@@ -64,19 +64,11 @@ namespace nn {
             void calculateHiddenDeltas(It begin, It end, Layer& affectedLayer, MomentumFunc momentum) {
                 auto current = begin;
                 using Var = typename Layer::Var;
-<<<<<<< HEAD
-                while(current != end) {
-                    Var sum{}; // sum(aDelta*aWeight)
-                    for(const auto& neuron : affectedLayer) {
-                        auto affectedDelta = neuron->getDelta();
-                        auto affectedWeight = neuron[current - begin].weight;
-=======
                 while(begin != end) {
-                    Var sum = 0.0f; // sum(aDelta*aWeight)
+                    Var sum = {}; // sum(aDelta*aWeight)
                     for(const auto& neuron : affectedLayer) {
                         auto affectedDelta = neuron->getDelta();
-                        auto affectedWeight = neuron[begin - start].weight;
->>>>>>> 4bbe891 (Clean-up code)
+                        auto affectedWeight = neuron[current-begin].weight;
                         sum += affectedDelta * affectedWeight;
                         sum += affectedDelta * neuron->getBias();
                     }
