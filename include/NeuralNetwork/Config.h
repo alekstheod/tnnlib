@@ -1,5 +1,4 @@
-#ifndef ConfigH
-#define ConfigH
+#pragma once
 
 #if defined(_MSC_VER)
 #define NN_CC_MSVC
@@ -7,6 +6,4 @@
 #define NN_CC_CLANG
 #elif defined(__GNUC__)
 #define NN_CC_GNU
-#endif
-
 #endif

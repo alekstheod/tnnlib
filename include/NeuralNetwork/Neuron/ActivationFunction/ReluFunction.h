@@ -1,5 +1,6 @@
-#ifndef ReluFunctionH
-#define ReluFunctionH
+#pragma once
+
+#include <numeric>
 
 namespace nn {
     /**
@@ -49,4 +50,3 @@ namespace nn {
     };
 } // namespace nn
 
-#endif

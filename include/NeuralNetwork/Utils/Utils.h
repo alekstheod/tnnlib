@@ -1,5 +1,4 @@
-#ifndef NN_UTILS_H
-#define NN_UTILS_H
+#pragma once
 #include <MPL/Tuple.h>
 
 namespace nn {
@@ -58,5 +57,3 @@ namespace nn {
         } // namespace mpl
     } // namespace detail
 } // namespace nn
-
-#endif

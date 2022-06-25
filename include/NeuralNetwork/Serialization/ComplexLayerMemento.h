@@ -1,5 +1,4 @@
-#ifndef COMPLEXLAYER_MEMENTO_H
-#define COMPLEXLAYER_MEMENTO_H
+#pragma once
 
 #include <NeuralNetwork/Serialization/PerceptronMemento.h>
 
@@ -22,5 +21,3 @@ namespace nn {
         PerceptronMemento< Var > perceptron;
     };
 } // namespace nn
-
-#endif

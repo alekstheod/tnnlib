@@ -33,8 +33,6 @@
 
 #include <MPL/TypeTraits.h>
 
-#include <boost/numeric/conversion/cast.hpp>
-
 #include <functional>
 #include <type_traits>
 
@@ -86,7 +84,7 @@ namespace nn {
             /**
              * @brief Default constructor will initialize the BPNeuron with 0.
              */
-            BPNeuron() : m_delta(boost::numeric_cast< Var >(0.f)) {
+            BPNeuron() : m_delta{} {
             }
 
             /**
@@ -94,7 +92,7 @@ namespace nn {
              * @param neuron the pointer to the neuron which need to be trained
              */
             BPNeuron(unsigned int inputsNumber)
-             : m_delta(boost::numeric_cast< Var >(0.f)), Neuron(inputsNumber) {
+             : m_delta{}, Neuron(inputsNumber) {
             }
 
             /**
