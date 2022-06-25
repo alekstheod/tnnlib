@@ -36,14 +36,8 @@
 
 #include <algorithm>
 #include <array>
-#include <boost/numeric/conversion/cast.hpp>
 #include <chrono>
 #include <functional>
-#include <iterator>
-#include <limits>
-#include <list>
-#include <queue>
-#include <random>
 
 namespace nn {
 
@@ -129,7 +123,7 @@ namespace nn {
                 unsigned int epochCounter = 0;
                 typename std::vector< Prototype > prototypes(begin, end);
 
-                Var error = boost::numeric_cast< Var >(0.f);
+                Var error{};
                 do {
                     auto seed =
                      std::chrono::system_clock::now().time_since_epoch().count();
@@ -144,7 +138,7 @@ namespace nn {
 
                     error = std::accumulate(prototypes.begin(),
                                             prototypes.end(),
-                                            boost::numeric_cast< Var >(0.f),
+                                            Var{},
                                             runTrainingStep);
 
                 } while(errorFunc(++epochCounter, error));

@@ -1,5 +1,4 @@
-#ifndef INEURALLAYER_H
-#define INEURALLAYER_H
+#pragma once
 
 #include <cstdlib>
 
@@ -122,5 +121,3 @@ namespace nn {
         return layer;
     }
 } // namespace nn
-
-#endif // INEURALLAYER_H

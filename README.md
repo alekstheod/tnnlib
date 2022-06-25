@@ -1,18 +1,17 @@
 ```
- _               _ _ _     
-| |_ _ __  _ __ | (_) |__  
-| __| '_ \| '_ \| | | '_ \ 
+ _               _ _ _
+| |_ _ __  _ __ | (_) |__
+| __| '_ \| '_ \| | | '_ \
 | |_| | | | | | | | | |_) |
- \__|_| |_|_| |_|_|_|_.__/ 
+ \__|_| |_|_| |_|_|_|_.__/
 ```
 
-[![Build Status (Windows)](https://ci.appveyor.com/api/projects/status/gb8229o85xap8c9i?svg=true
-)](https://ci.appveyor.com/project/grishavanika/tnnlib)
+[![Build Status (Windows)](https://ci.appveyor.com/api/projects/status/gb8229o85xap8c9i?svg=true)](https://ci.appveyor.com/project/grishavanika/tnnlib)
 [![Build Status (Linux)](https://travis-ci.org/alekstheod/tnnlib.svg)](https://travis-ci.org/alekstheod/tnnlib)
 
 template neural network library v3
 
-Flexible interface which allows to define a neural network with different types of layers, Neurons and Activation functions:
+Flexible compile time interface which allows to define a neural network with different types of layers, Neurons and Activation functions:
 
 ```cpp
     typedef nn::Perceptron<float,

@@ -1,5 +1,4 @@
-#ifndef PERCEPTRON_LAYER_H
-#define PERCEPTRON_LAYER_H
+#pragma once
 
 #include <NeuralNetwork/Serialization/ComplexLayerMemento.h>
 
@@ -91,5 +90,3 @@ namespace nn {
         }
     };
 } // namespace nn
-
-#endif
