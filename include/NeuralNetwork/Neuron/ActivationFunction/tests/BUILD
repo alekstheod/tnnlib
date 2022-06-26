@@ -1,8 +1,6 @@
 cc_test(
     name = "test",
-    srcs = glob([
-        "BinaryTest.cpp",
-    ]),
+    srcs = glob(["*.cpp"]),
     deps = [
         "//:tnnlib",
         "//:tnnlib_utils",

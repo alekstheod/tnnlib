@@ -22,18 +22,12 @@ namespace nn {
         using use = SigmoidFunction< V >;
 
         /**
-         * Empty constructor.
-         */
-        SigmoidFunction() : m_slope(1.0f) {
-        }
-
-        /**
          * Will calculate the equation
          * for the given input value.
          * @return the calculation result.
          */
         template< typename Iterator >
-        Var calculate(const Var& sum, Iterator begin, Iterator end) const {
+        Var calculate(const Var& sum, Iterator, Iterator) const {
             Var tmp(m_slope * sum);
             Var tmp2 = tmp * Var{-1.0f};
             return Var{1.f} / (Var{1.f} + std::exp(tmp2));
@@ -62,6 +56,6 @@ namespace nn {
         /**
          * Slope value.
          */
-        Var m_slope;
+        Var m_slope{1.f};
     };
 } // namespace nn
