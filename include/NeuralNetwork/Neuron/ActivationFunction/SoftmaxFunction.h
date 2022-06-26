@@ -18,12 +18,10 @@ namespace nn {
       public:
         template< typename Iterator >
         Var calculate(const Var& sum, Iterator begin, Iterator end) const {
-            return std::exp(sum) / std::accumulate(begin,
-                                                   end,
-                                                   Var{},
-                                                   [](Var init, Var next) -> Var {
-                                                       return init + std::exp(next);
-                                                   });
+            return std::exp(sum) /
+                   std::accumulate(begin, end, Var{}, [](Var init, Var next) -> Var {
+                       return init + std::exp(next);
+                   });
         }
 
         template< typename Iterator >
@@ -36,4 +34,3 @@ namespace nn {
         }
     };
 } // namespace nn
-

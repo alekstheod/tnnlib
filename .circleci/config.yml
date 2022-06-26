@@ -1,11 +1,11 @@
 jobs:
   build:
     docker:
-      - image: l.gcr.io/google/bazel:latest 
+      - image: l.gcr.io/google/bazel:latest
     steps:
-        - checkout
-        - run: apt -y install opencl-headers ocl-icd-opencl-dev
-        - run: ln -s /usr/lib/x86_64-linux-gnu/libOpenCL.so /usr/lib/ 
-        - run: bazel build --config=asan //...
-        - run: bazel test --config=asan //Test:tnnlib_test //tests:tnnlib_utest
+      - checkout
+      - run: apt -y install opencl-headers ocl-icd-opencl-dev
+      - run: ln -s /usr/lib/x86_64-linux-gnu/libOpenCL.so /usr/lib/
+      - run: bazel build --config=asan //...
+      - run: bazel test --config=asan //... --test_tag_filters="-openCL"
 version: 2

@@ -7,8 +7,6 @@
 
 #include <range/v3/all.hpp>
 
-#include "etc/xorXml.h"
-
 #include <cereal/archives/xml.hpp>
 #include <cereal/types/tuple.hpp>
 #include <cereal/types/vector.hpp>
@@ -21,13 +19,11 @@
 #include <vector>
 #include <string>
 
-
 namespace {
 
     template< typename Memento >
-    Memento read(const std::string& str) {
+    Memento read(std::istream& strm) {
         Memento memento{};
-        std::stringstream strm(str);
         cereal::XMLInputArchive archive(strm);
         archive >> memento;
         return memento;
@@ -45,6 +41,8 @@ namespace {
                              nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, 1 > >;
 
             Perceptron perceptron;
+            std::ifstream xorXml("SystemTests/etc/xor.xml");
+            REQUIRE(xorXml.is_open());
             perceptron.setMemento(read< Perceptron::Memento >(xorXml));
             WHEN("Input is [1, 0]") {
                 std::array< float, 2 > input{1, 0};

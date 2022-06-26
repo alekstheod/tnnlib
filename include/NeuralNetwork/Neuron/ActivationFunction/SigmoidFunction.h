@@ -36,8 +36,7 @@ namespace nn {
         Var calculate(const Var& sum, Iterator begin, Iterator end) const {
             Var tmp(m_slope * sum);
             Var tmp2 = tmp * Var{-1.0f};
-            return Var{1.f} /
-                   (Var{1.f} + std::exp(tmp2));
+            return Var{1.f} / (Var{1.f} + std::exp(tmp2));
         }
 
         template< typename Iterator >

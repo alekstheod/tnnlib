@@ -31,7 +31,7 @@ namespace nn {
 
         template< typename Iterator >
         Var sum(Iterator begin, Iterator end, const Var& start) const {
-            Var max = *begin; 
+            Var max = *begin;
             Iterator i = begin;
             while(i != end) {
                 if(*i > max) {
@@ -56,4 +56,3 @@ namespace nn {
         }
     };
 } // namespace nn
-
