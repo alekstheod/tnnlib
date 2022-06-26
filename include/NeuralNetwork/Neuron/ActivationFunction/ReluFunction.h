@@ -49,4 +49,3 @@ namespace nn {
         Var m_slope;
     };
 } // namespace nn
-

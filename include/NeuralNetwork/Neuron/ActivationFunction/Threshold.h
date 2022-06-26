@@ -18,9 +18,7 @@ namespace nn {
         template< typename Iterator >
         Var calculate(const Var& sum, Iterator begin, Iterator end) const {
             Var t = threshold / Var{100.f};
-            return m_func.calculate(sum, begin, end) > t ?
-                          Var{1.0f} :
-                          Var{0.0f};
+            return m_func.calculate(sum, begin, end) > t ? Var{1.0f} : Var{0.0f};
         }
 
         template< typename Iterator >
@@ -45,4 +43,3 @@ namespace nn {
         }
     };
 } // namespace nn
-
