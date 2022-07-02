@@ -33,7 +33,6 @@ namespace nn {
             /// @brief a list of the inputs first is the weight, second is the
             /// value
             using Inputs = typename Memento::Inputs;
-            typedef typename Inputs::const_iterator iterator;
 
             template< typename VarType >
             using use =
@@ -42,32 +41,20 @@ namespace nn {
             template< std::size_t inputs >
             using adjust = Neuron< OutputFunctionType, inputs >;
 
-            /**
-             * Initialization constructor.
-             * @param inputsNumber the number of inputs for current neuron.
-             * @exception NNException thrown on object initialization failure.
-             */
-            Neuron()
-             : m_bias(utils::createRandom< Var >(1)), m_output{}, m_sum{} {
-                static_assert(inputsNumber > 0, "Invalid number of inputs");
+            static_assert(inputsNumber > 0, "Invalid number of inputs");
+
+            auto cbegin() const {
+                return std::cbegin(m_inputs);
             }
 
-            /// @brief see @ref INeuron
-            iterator begin() const {
-                return m_inputs.begin();
+            auto cend() const {
+                return std::cend(m_inputs);
             }
 
-            /// @brief see @ref INeuron
-            iterator end() const {
-                return m_inputs.end();
-            }
-
-            /// @brief see @ref INeuron
             std::size_t size() const {
                 return m_inputs.size();
             }
 
-            /// @brief see @ref INeuron
             Input& operator[](std::size_t id) {
                 return m_inputs[id];
             }
@@ -76,39 +63,32 @@ namespace nn {
                 return m_inputs[id];
             }
 
-            /// @brief see @ref INeuron
             void setWeight(std::size_t weightId, const Var& weight) {
                 m_inputs[weightId].weight = weight;
             }
 
-            /// @brief see @ref INeuron
             const Var& getBias() const {
                 return m_bias;
             }
 
-            /// @brief see @ref INeuron
             const Var& getWeight(std::size_t weightId) const {
                 return m_inputs[weightId].weight;
             }
 
-            /// @brief see @ref INeuron
             const Memento getMemento() const {
                 return Memento{m_bias, m_inputs};
             }
 
-            /// @brief see @ref INeuron
             void setMemento(const Memento& memento) {
                 const auto& inputs = memento.inputs;
                 std::copy(inputs.begin(), inputs.end(), m_inputs.begin());
                 m_bias = memento.bias;
             }
 
-            /// @brief see @ref INeuron
             void setInput(unsigned int inputId, const Var& value) {
                 m_inputs[inputId].value = value;
             }
 
-            /// @brief see @ref INeuron
             Var calcDotProduct() const {
                 const auto calcInput = [](const Input& input) {
                     return input.value * input.weight;
@@ -119,27 +99,22 @@ namespace nn {
                 return m_activationFunction.sum(begin, end, m_bias);
             }
 
-            /// @brief see @ref INeuron
             const Var& getOutput() const {
                 return m_output;
             }
 
-            /// @brief see @ref INeuron
             unsigned int getInputsNumber() const {
                 return m_inputs.size();
             }
 
-            /// @brief see @ref INeuron
             void setBias(Var weight) {
                 m_bias = weight;
             }
 
-            /// @brief see @ref INeuron
             const Var& getNeuronWeight() const {
                 return m_bias;
             }
 
-            /// @brief see @ref INeuron
             template< typename Iterator >
             const Var& calculateOutput(Iterator begin, Iterator end) {
                 m_output = m_activationFunction.calculate(calcDotProduct(), begin, end);
@@ -160,26 +135,26 @@ namespace nn {
             /**
              * @brief List of neurons inputs.
              */
-            Inputs m_inputs;
+            Inputs m_inputs{};
 
             /**
              * @brief Neurons weight.
              * @brief Needed in order to improve the flexibility of neural
              * network.
              */
-            Var m_bias;
+            Var m_bias{utils::createRandom< Var >(1)};
 
             /**
              * @brief The neurons output.
              * @brief The output will be calculated with using the instance of
              * calculation equation.
              */
-            Var m_output;
+            Var m_output{};
 
             /**
              * @brief Needed in order to calculate the neurons output value.
              */
-            Var m_sum;
+            Var m_sum{};
         };
     } // namespace detail
 
