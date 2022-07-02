@@ -1,8 +1,11 @@
 cc_test(
     name = "test",
-    srcs = glob([
-        "ConvolutionLayerTest.cpp",
-    ]),
+    srcs = glob(
+        [
+            "*.cpp",
+        ],
+        exclude = ["OpenCLNeuralLayerTest.cpp"],
+    ),
     deps = [
         "//:tnnlib",
         "//:tnnlib_utils",
