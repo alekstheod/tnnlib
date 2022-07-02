@@ -6,6 +6,7 @@ cc_test(
     ]),
     data = ["etc/xor.xml"],
     includes = ["include"],
+    tags = ["system"],
     deps = [
         "//:tnnlib",
         "//:tnnlib_utils",

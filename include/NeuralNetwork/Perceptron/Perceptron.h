@@ -96,12 +96,6 @@ namespace nn {
                           "to be set");
 
           public:
-            Perceptron() {
-            }
-
-            Perceptron(const Layers& layers) : m_layers(layers) {
-            }
-
             Layers& layers() {
                 return m_layers;
             }
