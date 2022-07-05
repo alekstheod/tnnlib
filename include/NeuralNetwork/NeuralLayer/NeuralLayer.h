@@ -61,8 +61,8 @@ namespace nn {
                 return std::end(m_neurons);
             }
 
-            auto size() const {
-                return m_neurons.size();
+            static constexpr auto size() {
+                return CONST_NEURONS_NUMBER;
             }
 
             const Neuron& operator[](unsigned int id) const {
@@ -106,31 +106,27 @@ namespace nn {
 
             template< typename Layer >
             void calculateOutputs(Layer& nextLayer) {
-                auto begin =
-                 boost::make_transform_iterator(std::end(m_neurons),
-                                                boost::bind(&Neuron::calcDotProduct, _1));
-                auto end =
-                 boost::make_transform_iterator(std::begin(m_neurons),
-                                                boost::bind(&Neuron::calcDotProduct, _1));
+                std::array< Var, size() > dotProducts;
+                for(std::size_t i = 0U; i < size(); ++i) {
+                    dotProducts[i] = m_neurons[i].calcDotProduct();
+                }
+
                 for(unsigned int i = 0; i < m_neurons.size(); i++) {
-                    nextLayer.setInput(i, m_neurons[i].calculateOutput(begin, end));
+                    nextLayer.setInput(i,
+                                       m_neurons[i].calculateOutput(std::cbegin(dotProducts),
+                                                                    std::cend(dotProducts)));
                 }
             }
 
             void calculateOutputs() {
-                auto begin =
-                 boost::make_transform_iterator(std::begin(m_neurons),
-                                                boost::bind(&Neuron::calcDotProduct, ::_1));
-                auto end =
-                 boost::make_transform_iterator(std::end(m_neurons),
-                                                boost::bind(&Neuron::calcDotProduct, ::_1));
-                using IteratorType = decltype(begin);
-                std::for_each(std::begin(m_neurons),
-                              std::end(m_neurons),
-                              std::bind(&Neuron::template calculateOutput< IteratorType >,
-                                        std::placeholders::_1,
-                                        begin,
-                                        end));
+                std::array< Var, size() > dotProducts;
+                for(std::size_t i = 0U; i < size(); ++i) {
+                    dotProducts[i] = m_neurons[i].calcDotProduct();
+                }
+
+                for(auto& neuron : m_neurons) {
+                    neuron.calculateOutput(std::cbegin(dotProducts), std::cend(dotProducts));
+                }
             }
 
           private:
