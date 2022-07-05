@@ -1,7 +1,5 @@
 #pragma once
 
-#include <NeuralNetwork/ActivationFunction/IActivationFunction.h>
-
 #include <cmath>
 #include <functional>
 #include <numeric>

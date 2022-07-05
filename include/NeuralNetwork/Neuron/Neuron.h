@@ -1,9 +1,7 @@
 #pragma once
 
-#include <NeuralNetwork/Neuron/INeuron.h>
 #include <NeuralNetwork/Neuron/Input.h>
 #include <NeuralNetwork/Serialization/NeuronMemento.h>
-#include <NeuralNetwork/ActivationFunction/IActivationFunction.h>
 
 #include <System/Time.h>
 
@@ -12,7 +10,6 @@
 #include <boost/iterator/counting_iterator.hpp>
 #include <boost/iterator/transform_iterator.hpp>
 
-#include <map>
 #include <utility>
 
 namespace nn {
@@ -25,7 +22,7 @@ namespace nn {
     namespace detail {
         template< typename OutputFunctionType, std::size_t inputsNumber >
         struct Neuron {
-            using OutputFunction = IActivationFunction< OutputFunctionType >;
+            using OutputFunction = OutputFunctionType;
             using Var = typename OutputFunction::Var;
             using Memento = NeuronMemento< Var, inputsNumber >;
             using Input = nn::Input< Var >;
