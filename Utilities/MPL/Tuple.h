@@ -47,21 +47,6 @@ namespace utils {
             }
         };
 
-        template< class T, std::size_t N, class... Args >
-        struct get {
-            static const auto value = N;
-        };
-
-        template< class T, std::size_t N, class... Args >
-        struct get< T, N, T, Args... > {
-            static const auto value = N;
-        };
-
-        template< class T, std::size_t N, class U, class... Args >
-        struct get< T, N, U, Args... > {
-            static const auto value = get< T, N + 1, Args... >::value;
-        };
-
         template< template< typename > class C, typename Tuple >
         struct rebind_tuple;
 
@@ -85,13 +70,6 @@ namespace utils {
         };
 
     } // namespace detail
-
-
-    template< class T, class... Args >
-    T& get(std::tuple< Args... >& t) {
-        return std::get< detail::get< T, 0, Args... >::value >(t);
-    }
-
 
     template< typename Functor, typename... ArgsT >
     void for_each(std::tuple< ArgsT... >& t, Functor func) {

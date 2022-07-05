@@ -3,9 +3,7 @@
 #include <NeuralNetwork/INeuralLayer.h>
 #include <NeuralNetwork/Serialization/NeuralLayerMemento.h>
 
-#include <boost/iterator/transform_iterator.hpp>
-#include <boost/bind/placeholders.hpp>
-#include <boost/bind.hpp>
+#include <MPL/Algorithm.h>
 
 #include <range/v3/all.hpp>
 
@@ -27,11 +25,10 @@ namespace nn {
             using Memento = NeuralLayerMemento< NeuronMemento, neuronsNumber >;
 
             template< template< class > class NewType >
-            using wrap =
-             NeuralLayer< NewType< NeuronType >, neuronsNumber, inputsNumber >;
+            using wrap = NeuralLayer< NewType< Neuron >, neuronsNumber, inputsNumber >;
 
             template< unsigned int inputs >
-            using adjust = NeuralLayer< NeuronType, neuronsNumber, inputs >;
+            using adjust = NeuralLayer< Neuron, neuronsNumber, inputs >;
 
             template< typename VarType >
             using use =
@@ -80,24 +77,18 @@ namespace nn {
             }
 
             const Memento getMemento() const {
-                using namespace ranges;
                 Memento memento;
-                memento.neurons =
-                 m_neurons |
-                 views::transform([](const Neuron& n) { return n.getMemento(); }) |
-                 ranges::to< decltype(memento.neurons) >;
+                utils::for_< size() >([this, &memento](auto i) {
+                    memento.neurons[i.value] =
+                     utils::get< i.value >(m_neurons).getMemento();
+                });
                 return memento;
             }
 
             void setMemento(const Memento& memento) {
-                using namespace ranges;
-                m_neurons = memento.neurons |
-                            views::transform([](const NeuronMemento& m) {
-                                Neuron neuron;
-                                neuron.setMemento(m);
-                                return neuron;
-                            }) |
-                            ranges::to< decltype(m_neurons) >;
+                utils::for_< size() >([this, &memento](auto i) {
+                    utils::get< i.value >(m_neurons).setMemento(memento.neurons[i.value]);
+                });
             }
 
             Var getOutput(unsigned int outputId) const {

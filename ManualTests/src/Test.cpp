@@ -1,5 +1,4 @@
 #include <NeuralNetwork/LearningAlgorithm/BackPropagation/BepAlgorithm.h>
-#include <NeuralNetwork/NeuralLayer/ConvolutionLayer.h>
 #include <NeuralNetwork/NeuralLayer/NeuralLayer.h>
 #include <NeuralNetwork/ActivationFunction/SigmoidFunction.h>
 #include <NeuralNetwork/ActivationFunction/SoftmaxFunction.h>
