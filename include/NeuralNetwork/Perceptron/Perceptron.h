@@ -6,6 +6,7 @@
 #include <NeuralNetwork/Utils/Utils.h>
 
 #include <MPL/Tuple.h>
+#include <MPL/Algorithm.h>
 
 #include <algorithm>
 #include <cassert>
@@ -68,26 +69,10 @@ namespace nn {
             Layers m_layers;
 
             template< std::size_t index >
-            void setMem(const LayersMemento& layers) {
-                std::get< index >(m_layers).setMemento(std::get< index >(layers));
-                if constexpr(index < CONST_LAYERS_NUMBER - 1) {
-                    setMem< index + 1 >(layers);
-                }
-            }
-
-            template< std::size_t index >
             void getMem(LayersMemento& layers) const {
                 std::get< index >(layers) = std::get< index >(m_layers).getMemento();
                 if constexpr(index < CONST_LAYERS_NUMBER - 1) {
                     getMem< index + 1 >(layers);
-                }
-            }
-
-            template< unsigned int index >
-            void calculate(Layers& layers) {
-                std::get< index >(layers).calculateOutputs(std::get< index + 1 >(layers));
-                if constexpr(index < CONST_LAYERS_NUMBER - 2) {
-                    calculate< index + 1 >(layers);
                 }
             }
 
@@ -101,13 +86,24 @@ namespace nn {
             }
 
             void setMemento(const Memento& memento) {
-                setMem< 0 >(memento.layers);
+                utils::for_< size() >([this, &memento](auto i) {
+                    auto& layer = utils::get< i.value >(m_layers);
+                    layer.setMemento(utils::get< i.value >(memento.layers));
+                });
             }
 
             Memento getMemento() const {
-                LayersMemento layers;
-                getMem< 0 >(layers);
-                return Memento{layers};
+                LayersMemento memento;
+                utils::for_< size() >([this, &memento](auto i) {
+                    auto& layer = utils::get< i.value >(m_layers);
+                    utils::get< i.value >(memento) = layer.getMemento();
+                });
+
+                return {memento};
+            }
+
+            static constexpr auto size() {
+                return CONST_LAYERS_NUMBER;
             }
 
             /*!
@@ -126,23 +122,20 @@ namespace nn {
                     inputId++;
                 }
 
-                calculate< 0 >(m_layers);
-                using OutputLayer =
-                 typename std::tuple_element< CONST_LAYERS_NUMBER - 1, Layers >::type;
-                std::get< CONST_LAYERS_NUMBER - 1 >(m_layers).calculateOutputs();
-                std::transform(std::get< CONST_LAYERS_NUMBER - 1 >(m_layers).begin(),
-                               std::get< CONST_LAYERS_NUMBER - 1 >(m_layers).end(),
-                               out,
-                               std::bind(&OutputLayer::Neuron::getOutput,
-                                         std::placeholders::_1));
-            }
+                utils::for_< size() - 1U >([this](auto i) {
+                    auto& layer = utils::get< i.value >(m_layers);
+                    auto& nextLayer = utils::get< i.value + 1 >(m_layers);
+                    layer.calculateOutputs(nextLayer);
+                });
 
-            /**
-             * @brief only for the testing purpose.
-             * @brief please don't use this function.
-             */
-            template< typename Test >
-            void supportTest(Test&);
+                auto& lastLayer = utils::get< size() - 1U >(m_layers);
+                lastLayer.calculateOutputs();
+
+                for(const auto& neuron : lastLayer) {
+                    *out = neuron.getOutput();
+                    ++out;
+                }
+            }
         };
     } // namespace detail
 
