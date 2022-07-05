@@ -67,14 +67,14 @@ namespace nn {
                 while(current != end) {
                     Var sum{}; // sum(aDelta*aWeight)
                     for(const auto& neuron : affectedLayer) {
-                        auto affectedDelta = neuron->getDelta();
+                        auto affectedDelta = neuron.getDelta();
                         auto affectedWeight = neuron[current - begin].weight;
                         sum += affectedDelta * affectedWeight;
-                        sum += affectedDelta * neuron->getBias();
+                        sum += affectedDelta * neuron.getBias();
                     }
 
-                    (*current)->setDelta(momentum((**current).getDelta(),
-                                                  sum * (**current).calculateDerivate()));
+                    current->setDelta(momentum(current->getDelta(),
+                                               sum * current->calculateDerivate()));
 
                     current = std::next(current);
                 }
@@ -124,15 +124,15 @@ namespace nn {
             void calculateDeltas(const Prototype& prototype, MomentumFunc momentum) {
                 std::size_t neuronId = 0;
                 for(auto& neuron : *this) {
-                    neuron->calculateDelta(std::get< 1 >(prototype)[neuronId], momentum);
+                    neuron.calculateDelta(std::get< 1 >(prototype)[neuronId], momentum);
                     neuronId++;
                 }
             }
 
             void calculateWeights(Var learningRate) {
                 for(auto& neuron : *this) {
-                    std::size_t inputsNumber = neuron->size();
-                    auto delta = neuron->getDelta();
+                    std::size_t inputsNumber = neuron.size();
+                    auto delta = neuron.getDelta();
                     for(std::size_t i = 0; i < inputsNumber; i++) {
                         auto input = neuron[i].value;
                         auto weight = neuron[i].weight;
@@ -140,9 +140,9 @@ namespace nn {
                         neuron.setWeight(i, newWeight);
                     }
 
-                    Var weight = neuron->getBias();
+                    Var weight = neuron.getBias();
                     Var newWeight = weight - learningRate * delta;
-                    neuron->setBias(newWeight);
+                    neuron.setBias(newWeight);
                 }
             }
 
@@ -172,6 +172,8 @@ namespace nn {
 
             template< std::size_t inputs >
             using adjust = BPNeuralLayer;
+
+            using Base::size;
 
             BPNeuralLayer() {
                 auto firstNeuron = this->begin();
@@ -214,11 +216,11 @@ namespace nn {
             void calculateWeights(Var learningRate) {
                 for(auto neuronId : ranges::views::indices(this->size())) {
                     auto& neuron = (*this)[neuronId];
-                    auto delta = neuron->getDelta();
+                    auto delta = neuron.getDelta();
 
                     auto calculateWeight =
                      [&](const std::array< Var, Grid::frameSize >& weightIdxs) {
-                         for(auto inputId : ranges::views::indices(neuron->size())) {
+                         for(auto inputId : ranges::views::indices(neuron.size())) {
                              auto input = neuron[inputId].value;
                              auto weight = neuron[inputId].weight;
                              m_weights[weightIdxs[inputId]] +=
@@ -240,14 +242,14 @@ namespace nn {
                         }
                     }
 
-                    Var weight = neuron->getBias();
+                    Var weight = neuron.getBias();
                     Var newWeight = weight - learningRate * delta;
-                    neuron->setBias(newWeight);
+                    neuron.setBias(newWeight);
                 }
 
-                for(auto neuronId : ranges::views::indices(this->size())) {
+                for(auto neuronId : ranges::views::indices(size())) {
                     auto& neuron = (*this)[neuronId];
-                    for(auto inputId : ranges::views::indices(neuron->size())) {
+                    for(auto inputId : ranges::views::indices(neuron.size())) {
                         neuron.setWeight(inputId, m_weights[inputId]);
                     }
                 }

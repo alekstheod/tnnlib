@@ -1,7 +1,6 @@
 #pragma once
 
 #include <NeuralNetwork/INeuralLayer.h>
-#include <NeuralNetwork/Neuron/INeuron.h>
 #include <NeuralNetwork/Serialization/NeuralLayerMemento.h>
 
 #include <boost/iterator/transform_iterator.hpp>
@@ -22,7 +21,7 @@ namespace nn {
          */
         template< class NeuronType, std::size_t neuronsNumber, std::size_t inputsNumber >
         struct NeuralLayer {
-            using Neuron = INeuron< typename NeuronType::template adjust< inputsNumber > >;
+            using Neuron = typename NeuronType::template adjust< inputsNumber >;
             using Var = typename Neuron::Var;
             using NeuronMemento = typename Neuron::Memento;
             using Memento = NeuralLayerMemento< NeuronMemento, neuronsNumber >;
@@ -95,7 +94,7 @@ namespace nn {
                 m_neurons = memento.neurons |
                             views::transform([](const NeuronMemento& m) {
                                 Neuron neuron;
-                                neuron->setMemento(m);
+                                neuron.setMemento(m);
                                 return neuron;
                             }) |
                             ranges::to< decltype(m_neurons) >;
