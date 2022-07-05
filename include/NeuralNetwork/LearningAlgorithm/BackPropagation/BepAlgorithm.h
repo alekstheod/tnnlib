@@ -1,6 +1,7 @@
 #pragma once
 
 #include <NeuralNetwork/LearningAlgorithm/BackPropagation/BPNeuralLayer.h>
+#include <NeuralNetwork/LearningAlgorithm/BackPropagation/BPConvolutionNeuralLayer.h>
 #include <NeuralNetwork/LearningAlgorithm/BackPropagation/ErrorFunction.h>
 #include <NeuralNetwork/Perceptron/Perceptron.h>
 #include <System/Time.h>
