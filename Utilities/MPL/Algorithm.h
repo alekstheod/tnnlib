@@ -1,5 +1,6 @@
 #pragma once
 #include <utility>
+#include <tuple>
 #include <vector>
 
 namespace utils {
@@ -38,5 +39,15 @@ namespace utils {
     template< std::size_t idx, typename T >
     const auto& get(const std::vector< T >& v) {
         return v[idx];
+    }
+
+    template< typename... T >
+    constexpr auto size_of(const std::tuple< T... >&) {
+        return sizeof...(T);
+    }
+
+    template< typename T, std::size_t size >
+    constexpr auto size_of(const std::array< T, size >&) {
+        return size;
     }
 } // namespace utils
