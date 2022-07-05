@@ -1,6 +1,5 @@
 #pragma once
 
-
 #include <NeuralNetwork/LearningAlgorithm/BackPropagation/BPNeuralLayer.h>
 #include <NeuralNetwork/NeuralLayer/ConvolutionLayer.h>
 #include <NeuralNetwork/INeuralLayer.h>
@@ -32,6 +31,8 @@ namespace nn {
 
             template< std::size_t inputs >
             using adjust = BPNeuralLayer;
+
+            using Base::size;
 
             BPNeuralLayer() {
                 auto firstNeuron = this->begin();
@@ -74,11 +75,11 @@ namespace nn {
             void calculateWeights(Var learningRate) {
                 for(auto neuronId : ranges::views::indices(this->size())) {
                     auto& neuron = (*this)[neuronId];
-                    auto delta = neuron->getDelta();
+                    auto delta = neuron.getDelta();
 
                     auto calculateWeight =
                      [&](const std::array< Var, Grid::frameSize >& weightIdxs) {
-                         for(auto inputId : ranges::views::indices(neuron->size())) {
+                         for(auto inputId : ranges::views::indices(neuron.size())) {
                              auto input = neuron[inputId].value;
                              auto weight = neuron[inputId].weight;
                              m_weights[weightIdxs[inputId]] +=
@@ -100,14 +101,14 @@ namespace nn {
                         }
                     }
 
-                    Var weight = neuron->getBias();
+                    Var weight = neuron.getBias();
                     Var newWeight = weight - learningRate * delta;
-                    neuron->setBias(newWeight);
+                    neuron.setBias(newWeight);
                 }
 
-                for(auto neuronId : ranges::views::indices(this->size())) {
+                for(auto neuronId : ranges::views::indices(size())) {
                     auto& neuron = (*this)[neuronId];
-                    for(auto inputId : ranges::views::indices(neuron->size())) {
+                    for(auto inputId : ranges::views::indices(neuron.size())) {
                         neuron.setWeight(inputId, m_weights[inputId]);
                     }
                 }
