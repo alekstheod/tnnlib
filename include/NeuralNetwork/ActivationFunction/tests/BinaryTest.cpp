@@ -1,4 +1,4 @@
-#include <NeuralNetwork/Neuron/ActivationFunction/Binary.h>
+#include <NeuralNetwork/ActivationFunction/Binary.h>
 #include <cstdlib>
 
 #define CATCH_CONFIG_NO_CPP17_UNCAUGHT_EXCEPTIONS

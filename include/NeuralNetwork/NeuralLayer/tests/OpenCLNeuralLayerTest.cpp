@@ -1,6 +1,6 @@
 #include <NeuralNetwork/NeuralLayer/OpenCLNeuralLayer.h>
 #include <NeuralNetwork/NeuralLayer/NeuralLayer.h>
-#include <NeuralNetwork/Neuron/ActivationFunction/TanhFunction.h>
+#include <NeuralNetwork/ActivationFunction/TanhFunction.h>
 #include <NeuralNetwork/Neuron/Neuron.h>
 
 #include <range/v3/all.hpp>

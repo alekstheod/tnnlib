@@ -1,6 +1,6 @@
 #include <NeuralNetwork/NeuralLayer/ConvolutionLayer.h>
 #include <NeuralNetwork/NeuralLayer/NeuralLayer.h>
-#include <NeuralNetwork/Neuron/ActivationFunction/SigmoidFunction.h>
+#include <NeuralNetwork/ActivationFunction/SigmoidFunction.h>
 #include <NeuralNetwork/Neuron/Neuron.h>
 
 #include <range/v3/all.hpp>

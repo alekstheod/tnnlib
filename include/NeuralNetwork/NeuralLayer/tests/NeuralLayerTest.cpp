@@ -1,6 +1,6 @@
 #include <NeuralNetwork/NeuralLayer/NeuralLayer.h>
 #include <NeuralNetwork/Neuron/Neuron.h>
-#include <NeuralNetwork/Neuron/ActivationFunction/SigmoidFunction.h>
+#include <NeuralNetwork/ActivationFunction/SigmoidFunction.h>
 
 #define CATCH_CONFIG_NO_CPP17_UNCAUGHT_EXCEPTIONS
 #include <catch2/catch.hpp>

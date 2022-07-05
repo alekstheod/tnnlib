@@ -1,6 +1,6 @@
 #pragma once
 
-#include <NeuralNetwork/Neuron/ActivationFunction/IActivationFunction.h>
+#include <NeuralNetwork/ActivationFunction/IActivationFunction.h>
 
 #include <functional>
 #include <numeric>
