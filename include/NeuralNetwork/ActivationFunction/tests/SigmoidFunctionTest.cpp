@@ -1,4 +1,4 @@
-#include <NeuralNetwork/Neuron/ActivationFunction/SigmoidFunction.h>
+#include <NeuralNetwork/ActivationFunction/SigmoidFunction.h>
 #include <cstdlib>
 
 #define CATCH_CONFIG_NO_CPP17_UNCAUGHT_EXCEPTIONS

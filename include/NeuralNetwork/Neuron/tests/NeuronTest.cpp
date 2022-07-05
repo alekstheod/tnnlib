@@ -1,5 +1,5 @@
 #include <NeuralNetwork/Neuron/Neuron.h>
-#include <NeuralNetwork/Neuron/ActivationFunction/SigmoidFunction.h>
+#include <NeuralNetwork/ActivationFunction/SigmoidFunction.h>
 
 #include <range/v3/all.hpp>
 

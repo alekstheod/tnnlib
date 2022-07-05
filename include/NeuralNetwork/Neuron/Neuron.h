@@ -3,7 +3,7 @@
 #include <NeuralNetwork/Neuron/INeuron.h>
 #include <NeuralNetwork/Neuron/Input.h>
 #include <NeuralNetwork/Serialization/NeuronMemento.h>
-#include <NeuralNetwork/Neuron/ActivationFunction/IActivationFunction.h>
+#include <NeuralNetwork/ActivationFunction/IActivationFunction.h>
 
 #include <System/Time.h>
 

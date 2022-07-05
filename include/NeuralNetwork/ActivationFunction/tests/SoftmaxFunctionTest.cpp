@@ -1,4 +1,4 @@
-#include <NeuralNetwork/Neuron/ActivationFunction/SoftmaxFunction.h>
+#include <NeuralNetwork/ActivationFunction/SoftmaxFunction.h>
 
 #include <cstdlib>
 #include <iostream>
