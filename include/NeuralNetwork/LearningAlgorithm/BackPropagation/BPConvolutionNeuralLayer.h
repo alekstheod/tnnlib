@@ -2,7 +2,6 @@
 
 #include <NeuralNetwork/LearningAlgorithm/BackPropagation/BPNeuralLayer.h>
 #include <NeuralNetwork/NeuralLayer/ConvolutionLayer.h>
-#include <NeuralNetwork/INeuralLayer.h>
 
 #include <algorithm>
 
@@ -12,10 +11,10 @@ namespace nn {
 
         template< typename LayerType, typename Grid >
         class BPNeuralLayer< nn::detail::ConvolutionLayer< LayerType, Grid > >
-         : public nn::INeuralLayer< nn::detail::ConvolutionLayer< typename LayerType::template wrap< BPNeuron >, Grid > > {
+         : public nn::detail::ConvolutionLayer< typename LayerType::template wrap< BPNeuron >, Grid > {
           public:
             using Base =
-             nn::INeuralLayer< nn::detail::ConvolutionLayer< typename LayerType::template wrap< BPNeuron >, Grid > >;
+             nn::detail::ConvolutionLayer< typename LayerType::template wrap< BPNeuron >, Grid >;
 
             using NeuralLayerType =
              typename nn::detail::ConvolutionLayer< LayerType, Grid >;

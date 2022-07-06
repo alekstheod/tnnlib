@@ -2,7 +2,6 @@
 
 #include <NeuralNetwork/LearningAlgorithm/BackPropagation/BPNeuron.h>
 #include <NeuralNetwork/NeuralLayer/ConvolutionLayer.h>
-#include <NeuralNetwork/INeuralLayer.h>
 
 #include <MPL/TypeTraits.h>
 
@@ -53,12 +52,11 @@ namespace nn {
 
         template< typename NeuralLayerType >
         class BPNeuralLayer
-         : public nn::INeuralLayer< typename detail::unwrapLayer< typename NeuralLayerType::template wrap< BPNeuron > >::type > {
+         : public detail::unwrapLayer< typename NeuralLayerType::template wrap< BPNeuron > >::type {
           public:
             using Base =
-             INeuralLayer< typename detail::unwrapLayer< typename NeuralLayerType::template wrap< BPNeuron > >::type >;
-            using NeuralLayer =
-             INeuralLayer< typename detail::unwrapLayer< NeuralLayerType >::type >;
+             typename detail::unwrapLayer< typename NeuralLayerType::template wrap< BPNeuron > >::type;
+            using NeuralLayer = typename detail::unwrapLayer< NeuralLayerType >::type;
             using Var = typename NeuralLayer::Var;
 
             template< typename VarType >
