@@ -1,6 +1,6 @@
 #pragma once
 
-#include <NeuralNetwork/Serialization/NeuralLayerMemento.h>
+#include <NeuralNetwork/NeuralLayer/Layer.h>
 
 #include <MPL/Algorithm.h>
 
@@ -16,63 +16,58 @@ namespace nn {
         /**
          * Represent the NeuralLayer in perceptron.
          */
-        template< class NeuronType, std::size_t neuronsNumber, std::size_t inputsNumber >
-        struct NeuralLayer {
-            using Neuron = typename NeuronType::template adjust< inputsNumber >;
-            using Var = typename Neuron::Var;
-            using NeuronMemento = typename Neuron::Memento;
-            using Memento = NeuralLayerMemento< NeuronMemento, neuronsNumber >;
+        template< typename NeuronType, std::size_t neuronsNumber, std::size_t inputsNumber >
+        struct NeuralLayer
+         : private Layer< detail::Vector< std::vector< typename NeuronType::template adjust< inputsNumber > >, neuronsNumber > > {
+            using Base =
+             Layer< detail::Vector< std::vector< typename NeuronType::template adjust< inputsNumber > >, neuronsNumber > >;
+            using Container = typename Base::Container;
+            using Var = typename Base::Var;
+            using Memento = typename Base::Memento;
 
-            template< template< class > class NewType >
-            using wrap = NeuralLayer< NewType< Neuron >, neuronsNumber, inputsNumber >;
+            template< template< class > typename NewType >
+            using wrap = typename Base::template wrap_layer< NeuralLayer, NewType >;
 
             template< unsigned int inputs >
-            using adjust = NeuralLayer< Neuron, neuronsNumber, inputs >;
+            using adjust = typename Base::template adjust_layer< NeuralLayer, inputs >;
 
             template< typename VarType >
-            using use =
-             NeuralLayer< typename NeuronType::template use< VarType >, neuronsNumber, inputsNumber >;
+            using use = typename Base::template use_var< NeuralLayer, VarType >;
+
+            using Base::begin;
+            using Base::cbegin;
+            using Base::cend;
+            using Base::end;
+            using Base::size;
+            using Base::operator[];
+            using Base::getOutput;
+
             static constexpr unsigned int CONST_NEURONS_NUMBER = neuronsNumber;
             static constexpr unsigned int CONST_INPUTS_NUMBER = inputsNumber;
-            typedef typename std::vector< Neuron > Container;
 
             static_assert(neuronsNumber > 0,
                           "Invalid template argument neuronsNumber == 0");
-            static_assert(inputsNumber > 0,
+            static_assert(inputsNumber > 1,
                           "Invalid template argument inputsNumber <= 1");
 
-            auto cbegin() const {
-                return std::cbegin(m_neurons);
+            template< typename Func >
+            void for_each(Func func) {
+                utils::for_< size() >([this, &func](auto i) {
+                    func(i, utils::get< i.value >(m_neurons));
+                });
             }
 
-            auto cend() const {
-                return std::cend(m_neurons);
-            }
-
-            auto begin() {
-                return std::begin(m_neurons);
-            }
-
-            auto end() {
-                return std::end(m_neurons);
-            }
-
-            static constexpr auto size() {
-                return CONST_NEURONS_NUMBER;
-            }
-
-            const Neuron& operator[](unsigned int id) const {
-                return m_neurons[id];
-            }
-
-            Neuron& operator[](unsigned int id) {
-                return m_neurons[id];
+            template< typename Func >
+            void for_each(Func func) const {
+                utils::for_< size() >([this, &func](auto i) {
+                    func(i, utils::get< i.value >(m_neurons));
+                });
             }
 
             void setInput(unsigned int inputId, const Var& value) {
-                std::for_each(std::begin(m_neurons),
-                              std::end(m_neurons),
-                              std::bind(&Neuron::setInput, std::placeholders::_1, inputId, value));
+                utils::for_< size() >([this, inputId, value](auto i) {
+                    utils::get< i.value >(m_neurons).setInput(inputId, value);
+                });
             }
 
             const Memento getMemento() const {
@@ -90,22 +85,19 @@ namespace nn {
                 });
             }
 
-            Var getOutput(unsigned int outputId) const {
-                return m_neurons[outputId].getOutput();
-            }
-
             template< typename Layer >
             void calculateOutputs(Layer& nextLayer) {
                 std::array< Var, size() > dotProducts;
-                for(std::size_t i = 0U; i < size(); ++i) {
-                    dotProducts[i] = m_neurons[i].calcDotProduct();
-                }
+                utils::for_< size() >([this, &dotProducts](auto i) {
+                    dotProducts[i.value] =
+                     utils::get< i.value >(m_neurons).calcDotProduct();
+                });
 
-                for(unsigned int i = 0; i < m_neurons.size(); i++) {
-                    nextLayer.setInput(i,
-                                       m_neurons[i].calculateOutput(std::cbegin(dotProducts),
-                                                                    std::cend(dotProducts)));
-                }
+                utils::for_< size() >([this, &dotProducts, &nextLayer](auto i) {
+                    const auto output = utils::get< i.value >(m_neurons).calculateOutput(
+                     std::cbegin(dotProducts), std::cend(dotProducts));
+                    nextLayer.setInput(i.value, output);
+                });
             }
 
             void calculateOutputs() {
@@ -120,7 +112,7 @@ namespace nn {
             }
 
           private:
-            Container m_neurons{neuronsNumber};
+            using Base::m_neurons;
         };
     } // namespace detail
 

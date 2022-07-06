@@ -42,8 +42,7 @@ namespace nn {
             using OutputLayerType =
              typename std::tuple_element< CONST_LAYERS_NUMBER - 1, Layers >::type;
 
-            static constexpr std::size_t CONST_OUTPUTS_NUMBER =
-             OutputLayerType::CONST_NEURONS_NUMBER;
+            static constexpr std::size_t CONST_OUTPUTS_NUMBER = OutputLayerType::size();
 
             using Var = VarType;
 

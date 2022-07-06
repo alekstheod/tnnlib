@@ -75,7 +75,6 @@ namespace nn {
         template< class Internal >
         class OpenCLNeuralLayer : Internal {
           public:
-            using Neuron = typename Internal::Neuron;
             using Var = typename Internal::Var;
             using Memento = typename Internal::Memento;
 
@@ -91,8 +90,7 @@ namespace nn {
             using use =
              OpenCLNeuralLayer< typename Internal::template use< VarType > >;
 
-            BOOST_STATIC_CONSTEXPR unsigned int CONST_NEURONS_NUMBER =
-             Internal::CONST_NEURONS_NUMBER;
+            BOOST_STATIC_CONSTEXPR unsigned int CONST_NEURONS_NUMBER = Internal::size();
             BOOST_STATIC_CONSTEXPR unsigned int CONST_INPUTS_NUMBER =
              Internal::CONST_INPUTS_NUMBER;
 

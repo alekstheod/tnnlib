@@ -31,7 +31,7 @@ namespace nn {
                 typedef typename std::conditional<
                  sizeof...(Layers) == 0,
                  CurrentRebindedTuple,
-                 typename RebindInputsHelper< FirstLayer::CONST_NEURONS_NUMBER, CurrentRebindedTuple, std::tuple< Layers... > >::type >::type type;
+                 typename RebindInputsHelper< FirstLayer::size(), CurrentRebindedTuple, std::tuple< Layers... > >::type >::type type;
             };
 
             template< std::size_t FirstInputs, typename RebindedTuple, typename... Layers >

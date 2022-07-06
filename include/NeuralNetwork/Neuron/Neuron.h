@@ -48,8 +48,8 @@ namespace nn {
                 return std::cend(m_inputs);
             }
 
-            std::size_t size() const {
-                return m_inputs.size();
+            static constexpr auto size() {
+                return inputsNumber;
             }
 
             Input& operator[](std::size_t id) {
