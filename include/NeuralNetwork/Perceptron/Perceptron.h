@@ -1,6 +1,5 @@
 #pragma once
 
-#include <NeuralNetwork/INeuralLayer.h>
 #include <NeuralNetwork/ActivationFunction/SigmoidFunction.h>
 #include <NeuralNetwork/Serialization/PerceptronMemento.h>
 #include <NeuralNetwork/Utils/Utils.h>

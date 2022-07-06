@@ -1,6 +1,5 @@
 #pragma once
 
-#include <NeuralNetwork/INeuralLayer.h>
 #include <NeuralNetwork/Serialization/NeuralLayerMemento.h>
 
 #include <MPL/Algorithm.h>
