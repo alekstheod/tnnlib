@@ -6,10 +6,21 @@
 
 
 namespace nn {
+    namespace detail {
+        template< typename Container, std::size_t sz >
+        struct Vector {
+            static constexpr auto size() {
+                return sz;
+            }
+        };
+    } // namespace detail
+      //
+    template< typename T >
+    struct Layer;
 
-    template< typename T, std::size_t sz = utils::size_of(T{}) >
-    struct Layer {
-        using Container = T;
+    template< typename T, std::size_t sz >
+    struct Layer< detail::Vector< std::vector< T >, sz > > {
+        using Container = std::vector< T >;
         using Neuron = typename Container::value_type;
         using Var = typename Neuron::Var;
         using NeuronMemento = typename Neuron::Memento;
@@ -29,18 +40,16 @@ namespace nn {
         template< template< class, std::size_t, std::size_t > typename L, typename V >
         using use_var = L< typename Neuron::template use< V >, size(), inputs >;
 
-        template< typename Func >
-        void for_each(Func func) {
-            utils::for_< size() >([this, &func](auto i) {
-                func(i, utils::get< i.value >(m_neurons));
-            });
+        Var getOutput(unsigned int outputId) const {
+            return m_neurons[outputId].getOutput();
         }
 
-        template< typename Func >
-        void for_each(Func func) const {
-            utils::for_< size() >([this, &func](auto i) {
-                func(i, utils::get< i.value >(m_neurons));
-            });
+        const auto& operator[](unsigned int id) const {
+            return m_neurons[id];
+        }
+
+        auto& operator[](unsigned int id) {
+            return m_neurons[id];
         }
 
         auto cbegin() const {
@@ -60,5 +69,12 @@ namespace nn {
         }
 
         Container m_neurons{sz};
+    };
+
+    template< typename... T >
+    struct Layer< std::tuple< T... > > {
+        using Container = std::tuple< T... >;
+
+        Container m_neurons;
     };
 } // namespace nn

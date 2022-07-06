@@ -76,7 +76,6 @@ namespace nn {
         template< typename Internal, typename Grid >
         class ConvolutionLayer : private Internal {
           public:
-            using Neuron = typename Internal::Neuron;
             using Var = typename Internal::Var;
             using Memento = typename Internal::Memento;
             using Internal::begin;
@@ -99,7 +98,6 @@ namespace nn {
             using use =
              ConvolutionLayer< typename Internal::template use< VarType >, Grid >;
             static constexpr std::size_t CONST_INPUTS_NUMBER = Grid::size;
-            using Internal::CONST_NEURONS_NUMBER;
 
             /**
              * @see {INeuralLayer}

@@ -18,10 +18,9 @@ namespace nn {
          */
         template< typename NeuronType, std::size_t neuronsNumber, std::size_t inputsNumber >
         struct NeuralLayer
-         : private Layer< std::vector< typename NeuronType::template adjust< inputsNumber > >, neuronsNumber > {
+         : private Layer< detail::Vector< std::vector< typename NeuronType::template adjust< inputsNumber > >, neuronsNumber > > {
             using Base =
-             Layer< std::vector< typename NeuronType::template adjust< inputsNumber > >, neuronsNumber >;
-            using Neuron = typename Base::Neuron;
+             Layer< detail::Vector< std::vector< typename NeuronType::template adjust< inputsNumber > >, neuronsNumber > >;
             using Container = typename Base::Container;
             using Var = typename Base::Var;
             using Memento = typename Base::Memento;
@@ -40,6 +39,8 @@ namespace nn {
             using Base::cend;
             using Base::end;
             using Base::size;
+            using Base::operator[];
+            using Base::getOutput;
 
             static constexpr unsigned int CONST_NEURONS_NUMBER = neuronsNumber;
             static constexpr unsigned int CONST_INPUTS_NUMBER = inputsNumber;
@@ -49,12 +50,18 @@ namespace nn {
             static_assert(inputsNumber > 1,
                           "Invalid template argument inputsNumber <= 1");
 
-            const auto& operator[](unsigned int id) const {
-                return m_neurons[id];
+            template< typename Func >
+            void for_each(Func func) {
+                utils::for_< size() >([this, &func](auto i) {
+                    func(i, utils::get< i.value >(m_neurons));
+                });
             }
 
-            auto& operator[](unsigned int id) {
-                return m_neurons[id];
+            template< typename Func >
+            void for_each(Func func) const {
+                utils::for_< size() >([this, &func](auto i) {
+                    func(i, utils::get< i.value >(m_neurons));
+                });
             }
 
             void setInput(unsigned int inputId, const Var& value) {
@@ -78,22 +85,19 @@ namespace nn {
                 });
             }
 
-            Var getOutput(unsigned int outputId) const {
-                return m_neurons[outputId].getOutput();
-            }
-
             template< typename Layer >
             void calculateOutputs(Layer& nextLayer) {
                 std::array< Var, size() > dotProducts;
-                for(std::size_t i = 0U; i < size(); ++i) {
-                    dotProducts[i] = m_neurons[i].calcDotProduct();
-                }
+                utils::for_< size() >([this, &dotProducts](auto i) {
+                    dotProducts[i.value] =
+                     utils::get< i.value >(m_neurons).calcDotProduct();
+                });
 
-                for(unsigned int i = 0; i < m_neurons.size(); i++) {
-                    nextLayer.setInput(i,
-                                       m_neurons[i].calculateOutput(std::cbegin(dotProducts),
-                                                                    std::cend(dotProducts)));
-                }
+                utils::for_< size() >([this, &dotProducts, &nextLayer](auto i) {
+                    const auto output = utils::get< i.value >(m_neurons).calculateOutput(
+                     std::cbegin(dotProducts), std::cend(dotProducts));
+                    nextLayer.setInput(i.value, output);
+                });
             }
 
             void calculateOutputs() {
