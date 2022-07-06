@@ -87,7 +87,6 @@ namespace nn {
             using Internal::operator[];
             using Internal::calculateOutputs;
             using Internal::getMemento;
-            using Internal::getOutput;
             using Internal::setMemento;
 
             // We can't adjust this layer as the

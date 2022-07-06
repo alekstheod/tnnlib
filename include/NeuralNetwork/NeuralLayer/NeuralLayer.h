@@ -1,6 +1,6 @@
 #pragma once
 
-#include <NeuralNetwork/Serialization/NeuralLayerMemento.h>
+#include <NeuralNetwork/NeuralLayer/Layer.h>
 
 #include <MPL/Algorithm.h>
 
@@ -16,63 +16,51 @@ namespace nn {
         /**
          * Represent the NeuralLayer in perceptron.
          */
-        template< class NeuronType, std::size_t neuronsNumber, std::size_t inputsNumber >
-        struct NeuralLayer {
-            using Neuron = typename NeuronType::template adjust< inputsNumber >;
-            using Var = typename Neuron::Var;
-            using NeuronMemento = typename Neuron::Memento;
-            using Memento = NeuralLayerMemento< NeuronMemento, neuronsNumber >;
+        template< typename NeuronType, std::size_t neuronsNumber, std::size_t inputsNumber >
+        struct NeuralLayer
+         : private Layer< std::vector< typename NeuronType::template adjust< inputsNumber > >, neuronsNumber > {
+            using Base =
+             Layer< std::vector< typename NeuronType::template adjust< inputsNumber > >, neuronsNumber >;
+            using Neuron = typename Base::Neuron;
+            using Container = typename Base::Container;
+            using Var = typename Base::Var;
+            using Memento = typename Base::Memento;
 
-            template< template< class > class NewType >
-            using wrap = NeuralLayer< NewType< Neuron >, neuronsNumber, inputsNumber >;
+            template< template< class > typename NewType >
+            using wrap = typename Base::template wrap_layer< NeuralLayer, NewType >;
 
             template< unsigned int inputs >
-            using adjust = NeuralLayer< Neuron, neuronsNumber, inputs >;
+            using adjust = typename Base::template adjust_layer< NeuralLayer, inputs >;
 
             template< typename VarType >
-            using use =
-             NeuralLayer< typename NeuronType::template use< VarType >, neuronsNumber, inputsNumber >;
+            using use = typename Base::template use_var< NeuralLayer, VarType >;
+
+            using Base::begin;
+            using Base::cbegin;
+            using Base::cend;
+            using Base::end;
+            using Base::size;
+
             static constexpr unsigned int CONST_NEURONS_NUMBER = neuronsNumber;
             static constexpr unsigned int CONST_INPUTS_NUMBER = inputsNumber;
-            typedef typename std::vector< Neuron > Container;
 
             static_assert(neuronsNumber > 0,
                           "Invalid template argument neuronsNumber == 0");
-            static_assert(inputsNumber > 0,
+            static_assert(inputsNumber > 1,
                           "Invalid template argument inputsNumber <= 1");
 
-            auto cbegin() const {
-                return std::cbegin(m_neurons);
-            }
-
-            auto cend() const {
-                return std::cend(m_neurons);
-            }
-
-            auto begin() {
-                return std::begin(m_neurons);
-            }
-
-            auto end() {
-                return std::end(m_neurons);
-            }
-
-            static constexpr auto size() {
-                return CONST_NEURONS_NUMBER;
-            }
-
-            const Neuron& operator[](unsigned int id) const {
+            const auto& operator[](unsigned int id) const {
                 return m_neurons[id];
             }
 
-            Neuron& operator[](unsigned int id) {
+            auto& operator[](unsigned int id) {
                 return m_neurons[id];
             }
 
             void setInput(unsigned int inputId, const Var& value) {
-                std::for_each(std::begin(m_neurons),
-                              std::end(m_neurons),
-                              std::bind(&Neuron::setInput, std::placeholders::_1, inputId, value));
+                utils::for_< size() >([this, inputId, value](auto i) {
+                    utils::get< i.value >(m_neurons).setInput(inputId, value);
+                });
             }
 
             const Memento getMemento() const {
@@ -120,7 +108,7 @@ namespace nn {
             }
 
           private:
-            Container m_neurons{neuronsNumber};
+            using Base::m_neurons;
         };
     } // namespace detail
 
