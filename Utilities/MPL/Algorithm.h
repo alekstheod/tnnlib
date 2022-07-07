@@ -21,24 +21,24 @@ namespace utils {
         for_(func, std::make_index_sequence< N >());
     }
 
+    template< std::size_t idx, typename... T >
+    auto& get(std::tuple< T... >& container) {
+        return std::get< idx >(container);
+    }
+
+    template< std::size_t idx, typename... T >
+    const auto& get(const std::tuple< T... >& container) {
+        return std::get< idx >(container);
+    }
+
     template< std::size_t idx, typename T >
     auto& get(T& container) {
-        return std::get< idx >(container);
+        return container[idx];
     }
 
     template< std::size_t idx, typename T >
     const auto& get(const T& container) {
-        return std::get< idx >(container);
-    }
-
-    template< std::size_t idx, typename T >
-    auto& get(std::vector< T >& v) {
-        return v[idx];
-    }
-
-    template< std::size_t idx, typename T >
-    const auto& get(const std::vector< T >& v) {
-        return v[idx];
+        return container[idx];
     }
 
     template< typename... T >

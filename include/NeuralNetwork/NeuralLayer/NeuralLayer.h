@@ -1,6 +1,6 @@
 #pragma once
 
-#include <NeuralNetwork/NeuralLayer/Layer.h>
+#include <NeuralNetwork/NeuralLayer/Vector.h>
 
 #include <MPL/Algorithm.h>
 
@@ -13,23 +13,25 @@
 namespace nn {
 
     namespace detail {
+        template< typename T >
+        struct NeuralLayer;
+
         /**
          * Represent the NeuralLayer in perceptron.
          */
-        template< typename NeuronType, std::size_t neuronsNumber, std::size_t inputsNumber >
-        struct NeuralLayer
-         : private Layer< detail::Vector< std::vector< typename NeuronType::template adjust< inputsNumber > >, neuronsNumber > > {
-            using Base =
-             Layer< detail::Vector< std::vector< typename NeuronType::template adjust< inputsNumber > >, neuronsNumber > >;
+        template< typename T, std::size_t neuronsNumber >
+        struct NeuralLayer< Vector< T, neuronsNumber > >
+         : private Layer< Vector< T, neuronsNumber > > {
+            using Base = Layer< Vector< T, neuronsNumber > >;
             using Container = typename Base::Container;
             using Var = typename Base::Var;
             using Memento = typename Base::Memento;
 
             template< template< class > typename NewType >
-            using wrap = typename Base::template wrap_layer< NeuralLayer, NewType >;
+            using wrap = typename Base::template wrap_neuron< NeuralLayer, NewType >;
 
             template< unsigned int inputs >
-            using adjust = typename Base::template adjust_layer< NeuralLayer, inputs >;
+            using adjust = typename Base::template adjust_inputs< NeuralLayer, inputs >;
 
             template< typename VarType >
             using use = typename Base::template use_var< NeuralLayer, VarType >;
@@ -43,11 +45,11 @@ namespace nn {
             using Base::getOutput;
 
             static constexpr unsigned int CONST_NEURONS_NUMBER = neuronsNumber;
-            static constexpr unsigned int CONST_INPUTS_NUMBER = inputsNumber;
+            static constexpr unsigned int CONST_INPUTS_NUMBER = T::size();
 
             static_assert(neuronsNumber > 0,
                           "Invalid template argument neuronsNumber == 0");
-            static_assert(inputsNumber > 1,
+            static_assert(T::size() > 1,
                           "Invalid template argument inputsNumber <= 1");
 
             template< typename Func >
@@ -123,5 +125,5 @@ namespace nn {
               std::size_t inputsNumber = 2,
               typename Var = float >
     using NeuralLayer =
-     detail::NeuralLayer< NeuronType< ActivationFunctionType, Var, inputsNumber >, size, inputsNumber >;
+     detail::NeuralLayer< nn::detail::Vector< NeuronType< ActivationFunctionType, Var, inputsNumber >, size > >;
 } // namespace nn

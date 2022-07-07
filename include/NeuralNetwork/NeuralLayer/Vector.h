@@ -1,8 +1,11 @@
 #pragma once
 
+#include <NeuralNetwork/NeuralLayer/Container.h>
 #include <NeuralNetwork/Serialization/NeuralLayerMemento.h>
 
 #include <MPL/Algorithm.h>
+
+#include <vector>
 
 
 namespace nn {
@@ -14,13 +17,10 @@ namespace nn {
             }
         };
 
-        template< typename T >
-        struct Layer;
-
         template< typename T, std::size_t sz >
-        struct Layer< detail::Vector< std::vector< T >, sz > > {
+        struct Layer< detail::Vector< T, sz > > {
             using Container = std::vector< T >;
-            using Neuron = typename Container::value_type;
+            using Neuron = T;
             using Var = typename Neuron::Var;
             using NeuronMemento = typename Neuron::Memento;
             using Memento = NeuralLayerMemento< NeuronMemento, sz >;
@@ -30,14 +30,15 @@ namespace nn {
                 return sz;
             }
 
-            template< template< class, std::size_t, std::size_t > typename L, template< class > class NewType >
-            using wrap_layer = L< NewType< Neuron >, size(), inputs >;
+            template< template< class > typename L, template< class > class NewType >
+            using wrap_neuron = L< Vector< NewType< Neuron >, sz > >;
 
-            template< template< class, std::size_t, std::size_t > typename L, std::size_t inputs >
-            using adjust_layer = L< Neuron, size(), inputs >;
+            template< template< class > typename L, std::size_t inputs >
+            using adjust_inputs =
+             L< Vector< typename Neuron::template adjust< inputs >, sz > >;
 
-            template< template< class, std::size_t, std::size_t > typename L, typename V >
-            using use_var = L< typename Neuron::template use< V >, size(), inputs >;
+            template< template< class > typename L, typename V >
+            using use_var = L< Vector< typename Neuron::template use< V >, sz > >;
 
             Var getOutput(unsigned int outputId) const {
                 return m_neurons[outputId].getOutput();
@@ -68,13 +69,6 @@ namespace nn {
             }
 
             Container m_neurons{sz};
-        };
-
-        template< typename... T >
-        struct Layer< std::tuple< T... > > {
-            using Container = std::tuple< T... >;
-
-            Container m_neurons;
         };
 
     } // namespace detail
