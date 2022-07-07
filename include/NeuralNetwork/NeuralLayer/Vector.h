@@ -24,7 +24,10 @@ namespace nn {
             using Var = typename Neuron::Var;
             using NeuronMemento = typename Neuron::Memento;
             using Memento = NeuralLayerMemento< NeuronMemento, sz >;
-            static constexpr auto inputs = Neuron::size();
+
+            static constexpr auto inputs() {
+                return Neuron::size();
+            }
 
             static constexpr auto size() {
                 return sz;

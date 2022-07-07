@@ -1,5 +1,6 @@
 #pragma once
 
+#include <NeuralNetwork/NeuralLayer/Container.h>
 #include <NeuralNetwork/NeuralLayer/Vector.h>
 
 #include <MPL/Algorithm.h>
@@ -13,16 +14,12 @@
 namespace nn {
 
     namespace detail {
-        template< typename T >
-        struct NeuralLayer;
-
         /**
          * Represent the NeuralLayer in perceptron.
          */
-        template< typename T, std::size_t neuronsNumber >
-        struct NeuralLayer< Vector< T, neuronsNumber > >
-         : private Layer< Vector< T, neuronsNumber > > {
-            using Base = Layer< Vector< T, neuronsNumber > >;
+        template< typename T >
+        struct NeuralLayer : private Layer< T > {
+            using Base = Layer< T >;
             using Container = typename Base::Container;
             using Var = typename Base::Var;
             using Memento = typename Base::Memento;
@@ -40,16 +37,17 @@ namespace nn {
             using Base::cbegin;
             using Base::cend;
             using Base::end;
+            using Base::inputs;
             using Base::size;
             using Base::operator[];
             using Base::getOutput;
 
-            static constexpr unsigned int CONST_NEURONS_NUMBER = neuronsNumber;
-            static constexpr unsigned int CONST_INPUTS_NUMBER = T::size();
+            static constexpr unsigned int CONST_NEURONS_NUMBER = size();
+            static constexpr unsigned int CONST_INPUTS_NUMBER = inputs();
 
-            static_assert(neuronsNumber > 0,
+            static_assert(size() > 0,
                           "Invalid template argument neuronsNumber == 0");
-            static_assert(T::size() > 1,
+            static_assert(inputs() > 1,
                           "Invalid template argument inputsNumber <= 1");
 
             template< typename Func >
