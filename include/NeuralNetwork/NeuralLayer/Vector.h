@@ -43,10 +43,6 @@ namespace nn {
             template< template< class > typename L, typename V >
             using use_var = L< Vector< typename Neuron::template use< V >, sz > >;
 
-            Var getOutput(unsigned int outputId) const {
-                return m_neurons[outputId].getOutput();
-            }
-
             const auto& operator[](unsigned int id) const {
                 return m_neurons[id];
             }

@@ -2,6 +2,7 @@
 
 #include <NeuralNetwork/NeuralLayer/Container.h>
 #include <NeuralNetwork/NeuralLayer/Vector.h>
+#include <NeuralNetwork/NeuralLayer/Tuple.h>
 
 #include <MPL/Algorithm.h>
 
@@ -40,7 +41,6 @@ namespace nn {
             using Base::inputs;
             using Base::size;
             using Base::operator[];
-            using Base::getOutput;
 
             static constexpr unsigned int CONST_NEURONS_NUMBER = size();
             static constexpr unsigned int CONST_INPUTS_NUMBER = inputs();
@@ -49,6 +49,10 @@ namespace nn {
                           "Invalid template argument neuronsNumber == 0");
             static_assert(inputs() > 1,
                           "Invalid template argument inputsNumber <= 1");
+
+            const Var& getOutput(unsigned int outputId) const {
+                return self[outputId].getOutput();
+            }
 
             template< typename Func >
             void for_each(Func func) {
@@ -102,17 +106,19 @@ namespace nn {
 
             void calculateOutputs() {
                 std::array< Var, size() > dotProducts;
-                for(std::size_t i = 0U; i < size(); ++i) {
-                    dotProducts[i] = m_neurons[i].calcDotProduct();
-                }
+                utils::for_< size() >([this, &dotProducts](auto i) {
+                    dotProducts[i.value] =
+                     utils::get< i.value >(m_neurons).calcDotProduct();
+                });
 
-                for(auto& neuron : m_neurons) {
+                for_each([&dotProducts](auto, auto& neuron) {
                     neuron.calculateOutput(std::cbegin(dotProducts), std::cend(dotProducts));
-                }
+                });
             }
 
           private:
             using Base::m_neurons;
+            NeuralLayer& self{*this};
         };
     } // namespace detail
 
@@ -124,4 +130,8 @@ namespace nn {
               typename Var = float >
     using NeuralLayer =
      detail::NeuralLayer< nn::detail::Vector< NeuronType< ActivationFunctionType, Var, inputsNumber >, size > >;
+
+    template< std::size_t inputs, typename Var, typename... Neuron >
+    using HeterogenicNeuralLayer =
+     detail::NeuralLayer< detail::Tuple< Var, inputs, typename Neuron::template adjust< inputs >... > >;
 } // namespace nn
