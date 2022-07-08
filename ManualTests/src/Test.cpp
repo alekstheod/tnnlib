@@ -38,7 +38,8 @@ int main(int argc, char** argv) {
     using Perceptron =
      nn::Perceptron< float,
                      nn::NeuralLayer< nn::Neuron, nn::TanhFunction, 2 >,
-                     nn::HeterogenicNeuralLayer< 2, float, nn::Neuron< nn::TanhFunction >, nn::Neuron< nn::SigmoidFunction > >,
+                     nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, 5 >,
+                     nn::ComplexNeuralLayer< nn::Neuron< nn::TanhFunction >, nn::Neuron< nn::SigmoidFunction > >,
                      nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, 1 > >;
 
     typedef BepAlgorithm< Perceptron > Algo;

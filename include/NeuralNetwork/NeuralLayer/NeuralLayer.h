@@ -134,4 +134,8 @@ namespace nn {
     template< std::size_t inputs, typename Var, typename... Neuron >
     using HeterogenicNeuralLayer =
      detail::NeuralLayer< detail::Tuple< Var, inputs, typename Neuron::template adjust< inputs >... > >;
+
+    template< typename... Neuron >
+    using ComplexNeuralLayer =
+     detail::NeuralLayer< detail::Tuple< float, 1, Neuron... > >;
 } // namespace nn
