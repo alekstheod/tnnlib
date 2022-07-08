@@ -31,6 +31,7 @@ namespace nn {
             template< std::size_t inputs >
             using adjust = BPNeuralLayer;
 
+            using Base::for_each;
             using Base::size;
 
             BPNeuralLayer() {
@@ -68,7 +69,7 @@ namespace nn {
              */
             template< typename Layer, typename MomentumFunc >
             void calculateHiddenDeltas(Layer& affectedLayer, MomentumFunc momentum) {
-                detail::calculateHiddenDeltas(this->begin(), this->end(), affectedLayer, momentum);
+                detail::calculateHiddenDeltas(*this, affectedLayer, momentum);
             }
 
             void calculateWeights(Var learningRate) {

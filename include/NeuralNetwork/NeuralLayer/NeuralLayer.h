@@ -47,7 +47,7 @@ namespace nn {
 
             static_assert(size() > 0,
                           "Invalid template argument neuronsNumber == 0");
-            static_assert(inputs() > 1,
+            static_assert(inputs() >= 1,
                           "Invalid template argument inputsNumber <= 1");
 
             const Var& getOutput(unsigned int outputId) const {

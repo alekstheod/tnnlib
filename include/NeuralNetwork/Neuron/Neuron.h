@@ -157,6 +157,6 @@ namespace nn {
         };
     } // namespace detail
 
-    template< template< class > class OutputFunctionType, typename VarType, std::size_t inputsNumber = 1 >
+    template< template< class > class OutputFunctionType, typename VarType = float, std::size_t inputsNumber = 1 >
     using Neuron = detail::Neuron< OutputFunctionType< VarType >, inputsNumber >;
 } // namespace nn

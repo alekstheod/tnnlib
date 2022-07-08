@@ -20,7 +20,7 @@ namespace nn {
             using Var = VarType;
 
             template< template< class > typename L, template< class > class NewType >
-            using wrap_neuron = L< std::tuple< NewType< T >... > >;
+            using wrap_neuron = L< Tuple< VarType, inputsNumber, NewType< T >... > >;
 
             template< template< class > typename L, typename V >
             using use_var = L< Tuple< V, inputsNumber, T... > >;
