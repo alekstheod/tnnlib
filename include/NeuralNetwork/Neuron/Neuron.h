@@ -1,7 +1,9 @@
 #pragma once
 
+#include <NeuralNetwork/Neuron/INeuron.h>
 #include <NeuralNetwork/Neuron/Input.h>
 #include <NeuralNetwork/Serialization/NeuronMemento.h>
+
 
 #include <System/Time.h>
 
@@ -21,7 +23,7 @@ namespace nn {
      */
     namespace detail {
         template< typename OutputFunctionType, std::size_t inputsNumber >
-        struct Neuron {
+        struct Neuron : INeuron< typename OutputFunctionType::Var > {
             using OutputFunction = OutputFunctionType;
             using Var = typename OutputFunction::Var;
             using Memento = NeuronMemento< Var, inputsNumber >;
@@ -155,6 +157,6 @@ namespace nn {
         };
     } // namespace detail
 
-    template< template< class > class OutputFunctionType, typename VarType, std::size_t inputsNumber >
+    template< template< class > class OutputFunctionType, typename VarType = float, std::size_t inputsNumber = 1 >
     using Neuron = detail::Neuron< OutputFunctionType< VarType >, inputsNumber >;
 } // namespace nn

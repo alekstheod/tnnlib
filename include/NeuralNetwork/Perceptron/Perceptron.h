@@ -37,8 +37,10 @@ namespace nn {
             /// the input layer is used.
             static constexpr std::size_t CONST_INPUTS_NUMBER =
              (inputs > 1) ? inputs : InputLayerType::CONST_INPUTS_NUMBER;
+
             using Layers =
              typename mpl::rebindInputs< CONST_INPUTS_NUMBER, TmplLayers >::type;
+
             using OutputLayerType =
              typename std::tuple_element< CONST_LAYERS_NUMBER - 1, Layers >::type;
 

@@ -29,24 +29,23 @@ namespace nn {
                 using type = typename unwrapLayer< Internal >::type;
             };
 
-            template< typename It, typename Layer, typename MomentumFunc >
-            void calculateHiddenDeltas(It begin, It end, Layer& affectedLayer, MomentumFunc momentum) {
-                auto current = begin;
-                using Var = typename Layer::Var;
-                while(current != end) {
+            template< typename CurrentLayer, typename AffectedLayer, typename MomentumFunc >
+            void calculateHiddenDeltas(CurrentLayer& currentLayer,
+                                       AffectedLayer& affectedLayer,
+                                       MomentumFunc momentum) {
+                using Var = typename AffectedLayer::Var;
+                currentLayer.for_each([&affectedLayer, &momentum](auto i, auto& currentNeuron) {
                     Var sum{}; // sum(aDelta*aWeight)
-                    for(const auto& neuron : affectedLayer) {
+                    affectedLayer.for_each([&sum, &i](auto, auto& neuron) {
                         auto affectedDelta = neuron.getDelta();
-                        auto affectedWeight = neuron[current - begin].weight;
+                        auto affectedWeight = neuron[i.value].weight;
                         sum += affectedDelta * affectedWeight;
                         sum += affectedDelta * neuron.getBias();
-                    }
+                    });
 
-                    current->setDelta(momentum(current->getDelta(),
-                                               sum * current->calculateDerivate()));
-
-                    current = std::next(current);
-                }
+                    currentNeuron.setDelta(momentum(currentNeuron.getDelta(),
+                                                    sum * currentNeuron.calculateDerivate()));
+                });
             }
         } // namespace detail
 
@@ -70,6 +69,8 @@ namespace nn {
             using adjust =
              BPNeuralLayer< typename NeuralLayerType::template adjust< inputs > >;
 
+            using Base::for_each;
+
             /**
              * @brief Will calculate the deltas for the current layer. This
              * method must be called for the hidden layers.
@@ -79,7 +80,7 @@ namespace nn {
              */
             template< typename Layer, typename MomentumFunc >
             void calculateHiddenDeltas(Layer& affectedLayer, MomentumFunc momentum) {
-                detail::calculateHiddenDeltas(this->begin(), this->end(), affectedLayer, momentum);
+                detail::calculateHiddenDeltas(*this, affectedLayer, momentum);
             }
 
             /**
@@ -97,8 +98,8 @@ namespace nn {
                 }
             }
 
-            void calculateWeights(Var learningRate) {
-                for(auto& neuron : *this) {
+            void calculateWeights(const Var& learningRate) {
+                for_each([&learningRate](auto, auto& neuron) {
                     std::size_t inputsNumber = neuron.size();
                     auto delta = neuron.getDelta();
                     for(std::size_t i = 0; i < inputsNumber; i++) {
@@ -111,7 +112,7 @@ namespace nn {
                     Var weight = neuron.getBias();
                     Var newWeight = weight - learningRate * delta;
                     neuron.setBias(newWeight);
-                }
+                });
             }
 
             const Var& getDelta(std::size_t neuronId) const {

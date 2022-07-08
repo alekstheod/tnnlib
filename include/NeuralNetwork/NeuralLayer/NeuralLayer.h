@@ -1,6 +1,8 @@
 #pragma once
 
-#include <NeuralNetwork/NeuralLayer/Layer.h>
+#include <NeuralNetwork/NeuralLayer/Container.h>
+#include <NeuralNetwork/NeuralLayer/Vector.h>
+#include <NeuralNetwork/NeuralLayer/Tuple.h>
 
 #include <MPL/Algorithm.h>
 
@@ -16,20 +18,18 @@ namespace nn {
         /**
          * Represent the NeuralLayer in perceptron.
          */
-        template< typename NeuronType, std::size_t neuronsNumber, std::size_t inputsNumber >
-        struct NeuralLayer
-         : private Layer< detail::Vector< std::vector< typename NeuronType::template adjust< inputsNumber > >, neuronsNumber > > {
-            using Base =
-             Layer< detail::Vector< std::vector< typename NeuronType::template adjust< inputsNumber > >, neuronsNumber > >;
+        template< typename T >
+        struct NeuralLayer : private Layer< T > {
+            using Base = Layer< T >;
             using Container = typename Base::Container;
             using Var = typename Base::Var;
             using Memento = typename Base::Memento;
 
             template< template< class > typename NewType >
-            using wrap = typename Base::template wrap_layer< NeuralLayer, NewType >;
+            using wrap = typename Base::template wrap_neuron< NeuralLayer, NewType >;
 
             template< unsigned int inputs >
-            using adjust = typename Base::template adjust_layer< NeuralLayer, inputs >;
+            using adjust = typename Base::template adjust_inputs< NeuralLayer, inputs >;
 
             template< typename VarType >
             using use = typename Base::template use_var< NeuralLayer, VarType >;
@@ -38,17 +38,21 @@ namespace nn {
             using Base::cbegin;
             using Base::cend;
             using Base::end;
+            using Base::inputs;
             using Base::size;
             using Base::operator[];
-            using Base::getOutput;
 
-            static constexpr unsigned int CONST_NEURONS_NUMBER = neuronsNumber;
-            static constexpr unsigned int CONST_INPUTS_NUMBER = inputsNumber;
+            static constexpr unsigned int CONST_NEURONS_NUMBER = size();
+            static constexpr unsigned int CONST_INPUTS_NUMBER = inputs();
 
-            static_assert(neuronsNumber > 0,
+            static_assert(size() > 0,
                           "Invalid template argument neuronsNumber == 0");
-            static_assert(inputsNumber > 1,
+            static_assert(inputs() >= 1,
                           "Invalid template argument inputsNumber <= 1");
+
+            const Var& getOutput(unsigned int outputId) const {
+                return self[outputId].getOutput();
+            }
 
             template< typename Func >
             void for_each(Func func) {
@@ -102,17 +106,19 @@ namespace nn {
 
             void calculateOutputs() {
                 std::array< Var, size() > dotProducts;
-                for(std::size_t i = 0U; i < size(); ++i) {
-                    dotProducts[i] = m_neurons[i].calcDotProduct();
-                }
+                utils::for_< size() >([this, &dotProducts](auto i) {
+                    dotProducts[i.value] =
+                     utils::get< i.value >(m_neurons).calcDotProduct();
+                });
 
-                for(auto& neuron : m_neurons) {
+                for_each([&dotProducts](auto, auto& neuron) {
                     neuron.calculateOutput(std::cbegin(dotProducts), std::cend(dotProducts));
-                }
+                });
             }
 
           private:
             using Base::m_neurons;
+            NeuralLayer& self{*this};
         };
     } // namespace detail
 
@@ -123,5 +129,9 @@ namespace nn {
               std::size_t inputsNumber = 2,
               typename Var = float >
     using NeuralLayer =
-     detail::NeuralLayer< NeuronType< ActivationFunctionType, Var, inputsNumber >, size, inputsNumber >;
+     detail::NeuralLayer< nn::detail::Vector< NeuronType< ActivationFunctionType, Var, inputsNumber >, size > >;
+
+    template< std::size_t inputs, typename Var, typename... Neuron >
+    using HeterogenicNeuralLayer =
+     detail::NeuralLayer< detail::Tuple< Var, inputs, typename Neuron::template adjust< inputs >... > >;
 } // namespace nn

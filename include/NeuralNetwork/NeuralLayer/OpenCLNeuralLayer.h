@@ -183,6 +183,7 @@ namespace nn {
             using Internal::end;
             using Internal::size;
             using Internal::operator[];
+            using Internal::for_each;
             using Internal::getMemento;
             using Internal::getOutput;
             using Internal::setInput;
