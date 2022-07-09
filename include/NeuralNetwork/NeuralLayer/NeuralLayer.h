@@ -132,7 +132,7 @@ namespace nn {
      detail::NeuralLayer< nn::detail::Vector< NeuronType< ActivationFunctionType, Var, inputsNumber >, size > >;
 
     template< std::size_t inputs, typename Var, typename... Neuron >
-    using HeterogenicNeuralLayer =
+    using ComplexNeuralInputLayer =
      detail::NeuralLayer< detail::Tuple< Var, inputs, typename Neuron::template adjust< inputs >... > >;
 
     template< typename... Neuron >

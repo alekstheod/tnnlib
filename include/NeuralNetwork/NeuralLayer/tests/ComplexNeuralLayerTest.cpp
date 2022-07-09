@@ -7,12 +7,12 @@
 #include <catch2/catch.hpp>
 
 namespace {
-    SCENARIO("Heterogenic neural layer basic calculation",
+    SCENARIO("Complex neural layer basic calculation",
              "[layer][basic][sigmoid][forward]") {
         GIVEN(
          "A neural layer with 2 neurons of 2 different "
          "types") {
-            nn::HeterogenicNeuralLayer< 2U, float, nn::Neuron< nn::SigmoidFunction, float >, nn::Neuron< nn::SoftmaxFunction, float > > layer;
+            nn::ComplexNeuralInputLayer< 2U, float, nn::Neuron< nn::SigmoidFunction, float >, nn::Neuron< nn::SoftmaxFunction, float > > layer;
             nn::Input< float > one{1.f, 1.f};
             layer[0][0] = one;
             layer[0][1] = one;
