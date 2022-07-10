@@ -31,6 +31,11 @@ namespace nn {
              typename std::tuple< std::array< Var, inputsNumber >, std::array< Var, outputsNumber > >;
             using Memento = typename Perceptron::Memento;
 
+
+            static constexpr auto size() {
+                return PerceptronType::size();
+            }
+
             /// @brief constructor will initialize the object with a learning
             /// rate and maximum error limit.
             /// @param varP the learning rate.
@@ -53,7 +58,7 @@ namespace nn {
 
                 // Calculate deltas
                 std::get< Perceptron::size() - 1 >(m_perceptron.layers()).calculateDeltas(prototype, momentum);
-                calculateDelta< Perceptron::size() - 1 >(m_perceptron.layers(), momentum);
+                calculateDelta(prototype, momentum);
 
                 // Calculate weights
                 utils::for_each(m_perceptron.layers(), [this](auto& layer) {
@@ -136,13 +141,16 @@ namespace nn {
                 }
             };
 
-            template< unsigned int index, typename MomentumFunc >
-            void calculateDelta(Layers& layers, MomentumFunc momentum) {
-                std::get< index - 1 >(layers).calculateHiddenDeltas(std::get< index >(layers),
-                                                                    momentum);
-                if constexpr(index > 1) {
-                    calculateDelta< index - 1 >(layers, momentum);
-                }
+            template< typename MomentumFunc >
+            void calculateDelta(const Prototype& prototype, MomentumFunc momentum) {
+                auto& layers = m_perceptron.layers();
+                utils::get< size() - 1 >(layers).calculateDeltas(prototype, momentum);
+                utils::for_< size() - 1 >([this, &layers, &momentum](auto i) {
+                    constexpr auto idx = size() - i.value - 1;
+                    auto& frontLayer = std::get< idx >(layers);
+                    auto& backLayer = std::get< idx - 1 >(layers);
+                    detail::calculateHiddenDeltas(backLayer, frontLayer, momentum);
+                });
             }
         };
     } // namespace bp

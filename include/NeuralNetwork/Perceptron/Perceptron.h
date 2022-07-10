@@ -12,7 +12,6 @@
 #include <functional>
 #include <tuple>
 #include <type_traits>
-#include <vector>
 
 namespace nn {
 
@@ -44,6 +43,8 @@ namespace nn {
             using TmplLayers = std::tuple< typename L::template use< Var >... >;
 
           public:
+            using InputLayerType = typename std::tuple_element< 0, TmplLayers >::type;
+
             static constexpr auto size() {
                 return sizeof...(L);
             }
@@ -53,8 +54,6 @@ namespace nn {
             }
 
             using Layers = typename mpl::rebindInputs< inputs(), TmplLayers >::type;
-            using InputLayerType = typename std::tuple_element< 0, TmplLayers >::type;
-
             using OutputLayerType =
              typename std::tuple_element< size() - 1, Layers >::type;
 
@@ -74,14 +73,6 @@ namespace nn {
 
           private:
             Layers m_layers;
-
-            template< std::size_t index >
-            void getMem(LayersMemento& layers) const {
-                std::get< index >(layers) = std::get< index >(m_layers).getMemento();
-                if constexpr(index < size() - 1) {
-                    getMem< index + 1 >(layers);
-                }
-            }
 
             static_assert(std::tuple_size< Layers >::value > 1,
                           "Invalid number of layers, at least two layers need "

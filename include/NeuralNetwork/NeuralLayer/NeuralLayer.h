@@ -126,14 +126,14 @@ namespace nn {
               template< class >
               class ActivationFunctionType,
               std::size_t size,
-              std::size_t inputsNumber = 2,
+              std::size_t inputsNumber = size,
               typename Var = float >
     using NeuralLayer =
      detail::NeuralLayer< nn::detail::Vector< NeuronType< ActivationFunctionType, Var, inputsNumber >, size > >;
 
     template< std::size_t inputs, typename Var, typename... Neuron >
     using ComplexNeuralInputLayer =
-     detail::NeuralLayer< detail::Tuple< Var, inputs, typename Neuron::template adjust< inputs >... > >;
+     detail::NeuralLayer< detail::Tuple< Var, inputs, typename Neuron::template resize< inputs >... > >;
 
     template< typename... Neuron >
     using ComplexNeuralLayer =

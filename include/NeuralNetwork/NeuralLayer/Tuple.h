@@ -27,7 +27,7 @@ namespace nn {
 
             template< template< class > typename L, std::size_t newInputs >
             using adjust_inputs =
-             L< Tuple< Var, newInputs, typename T::template adjust< newInputs >... > >;
+             L< Tuple< Var, newInputs, typename T::template resize< newInputs >... > >;
 
             using Container = std::tuple< T... >;
 

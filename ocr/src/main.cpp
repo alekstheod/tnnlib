@@ -76,18 +76,10 @@ using ConvolutionGrid2 =
 using Perceptron =
  nn::Perceptron< VarType,
                  nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, inputsNumber >,
-                 nn::NeuralLayer< nn::Neuron, nn::TanhFunction, 20 >,
+                 nn::NeuralLayer< nn::Neuron, nn::TanhFunction, 100 >,
                  nn::NeuralLayer< nn::Neuron, nn::SoftmaxFunction, 10, 1000 > >;
 
 using Algo = nn::bp::BepAlgorithm< Perceptron, nn::bp::CrossEntropyError >;
-
-template< typename Out >
-struct halfdiff_cast_channels {
-    template< typename T >
-    Out operator()(const T& in1, const T& in2) const {
-        return Out((in1 - in2) / 2);
-    }
-};
 
 template< typename SrcView, typename DstView >
 void convert_color(const SrcView& src, const DstView& dst) {
