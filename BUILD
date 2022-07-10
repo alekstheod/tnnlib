@@ -20,23 +20,6 @@ cc_library(
     ],
 )
 
-cc_binary(
-    name = "ocr",
-    srcs = glob(["ocr/**/*.cpp"]),
-    copts = ["-Werror"],
-    deps = [
-        ":tnnlib",
-        ":tnnlib_utils",
-        "@OpenCL",
-        "@boost//:filesystem",
-        "@boost//:gil",
-        "@boost//:variant",
-        "@cereal",
-        "@libpng",
-        "@zlib",
-    ],
-)
-
 cc_library(
     name = "tnnlib_utils",
     srcs = glob(["Utilities/**/*.cpp"]),

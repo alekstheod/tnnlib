@@ -75,7 +75,8 @@ using ConvolutionGrid2 =
 
 using Perceptron =
  nn::Perceptron< VarType,
-                 nn::ConvolutionLayer< nn::OpenCLNeuralLayer, nn::Neuron, nn::ReluFunction, inputsNumber, ConvolutionGrid >,
+                 nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, inputsNumber >,
+                 nn::NeuralLayer< nn::Neuron, nn::TanhFunction, 20 >,
                  nn::NeuralLayer< nn::Neuron, nn::SoftmaxFunction, 10, 1000 > >;
 
 using Algo = nn::bp::BepAlgorithm< Perceptron, nn::bp::CrossEntropyError >;

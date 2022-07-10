@@ -20,8 +20,8 @@ namespace nn {
           private:
             using Var = typename PerceptronType::Var;
 
-            static constexpr unsigned int inputsNumber = PerceptronType::CONST_INPUTS_NUMBER;
-            static constexpr unsigned int outputsNumber = PerceptronType::CONST_OUTPUTS_NUMBER;
+            static constexpr unsigned int inputsNumber = PerceptronType::inputs();
+            static constexpr unsigned int outputsNumber = PerceptronType::outputs();
 
             using Perceptron = typename PerceptronType::template wrap< BPNeuralLayer >;
             using Layers = typename Perceptron::Layers;
@@ -52,10 +52,8 @@ namespace nn {
                                        m_outputs.begin());
 
                 // Calculate deltas
-                std::get< Perceptron::CONST_LAYERS_NUMBER - 1 >(m_perceptron.layers())
-                 .calculateDeltas(prototype, momentum);
-                calculateDelta< Perceptron::CONST_LAYERS_NUMBER - 1 >(
-                 m_perceptron.layers(), momentum);
+                std::get< Perceptron::size() - 1 >(m_perceptron.layers()).calculateDeltas(prototype, momentum);
+                calculateDelta< Perceptron::size() - 1 >(m_perceptron.layers(), momentum);
 
                 // Calculate weights
                 utils::for_each(m_perceptron.layers(), [this](auto& layer) {

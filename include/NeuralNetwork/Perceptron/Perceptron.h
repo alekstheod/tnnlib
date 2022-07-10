@@ -17,61 +17,68 @@
 namespace nn {
 
     namespace detail {
+        template< typename Var, typename... Layers >
+        struct Perceptron;
+
+        template< typename Var, typename... Layers >
+        static constexpr auto perceptron(std::tuple< Layers... >)
+         -> Perceptron< Var, Layers... >;
+
+        template< template< class > class Wrapper, typename... Layers >
+        constexpr auto wrap_layers(std::tuple< Layers... >)
+         -> std::tuple< Wrapper< Layers >... >;
+
+        template< typename... Layers >
+        constexpr auto layers_memento(std::tuple< Layers... >)
+         -> std::tuple< typename Layers::Memento... >;
 
         /*! \class Perceptron
          *  \briefs Contains an input neurons layer one output and one or more
          * hidden layers.
          */
-        template< typename VarType, typename LayerTypes, std::size_t inputs = 1 >
-        class Perceptron {
-          private:
-            using TmplLayers = typename mpl::rebindVar< VarType, LayerTypes >::type;
-
-          public:
-            static constexpr std::size_t CONST_LAYERS_NUMBER =
-             std::tuple_size< TmplLayers >::value;
-            using InputLayerType = typename std::tuple_element< 0, TmplLayers >::type;
-
-            /// @brief the number of inputs is taken out of the argument if and
-            /// only if it is bigger than 1, otherwise the number of inputs from
-            /// the input layer is used.
-            static constexpr std::size_t CONST_INPUTS_NUMBER =
-             (inputs > 1) ? inputs : InputLayerType::CONST_INPUTS_NUMBER;
-
-            using Layers =
-             typename mpl::rebindInputs< CONST_INPUTS_NUMBER, TmplLayers >::type;
-
-            using OutputLayerType =
-             typename std::tuple_element< CONST_LAYERS_NUMBER - 1, Layers >::type;
-
-            static constexpr std::size_t CONST_OUTPUTS_NUMBER = OutputLayerType::size();
-
+        template< typename VarType, typename... L >
+        struct Perceptron {
             using Var = VarType;
 
-            template< template< class > class Layer >
-            using wrap =
-             detail::Perceptron< VarType, typename utils::rebind_tuple< Layer, Layers >::type >;
+          private:
+            using TmplLayers = std::tuple< typename L::template use< Var >... >;
 
-            using LayersMemento = typename detail::mpl::ToMemento< Layers >::type;
+          public:
+            static constexpr auto size() {
+                return sizeof...(L);
+            }
+
+            static constexpr auto inputs() {
+                return InputLayerType::inputs();
+            }
+
+            using Layers = typename mpl::rebindInputs< inputs(), TmplLayers >::type;
+            using InputLayerType = typename std::tuple_element< 0, TmplLayers >::type;
+
+            using OutputLayerType =
+             typename std::tuple_element< size() - 1, Layers >::type;
+
+            static constexpr auto outputs() {
+                return OutputLayerType::size();
+            }
+
+            template< template< class > typename Layer >
+            using wrap =
+             decltype(perceptron< Var >(wrap_layers< Layer >(std::declval< Layers >())));
+
+            using LayersMemento = decltype(layers_memento(std::declval< Layers >()));
             typedef PerceptronMemento< LayersMemento > Memento;
 
             template< typename T >
-            using use = Perceptron< T, LayerTypes >;
-
-            template< std::size_t in >
-            using resize = Perceptron< VarType, LayerTypes, in >;
-            using reverse = Perceptron< VarType, utils::reverse< LayerTypes > >;
+            using use = decltype(perceptron< T >(std::declval< Layers >()));
 
           private:
-            /*!
-             * Hidden layers.
-             */
             Layers m_layers;
 
             template< std::size_t index >
             void getMem(LayersMemento& layers) const {
                 std::get< index >(layers) = std::get< index >(m_layers).getMemento();
-                if constexpr(index < CONST_LAYERS_NUMBER - 1) {
+                if constexpr(index < size() - 1) {
                     getMem< index + 1 >(layers);
                 }
             }
@@ -100,10 +107,6 @@ namespace nn {
                 });
 
                 return {memento};
-            }
-
-            static constexpr auto size() {
-                return CONST_LAYERS_NUMBER;
             }
 
             /*!
@@ -139,6 +142,6 @@ namespace nn {
         };
     } // namespace detail
 
-    template< typename VarType, typename... NeuralLayers >
-    using Perceptron = detail::Perceptron< VarType, std::tuple< NeuralLayers... > >;
+    template< typename Var, typename... NeuralLayers >
+    using Perceptron = detail::Perceptron< Var, NeuralLayers... >;
 } // namespace nn
