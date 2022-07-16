@@ -145,7 +145,7 @@ namespace nn {
             void calculateDelta(const Prototype& prototype, MomentumFunc momentum) {
                 auto& layers = m_perceptron.layers();
                 utils::get< size() - 1 >(layers).calculateDeltas(prototype, momentum);
-                utils::for_< size() - 1 >([this, &layers, &momentum](auto i) {
+                utils::for_< size() - 1 >([&layers, &momentum](auto i) {
                     constexpr auto idx = size() - i.value - 1;
                     auto& frontLayer = std::get< idx >(layers);
                     auto& backLayer = std::get< idx - 1 >(layers);
