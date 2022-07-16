@@ -26,7 +26,6 @@ namespace {
             }
             WHEN("dot product increases") {
                 std::vector< float > neighbors(10, 1.f);
-                const auto sum = std::accumulate(cbegin(neighbors), cend(neighbors), 0.f);
                 for(float i = -100.f; i < 100.f; i++) {
                     THEN(
                      "the calculation result is following the formula "

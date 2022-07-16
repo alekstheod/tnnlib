@@ -38,7 +38,7 @@ namespace nn {
 
             template< template< class > typename L, std::size_t inputs >
             using adjust_inputs =
-             L< Vector< typename Neuron::template adjust< inputs >, sz > >;
+             L< Vector< typename Neuron::template resize< inputs >, sz > >;
 
             template< template< class > typename L, typename V >
             using use_var = L< Vector< typename Neuron::template use< V >, sz > >;

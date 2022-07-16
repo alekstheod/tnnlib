@@ -4,23 +4,7 @@
 namespace nn {
 
     namespace detail {
-
         namespace mpl {
-
-            /// workaround for VS++ compilation.
-            template< typename Var, typename T >
-            struct rebindOne {
-                typedef typename T::template use< Var > type;
-            };
-
-            template< typename Var, typename T >
-            struct rebindVar;
-
-            template< typename Var, typename... T >
-            struct rebindVar< Var, std::tuple< T... > > {
-                typedef typename std::tuple< typename rebindOne< Var, T >::type... > type;
-            };
-
             template< std::size_t FirstInputs, typename RebindedTuple, typename Tuple >
             struct RebindInputsHelper;
 
@@ -44,15 +28,6 @@ namespace nn {
                 static_assert(std::tuple_size< Tuple >::value >= 1, "Invalid");
                 typedef
                  typename RebindInputsHelper< FirstInputs, std::tuple<>, Tuple >::type type;
-            };
-
-            /// @brief Memento type.
-            template< typename T >
-            struct ToMemento;
-
-            template< typename... L >
-            struct ToMemento< std::tuple< L... > > {
-                using type = typename std::tuple< typename L::Memento... >;
             };
         } // namespace mpl
     } // namespace detail

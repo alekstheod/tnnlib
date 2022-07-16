@@ -1,6 +1,4 @@
-#include "NeuralNetwork/NeuralLayer/OpenCLNeuralLayer.h"
 #include <NeuralNetwork/LearningAlgorithm/BackPropagation/BepAlgorithm.h>
-#include <NeuralNetwork/NeuralLayer/ConvolutionLayer.h>
 #include <NeuralNetwork/NeuralLayer/NeuralLayer.h>
 #include <NeuralNetwork/ActivationFunction/BiopolarSigmoidFunction.h>
 #include <NeuralNetwork/ActivationFunction/LogScaleSoftmaxFunction.h>
@@ -10,7 +8,6 @@
 #include <NeuralNetwork/ActivationFunction/ReluFunction.h>
 #include <NeuralNetwork/Neuron/Neuron.h>
 #include <NeuralNetwork/Perceptron/Perceptron.h>
-#include <NeuralNetwork/NeuralLayer/OpenCLNeuralLayer.h>
 #include <NeuralNetwork/Config.h>
 
 #include <MPL/Tuple.h>
@@ -69,24 +66,16 @@ namespace {
 
 using ConvolutionGrid =
  typename nn::ConvolutionGrid< width, height, stride, margin >::define;
-
 using ConvolutionGrid2 =
  typename nn::ConvolutionGrid< width / stride, height / stride, 2, 5 >::define;
 
 using Perceptron =
  nn::Perceptron< VarType,
-                 nn::ConvolutionLayer< nn::OpenCLNeuralLayer, nn::Neuron, nn::ReluFunction, inputsNumber, ConvolutionGrid >,
-                 nn::NeuralLayer< nn::Neuron, nn::SoftmaxFunction, 10, 1000 > >;
+                 nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, 30, inputsNumber >,
+                 nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, 30 >,
+                 nn::NeuralLayer< nn::Neuron, nn::SoftmaxFunction, 10 > >;
 
 using Algo = nn::bp::BepAlgorithm< Perceptron, nn::bp::CrossEntropyError >;
-
-template< typename Out >
-struct halfdiff_cast_channels {
-    template< typename T >
-    Out operator()(const T& in1, const T& in2) const {
-        return Out((in1 - in2) / 2);
-    }
-};
 
 template< typename SrcView, typename DstView >
 void convert_color(const SrcView& src, const DstView& dst) {
@@ -121,7 +110,7 @@ void readImage(std::string fileName, Iterator out) {
     for(int y = 0; y < srcView.height(); ++y) {
         gray8c_view_t::x_iterator src_it(srcView.row_begin(y));
         for(int x = 0; x < srcView.width(); ++x) {
-            *out = src_it[x];
+            *out = src_it[x] < 130 ? 1.f : -1.f;
             out++;
         }
     }
@@ -208,9 +197,9 @@ void calculateWeights(std::string imagesPath) {
     }
 
     auto errorFunc = [](unsigned int epoch, VarType error) {
-        // if(epoch % 3 == 0) {
-        std::cout << "Epoch:" << epoch << " error:" << error << std::endl;
-        //}
+        if(epoch % 20 == 0) {
+            std::cout << "Epoch:" << epoch << " error:" << error << std::endl;
+        }
 
         return error > 0.001f;
     };

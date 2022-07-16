@@ -73,18 +73,6 @@ namespace nn {
 
             /**
              * @brief Will calculate the deltas for the current layer. This
-             * method must be called for the hidden layers.
-             * @param affectedLayer the next affected layer.
-             * @param current data set based on which the deltas will be
-             * calculated.
-             */
-            template< typename Layer, typename MomentumFunc >
-            void calculateHiddenDeltas(Layer& affectedLayer, MomentumFunc momentum) {
-                detail::calculateHiddenDeltas(*this, affectedLayer, momentum);
-            }
-
-            /**
-             * @brief Will calculate the deltas for the current layer. This
              * method must be called for the output layer layers.
              * @param current data set based on which the deltas will be
              * calculated.

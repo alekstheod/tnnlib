@@ -38,7 +38,7 @@ namespace nn {
              Neuron< typename OutputFunctionType::template use< VarType >, inputsNumber >;
 
             template< std::size_t inputs >
-            using adjust = Neuron< OutputFunctionType, inputs >;
+            using resize = Neuron< OutputFunctionType, inputs >;
 
             static_assert(inputsNumber > 0, "Invalid number of inputs");
 
