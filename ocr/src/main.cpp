@@ -12,12 +12,6 @@
 
 #include <MPL/Tuple.h>
 
-#ifndef BOOST_SYSTEM_NO_DEPRECATED
-#define BOOST_SYSTEM_NO_DEPRECATED 1
-#include <boost/filesystem.hpp>
-#undef BOOST_SYSTEM_NO_DEPRECATED
-#endif
-
 #define png_infopp_NULL (png_infopp) NULL
 #define int_p_NULL (int*)NULL
 
@@ -49,6 +43,7 @@
 #include <iomanip>
 #include <iostream>
 #include <set>
+#include <filesystem>
 
 typedef float VarType;
 
@@ -118,7 +113,7 @@ void readImage(std::string fileName, Iterator out) {
 
 Perceptron readPerceptron(std::string fileName) {
     Perceptron perceptron;
-    if(boost::filesystem::exists(fileName.c_str())) {
+    if(std::filesystem::exists(fileName.c_str())) {
         std::ifstream file(fileName);
         if(file.good()) {
             Perceptron::Memento memento;
@@ -129,6 +124,8 @@ Perceptron readPerceptron(std::string fileName) {
         } else {
             throw std::logic_error("Invalid perceptron file name");
         }
+    } else {
+        throw std::logic_error("Invalid perceptron file name");
     }
 
     return perceptron;
@@ -161,7 +158,7 @@ void save(const Perc& perc, std::string name) {
 }
 
 void calculateWeights(std::string imagesPath) {
-    using namespace boost::filesystem;
+    using namespace std::filesystem;
     path directory(imagesPath);
     directory_iterator end_iter;
 
@@ -175,13 +172,11 @@ void calculateWeights(std::string imagesPath) {
     }
 
     std::cout << "Perceptron calculation started" << std::endl;
-    static Perceptron tmp = readPerceptron("perceptron.json");
     static Algo algorithm(0.05f);
-    algorithm.setMemento(tmp.getMemento());
 
     std::vector< Algo::Prototype > prototypes;
     for(auto image : files) {
-        if(!boost::filesystem::is_directory(image)) {
+        if(!std::filesystem::is_directory(image)) {
             try {
                 Algo::Prototype proto;
                 readImage(image, std::get< 0 >(proto).begin());
@@ -201,7 +196,7 @@ void calculateWeights(std::string imagesPath) {
             std::cout << "Epoch:" << epoch << " error:" << error << std::endl;
         }
 
-        return error > 0.001f;
+        return error > 0.01f;
     };
 
     static Perceptron perceptron =

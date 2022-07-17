@@ -7,7 +7,6 @@ cc_binary(
         "//:tnnlib",
         "//:tnnlib_utils",
         "@OpenCL",
-        "@boost//:filesystem",
         "@boost//:gil",
         "@boost//:variant",
         "@cereal",
