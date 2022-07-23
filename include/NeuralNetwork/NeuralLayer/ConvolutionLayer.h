@@ -106,26 +106,18 @@ namespace nn {
 
             static constexpr std::size_t CONST_INPUTS_NUMBER = Grid::size;
 
-            /**
-             * @see {INeuralLayer}
-             */
             void setInput(unsigned int inputId, const Var& value) {
-                std::size_t neuronId = 0;
-                for(auto& neuron : *this) {
-                    utils::for_each(m_grid.connections, [&](auto& connection) {
-                        if(neuronId == connection.neuronId &&
-                           connection.area.doesIntersect(inputId)) {
-                            const auto localInputId = connection.area.localize(inputId);
-                            neuron.setInput(localInputId, value);
-                        }
-                    });
-
-                    neuronId++;
-                }
+                utils::for_each(m_grid.connections, [&](auto& connection) {
+                    if(connection.area.doesIntersect(inputId)) {
+                        const auto localInputId = connection.area.localize(inputId);
+                        self[connection.neuronId].setInput(localInputId, value);
+                    }
+                });
             }
 
           private:
             Grid m_grid;
+            ConvolutionLayer& self{*this};
         };
     } // namespace detail
 
