@@ -52,9 +52,9 @@ namespace nn {
         };
 
         template< std::size_t... ints >
-        static constexpr auto makeArea(std::index_sequence< ints... >) {
-            return std::tuple< Connection< Area< calcPoint(ints) >, ints >... >{};
-        }
+        static constexpr auto makeArea(std::index_sequence< ints... >)
+         -> std::tuple< Connection< Area< calcPoint(ints) >, ints >... >;
+
 
         template< typename Connections >
         struct Grid {
@@ -99,6 +99,11 @@ namespace nn {
             template< typename VarType >
             using use =
              ConvolutionLayer< typename Internal::template use< VarType >, Grid >;
+
+            template< template< class > typename NewNeuron >
+            using wrap =
+             ConvolutionLayer< typename Internal::template wrap< NewNeuron >, Grid >;
+
             static constexpr std::size_t CONST_INPUTS_NUMBER = Grid::size;
 
             /**
@@ -130,7 +135,6 @@ namespace nn {
               class NeuronType,
               template< class >
               class ActivationFunctionType,
-              std::size_t,
               typename Grid,
               typename Var = float >
     using ConvolutionLayer =
