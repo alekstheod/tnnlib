@@ -6,8 +6,7 @@
  \__|_| |_|_| |_|_|_|_.__/
 ```
 
-[![Build Status (Windows)](https://ci.appveyor.com/api/projects/status/gb8229o85xap8c9i?svg=true)](https://ci.appveyor.com/project/grishavanika/tnnlib)
-[![Build Status (Linux)](https://travis-ci.org/alekstheod/tnnlib.svg)](https://travis-ci.org/alekstheod/tnnlib)
+[![CircleCI](https://dl.circleci.com/status-badge/img/gh/alekstheod/tnnlib/tree/master.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/alekstheod/tnnlib/tree/master)
 
 template neural network library v3
 
