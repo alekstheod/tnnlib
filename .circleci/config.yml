@@ -17,9 +17,19 @@ jobs:
     executor:
       name: win/default
     steps:
+      - checkout
       - run:
-          name: "Install project dependencies"
-          command: echo "Hello from windows"
+          name: "Install bazelisk"
+          command: choco install -y bazelisk
+      - run:
+          name: "Install clang"
+          command: choco install -y llvm
+      - run:
+          name: "Build all"
+          command: bazel build --config=win_clang //... --build_tag_filters="-openCL"
+      - run:
+          name: "Test all"
+          command: bazel --config=win_clang test //... --test_tag_filters="-openCL"
 
 workflows:
   pr_check:
