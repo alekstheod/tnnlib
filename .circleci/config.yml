@@ -11,8 +11,8 @@ jobs:
       - checkout
       - run: apt -y install opencl-headers ocl-icd-opencl-dev
       - run: ln -s /usr/lib/x86_64-linux-gnu/libOpenCL.so /usr/lib/
-      - run: bazel build --config=asan //...
-      - run: bazel test --config=asan //... --test_tag_filters="-openCL"
+      - run: bazel build --config=clang-asan //...
+      - run: bazel test --config=clang-asan //... --test_tag_filters="-openCL"
   build_in_windows:
     executor:
       name: win/default
@@ -22,14 +22,11 @@ jobs:
           name: "Install bazelisk"
           command: choco install -y bazelisk
       - run:
-          name: "Install clang"
-          command: choco install -y llvm
-      - run:
           name: "Build all"
-          command: bazel build --config=win_clang //... --build_tag_filters="-openCL"
+          command: bazel build --config=windows //... --build_tag_filters="-openCL"
       - run:
           name: "Test all"
-          command: bazel --config=win_clang test //... --test_tag_filters="-openCL"
+          command: bazel --config=windows test //... --test_tag_filters="-openCL"
 
 workflows:
   pr_check:

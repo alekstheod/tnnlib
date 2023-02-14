@@ -10,11 +10,12 @@ cc_library(
         exclude = [
             "zlib.h",
             "contrib/**/*",
+            "test/**/*",
         ],
     ),
     hdrs = ["zlib.h"],
     copts = [
-        "-Wno-implicit-function-declaration",
+        "-w",
     ],
     includes = ["."],
     visibility = ["//visibility:public"],

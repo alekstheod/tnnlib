@@ -1,7 +1,9 @@
 #include "System/Time.h"
+
+#include <boost/numeric/conversion/cast.hpp>
+
 #include <chrono>
 #include <random>
-#include <boost/numeric/conversion/cast.hpp>
 
 namespace utils {
     namespace priv {
@@ -19,12 +21,10 @@ namespace utils {
             return rnd< float >(maxValue);
         }
 
-
         template<>
         double randomize< double >(unsigned int maxValue) {
             return rnd< double >(maxValue);
         }
-
 
         template<>
         int randomize< int >(unsigned int maxValue) {
