@@ -31,9 +31,7 @@ namespace nn {
         template< class Archive >
         void load(Archive& ar) {
             ar(CEREAL_NVP(bias));
-            auto inputValues =
-             inputs | ranges::views::transform(std::mem_fn(&Input< Var >::weight)) |
-             ranges::to< std::vector >;
+            std::vector< Var > inputValues;
             ar(inputValues);
             std::transform(cbegin(inputValues), cend(inputValues), begin(inputs), [](const auto& weight) {
                 return Input< Var >{weight, {}};
