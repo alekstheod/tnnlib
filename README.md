@@ -49,18 +49,16 @@ Calculating perceptron by using BEP algorithm:
 
 The convolution layer is not yet ready
 
-[Key features](#features)
-[How to build](#build)
-[Example ocr](#ocr)
-[Work in progress](#wip)
+- [Key features](#features)
+- [How to build](#build)
+- [Example ocr](#ocr)
+- [Work in progress](Work in progress)
 
 #features
 The main idea of tnnlib is to provide a simple and intuitive DSL (lego like) which can
 be used to define a neural network (Perceptron) in a modern c++ envirnoment.
 
 ### Define simple perceptron:
-
-#perceptron
 
 ```cpp
     typedef nn::Perceptron<float,
@@ -70,7 +68,7 @@ be used to define a neural network (Perceptron) in a modern c++ envirnoment.
                            > Perceptron;
 ```
 
-### Activation functions:
+### Activation functions
 
 There is a set of activation functions implemented that can be used in perceptron
 
@@ -84,11 +82,7 @@ As defined in the [simple perceptron section](#perceptron) we can pass an activa
 function type as an argument to the [NeuralLayer interface](#NeuralLayer) or to the
 Neuron interface directly when constructing a [complex NeuralLayer](#complexLayer).
 
-### NeuralLayer types:
-
-#NeuralLayer
-
-#### NeuralLayer
+### NeuralLayer
 
 A simplest NeuralLayer instarface. This interface accepts
 a type of the neuron used in a layer the activation function
@@ -99,7 +93,7 @@ of neurons available in that layer.
 nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, 2>
 ```
 
-#### ComplexNeuralLayer
+### ComplexNeuralLayer
 
 #complexLayer
 
@@ -112,14 +106,15 @@ an individual neuron.
 nn::ComplexNeuralInputLayer< 2U, float, nn::Neuron< nn::SigmoidFunction, float >, nn::Neuron< nn::SoftmaxFunction, float > > layer;
 ```
 
-#### OpenCLNeuralLayer
+### OpenCLNeuralLayer
 
 OpenCL neural layer is meant to speedup a back propagation algorithm by calclating the dot products of the
 neurons in parallel through the GPU or CPU OpenCL layer. Keep in mind that it only works if your system
 contains a proper OpenCL installation and all modules and include files are located in a correct directory.
 See the local_repository definition in the projects WORKSPACE file for more details.
 
-#build
+### build
+
 The tnnlib library is using bazels (bazelisk) as a its build system.
 Please use starndard bazelisk (bazel) commands to build the library.
 
@@ -131,7 +126,8 @@ OpenCL targets are marked with the tag openCL and you have to exclude
 these targets from building if openCL is not available on your system.
 --config=asan stays for address sanetizer configuration.
 
-#ocr
+### ocr
+
 There is a small subproject which implements a simple ocr application which can recognize
 handwritten digits by using the tnnlib code. Running this project is as simple as executing
 the following command in your terminal:
@@ -154,8 +150,6 @@ command:
 This command will calculate the probabilities of all the digits (0-9) in the image 2.png.
 
 ### Work in progress
-
-#wip
 
 - Convolution layer
 - Build on windows
