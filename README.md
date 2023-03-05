@@ -53,6 +53,7 @@ Calculating perceptron by using BEP algorithm:
 - [Work in progress](#WIP)
 
 ### Features
+
 The main idea of tnnlib is to provide a simple and intuitive DSL (lego like) which can
 be used to define a neural network (Perceptron) in a modern c++ envirnoment.
 
@@ -120,7 +121,7 @@ bazel build --config=asan //... --test_tag_filters=-openCL
 
 OpenCL targets are marked with the tag openCL and you have to exclude
 these targets from building if openCL is not available on your system.
-```--config=asan``` stays for address sanetizer configuration.
+`--config=asan` stays for address sanetizer configuration.
 
 ### OCR
 
@@ -134,12 +135,13 @@ bazel run //ocr:ocr -- ocr/samples/
 
 This command will start the learning procedure through the back error propagation
 algorithm for the set of samples in the ocr/samples directory. The result
-of the process (when converged) will be stored in the 
+of the process (when converged) will be stored in the file.
+
 ```bash
 bazel-bin/ocr/ocr.runfiles/__main__/perceptron.json
 ```
 
-file. This file describes a perceptron with the calculated weights which can be used to recognize the digits.
+This file describes a perceptron with the calculated weights which can be used to recognize the digits.
 Trying it out is as simple as going to the directory where the json file is stored and executing the following
 command:
 
