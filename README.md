@@ -47,8 +47,6 @@ Calculating perceptron by using BEP algorithm:
                                                   numOfEpochs);
 ```
 
-The convolution layer is not yet ready
-
 - [Key features](#Features)
 - [How to build](#Build)
 - [Example ocr](#OCR)
