@@ -52,9 +52,9 @@ The convolution layer is not yet ready
 - [Key features](#features)
 - [How to build](#build)
 - [Example ocr](#ocr)
-- [Work in progress](Work in progress)
+- [Work in progress](#wip)
 
-#features
+### features
 The main idea of tnnlib is to provide a simple and intuitive DSL (lego like) which can
 be used to define a neural network (Perceptron) in a modern c++ envirnoment.
 
@@ -149,7 +149,7 @@ command:
 
 This command will calculate the probabilities of all the digits (0-9) in the image 2.png.
 
-### Work in progress
+### wip
 
 - Convolution layer
 - Build on windows
