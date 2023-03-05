@@ -48,3 +48,114 @@ Calculating perceptron by using BEP algorithm:
 ```
 
 The convolution layer is not yet ready
+
+[Key features](#features)
+[How to build](#build)
+[Example ocr](#ocr)
+[Work in progress](#wip)
+
+#features
+The main idea of tnnlib is to provide a simple and intuitive DSL (lego like) which can
+be used to define a neural network (Perceptron) in a modern c++ envirnoment.
+
+### Define simple perceptron:
+
+#perceptron
+
+```cpp
+    typedef nn::Perceptron<float,
+                           nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, 2>,
+                           nn::NeuralLayer<nn::Neuron, nn::TanhFunction, 20>,
+                           nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, 1>
+                           > Perceptron;
+```
+
+### Activation functions:
+
+There is a set of activation functions implemented that can be used in perceptron
+
+Some of them and the most frequently used are:
+
+- SigmoidFunction
+- TanhFunction
+- SoftmaxFunction
+
+As defined in the [simple perceptron section](#perceptron) we can pass an activation
+function type as an argument to the [NeuralLayer interface](#NeuralLayer) or to the
+Neuron interface directly when constructing a [complex NeuralLayer](#complexLayer).
+
+### NeuralLayer types:
+
+#NeuralLayer
+
+#### NeuralLayer
+
+A simplest NeuralLayer instarface. This interface accepts
+a type of the neuron used in a layer the activation function
+which suppose to be the same for a whole layer and the number
+of neurons available in that layer.
+
+```cpp
+nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, 2>
+```
+
+#### ComplexNeuralLayer
+
+#complexLayer
+
+With complex layer we can define a layer which consists of heterogenic neuron types. That means
+that we even can construct a layer in which a neuron can be anyting which fulfills the interface
+of the neuron. Consider having a full perceptron acting as a neuron or a NeuralLayer which acts as
+an individual neuron.
+
+```cpp
+nn::ComplexNeuralInputLayer< 2U, float, nn::Neuron< nn::SigmoidFunction, float >, nn::Neuron< nn::SoftmaxFunction, float > > layer;
+```
+
+#### OpenCLNeuralLayer
+
+OpenCL neural layer is meant to speedup a back propagation algorithm by calclating the dot products of the
+neurons in parallel through the GPU or CPU OpenCL layer. Keep in mind that it only works if your system
+contains a proper OpenCL installation and all modules and include files are located in a correct directory.
+See the local_repository definition in the projects WORKSPACE file for more details.
+
+#build
+The tnnlib library is using bazels (bazelisk) as a its build system.
+Please use starndard bazelisk (bazel) commands to build the library.
+
+```bash
+bazel build --config=asan //... --test_tag_filters=-openCL
+```
+
+OpenCL targets are marked with the tag openCL and you have to exclude
+these targets from building if openCL is not available on your system.
+--config=asan stays for address sanetizer configuration.
+
+#ocr
+There is a small subproject which implements a simple ocr application which can recognize
+handwritten digits by using the tnnlib code. Running this project is as simple as executing
+the following command in your terminal:
+
+```bash
+bazel run //ocr:ocr -- ocr/samples/
+```
+
+This command will start the learning procedure through the back error propagation
+algorithm for the set of samples in the ocr/samples directory. The result
+of the process (when converged) will be stored in the bazel-bin/ocr/ocr.runfiles/**main**/perceptron.json
+file. This file describes a perceptron with the calculated weights which can be used to recognize the digits.
+Trying it out is as simple as going to the directory where the json file is stored and executing the following
+command:
+
+```bash
+./ocr/ocr perceptron.json ocr/samples/2.png
+```
+
+This command will calculate the probabilities of all the digits (0-9) in the image 2.png.
+
+### Work in progress
+
+#wip
+
+- Convolution layer
+- Build on windows
