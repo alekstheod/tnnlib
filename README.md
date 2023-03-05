@@ -136,7 +136,7 @@ This command will start the learning procedure through the back error propagatio
 algorithm for the set of samples in the ocr/samples directory. The result
 of the process (when converged) will be stored in the 
 ```bash
-bazel-bin/ocr/ocr.runfiles/**main**/perceptron.json
+bazel-bin/ocr/ocr.runfiles/__main__/perceptron.json
 ```
 
 file. This file describes a perceptron with the calculated weights which can be used to recognize the digits.
