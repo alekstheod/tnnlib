@@ -49,16 +49,16 @@ Calculating perceptron by using BEP algorithm:
 
 The convolution layer is not yet ready
 
-- [Key features](#features)
-- [How to build](#build)
-- [Example ocr](#ocr)
-- [Work in progress](#wip)
+- [Key features](#Features)
+- [How to build](#Build)
+- [Example ocr](#OCR)
+- [Work in progress](#WIP)
 
-### features
+### Features
 The main idea of tnnlib is to provide a simple and intuitive DSL (lego like) which can
 be used to define a neural network (Perceptron) in a modern c++ envirnoment.
 
-### Define simple perceptron:
+### Define simple perceptron
 
 ```cpp
     typedef nn::Perceptron<float,
@@ -78,9 +78,9 @@ Some of them and the most frequently used are:
 - TanhFunction
 - SoftmaxFunction
 
-As defined in the [simple perceptron section](#perceptron) we can pass an activation
-function type as an argument to the [NeuralLayer interface](#NeuralLayer) or to the
-Neuron interface directly when constructing a [complex NeuralLayer](#complexLayer).
+As defined in the #Define simple perceptron we can pass an activation
+function type as an argument to the NeuralLayer interface or to the
+Neuron interface directly when constructing a complex NeuralLayer.
 
 ### NeuralLayer
 
@@ -94,8 +94,6 @@ nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, 2>
 ```
 
 ### ComplexNeuralLayer
-
-#complexLayer
 
 With complex layer we can define a layer which consists of heterogenic neuron types. That means
 that we even can construct a layer in which a neuron can be anyting which fulfills the interface
@@ -113,7 +111,7 @@ neurons in parallel through the GPU or CPU OpenCL layer. Keep in mind that it on
 contains a proper OpenCL installation and all modules and include files are located in a correct directory.
 See the local_repository definition in the projects WORKSPACE file for more details.
 
-### build
+### Build
 
 The tnnlib library is using bazels (bazelisk) as a its build system.
 Please use starndard bazelisk (bazel) commands to build the library.
@@ -124,9 +122,9 @@ bazel build --config=asan //... --test_tag_filters=-openCL
 
 OpenCL targets are marked with the tag openCL and you have to exclude
 these targets from building if openCL is not available on your system.
---config=asan stays for address sanetizer configuration.
+```--config=asan``` stays for address sanetizer configuration.
 
-### ocr
+### OCR
 
 There is a small subproject which implements a simple ocr application which can recognize
 handwritten digits by using the tnnlib code. Running this project is as simple as executing
@@ -138,7 +136,11 @@ bazel run //ocr:ocr -- ocr/samples/
 
 This command will start the learning procedure through the back error propagation
 algorithm for the set of samples in the ocr/samples directory. The result
-of the process (when converged) will be stored in the bazel-bin/ocr/ocr.runfiles/**main**/perceptron.json
+of the process (when converged) will be stored in the 
+```bash
+bazel-bin/ocr/ocr.runfiles/**main**/perceptron.json
+```
+
 file. This file describes a perceptron with the calculated weights which can be used to recognize the digits.
 Trying it out is as simple as going to the directory where the json file is stored and executing the following
 command:
@@ -149,7 +151,7 @@ command:
 
 This command will calculate the probabilities of all the digits (0-9) in the image 2.png.
 
-### wip
+### WIP
 
 - Convolution layer
 - Build on windows
