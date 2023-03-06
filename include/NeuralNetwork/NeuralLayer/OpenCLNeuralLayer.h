@@ -6,7 +6,7 @@
 
 #define CL_HPP_TARGET_OPENCL_VERSION 200
 #define CL_HPP_ENABLE_EXCEPTIONS
-#include <CL/cl2.hpp>
+#include <CL/opencl.hpp>
 
 #include <array>
 #include <exception>
@@ -186,6 +186,7 @@ namespace nn {
             using Internal::for_each;
             using Internal::getMemento;
             using Internal::getOutput;
+            using Internal::inputs;
             using Internal::setInput;
             using Internal::setMemento;
 
