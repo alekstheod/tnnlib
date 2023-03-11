@@ -2,7 +2,7 @@ cc_binary(
     name = "ocr",
     srcs = glob(["src/*.cpp"]),
     copts = ["-Werror"],
-    data = glob(["samples/**"]),
+    data = ["@OcrSamples//:samples"],
     deps = [
         "//:tnnlib",
         "//:tnnlib_utils",

@@ -129,7 +129,7 @@ handwritten digits by using the tnnlib code. Running this project is as simple a
 the following command in your terminal:
 
 ```bash
-bazel run //ocr:ocr -- ocr/samples/
+bazel run //ocr:ocr -- external/OcrSamples/samples
 ```
 
 This command will start the learning procedure through the back error propagation
@@ -145,7 +145,7 @@ Trying it out is as simple as going to the directory where the json file is stor
 command:
 
 ```bash
-./ocr/ocr perceptron.json ocr/samples/2.png
+./ocr/ocr perceptron.json external/OcrSamples/samples/0_4.png
 ```
 
 This command will calculate the probabilities of all the digits (0-9) in the image 2.png.

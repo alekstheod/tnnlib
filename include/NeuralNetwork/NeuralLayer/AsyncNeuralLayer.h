@@ -2,6 +2,8 @@
 
 #include <NeuralNetwork/NeuralLayer/NeuralLayer.h>
 
+#include <range/v3/all.hpp>
+
 #include <thread>
 #include <future>
 
@@ -48,11 +50,9 @@ namespace nn {
                      std::async([&neuron]() { return neuron.calcDotProduct(); });
                 });
 
-                std::array< Var, size() > products;
-                std::transform(std::begin(dotProducts),
-                               std::end(dotProducts),
-                               std::begin(products),
-                               [](auto& f) { return f.get(); });
+                const auto products =
+                 dotProducts |
+                 ranges::views::transform(std::mem_fn(&std::future< Var >::get));
                 for_each([&products](auto, auto& neuron) {
                     neuron.calculateOutput(std::cbegin(products), std::cend(products));
                 });
