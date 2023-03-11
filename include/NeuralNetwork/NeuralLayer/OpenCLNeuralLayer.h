@@ -186,6 +186,7 @@ namespace nn {
             using Internal::for_each;
             using Internal::getMemento;
             using Internal::getOutput;
+            using Internal::inputs;
             using Internal::setInput;
             using Internal::setMemento;
 
