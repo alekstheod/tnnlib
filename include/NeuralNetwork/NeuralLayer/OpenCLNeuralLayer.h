@@ -12,7 +12,6 @@
 #include <exception>
 #include <fstream>
 
-
 namespace nn {
 
     namespace detail {

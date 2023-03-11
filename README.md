@@ -53,7 +53,6 @@ Calculating perceptron by using BEP algorithm:
 - [Work in progress](#WIP)
 
 ### Features
-
 The main idea of tnnlib is to provide a simple and intuitive DSL (lego like) which can
 be used to define a neural network (Perceptron) in a modern c++ envirnoment.
 
