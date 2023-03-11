@@ -27,9 +27,13 @@ cc_library(
         "pngpriv.h",
         "pngstruct.h",
     ],
+    copts = [
+        "-w",
+    ],
     includes = ["."],
     visibility = ["//visibility:public"],
-    deps = ["@zlib",
-	"@libpng_config"],
+    deps = [
+        "@libpng_config",
+        "@zlib",
+    ],
 )
-

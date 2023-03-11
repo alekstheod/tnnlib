@@ -1,9 +1,12 @@
-build -c opt --cxxopt='-std=c++17'
-build:asan --strip=never
-build:asan --copt -fsanitize=address
-build:asan --copt -DADDRESS_SANITIZER
-build:asan --copt -O1
-build:asan --copt -g
-build:asan --copt -fno-omit-frame-pointer
-build:asan --linkopt -fsanitize=address
+build:clang-asan -c opt --cxxopt='-std=c++17'
+build:clang-asan --strip=never
+build:clang-asan --copt -fsanitize=address
+build:clang-asan --copt -DADDRESS_SANITIZER
+build:clang-asan --copt -O1
+build:clang-asan --copt -g
+build:clang-asan --copt -fno-omit-frame-pointer
+build:clang-asan --linkopt -fsanitize=address
+build:clang-asan  --copt -Werror
+build:clang-asan --repo_env=CC=clang
 
+build:windows --copt /WX

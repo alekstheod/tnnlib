@@ -1,11 +1,35 @@
+version: 2.1
+
+orbs:
+  win: circleci/windows@5
+
 jobs:
-  build:
+  build_in_docker:
     docker:
       - image: l.gcr.io/google/bazel:latest
     steps:
       - checkout
       - run: apt -y install opencl-headers ocl-icd-opencl-dev
       - run: ln -s /usr/lib/x86_64-linux-gnu/libOpenCL.so /usr/lib/
-      - run: bazel build --config=asan //...
-      - run: bazel test --config=asan //... --test_tag_filters="-openCL"
-version: 2
+      - run: bazel build --config=clang-asan //...
+      - run: bazel test --config=clang-asan //... --test_tag_filters="-openCL"
+  build_in_windows:
+    executor:
+      name: win/default
+    steps:
+      - checkout
+      - run:
+          name: "Install bazelisk"
+          command: choco install -y bazelisk
+      - run:
+          name: "Build all"
+          command: bazel build --config=windows //... --build_tag_filters="-openCL"
+      - run:
+          name: "Test all"
+          command: bazel --config=windows test //... --test_tag_filters="-openCL"
+
+workflows:
+  pr_check:
+    jobs:
+      - build_in_docker
+      - build_in_windows
