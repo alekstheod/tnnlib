@@ -58,8 +58,6 @@ namespace {
     constexpr std::size_t width = 25;
     constexpr std::size_t height = 34;
     constexpr std::size_t inputsNumber = width * height;
-    constexpr std::size_t margin = 15;
-    constexpr std::size_t stride = 10;
 } // namespace
 
 

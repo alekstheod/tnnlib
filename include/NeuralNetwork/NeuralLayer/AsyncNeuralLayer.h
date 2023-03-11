@@ -21,7 +21,7 @@ namespace nn {
             using Internal::getMemento;
             using Internal::getOutput;
             using Internal::inputs;
-            using Internal::Memento;
+            using Memento = typename Internal::Memento;
             using Var = typename Internal::Var;
             using Internal::operator[];
             using Internal::setInput;
@@ -43,8 +43,7 @@ namespace nn {
 
             void calculateOutputs() {
                 std::array< std::future< Var >, size() > dotProducts;
-
-                utils::for_< size() >([this, &dotProducts](auto i) {
+                utils::for_< size() >([&dotProducts](auto i) {
                     auto& neuron = operator[](i.value);
                     dotProducts[i.value] =
                      std::async([&neuron]() { return neuron.calcDotProduct(); });
