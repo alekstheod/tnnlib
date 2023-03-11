@@ -12,7 +12,6 @@ namespace nn {
     namespace detail {
         template< typename Internal >
         struct AsyncNeuralLayer : private Internal {
-            using Internal::adjust;
             using Internal::begin;
             using Internal::cbegin;
             using Internal::cend;
@@ -27,12 +26,18 @@ namespace nn {
             using Internal::setInput;
             using Internal::setMemento;
             using Internal::size;
-            using Internal::use;
-            using Internal::wrap;
 
-            /**
-             * @see {INeuralLayer}
-             */
+            template< template< class > class NewType >
+            using wrap =
+             AsyncNeuralLayer< typename Internal::template wrap< NewType > >;
+
+            template< unsigned int inputs >
+            using adjust =
+             AsyncNeuralLayer< typename Internal::template adjust< inputs > >;
+
+            template< typename VarType >
+            using use = AsyncNeuralLayer< typename Internal::template use< VarType > >;
+
             template< typename Layer >
             void calculateOutputs(Layer& nextLayer) {
                 calculateOutputs();
@@ -43,7 +48,7 @@ namespace nn {
 
             void calculateOutputs() {
                 std::array< std::future< Var >, size() > dotProducts;
-                utils::for_< size() >([&dotProducts](auto i) {
+                utils::for_< size() >([this, &dotProducts](auto i) {
                     auto& neuron = operator[](i.value);
                     dotProducts[i.value] =
                      std::async([&neuron]() { return neuron.calcDotProduct(); });
