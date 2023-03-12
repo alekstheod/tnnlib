@@ -9,6 +9,8 @@
 #include <NeuralNetwork/Neuron/Neuron.h>
 #include <NeuralNetwork/Perceptron/Perceptron.h>
 #include <NeuralNetwork/Config.h>
+#include <NeuralNetwork/NeuralLayer/OpenCLNeuralLayer.h>
+#include <NeuralNetwork/NeuralLayer/AsyncNeuralLayer.h>
 
 #include <MPL/Tuple.h>
 
@@ -17,9 +19,6 @@
 #include <boost/filesystem.hpp>
 #undef BOOST_SYSTEM_NO_DEPRECATED
 #endif
-
-#define png_infopp_NULL (png_infopp) NULL
-#define int_p_NULL (int*)NULL
 
 #if defined(NN_CC_MSVC)
 #pragma warning(push)
@@ -32,7 +31,7 @@
 #include <boost/gil.hpp>
 #include <boost/gil/image.hpp>
 
-#include <boost/gil/extension/io/png/old.hpp>
+#include <boost/gil/extension/io/png.hpp>
 #include <boost/gil/extension/numeric/sampler.hpp>
 #include <boost/gil/extension/numeric/resample.hpp>
 #include <boost/gil/extension/dynamic_image/any_image.hpp>
@@ -56,23 +55,15 @@ namespace {
     using namespace boost::gil;
     using namespace boost::gil::detail;
     const std::string alphabet("0123456789");
-    constexpr std::size_t width = 49;
-    constexpr std::size_t height = 67;
+    constexpr std::size_t width = 24;
+    constexpr std::size_t height = 33;
     constexpr std::size_t inputsNumber = width * height;
-    constexpr std::size_t margin = 15;
-    constexpr std::size_t stride = 10;
 } // namespace
 
 
-using ConvolutionGrid =
- typename nn::ConvolutionGrid< width, height, stride, margin >::define;
-using ConvolutionGrid2 =
- typename nn::ConvolutionGrid< width / stride, height / stride, 2, 5 >::define;
-
 using Perceptron =
  nn::Perceptron< VarType,
-                 nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, 30, inputsNumber >,
-                 nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, 30 >,
+                 nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, 12, inputsNumber >,
                  nn::NeuralLayer< nn::Neuron, nn::SoftmaxFunction, 10 > >;
 
 using Algo = nn::bp::BepAlgorithm< Perceptron, nn::bp::CrossEntropyError >;
@@ -93,7 +84,7 @@ void readImage(std::string fileName, Iterator out) {
     using namespace nn::bp;
 
     rgb8_image_t srcImg;
-    png_read_image(fileName.c_str(), srcImg);
+    read_image(fileName.c_str(), srcImg, png_tag());
 
     gray8_image_t dstImg(srcImg.dimensions());
     gray8_pixel_t white(255);
@@ -110,7 +101,7 @@ void readImage(std::string fileName, Iterator out) {
     for(int y = 0; y < srcView.height(); ++y) {
         gray8c_view_t::x_iterator src_it(srcView.row_begin(y));
         for(int x = 0; x < srcView.width(); ++x) {
-            *out = src_it[x] < 130 ? 1.f : -1.f;
+            *out = static_cast< float >(src_it[x]) / 255.f; // input in a range of (0-1)
             out++;
         }
     }
@@ -164,7 +155,6 @@ void calculateWeights(std::string imagesPath) {
     using namespace boost::filesystem;
     path directory(imagesPath);
     directory_iterator end_iter;
-
     std::vector< std::string > files;
     if(exists(directory) && is_directory(directory)) {
         for(directory_iterator dir_iter(directory); dir_iter != end_iter; ++dir_iter) {
@@ -174,12 +164,14 @@ void calculateWeights(std::string imagesPath) {
         }
     }
 
+
     std::cout << "Perceptron calculation started" << std::endl;
-    static Perceptron tmp = readPerceptron("perceptron.json");
-    static Algo algorithm(0.05f);
-    algorithm.setMemento(tmp.getMemento());
+    // static Perceptron tmp = readPerceptron("perceptron.json");
+    static Algo algorithm(0.001f);
+    // algorithm.setMemento(tmp.getMemento());
 
     std::vector< Algo::Prototype > prototypes;
+
     for(auto image : files) {
         if(!boost::filesystem::is_directory(image)) {
             try {
@@ -190,22 +182,23 @@ void calculateWeights(std::string imagesPath) {
                 size_t pos = alphabet.find(ch);
                 std::get< 1 >(proto)[pos] = 1.0f;
                 prototypes.push_back(proto);
-            } catch(const std::exception&) {
-                std::cout << "Invalid image found :" << image << std::endl;
+            } catch(const std::exception& e) {
+                std::cout << "Invalid image found :" << image
+                          << " exception: " << e.what() << std::endl;
             }
         }
     }
 
     auto errorFunc = [](unsigned int epoch, VarType error) {
-        if(epoch % 20 == 0) {
-            std::cout << "Epoch:" << epoch << " error:" << error << std::endl;
-        }
-
-        return error > 0.001f;
+        std::cout << "Epoch:" << epoch << " error:" << error << std::endl;
+        return error > 0.1f;
     };
 
+    const auto momentum = [](const auto, const auto newDelta) {
+        return newDelta;
+    };
     static Perceptron perceptron =
-     algorithm.calculate(prototypes.begin(), prototypes.end(), errorFunc);
+     algorithm.calculate(prototypes.begin(), prototypes.end(), errorFunc, momentum);
 
     save(perceptron, "perceptron.json");
 }

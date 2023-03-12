@@ -102,19 +102,19 @@ namespace nn {
                 do {
                     auto seed =
                      std::chrono::system_clock::now().time_since_epoch().count();
-                    std::shuffle(prototypes.begin(),
-                                 prototypes.end(),
+
+                    std::vector< int > idxs(prototypes.size());
+                    std::iota(std::begin(idxs), std::end(idxs), 0);
+                    std::shuffle(std::begin(idxs),
+                                 std::end(idxs),
                                  std::default_random_engine(static_cast< unsigned int >(seed)));
 
-                    const auto runTrainingStep = [&](const Var& init,
-                                                     const Prototype& first) -> Var {
-                        return init + executeTrainingStep(first, momentum);
-                    };
+                    error = {};
+                    for(auto idx : idxs) {
+                        error += executeTrainingStep(prototypes[idx], momentum);
+                    }
 
-                    error =
-                     std::accumulate(prototypes.begin(), prototypes.end(), Var{}, runTrainingStep);
-
-                } while(errorFunc(++epochCounter, error));
+                } while(errorFunc(++epochCounter, error / prototypes.size()));
 
                 PerceptronType perceptron;
                 perceptron.setMemento(m_perceptron.getMemento());

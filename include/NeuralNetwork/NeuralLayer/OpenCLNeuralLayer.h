@@ -12,7 +12,6 @@
 #include <exception>
 #include <fstream>
 
-
 namespace nn {
 
     namespace detail {
@@ -190,9 +189,6 @@ namespace nn {
             using Internal::setInput;
             using Internal::setMemento;
 
-            /**
-             * @see {INeuralLayer}
-             */
             template< typename Layer >
             void calculateOutputs(Layer& nextLayer) {
                 calculate();
@@ -201,9 +197,6 @@ namespace nn {
                 }
             }
 
-            /**
-             * @see {INeuralLayer}
-             */
             void calculateOutputs() {
                 calculate();
             }
