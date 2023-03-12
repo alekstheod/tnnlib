@@ -25,7 +25,7 @@ http_archive(
 
 new_local_repository(
     name = "OpenCL",
-    build_file = "OpenCL/OpenCL.BUILD",
+    build_file = "external/OpenCL.BUILD",
     path = "/usr/",
 )
 

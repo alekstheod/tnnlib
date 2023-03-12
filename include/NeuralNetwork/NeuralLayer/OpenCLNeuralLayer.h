@@ -16,7 +16,7 @@ namespace nn {
 
     namespace detail {
 
-        cl::Context createContext() {
+        inline cl::Context createContext() {
             using namespace cl;
             // Get available platforms
             std::vector< cl::Platform > platforms;
@@ -31,7 +31,7 @@ namespace nn {
             return cl::Context(CL_DEVICE_TYPE_GPU, cps);
         }
 
-        cl::Program createProgram(const cl::Context& context) {
+        inline cl::Program createProgram(const cl::Context& context) {
             using namespace cl;
             // Get a list of devices on this platform
             std::vector< Device > devices = context.getInfo< CL_CONTEXT_DEVICES >();
@@ -68,6 +68,17 @@ namespace nn {
             return program;
         }
 
+        struct OpenCLProgram {
+            cl::Context context{createContext()};
+            cl::Program program{createProgram(context)};
+            cl::Kernel kernel{program, "dot_product"};
+            std::vector< cl::Device > devices{context.getInfo< CL_CONTEXT_DEVICES >()};
+            static OpenCLProgram& instance() {
+                static OpenCLProgram program;
+                return program;
+            }
+        };
+
         /// @brief OpenCL based neural layer. Used to improve the perormace
         /// for a larg ammount of neurons. This layer will use the openCL in
         /// order to calculate a dot product for the neuros inputs.
@@ -94,28 +105,25 @@ namespace nn {
              Internal::CONST_INPUTS_NUMBER;
 
           private:
-            cl::Context m_context;
-            cl::Program m_program;
-            cl::Kernel m_kernel;
-            std::vector< cl::Device > m_devices;
-
-          private:
             void calculate() {
                 using namespace cl;
                 constexpr auto size = CONST_INPUTS_NUMBER * CONST_NEURONS_NUMBER;
                 std::array< float, size > in_weights;
                 std::array< float, size > in_values;
+                auto& ocl = OpenCLProgram::instance();
                 // Create a command queue and use the first device
-                Buffer weights(m_context, CL_MEM_READ_ONLY, size * sizeof(float));
-                Buffer values(m_context, CL_MEM_READ_ONLY, size * sizeof(float));
-                Buffer product(m_context, CL_MEM_WRITE_ONLY, CONST_NEURONS_NUMBER * sizeof(float));
+                Buffer weights(ocl.context, CL_MEM_READ_ONLY, size * sizeof(float));
+                Buffer values(ocl.context, CL_MEM_READ_ONLY, size * sizeof(float));
+                Buffer product(ocl.context,
+                               CL_MEM_WRITE_ONLY,
+                               CONST_NEURONS_NUMBER * sizeof(float));
 
                 // Set arguments to kernel
-                m_kernel.setArg(0, weights);
-                m_kernel.setArg(1, values);
-                m_kernel.setArg(2, product);
-                m_kernel.setArg(3, CONST_INPUTS_NUMBER);
-                CommandQueue queue(m_context, m_devices[0]);
+                ocl.kernel.setArg(0, weights);
+                ocl.kernel.setArg(1, values);
+                ocl.kernel.setArg(2, product);
+                ocl.kernel.setArg(3, CONST_INPUTS_NUMBER);
+                CommandQueue queue(ocl.context, ocl.devices[0]);
 
                 try {
                     for(const auto i : ranges::views::indices(CONST_NEURONS_NUMBER)) {
@@ -138,7 +146,7 @@ namespace nn {
                                              in_values.size() * sizeof(float),
                                              in_values.data());
 
-                    queue.enqueueNDRangeKernel(m_kernel,
+                    queue.enqueueNDRangeKernel(ocl.kernel,
                                                cl::NullRange,
                                                cl::NDRange(CONST_NEURONS_NUMBER));
 
@@ -163,16 +171,6 @@ namespace nn {
             }
 
           public:
-            OpenCLNeuralLayer()
-             : m_context(createContext()), m_program(createProgram(m_context)),
-               m_kernel(m_program, "dot_product"),
-               m_devices(m_context.getInfo< CL_CONTEXT_DEVICES >()) {
-            }
-
-            static_assert(CONST_NEURONS_NUMBER > 0,
-                          "Invalid template argument neuronsNumber == 0");
-            static_assert(CONST_INPUTS_NUMBER > 0,
-                          "Invalid template argument inputsNumber <= 1");
             static_assert(std::is_same< float, Var >::value,
                           "VarType must be float");
 
