@@ -104,8 +104,8 @@ nn::ComplexNeuralInputLayer< 2U, float, nn::Neuron< nn::SigmoidFunction, float >
 
 ### OpenCLNeuralLayer
 
-OpenCL neural layer is meant to speedup a back propagation algorithm by calclating the dot products of the
-neurons in parallel through the GPU or CPU OpenCL layer. Keep in mind that it only works if your system
+OpenCL neural layer is meant to speedup a back propagation algorithm by calculating the dot products of
+neurons inputs in parallel through the GPU or CPU OpenCL layer. Keep in mind that it only works if your system
 contains a proper OpenCL installation and all modules and include files are located in a correct directory.
 See the local_repository definition in the projects WORKSPACE file for more details.
 
