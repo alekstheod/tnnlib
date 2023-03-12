@@ -63,7 +63,7 @@ namespace {
 
 using Perceptron =
  nn::Perceptron< VarType,
-                 nn::AsyncNeuralLayer< nn::Neuron, nn::SigmoidFunction, 20, inputsNumber >,
+                 nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, 12, inputsNumber >,
                  nn::NeuralLayer< nn::Neuron, nn::SoftmaxFunction, 10 > >;
 
 using Algo = nn::bp::BepAlgorithm< Perceptron, nn::bp::CrossEntropyError >;
