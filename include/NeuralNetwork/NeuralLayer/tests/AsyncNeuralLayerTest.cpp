@@ -16,7 +16,7 @@ namespace {
          "regular layer with the same topology") {
             nn::NeuralLayer< nn::Neuron, nn::TanhFunction, 2, 2 > regularLayer;
             const auto memento = regularLayer.getMemento();
-            nn::AsyncNeuralLayer< nn::Neuron, nn::TanhFunction, 2, 2 > asyncLayer;
+            nn::AsyncNeuralLayer< 2, nn::Neuron, nn::TanhFunction, 2, 2 > asyncLayer;
             asyncLayer.setMemento(memento);
             WHEN("The weights and the inputs of both layers are identical") {
                 THEN("The output is of both layers identical") {

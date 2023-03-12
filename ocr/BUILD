@@ -7,6 +7,7 @@ cc_binary(
         "//:tnnlib",
         "//:tnnlib_utils",
         "@OpenCL",
+        "@boost//:asio",
         "@boost//:filesystem",
         "@boost//:gil",
         "@boost//:variant",

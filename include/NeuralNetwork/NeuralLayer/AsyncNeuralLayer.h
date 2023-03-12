@@ -4,6 +4,11 @@
 
 #include <range/v3/all.hpp>
 
+#include <boost/asio/thread_pool.hpp>
+#include <boost/asio/post.hpp>
+
+#include <range/v3/all.hpp>
+
 #include <thread>
 #include <future>
 
@@ -47,19 +52,30 @@ namespace nn {
             }
 
             void calculateOutputs() {
-                std::array< std::future< Var >, size() > dotProducts;
-                utils::for_< size() >([this, &dotProducts](auto i) {
+                std::array< std::future< Var >, size() > dotFuture;
+
+                utils::for_< size() >([this, &dotFuture](auto i) {
+                    std::promise< Var > promise;
+                    dotFuture[i.value] = promise.get_future();
                     auto& neuron = operator[](i.value);
-                    dotProducts[i.value] =
-                     std::async([&neuron]() { return neuron.calcDotProduct(); });
+                    boost::asio::post(pool(), [&neuron, promise = std::move(promise)]() mutable {
+                        promise.set_value(neuron.calcDotProduct());
+                    });
                 });
 
-                const auto products =
-                 dotProducts |
-                 ranges::views::transform(std::mem_fn(&std::future< Var >::get));
+                auto products = dotFuture | ranges::views::transform([](auto& future) {
+                                    return future.get();
+                                });
+
                 for_each([&products](auto, auto& neuron) {
                     neuron.calculateOutput(std::cbegin(products), std::cend(products));
                 });
+            }
+
+          private:
+            boost::asio::thread_pool& pool(std::size_t numberOfThreads = 8) {
+                static boost::asio::thread_pool threadPool{numberOfThreads};
+                return threadPool;
             }
         };
     } // namespace detail

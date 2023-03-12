@@ -13,6 +13,7 @@ cc_library(
     deps = [
         ":tnnlib_utils",
         "@boost//:array",
+        "@boost//:asio",
         "@boost//:bind",
         "@boost//:iterator",
         "@cereal",

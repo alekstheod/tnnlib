@@ -55,15 +55,15 @@ namespace {
     using namespace boost::gil;
     using namespace boost::gil::detail;
     const std::string alphabet("0123456789");
-    constexpr std::size_t width = 25;
-    constexpr std::size_t height = 34;
+    constexpr std::size_t width = 24;
+    constexpr std::size_t height = 33;
     constexpr std::size_t inputsNumber = width * height;
 } // namespace
 
 
 using Perceptron =
  nn::Perceptron< VarType,
-                 nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, 30, inputsNumber >,
+                 nn::AsyncNeuralLayer< nn::Neuron, nn::SigmoidFunction, 20, inputsNumber >,
                  nn::NeuralLayer< nn::Neuron, nn::SoftmaxFunction, 10 > >;
 
 using Algo = nn::bp::BepAlgorithm< Perceptron, nn::bp::CrossEntropyError >;
@@ -155,7 +155,6 @@ void calculateWeights(std::string imagesPath) {
     using namespace boost::filesystem;
     path directory(imagesPath);
     directory_iterator end_iter;
-
     std::vector< std::string > files;
     if(exists(directory) && is_directory(directory)) {
         for(directory_iterator dir_iter(directory); dir_iter != end_iter; ++dir_iter) {
@@ -165,12 +164,14 @@ void calculateWeights(std::string imagesPath) {
         }
     }
 
+
     std::cout << "Perceptron calculation started" << std::endl;
     // static Perceptron tmp = readPerceptron("perceptron.json");
-    static Algo algorithm(0.0009f);
+    static Algo algorithm(0.001f);
     // algorithm.setMemento(tmp.getMemento());
 
     std::vector< Algo::Prototype > prototypes;
+
     for(auto image : files) {
         if(!boost::filesystem::is_directory(image)) {
             try {
