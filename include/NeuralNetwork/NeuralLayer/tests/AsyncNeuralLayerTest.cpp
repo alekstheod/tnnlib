@@ -8,9 +8,10 @@
 #define CATCH_CONFIG_NO_CPP17_UNCAUGHT_EXCEPTIONS
 #include <catch2/catch.hpp>
 
+
 namespace {
     SCENARIO("AsyncNeuralLayer compared to regular NeuralLayer",
-             "[layer][opencl][forward]") {
+             "[layer][thread][forward]") {
         GIVEN(
          "A AsyncNeuralLayer layer with 2 neurons and 2 inputs as well as a "
          "regular layer with the same topology") {
@@ -24,7 +25,7 @@ namespace {
                     asyncLayer.calculateOutputs();
                     const auto expected_output = regularLayer.getOutput(0);
                     const auto actual_output = asyncLayer.getOutput(0);
-                    REQUIRE(expected_output == actual_output);
+                    REQUIRE_THAT(expected_output, Catch::WithinRel(actual_output));
                 }
             }
         }

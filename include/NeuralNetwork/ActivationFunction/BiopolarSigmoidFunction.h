@@ -24,7 +24,7 @@ namespace nn {
         }
 
         Var delta(const Var& output, const Var& expectedOutput) const {
-            return (output - expectedOutput) * calculateDerivate(output);
+            return (output - expectedOutput) * derivate(output);
         }
 
         template< typename Iterator >

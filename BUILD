@@ -1,5 +1,9 @@
 cc_library(
     name = "tnnlib",
+    srcs = glob(
+        ["include/NeuralNetwork/**/*.cpp"],
+        exclude = ["**/tests/**"],
+    ),
     hdrs = glob(
         ["include/NeuralNetwork/**/*.h"],
         exclude = ["**/tests/**"],

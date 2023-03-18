@@ -15,6 +15,9 @@
 namespace nn {
 
     namespace detail {
+
+        boost::asio::thread_pool& pool(std::size_t numberOfThreads = 8);
+
         template< typename Internal >
         struct AsyncNeuralLayer : private Internal {
             using Internal::begin;
@@ -70,12 +73,6 @@ namespace nn {
                 for_each([&products](auto, auto& neuron) {
                     neuron.calculateOutput(std::cbegin(products), std::cend(products));
                 });
-            }
-
-          private:
-            boost::asio::thread_pool& pool(std::size_t numberOfThreads = 8) {
-                static boost::asio::thread_pool threadPool{numberOfThreads};
-                return threadPool;
             }
         };
     } // namespace detail
