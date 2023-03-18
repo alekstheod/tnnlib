@@ -41,6 +41,7 @@ cc_library(
     copts = ["-Werror"],
     data = ["dot_product.cl"],
     includes = ["."],
+    tags = ["openCL"],
     visibility = [
         "//visibility:public",
     ],
