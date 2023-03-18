@@ -63,7 +63,11 @@ namespace {
                              regularLayer[i.value][j.value].weight;
                             const auto actualWeight =
                              asyncLayer[i.value][j.value].weight;
+                            const auto expectedBias = regularLayer[i.value].getBias();
+                            const auto actualBias = asyncLayer[i.value].getBias();
+
                             REQUIRE_THAT(expectedWeight, Catch::WithinRel(actualWeight));
+                            REQUIRE_THAT(expectedBias, Catch::WithinRel(actualBias));
                         });
                     });
                 }

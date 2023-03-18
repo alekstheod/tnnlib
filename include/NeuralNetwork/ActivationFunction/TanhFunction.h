@@ -18,7 +18,7 @@ namespace nn {
       public:
         // 2 / (1 + exp(-2 * x)) - 1
         template< typename Iterator >
-        Var calculate(const Var& sum, Iterator begin, Iterator end) const {
+        Var calculate(const Var& sum, Iterator, Iterator) const {
             return Var{2.f} / (Var{1.f} + std::exp(Var{-2.f} * sum)) - Var{1.f};
         }
 
