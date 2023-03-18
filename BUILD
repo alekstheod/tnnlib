@@ -1,31 +1,4 @@
 cc_library(
-    name = "tnnlib",
-    srcs = glob(
-        ["include/NeuralNetwork/**/*.cpp"],
-        exclude = ["**/tests/**"],
-    ),
-    hdrs = glob(
-        ["include/NeuralNetwork/**/*.h"],
-        exclude = ["**/tests/**"],
-    ),
-    copts = ["-Werror"],
-    includes = ["NeuralNetwork"],
-    strip_include_prefix = "include",
-    visibility = [
-        "//visibility:public",
-    ],
-    deps = [
-        ":tnnlib_utils",
-        "@boost//:array",
-        "@boost//:asio",
-        "@boost//:bind",
-        "@boost//:iterator",
-        "@cereal",
-        "@range-v3",
-    ],
-)
-
-cc_library(
     name = "tnnlib_utils",
     srcs = glob(["Utilities/**/*.cpp"]),
     hdrs = glob(["Utilities/**/*.h"]),

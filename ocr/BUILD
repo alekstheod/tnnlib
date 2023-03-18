@@ -4,8 +4,10 @@ cc_binary(
     copts = ["-Werror"],
     data = ["@OcrSamples//:samples"],
     deps = [
-        "//:tnnlib",
         "//:tnnlib_utils",
+        "//NeuralNetwork/ActivationFunction",
+        "//NeuralNetwork/LearningAlgorithm/BackPropagation",
+        "//NeuralNetwork/NeuralLayer:OpenCLNeuralLayer",
         "@OpenCL",
         "@boost//:asio",
         "@boost//:filesystem",

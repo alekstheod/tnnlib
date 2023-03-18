@@ -1,15 +1,11 @@
-#include <NeuralNetwork/LearningAlgorithm/BackPropagation/BepAlgorithm.h>
-#include <NeuralNetwork/NeuralLayer/NeuralLayer.h>
-#include <NeuralNetwork/ActivationFunction/SigmoidFunction.h>
-#include <NeuralNetwork/ActivationFunction/SoftmaxFunction.h>
-#include <NeuralNetwork/ActivationFunction/TanhFunction.h>
-#include <NeuralNetwork/Neuron/Neuron.h>
-#include <NeuralNetwork/Perceptron/ComplexLayer.h>
-#include <NeuralNetwork/Perceptron/Perceptron.h>
-#include <NeuralNetwork/SOM/K2DNeighbourhood.h>
-#include <NeuralNetwork/SOM/K2DPosition.h>
-#include <NeuralNetwork/SOM/KNode.h>
-#include <NeuralNetwork/SOM/KohonenMap.h>
+#include "NeuralNetwork/LearningAlgorithm/BackPropagation/BepAlgorithm.h"
+#include "NeuralNetwork/NeuralLayer/NeuralLayer.h"
+#include "NeuralNetwork/ActivationFunction/SigmoidFunction.h"
+#include "NeuralNetwork/ActivationFunction/SoftmaxFunction.h"
+#include "NeuralNetwork/ActivationFunction/TanhFunction.h"
+#include "NeuralNetwork/Neuron/Neuron.h"
+#include "NeuralNetwork/Perceptron/ComplexLayer.h"
+#include "NeuralNetwork/Perceptron/Perceptron.h"
 
 #include <Design/Factory.h>
 #include <Design/Singleton.h>
@@ -98,19 +94,5 @@ int main(int argc, char** argv) {
     perceptron2.calculate(input4.begin(), input4.end(), outputs.begin());
     std::cout << "0 1 " << outputs[0] << std::endl;
 
-    /// Kohonen map implementation
-    typedef kohonen::K2DPosition< float, 5 > Position;
-    typedef kohonen::K2DNeighbourhood< kohonen::KNode< Position > > Neighbourhood;
-    typedef nn::kohonen::KohonenMap< Neighbourhood, 25, 3 > KohonenMap;
-
-    KohonenMap kohMap;
-
-    typedef KohonenMap::InputType InputType;
-    std::vector< InputType > inputsData;
-    inputsData.push_back({{0.f, 255.f, 0.f}});
-    inputsData.push_back({{255.f, 0.f, 0.f}});
-    inputsData.push_back({{0.f, 0.f, 255.f}});
-
-    kohMap.calculateWeights(inputsData.begin(), inputsData.end(), 10000, 0.4f, 8.0f);
     return 0;
 }

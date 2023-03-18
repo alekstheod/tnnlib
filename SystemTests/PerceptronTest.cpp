@@ -1,9 +1,9 @@
-#include <NeuralNetwork/NeuralLayer/ConvolutionLayer.h>
-#include <NeuralNetwork/NeuralLayer/NeuralLayer.h>
-#include <NeuralNetwork/Neuron/Neuron.h>
-#include <NeuralNetwork/ActivationFunction/SigmoidFunction.h>
-#include <NeuralNetwork/ActivationFunction/TanhFunction.h>
-#include <NeuralNetwork/Perceptron/Perceptron.h>
+#include "NeuralNetwork/NeuralLayer/ConvolutionLayer.h"
+#include "NeuralNetwork/NeuralLayer/NeuralLayer.h"
+#include "NeuralNetwork/Neuron/Neuron.h"
+#include "NeuralNetwork/ActivationFunction/SigmoidFunction.h"
+#include "NeuralNetwork/ActivationFunction/TanhFunction.h"
+#include "NeuralNetwork/Perceptron/Perceptron.h"
 
 #include <range/v3/all.hpp>
 
