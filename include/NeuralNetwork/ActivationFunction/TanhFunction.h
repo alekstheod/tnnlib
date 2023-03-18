@@ -33,7 +33,7 @@ namespace nn {
          * @return calculated differential for given input value.
          */
         Var delta(const Var& output, const Var& expectedOutput) const {
-            return (output - expectedOutput) * calculateDerivate(output);
+            return (output - expectedOutput) * derivate(output);
         }
 
         Var derivate(const Var& output) const {

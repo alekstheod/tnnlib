@@ -16,7 +16,7 @@ namespace nn {
 
     namespace bp {
         template< typename Internal >
-        class BPNeuralLayer;
+        struct BPNeuralLayer;
 
         namespace detail {
             template< typename Internal >
@@ -50,20 +50,17 @@ namespace nn {
         } // namespace detail
 
         template< typename NeuralLayerType >
-        class BPNeuralLayer
-         : public detail::unwrapLayer< typename NeuralLayerType::template wrap< BPNeuron > >::type {
-          public:
+        struct BPNeuralLayer
+         : detail::unwrapLayer< typename NeuralLayerType::template wrap< BPNeuron > >::type {
             using Base =
              typename detail::unwrapLayer< typename NeuralLayerType::template wrap< BPNeuron > >::type;
+
             using NeuralLayer = typename detail::unwrapLayer< NeuralLayerType >::type;
             using Var = typename NeuralLayer::Var;
 
             template< typename VarType >
             using use =
              BPNeuralLayer< typename NeuralLayerType::template use< VarType > >;
-
-            static constexpr std::size_t CONST_NEURONS_NUMBER =
-             NeuralLayerType::CONST_NEURONS_NUMBER;
 
             template< std::size_t inputs >
             using adjust =
@@ -104,7 +101,7 @@ namespace nn {
             }
 
             const Var& getDelta(std::size_t neuronId) const {
-                return Base::operator[](neuronId)->getDelta();
+                return Base::operator[](neuronId).getDelta();
             }
         };
     } // namespace bp
