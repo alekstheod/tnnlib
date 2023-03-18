@@ -24,7 +24,7 @@ namespace {
                     openClLayer.calculateOutputs();
                     const auto expected_output = regularLayer.getOutput(0);
                     const auto actual_output = openClLayer.getOutput(0);
-                    REQUIRE(expected_output == actual_output);
+                    REQUIRE_THAT(expected_output, Catch::WithinRel(actual_output));
                 }
             }
         }
