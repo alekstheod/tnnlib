@@ -8,8 +8,12 @@ cc_test(
     includes = ["include"],
     tags = ["system"],
     deps = [
-        "//:tnnlib",
         "//:tnnlib_utils",
+        "//NeuralNetwork/ActivationFunction",
+        "//NeuralNetwork/LearningAlgorithm/BackPropagation",
+        "//NeuralNetwork/NeuralLayer",
+        "//NeuralNetwork/Neuron",
+        "//NeuralNetwork/Serialization",
         "@catch2",
     ],
 )

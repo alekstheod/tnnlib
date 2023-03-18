@@ -1,16 +1,16 @@
-#include <NeuralNetwork/LearningAlgorithm/BackPropagation/BepAlgorithm.h>
-#include <NeuralNetwork/NeuralLayer/NeuralLayer.h>
-#include <NeuralNetwork/ActivationFunction/BiopolarSigmoidFunction.h>
-#include <NeuralNetwork/ActivationFunction/LogScaleSoftmaxFunction.h>
-#include <NeuralNetwork/ActivationFunction/SigmoidFunction.h>
-#include <NeuralNetwork/ActivationFunction/SoftmaxFunction.h>
-#include <NeuralNetwork/ActivationFunction/TanhFunction.h>
-#include <NeuralNetwork/ActivationFunction/ReluFunction.h>
-#include <NeuralNetwork/Neuron/Neuron.h>
-#include <NeuralNetwork/Perceptron/Perceptron.h>
-#include <NeuralNetwork/Config.h>
-#include <NeuralNetwork/NeuralLayer/OpenCLNeuralLayer.h>
-#include <NeuralNetwork/NeuralLayer/AsyncNeuralLayer.h>
+#include "NeuralNetwork/LearningAlgorithm/BackPropagation/BepAlgorithm.h"
+#include "NeuralNetwork/NeuralLayer/NeuralLayer.h"
+#include "NeuralNetwork/ActivationFunction/BiopolarSigmoidFunction.h"
+#include "NeuralNetwork/ActivationFunction/LogScaleSoftmaxFunction.h"
+#include "NeuralNetwork/ActivationFunction/SigmoidFunction.h"
+#include "NeuralNetwork/ActivationFunction/SoftmaxFunction.h"
+#include "NeuralNetwork/ActivationFunction/TanhFunction.h"
+#include "NeuralNetwork/ActivationFunction/ReluFunction.h"
+#include "NeuralNetwork/Neuron/Neuron.h"
+#include "NeuralNetwork/Perceptron/Perceptron.h"
+#include "NeuralNetwork/NeuralLayer/OpenCLNeuralLayer.h"
+#include "NeuralNetwork/NeuralLayer/AsyncNeuralLayer.h"
+#include "NeuralNetwork/LearningAlgorithm/BackPropagation/BPAsyncNeuralLayer.h"
 
 #include <MPL/Tuple.h>
 
@@ -56,7 +56,7 @@ namespace {
     using namespace boost::gil::detail;
     const std::string alphabet("0123456789");
     constexpr std::size_t width = 24;
-    constexpr std::size_t height = 33;
+    constexpr std::size_t height = 35;
     constexpr std::size_t inputsNumber = width * height;
 } // namespace
 

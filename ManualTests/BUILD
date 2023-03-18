@@ -4,5 +4,12 @@ cc_test(
     srcs = glob(["**/*.cpp"]),
     args = ["1000"],
     copts = ["-Werror"],
-    deps = ["//:tnnlib"],
+    deps = [
+        "//NeuralNetwork/ActivationFunction",
+        "//NeuralNetwork/LearningAlgorithm/BackPropagation",
+        "//NeuralNetwork/NeuralLayer",
+        "//NeuralNetwork/NeuralLayer:OpenCLNeuralLayer",
+        "//NeuralNetwork/Neuron",
+        "//NeuralNetwork/Serialization",
+    ],
 )
