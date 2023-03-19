@@ -9,5 +9,6 @@ __kernel void dot_product(__global float* weights,
     for(i = 0; i < sz; ++i) {
         dot += weights[offset + i] * values[offset + i];
     }
+
     result[idx] = dot;
 }

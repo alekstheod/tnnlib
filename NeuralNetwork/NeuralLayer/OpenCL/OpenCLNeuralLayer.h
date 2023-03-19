@@ -52,39 +52,39 @@ namespace nn {
             using use =
              OpenCLNeuralLayer< typename Internal::template use< VarType > >;
 
-            BOOST_STATIC_CONSTEXPR unsigned int CONST_NEURONS_NUMBER = Internal::size();
             BOOST_STATIC_CONSTEXPR unsigned int CONST_INPUTS_NUMBER =
              Internal::CONST_INPUTS_NUMBER;
 
           private:
             void calculate() {
                 using namespace cl;
-                constexpr auto size = CONST_INPUTS_NUMBER * CONST_NEURONS_NUMBER;
-                std::array< float, size > in_weights;
-                std::array< float, size > in_values;
-                auto& ocl = OpenCLProgram::instance();
-                // Create a command queue and use the first device
-                Buffer weights(ocl.context, CL_MEM_READ_ONLY, size * sizeof(float));
-                Buffer values(ocl.context, CL_MEM_READ_ONLY, size * sizeof(float));
-                Buffer product(ocl.context,
-                               CL_MEM_WRITE_ONLY,
-                               CONST_NEURONS_NUMBER * sizeof(float));
+                constexpr auto bufferSize = size() * CONST_INPUTS_NUMBER;
+                std::array< float, bufferSize > in_weights;
+                std::array< float, bufferSize > in_values;
 
-                // Set arguments to kernel
-                ocl.kernel.setArg(0, weights);
-                ocl.kernel.setArg(1, values);
-                ocl.kernel.setArg(2, product);
-                ocl.kernel.setArg(3, CONST_INPUTS_NUMBER);
+                auto& ocl = OpenCLProgram::instance();
+
+                // Create a command queue and use the first device
+                Buffer weights(ocl.context, CL_MEM_READ_ONLY, bufferSize * sizeof(float));
+                Buffer values(ocl.context, CL_MEM_READ_ONLY, bufferSize * sizeof(float));
+                Buffer product(ocl.context, CL_MEM_WRITE_ONLY, size() * sizeof(float));
+
                 CommandQueue queue(ocl.context, ocl.devices[0]);
 
                 try {
-                    for(const auto i : ranges::views::indices(CONST_NEURONS_NUMBER)) {
+                    for(const auto i : ranges::views::indices(size())) {
                         for(const auto j : ranges::views::indices(CONST_INPUTS_NUMBER)) {
                             const std::size_t idx = i * CONST_INPUTS_NUMBER + j;
                             in_weights[idx] = operator[](i)[j].weight;
                             in_values[idx] = operator[](i)[j].value;
                         }
                     }
+
+                    // Set arguments to kernel
+                    ocl.kernel.setArg(0, weights);
+                    ocl.kernel.setArg(1, values);
+                    ocl.kernel.setArg(2, product);
+                    ocl.kernel.setArg(3, CONST_INPUTS_NUMBER);
 
                     queue.enqueueWriteBuffer(weights,
                                              CL_TRUE,
@@ -98,24 +98,21 @@ namespace nn {
                                              in_values.size() * sizeof(float),
                                              in_values.data());
 
-                    queue.enqueueNDRangeKernel(ocl.kernel,
-                                               cl::NullRange,
-                                               cl::NDRange(CONST_NEURONS_NUMBER));
+                    queue.enqueueNDRangeKernel(ocl.kernel, cl::NullRange, cl::NDRange(size()));
 
-                    std::array< float, CONST_NEURONS_NUMBER > dotProducts;
-                    queue.enqueueReadBuffer(product,
-                                            CL_TRUE,
-                                            0,
-                                            CONST_NEURONS_NUMBER * sizeof(float),
-                                            dotProducts.data());
+                    std::array< float, size() > dotProducts;
+                    queue.enqueueReadBuffer(
+                     product, CL_TRUE, 0, size() * sizeof(float), dotProducts.data());
 
-                    for(const auto i : ranges::views::indices(CONST_NEURONS_NUMBER)) {
+                    for(const auto i : ranges::views::indices(size())) {
                         dotProducts[i] += operator[](i).getBias();
                     }
 
-                    for(const auto i : ranges::views::indices(CONST_NEURONS_NUMBER)) {
-                        operator[](i).calculateOutput(dotProducts.begin(),
-                                                      dotProducts.end());
+                    for(const auto i : ranges::views::indices(size())) {
+                        auto& neuron = operator[](i);
+                        neuron.calculateOutput(dotProducts[i],
+                                               dotProducts.begin(),
+                                               dotProducts.end());
                     }
                 } catch(const cl::Error& e) {
                     std::cerr << "Calculation error" << std::endl;
@@ -142,7 +139,7 @@ namespace nn {
             template< typename Layer >
             void calculateOutputs(Layer& nextLayer) {
                 calculate();
-                for(unsigned int i = 0; i < CONST_NEURONS_NUMBER; i++) {
+                for(unsigned int i = 0; i < size(); i++) {
                     nextLayer.setInput(i, operator[](i).getOutput());
                 }
             }
