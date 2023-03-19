@@ -69,7 +69,6 @@ int main(int argc, char** argv) {
 
         Memento memento2;
 
-
         std::string str = strm.str();
         std::stringstream strStream(str);
         cereal::XMLInputArchive ia(strStream);

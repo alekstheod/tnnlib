@@ -4,16 +4,14 @@ cc_library(
         ["**/*.cpp"],
         exclude = [
             "tests/**",
-            "OpenCLNeuralLayer.h",
-            "OpenCLNeuralLayer.cpp",
+            "OpenCL/**",
         ],
     ),
     hdrs = glob(
-        ["*.h"],
+        ["**/*.h"],
         exclude = [
             "tests/**",
-            "OpenCLNeuralLayer.h",
-            "OpenCLNeuralLayer.cpp",
+            "OpenCL/**",
         ],
     ),
     copts = ["-Werror"],
@@ -33,13 +31,13 @@ cc_library(
 cc_library(
     name = "OpenCLNeuralLayer",
     srcs = [
-        "OpenCLNeuralLayer.cpp",
+        "OpenCL/OpenCLNeuralLayer.cpp",
     ],
     hdrs = [
-        "OpenCLNeuralLayer.h",
+        "OpenCL/OpenCLNeuralLayer.h",
     ],
     copts = ["-Werror"],
-    data = ["dot_product.cl"],
+    data = ["OpenCL/dot_product.cl"],
     includes = ["."],
     tags = ["openCL"],
     visibility = [

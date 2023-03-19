@@ -8,8 +8,8 @@
 #include "NeuralNetwork/ActivationFunction/ReluFunction.h"
 #include "NeuralNetwork/Neuron/Neuron.h"
 #include "NeuralNetwork/Perceptron/Perceptron.h"
-#include "NeuralNetwork/NeuralLayer/OpenCLNeuralLayer.h"
-#include "NeuralNetwork/NeuralLayer/AsyncNeuralLayer.h"
+#include "NeuralNetwork/NeuralLayer/OpenCL/OpenCLNeuralLayer.h"
+#include "NeuralNetwork/NeuralLayer/Thread/AsyncNeuralLayer.h"
 #include "NeuralNetwork/LearningAlgorithm/BackPropagation/BPAsyncNeuralLayer.h"
 
 #include <MPL/Tuple.h>
@@ -63,7 +63,7 @@ namespace {
 
 using Perceptron =
  nn::Perceptron< VarType,
-                 nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, 12, inputsNumber >,
+                 nn::OpenCLNeuralLayer< nn::Neuron, nn::SigmoidFunction, 12, inputsNumber >,
                  nn::NeuralLayer< nn::Neuron, nn::SoftmaxFunction, 10 > >;
 
 using Algo = nn::bp::BepAlgorithm< Perceptron, nn::bp::CrossEntropyError >;

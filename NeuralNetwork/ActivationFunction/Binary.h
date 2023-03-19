@@ -3,13 +3,10 @@
 namespace nn {
 
     template< typename Func, unsigned int threshold >
-    class Binary {
-      private:
-        Func m_func;
-        static_assert(threshold <= 100, "Invalid template parameter threshold");
+    struct Binary {
+
         typedef typename Func::Var Var;
 
-      public:
         /**
          * Will calculate the equation
          * for the given input value and apply the throshold to its output.
@@ -41,5 +38,9 @@ namespace nn {
         Func& operator*() {
             return m_func;
         }
+
+      private:
+        Func m_func;
+        static_assert(threshold <= 100, "Invalid template parameter threshold");
     };
 } // namespace nn

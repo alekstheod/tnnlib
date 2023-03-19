@@ -1,4 +1,4 @@
-#include "NeuralNetwork/NeuralLayer/OpenCLNeuralLayer.h"
+#include "NeuralNetwork/NeuralLayer/OpenCL/OpenCLNeuralLayer.h"
 
 namespace nn {
     namespace detail {
@@ -22,8 +22,8 @@ namespace nn {
                                   const std::vector< cl::Device >& devices) {
             using namespace cl;
 
-            std::ifstream strm("NeuralNetwork/NeuralLayer/dot_product.cl",
-                               std::ios_base::binary);
+            std::ifstream strm(
+             "NeuralNetwork/NeuralLayer/OpenCL/dot_product.cl", std::ios_base::binary);
 
             using It = std::istreambuf_iterator< char >;
             std::string src{(It(strm)), It()};
