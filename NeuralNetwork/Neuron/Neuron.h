@@ -110,8 +110,8 @@ namespace nn {
             }
 
             template< typename Iterator >
-            const Var& calculateOutput(Iterator begin, Iterator end) {
-                m_output = m_activationFunction.calculate(calcDotProduct(), begin, end);
+            const Var& calculateOutput(const Var& dotProduct, Iterator begin, Iterator end) {
+                m_output = m_activationFunction.calculate(dotProduct, begin, end);
                 return m_output;
             }
 

@@ -22,8 +22,9 @@ namespace {
                 }
 
                 THEN("The output of the neuron is 1/(1+exp(-4)) -> 0.982") {
-                    const auto output =
-                     neuron.calculateOutput(dotProducts.begin(), dotProducts.end());
+                    const auto output = neuron.calculateOutput(neuron.calcDotProduct(),
+                                                               dotProducts.begin(),
+                                                               dotProducts.end());
                     REQUIRE(output == Approx(0.982f).margin(0.001));
                 }
             }
@@ -34,8 +35,9 @@ namespace {
                     neuron.setInput(i, 1);
                 }
                 THEN("The output of the neuron is 1/1+exp(0) -> 0.5") {
-                    const auto output =
-                     neuron.calculateOutput(dotProducts.begin(), dotProducts.end());
+                    const auto output = neuron.calculateOutput(neuron.calcDotProduct(),
+                                                               dotProducts.begin(),
+                                                               dotProducts.end());
                     REQUIRE(output == Approx(0.5f).margin(0.001));
                 }
             }
@@ -48,8 +50,9 @@ namespace {
                     neuron.setInput(i, 0);
                 }
                 THEN("The output of the neuron is 1/1+exp(0) -> 0.5") {
-                    const auto output =
-                     neuron.calculateOutput(dotProducts.begin(), dotProducts.end());
+                    const auto output = neuron.calculateOutput(neuron.calcDotProduct(),
+                                                               dotProducts.begin(),
+                                                               dotProducts.end());
                     REQUIRE(output == Approx(0.5f).margin(0.001));
                 }
             }

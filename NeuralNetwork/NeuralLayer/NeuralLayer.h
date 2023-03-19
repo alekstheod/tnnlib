@@ -99,7 +99,7 @@ namespace nn {
 
                 utils::for_< size() >([this, &dotProducts, &nextLayer](auto i) {
                     const auto output = utils::get< i.value >(m_neurons).calculateOutput(
-                     std::cbegin(dotProducts), std::cend(dotProducts));
+                     dotProducts[i.value], std::cbegin(dotProducts), std::cend(dotProducts));
                     nextLayer.setInput(i.value, output);
                 });
             }
@@ -112,7 +112,9 @@ namespace nn {
                 });
 
                 for_each([&dotProducts](auto, auto& neuron) {
-                    neuron.calculateOutput(std::cbegin(dotProducts), std::cend(dotProducts));
+                    neuron.calculateOutput(neuron.calcDotProduct(),
+                                           std::cbegin(dotProducts),
+                                           std::cend(dotProducts));
                 });
             }
 

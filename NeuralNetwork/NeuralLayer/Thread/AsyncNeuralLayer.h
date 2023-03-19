@@ -70,8 +70,14 @@ namespace nn {
                                     return future.get();
                                 });
 
-                for_each([&products](auto, auto& neuron) {
-                    neuron.calculateOutput(std::cbegin(products), std::cend(products));
+                std::array< Var, size() > dotProducts;
+                ranges::copy(products, std::begin(dotProducts));
+
+                utils::for_< size() >([&, this](auto i) {
+                    auto& neuron = operator[](i.value);
+                    neuron.calculateOutput(dotProducts[i.value],
+                                           std::cbegin(dotProducts),
+                                           std::cend(dotProducts));
                 });
             }
         };
