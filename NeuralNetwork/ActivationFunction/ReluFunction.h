@@ -3,13 +3,10 @@
 #include <numeric>
 
 namespace nn {
-    /**
-     * Sigmoid function
-     * Usually used by convolution layer
-     */
-    template< class VarType >
+
+    template< typename Var >
     struct ReluFunction {
-        typedef VarType Var;
+
         template< typename V >
         using use = ReluFunction< V >;
 
@@ -41,11 +38,5 @@ namespace nn {
         Var derivate(const Var& output) const {
             return output > 0 ? 1 : 0;
         }
-
-      private:
-        /**
-         * Slope value.
-         */
-        Var m_slope;
     };
 } // namespace nn

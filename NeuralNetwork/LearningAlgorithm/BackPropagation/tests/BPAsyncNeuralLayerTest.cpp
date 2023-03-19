@@ -1,6 +1,6 @@
 #include "NeuralNetwork/LearningAlgorithm/BackPropagation/BPAsyncNeuralLayer.h"
 #include "NeuralNetwork/LearningAlgorithm/BackPropagation/BPNeuralLayer.h"
-#include "NeuralNetwork/NeuralLayer/AsyncNeuralLayer.h"
+#include "NeuralNetwork/NeuralLayer/Thread/AsyncNeuralLayer.h"
 #include "NeuralNetwork/NeuralLayer/NeuralLayer.h"
 #include "NeuralNetwork/ActivationFunction/TanhFunction.h"
 #include "NeuralNetwork/Neuron/Neuron.h"

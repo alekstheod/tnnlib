@@ -1,4 +1,4 @@
-#include "NeuralNetwork/NeuralLayer/OpenCLNeuralLayer.h"
+#include "NeuralNetwork/NeuralLayer/OpenCL/OpenCLNeuralLayer.h"
 #include "NeuralNetwork/NeuralLayer/NeuralLayer.h"
 #include "NeuralNetwork/ActivationFunction/TanhFunction.h"
 #include "NeuralNetwork/Neuron/Neuron.h"

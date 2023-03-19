@@ -1,4 +1,4 @@
-#include "NeuralNetwork/NeuralLayer/AsyncNeuralLayer.h"
+#include "NeuralNetwork/NeuralLayer/Thread/AsyncNeuralLayer.h"
 
 namespace nn {
     namespace detail {

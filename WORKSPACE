@@ -7,7 +7,7 @@ load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 local_repository(
     name = "libpng_config",
-    path = "libpng_config",
+    path = "external/libpng_config",
 )
 
 http_archive(

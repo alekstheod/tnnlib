@@ -1,7 +1,7 @@
 #pragma once
 
 #include "NeuralNetwork/LearningAlgorithm/BackPropagation/BPNeuralLayer.h"
-#include "NeuralNetwork/NeuralLayer/AsyncNeuralLayer.h"
+#include "NeuralNetwork/NeuralLayer/Thread/AsyncNeuralLayer.h"
 
 namespace nn {
 
