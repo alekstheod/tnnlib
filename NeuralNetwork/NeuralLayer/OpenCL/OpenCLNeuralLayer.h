@@ -55,20 +55,57 @@ namespace nn {
             BOOST_STATIC_CONSTEXPR unsigned int CONST_INPUTS_NUMBER =
              Internal::CONST_INPUTS_NUMBER;
 
+            static_assert(std::is_same< float, Var >::value,
+                          "VarType must be float");
+
+            using Internal::begin;
+            using Internal::cbegin;
+            using Internal::cend;
+            using Internal::end;
+            using Internal::size;
+            using Internal::operator[];
+            using Internal::for_each;
+            using Internal::getMemento;
+            using Internal::getOutput;
+            using Internal::inputs;
+            using Internal::setMemento;
+
+            void setInput(unsigned int inputId, const Var& value) {
+                auto& self = *this;
+                utils::for_< size() >([&self, inputId, &value](const auto& i) mutable {
+                    const auto idx = i.value * CONST_INPUTS_NUMBER + inputId;
+                    self.m_inInputs[idx] = value;
+                    self[i.value][inputId].value = value;
+                    self.m_inWeights[idx] = self[i.value][inputId].weight;
+                });
+            }
+
+            template< typename Layer >
+            void calculateOutputs(Layer& nextLayer) {
+                calculate();
+                auto& self = *this;
+                for(unsigned int i = 0; i < size(); i++) {
+                    nextLayer.setInput(i, self[i].getOutput());
+                }
+            }
+
+            void calculateOutputs() {
+                calculate();
+            }
+
           private:
             void calculate() {
-                using namespace cl;
-
-                auto& ocl = OpenCLProgram::instance();
-
-                // Create a command queue and use the first device
-                Buffer weights(ocl.context, CL_MEM_READ_ONLY, bufferSize * sizeof(float));
-                Buffer values(ocl.context, CL_MEM_READ_ONLY, bufferSize * sizeof(float));
-                Buffer product(ocl.context, CL_MEM_WRITE_ONLY, size() * sizeof(float));
-
-                CommandQueue queue(ocl.context, ocl.devices[0]);
-
                 try {
+                    using namespace cl;
+
+                    auto& ocl = OpenCLProgram::instance();
+
+                    // Create a command queue and use the first device
+                    Buffer weights(ocl.context, CL_MEM_READ_ONLY, bufferSize * sizeof(float));
+                    Buffer values(ocl.context, CL_MEM_READ_ONLY, bufferSize * sizeof(float));
+                    Buffer product(ocl.context, CL_MEM_WRITE_ONLY, size() * sizeof(float));
+
+                    CommandQueue queue(ocl.context, ocl.devices[0]);
 
                     // Set arguments to kernel
                     ocl.kernel.setArg(0, weights);
@@ -109,45 +146,6 @@ namespace nn {
                 } catch(const cl::Error& e) {
                     std::cerr << "Calculation error" << std::endl;
                 }
-            }
-
-          public:
-            static_assert(std::is_same< float, Var >::value,
-                          "VarType must be float");
-
-            using Internal::begin;
-            using Internal::cbegin;
-            using Internal::cend;
-            using Internal::end;
-            using Internal::size;
-            using Internal::operator[];
-            using Internal::for_each;
-            using Internal::getMemento;
-            using Internal::getOutput;
-            using Internal::inputs;
-            using Internal::setMemento;
-
-            void setInput(unsigned int inputId, const Var& value) {
-                auto& self = *this;
-                utils::for_< size() >([&self, inputId, &value](const auto& i) mutable {
-                    const auto idx = i.value * CONST_INPUTS_NUMBER + inputId;
-                    self.m_inInputs[idx] = value;
-                    self[i.value][inputId].value = value;
-                    self.m_inWeights[idx] = self[i.value][inputId].weight;
-                });
-            }
-
-            template< typename Layer >
-            void calculateOutputs(Layer& nextLayer) {
-                calculate();
-                auto& self = *this;
-                for(unsigned int i = 0; i < size(); i++) {
-                    nextLayer.setInput(i, self[i].getOutput());
-                }
-            }
-
-            void calculateOutputs() {
-                calculate();
             }
 
           private:
