@@ -35,8 +35,8 @@ namespace nn {
         /// for a larg ammount of neurons. This layer will use the openCL in
         /// order to calculate a dot product for the neuros inputs.
         template< class Internal >
-        class OpenCLNeuralLayer : Internal {
-          public:
+        struct OpenCLNeuralLayer : private Internal {
+
             using Var = typename Internal::Var;
             using Memento = typename Internal::Memento;
 
@@ -58,9 +58,6 @@ namespace nn {
           private:
             void calculate() {
                 using namespace cl;
-                constexpr auto bufferSize = size() * CONST_INPUTS_NUMBER;
-                std::array< float, bufferSize > in_weights;
-                std::array< float, bufferSize > in_values;
 
                 auto& ocl = OpenCLProgram::instance();
 
@@ -72,13 +69,6 @@ namespace nn {
                 CommandQueue queue(ocl.context, ocl.devices[0]);
 
                 try {
-                    for(const auto i : ranges::views::indices(size())) {
-                        for(const auto j : ranges::views::indices(CONST_INPUTS_NUMBER)) {
-                            const std::size_t idx = i * CONST_INPUTS_NUMBER + j;
-                            in_weights[idx] = operator[](i)[j].weight;
-                            in_values[idx] = operator[](i)[j].value;
-                        }
-                    }
 
                     // Set arguments to kernel
                     ocl.kernel.setArg(0, weights);
@@ -89,30 +79,32 @@ namespace nn {
                     queue.enqueueWriteBuffer(weights,
                                              CL_TRUE,
                                              0,
-                                             in_weights.size() * sizeof(float),
-                                             in_weights.data());
+                                             m_inWeights.size() * sizeof(float),
+                                             m_inWeights.data());
 
                     queue.enqueueWriteBuffer(values,
                                              CL_TRUE,
                                              0,
-                                             in_values.size() * sizeof(float),
-                                             in_values.data());
+                                             m_inInputs.size() * sizeof(float),
+                                             m_inInputs.data());
 
                     queue.enqueueNDRangeKernel(ocl.kernel, cl::NullRange, cl::NDRange(size()));
 
-                    std::array< float, size() > dotProducts;
-                    queue.enqueueReadBuffer(
-                     product, CL_TRUE, 0, size() * sizeof(float), dotProducts.data());
+                    queue.enqueueReadBuffer(product,
+                                            CL_TRUE,
+                                            0,
+                                            size() * sizeof(float),
+                                            m_dotProducts.data());
 
                     for(const auto i : ranges::views::indices(size())) {
-                        dotProducts[i] += operator[](i).getBias();
+                        m_dotProducts[i] += operator[](i).getBias();
                     }
 
                     for(const auto i : ranges::views::indices(size())) {
                         auto& neuron = operator[](i);
-                        neuron.calculateOutput(dotProducts[i],
-                                               dotProducts.begin(),
-                                               dotProducts.end());
+                        neuron.calculateOutput(m_dotProducts[i],
+                                               m_dotProducts.begin(),
+                                               m_dotProducts.end());
                     }
                 } catch(const cl::Error& e) {
                     std::cerr << "Calculation error" << std::endl;
@@ -133,20 +125,36 @@ namespace nn {
             using Internal::getMemento;
             using Internal::getOutput;
             using Internal::inputs;
-            using Internal::setInput;
             using Internal::setMemento;
+
+            void setInput(unsigned int inputId, const Var& value) {
+                auto& self = *this;
+                utils::for_< size() >([&self, inputId, &value](const auto& i) mutable {
+                    const auto idx = i.value * CONST_INPUTS_NUMBER + inputId;
+                    self.m_inInputs[idx] = value;
+                    self[i.value][inputId].value = value;
+                    self.m_inWeights[idx] = self[i.value][inputId].weight;
+                });
+            }
 
             template< typename Layer >
             void calculateOutputs(Layer& nextLayer) {
                 calculate();
+                auto& self = *this;
                 for(unsigned int i = 0; i < size(); i++) {
-                    nextLayer.setInput(i, operator[](i).getOutput());
+                    nextLayer.setInput(i, self[i].getOutput());
                 }
             }
 
             void calculateOutputs() {
                 calculate();
             }
+
+          private:
+            static constexpr auto bufferSize = size() * CONST_INPUTS_NUMBER;
+            std::array< float, bufferSize > m_inWeights;
+            std::array< float, bufferSize > m_inInputs;
+            std::array< float, size() > m_dotProducts;
         };
     } // namespace detail
 

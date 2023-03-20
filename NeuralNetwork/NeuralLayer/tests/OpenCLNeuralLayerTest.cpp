@@ -19,15 +19,11 @@ namespace {
             const auto memento = regularLayer.getMemento();
             openClLayer.setMemento(memento);
 
-            regularLayer[0][0].value = 0.1f;
-            regularLayer[0][1].value = 0.2f;
-            regularLayer[1][0].value = 0.3f;
-            regularLayer[1][1].value = 0.4f;
+            regularLayer.setInput(0, 0.1);
+            regularLayer.setInput(1, 0.2);
 
-            openClLayer[0][0].value = 0.1f;
-            openClLayer[0][1].value = 0.2f;
-            openClLayer[1][0].value = 0.3f;
-            openClLayer[1][1].value = 0.4f;
+            openClLayer.setInput(0, 0.1);
+            openClLayer.setInput(1, 0.2);
 
             WHEN("The weights and the inputs of both layers are identical") {
                 THEN("The output is of both layers identical") {
@@ -35,9 +31,11 @@ namespace {
                     openClLayer.calculateOutputs();
                     const auto expected_output = regularLayer.getOutput(0);
                     const auto actual_output = openClLayer.getOutput(0);
-                    std::cout << "Outputs " << expected_output << " "
-                              << actual_output << std::endl;
                     REQUIRE_THAT(expected_output, Catch::WithinRel(actual_output));
+
+                    const auto expected_output2 = regularLayer.getOutput(1);
+                    const auto actual_output2 = openClLayer.getOutput(1);
+                    REQUIRE_THAT(expected_output2, Catch::WithinRel(actual_output2));
                 }
             }
         }
