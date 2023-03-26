@@ -15,6 +15,7 @@ cc_test(
 cc_test(
     name = "bp_opencl_layer_ut",
     srcs = ["BPOpenCLNeuralLayerTest.cpp"],
+    tags = ["openCL"],
     deps = [
         "//:tnnlib_utils",
         "//NeuralNetwork/ActivationFunction",
