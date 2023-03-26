@@ -4,7 +4,7 @@
 
 #include <range/v3/all.hpp>
 
-#define CL_HPP_TARGET_OPENCL_VERSION 200
+#define CL_HPP_TARGET_OPENCL_VERSION 220
 #define CL_HPP_ENABLE_EXCEPTIONS
 #include <CL/cl2.hpp>
 
@@ -24,7 +24,6 @@ namespace nn {
             cl::Context context{createContext()};
             std::vector< cl::Device > devices{context.getInfo< CL_CONTEXT_DEVICES >()};
             cl::Program program{createProgram(context, devices)};
-            cl::Kernel kernel{program, "dot_product"};
             static OpenCLProgram& instance() {
                 static OpenCLProgram program;
                 return program;
@@ -35,8 +34,8 @@ namespace nn {
         /// for a larg ammount of neurons. This layer will use the openCL in
         /// order to calculate a dot product for the neuros inputs.
         template< class Internal >
-        class OpenCLNeuralLayer : Internal {
-          public:
+        struct OpenCLNeuralLayer : private Internal {
+
             using Var = typename Internal::Var;
             using Memento = typename Internal::Memento;
 
@@ -55,71 +54,6 @@ namespace nn {
             BOOST_STATIC_CONSTEXPR unsigned int CONST_INPUTS_NUMBER =
              Internal::CONST_INPUTS_NUMBER;
 
-          private:
-            void calculate() {
-                using namespace cl;
-                constexpr auto bufferSize = size() * CONST_INPUTS_NUMBER;
-                std::array< float, bufferSize > in_weights;
-                std::array< float, bufferSize > in_values;
-
-                auto& ocl = OpenCLProgram::instance();
-
-                // Create a command queue and use the first device
-                Buffer weights(ocl.context, CL_MEM_READ_ONLY, bufferSize * sizeof(float));
-                Buffer values(ocl.context, CL_MEM_READ_ONLY, bufferSize * sizeof(float));
-                Buffer product(ocl.context, CL_MEM_WRITE_ONLY, size() * sizeof(float));
-
-                CommandQueue queue(ocl.context, ocl.devices[0]);
-
-                try {
-                    for(const auto i : ranges::views::indices(size())) {
-                        for(const auto j : ranges::views::indices(CONST_INPUTS_NUMBER)) {
-                            const std::size_t idx = i * CONST_INPUTS_NUMBER + j;
-                            in_weights[idx] = operator[](i)[j].weight;
-                            in_values[idx] = operator[](i)[j].value;
-                        }
-                    }
-
-                    // Set arguments to kernel
-                    ocl.kernel.setArg(0, weights);
-                    ocl.kernel.setArg(1, values);
-                    ocl.kernel.setArg(2, product);
-                    ocl.kernel.setArg(3, CONST_INPUTS_NUMBER);
-
-                    queue.enqueueWriteBuffer(weights,
-                                             CL_TRUE,
-                                             0,
-                                             in_weights.size() * sizeof(float),
-                                             in_weights.data());
-
-                    queue.enqueueWriteBuffer(values,
-                                             CL_TRUE,
-                                             0,
-                                             in_values.size() * sizeof(float),
-                                             in_values.data());
-
-                    queue.enqueueNDRangeKernel(ocl.kernel, cl::NullRange, cl::NDRange(size()));
-
-                    std::array< float, size() > dotProducts;
-                    queue.enqueueReadBuffer(
-                     product, CL_TRUE, 0, size() * sizeof(float), dotProducts.data());
-
-                    for(const auto i : ranges::views::indices(size())) {
-                        dotProducts[i] += operator[](i).getBias();
-                    }
-
-                    for(const auto i : ranges::views::indices(size())) {
-                        auto& neuron = operator[](i);
-                        neuron.calculateOutput(dotProducts[i],
-                                               dotProducts.begin(),
-                                               dotProducts.end());
-                    }
-                } catch(const cl::Error& e) {
-                    std::cerr << "Calculation error" << std::endl;
-                }
-            }
-
-          public:
             static_assert(std::is_same< float, Var >::value,
                           "VarType must be float");
 
@@ -133,20 +67,101 @@ namespace nn {
             using Internal::getMemento;
             using Internal::getOutput;
             using Internal::inputs;
-            using Internal::setInput;
             using Internal::setMemento;
+
+            void setInput(unsigned int inputId, const Var& value) {
+                auto& self = *this;
+                utils::for_< size() >([&self, inputId, &value](const auto& i) mutable {
+                    const auto idx = i.value * CONST_INPUTS_NUMBER + inputId;
+                    self.m_inInputs[idx] = value;
+                    self[i.value][inputId].value = value;
+                    self.m_inWeights[idx] = self[i.value][inputId].weight;
+                });
+            }
 
             template< typename Layer >
             void calculateOutputs(Layer& nextLayer) {
                 calculate();
+                auto& self = *this;
                 for(unsigned int i = 0; i < size(); i++) {
-                    nextLayer.setInput(i, operator[](i).getOutput());
+                    nextLayer.setInput(i, self[i].getOutput());
                 }
             }
 
             void calculateOutputs() {
                 calculate();
             }
+
+          private:
+            void calculate() {
+                try {
+                    using namespace cl;
+                    auto& ocl = OpenCLProgram::instance();
+                    const auto& defaultDevice = ocl.devices.front();
+
+                    // Create a command queue and use the first device
+
+                    const cl_mem_flags inBufFlags =
+                     CL_MEM_READ_ONLY | CL_MEM_HOST_NO_ACCESS | CL_MEM_USE_HOST_PTR;
+                    const cl_mem_flags outBufFlags =
+                     CL_MEM_WRITE_ONLY | CL_MEM_HOST_READ_ONLY | CL_MEM_USE_HOST_PTR;
+
+                    Buffer weights(ocl.context,
+                                   inBufFlags,
+                                   bufferSize * sizeof(float),
+                                   m_inWeights.data());
+
+                    Buffer values(ocl.context,
+                                  inBufFlags,
+                                  bufferSize * sizeof(float),
+                                  m_inInputs.data());
+
+                    Buffer product(ocl.context,
+                                   outBufFlags,
+                                   size() * sizeof(float),
+                                   m_dotProducts.data());
+
+                    CommandQueue queue(ocl.context, defaultDevice);
+                    cl::Kernel kernel{ocl.program, "dot_product"};
+
+                    // Set arguments to kernel
+                    kernel.setArg(0, weights);
+                    kernel.setArg(1, values);
+                    kernel.setArg(2, product);
+                    kernel.setArg(3, CONST_INPUTS_NUMBER);
+
+                    queue.enqueueNDRangeKernel(kernel,
+                                               cl::NullRange,
+                                               cl::NDRange(size()),
+                                               cl::NullRange);
+
+                    queue.enqueueReadBuffer(product,
+                                            CL_TRUE,
+                                            0,
+                                            m_dotProducts.size() * sizeof(float),
+                                            m_dotProducts.data());
+
+                    auto& self = *this;
+                    for(const auto i : ranges::views::indices(size())) {
+                        m_dotProducts[i] += self[i].getBias();
+                    }
+
+                    for(const auto i : ranges::views::indices(size())) {
+                        auto& neuron = self[i];
+                        neuron.calculateOutput(m_dotProducts[i],
+                                               m_dotProducts.begin(),
+                                               m_dotProducts.end());
+                    }
+                } catch(const cl::Error& e) {
+                    std::cerr << "Calculation error" << std::endl;
+                }
+            }
+
+          private:
+            static constexpr auto bufferSize = size() * CONST_INPUTS_NUMBER;
+            std::array< float, bufferSize > m_inWeights;
+            std::array< float, bufferSize > m_inInputs;
+            std::array< float, size() > m_dotProducts;
         };
     } // namespace detail
 
