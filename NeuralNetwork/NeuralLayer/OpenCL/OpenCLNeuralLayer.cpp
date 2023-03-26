@@ -33,11 +33,11 @@ namespace nn {
 
             // Build program for these specific devices
             try {
-                program.build(devices);
+                program.build({devices.front()});
             } catch(const cl::Error& e) {
                 cl_int err;
                 const auto buildlog =
-                 program.getBuildInfo< CL_PROGRAM_BUILD_LOG >(devices[0], &err);
+                 program.getBuildInfo< CL_PROGRAM_BUILD_LOG >(devices.front(), &err);
                 std::cerr << "Building error! Log: " << buildlog << std::endl;
                 throw std::runtime_error{"Build opencl program error"};
             }

@@ -4,7 +4,7 @@
 
 #include <range/v3/all.hpp>
 
-#define CL_HPP_TARGET_OPENCL_VERSION 200
+#define CL_HPP_TARGET_OPENCL_VERSION 220
 #define CL_HPP_ENABLE_EXCEPTIONS
 #include <CL/cl2.hpp>
 
@@ -24,7 +24,6 @@ namespace nn {
             cl::Context context{createContext()};
             std::vector< cl::Device > devices{context.getInfo< CL_CONTEXT_DEVICES >()};
             cl::Program program{createProgram(context, devices)};
-            cl::Kernel kernel{program, "dot_product"};
             static OpenCLProgram& instance() {
                 static OpenCLProgram program;
                 return program;
@@ -97,48 +96,58 @@ namespace nn {
             void calculate() {
                 try {
                     using namespace cl;
-
                     auto& ocl = OpenCLProgram::instance();
+                    const auto& defaultDevice = ocl.devices.front();
 
                     // Create a command queue and use the first device
-                    Buffer weights(ocl.context, CL_MEM_READ_ONLY, bufferSize * sizeof(float));
-                    Buffer values(ocl.context, CL_MEM_READ_ONLY, bufferSize * sizeof(float));
-                    Buffer product(ocl.context, CL_MEM_WRITE_ONLY, size() * sizeof(float));
 
-                    CommandQueue queue(ocl.context, ocl.devices[0]);
+                    const cl_mem_flags inBufFlags =
+                     CL_MEM_READ_ONLY | CL_MEM_HOST_NO_ACCESS | CL_MEM_USE_HOST_PTR;
+                    const cl_mem_flags outBufFlags =
+                     CL_MEM_WRITE_ONLY | CL_MEM_HOST_READ_ONLY | CL_MEM_USE_HOST_PTR;
+
+                    Buffer weights(ocl.context,
+                                   inBufFlags,
+                                   bufferSize * sizeof(float),
+                                   m_inWeights.data());
+
+                    Buffer values(ocl.context,
+                                  inBufFlags,
+                                  bufferSize * sizeof(float),
+                                  m_inInputs.data());
+
+                    Buffer product(ocl.context,
+                                   outBufFlags,
+                                   size() * sizeof(float),
+                                   m_dotProducts.data());
+
+                    CommandQueue queue(ocl.context, defaultDevice);
+                    cl::Kernel kernel{ocl.program, "dot_product"};
 
                     // Set arguments to kernel
-                    ocl.kernel.setArg(0, weights);
-                    ocl.kernel.setArg(1, values);
-                    ocl.kernel.setArg(2, product);
-                    ocl.kernel.setArg(3, CONST_INPUTS_NUMBER);
+                    kernel.setArg(0, weights);
+                    kernel.setArg(1, values);
+                    kernel.setArg(2, product);
+                    kernel.setArg(3, CONST_INPUTS_NUMBER);
 
-                    queue.enqueueWriteBuffer(weights,
-                                             CL_TRUE,
-                                             0,
-                                             m_inWeights.size() * sizeof(float),
-                                             m_inWeights.data());
-
-                    queue.enqueueWriteBuffer(values,
-                                             CL_TRUE,
-                                             0,
-                                             m_inInputs.size() * sizeof(float),
-                                             m_inInputs.data());
-
-                    queue.enqueueNDRangeKernel(ocl.kernel, cl::NullRange, cl::NDRange(size()));
+                    queue.enqueueNDRangeKernel(kernel,
+                                               cl::NullRange,
+                                               cl::NDRange(size()),
+                                               cl::NullRange);
 
                     queue.enqueueReadBuffer(product,
                                             CL_TRUE,
                                             0,
-                                            size() * sizeof(float),
+                                            m_dotProducts.size() * sizeof(float),
                                             m_dotProducts.data());
 
+                    auto& self = *this;
                     for(const auto i : ranges::views::indices(size())) {
-                        m_dotProducts[i] += operator[](i).getBias();
+                        m_dotProducts[i] += self[i].getBias();
                     }
 
                     for(const auto i : ranges::views::indices(size())) {
-                        auto& neuron = operator[](i);
+                        auto& neuron = self[i];
                         neuron.calculateOutput(m_dotProducts[i],
                                                m_dotProducts.begin(),
                                                m_dotProducts.end());
