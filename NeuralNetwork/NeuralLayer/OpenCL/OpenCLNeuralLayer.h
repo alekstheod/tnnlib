@@ -17,24 +17,33 @@ namespace nn {
     namespace detail {
 
         cl::Context createContext();
-        cl::Program createProgram(const cl::Context& context,
-                                  const std::vector< cl::Device >& devices);
-
-        struct OpenCLProgram {
-            cl::Context context{createContext()};
-            std::vector< cl::Device > devices{context.getInfo< CL_CONTEXT_DEVICES >()};
-            cl::Program program{createProgram(context, devices)};
-            static OpenCLProgram& instance() {
-                static OpenCLProgram program;
-                return program;
-            }
-        };
+        cl::Program createProgram(const std::string& programPath,
+                                  const cl::Context& context,
+                                  const cl::Device& devices);
 
         /// @brief OpenCL based neural layer. Used to improve the perormace
         /// for a larg ammount of neurons. This layer will use the openCL in
         /// order to calculate a dot product for the neuros inputs.
         template< class Internal >
         struct OpenCLNeuralLayer : private Internal {
+
+            OpenCLNeuralLayer() {
+                syncWeights();
+            }
+
+            struct OpenCLProgram {
+                cl::Context context{createContext()};
+                std::vector< cl::Device > devices{context.getInfo< CL_CONTEXT_DEVICES >()};
+                cl::Program program{
+                 createProgram("NeuralNetwork/NeuralLayer/OpenCL/"
+                               "dot_product.cl",
+                               context,
+                               devices.front())};
+                static OpenCLProgram& instance() {
+                    static OpenCLProgram program;
+                    return program;
+                }
+            };
 
             using Var = typename Internal::Var;
             using Memento = typename Internal::Memento;
@@ -51,9 +60,6 @@ namespace nn {
             using use =
              OpenCLNeuralLayer< typename Internal::template use< VarType > >;
 
-            BOOST_STATIC_CONSTEXPR unsigned int CONST_INPUTS_NUMBER =
-             Internal::CONST_INPUTS_NUMBER;
-
             static_assert(std::is_same< float, Var >::value,
                           "VarType must be float");
 
@@ -67,15 +73,24 @@ namespace nn {
             using Internal::getMemento;
             using Internal::getOutput;
             using Internal::inputs;
-            using Internal::setMemento;
+
+
+            void setMemento(const Memento& memento) {
+                Internal::setMemento(memento);
+                syncWeights();
+            }
+
+            const Var& getWeight(std::size_t neuronId, std::size_t inputId) const {
+                return m_weights[neuronId * inputs() + inputId];
+            }
 
             void setInput(unsigned int inputId, const Var& value) {
                 auto& self = *this;
                 utils::for_< size() >([&self, inputId, &value](const auto& i) mutable {
-                    const auto idx = i.value * CONST_INPUTS_NUMBER + inputId;
-                    self.m_inInputs[idx] = value;
+                    const auto idx = i.value * inputs() + inputId;
+                    self.m_inputs[idx] = value;
                     self[i.value][inputId].value = value;
-                    self.m_inWeights[idx] = self[i.value][inputId].weight;
+                    self.m_weights[idx] = self[i.value][inputId].weight;
                 });
             }
 
@@ -109,12 +124,12 @@ namespace nn {
                     Buffer weights(ocl.context,
                                    inBufFlags,
                                    bufferSize * sizeof(float),
-                                   m_inWeights.data());
+                                   m_weights.data());
 
                     Buffer values(ocl.context,
                                   inBufFlags,
                                   bufferSize * sizeof(float),
-                                  m_inInputs.data());
+                                  m_inputs.data());
 
                     Buffer product(ocl.context,
                                    outBufFlags,
@@ -128,7 +143,7 @@ namespace nn {
                     kernel.setArg(0, weights);
                     kernel.setArg(1, values);
                     kernel.setArg(2, product);
-                    kernel.setArg(3, CONST_INPUTS_NUMBER);
+                    kernel.setArg(3, static_cast< unsigned int >(Internal::inputs()));
 
                     queue.enqueueNDRangeKernel(kernel,
                                                cl::NullRange,
@@ -158,9 +173,19 @@ namespace nn {
             }
 
           private:
-            static constexpr auto bufferSize = size() * CONST_INPUTS_NUMBER;
-            std::array< float, bufferSize > m_inWeights;
-            std::array< float, bufferSize > m_inInputs;
+            void syncWeights() {
+                auto& self = *this;
+                for(const auto i : ranges::views::indices(size())) {
+                    for(const auto j : ranges::views::indices(inputs())) {
+                        m_weights[i * inputs() + j] = self[i][j].weight;
+                    }
+                }
+            }
+
+          protected:
+            static constexpr auto bufferSize = size() * inputs();
+            std::array< float, bufferSize > m_weights;
+            std::array< float, bufferSize > m_inputs;
             std::array< float, size() > m_dotProducts;
         };
     } // namespace detail
