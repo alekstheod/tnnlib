@@ -19,15 +19,6 @@ namespace nn {
         struct BPNeuralLayer;
 
         namespace detail {
-            template< typename Internal >
-            struct unwrapLayer {
-                using type = Internal;
-            };
-
-            template< typename Internal >
-            struct unwrapLayer< BPNeuralLayer< Internal > > {
-                using type = typename unwrapLayer< Internal >::type;
-            };
 
             template< typename CurrentLayer, typename AffectedLayer, typename MomentumFunc >
             void calculateHiddenDeltas(CurrentLayer& currentLayer,
@@ -50,12 +41,10 @@ namespace nn {
         } // namespace detail
 
         template< typename NeuralLayerType >
-        struct BPNeuralLayer
-         : detail::unwrapLayer< typename NeuralLayerType::template wrap< BPNeuron > >::type {
-            using Base =
-             typename detail::unwrapLayer< typename NeuralLayerType::template wrap< BPNeuron > >::type;
+        struct BPNeuralLayer : NeuralLayerType::template wrap< BPNeuron > {
+            using Base = typename NeuralLayerType::template wrap< BPNeuron >;
 
-            using NeuralLayer = typename detail::unwrapLayer< NeuralLayerType >::type;
+            using NeuralLayer = NeuralLayerType;
             using Var = typename NeuralLayer::Var;
 
             template< typename VarType >

@@ -42,9 +42,6 @@ namespace nn {
             using Base::size;
             using Base::operator[];
 
-            static constexpr unsigned int CONST_NEURONS_NUMBER = size();
-            static constexpr unsigned int CONST_INPUTS_NUMBER = inputs();
-
             static_assert(size() > 0,
                           "Invalid template argument neuronsNumber == 0");
             static_assert(inputs() >= 1,
