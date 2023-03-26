@@ -93,9 +93,6 @@ namespace nn {
                     CommandQueue queue(ocl.context, defaultDevice);
                     cl::Kernel kernel{ocl.program, "calc_weights"};
 
-                    static_assert(std::is_same_v< Var, float >,
-                                  "Var has to be float");
-
                     // Set arguments to kernel
                     kernel.setArg(0, values);
                     kernel.setArg(1, deltas);
