@@ -55,16 +55,16 @@ namespace nn {
     /// @param ActivationFunction a type of the activation function used in a
     /// neuron.
     /// @param size ammount of neurons in a layer.
-    /// @param inputsNumber the number of inputs of each neuron in a layer.
+    /// @param featuresNumber the number of features of each input in a layer.
     /// initialization a final weight will be calculated in a following way
     /// random(0, 1)/scaleFactor
     template< template< template< class > class, class, std::size_t > class NeuronType,
               template< class >
               class ActivationFunctionType,
               std::size_t size,
-              std::size_t inputsNumber = 2,
+              std::size_t featuresNumber = 1,
               typename Var = float >
     using InputLayer =
-     detail::InputLayer< NeuralLayer< NeuronType, ActivationFunctionType, size, inputsNumber > >;
+     detail::InputLayer< NeuralLayer< NeuronType, ActivationFunctionType, size, featuresNumber > >;
 
 } // namespace nn
