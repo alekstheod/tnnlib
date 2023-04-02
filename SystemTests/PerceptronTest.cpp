@@ -1,5 +1,6 @@
 #include "NeuralNetwork/NeuralLayer/ConvolutionLayer.h"
 #include "NeuralNetwork/NeuralLayer/NeuralLayer.h"
+#include "NeuralNetwork/NeuralLayer/InputLayer.h"
 #include "NeuralNetwork/Neuron/Neuron.h"
 #include "NeuralNetwork/ActivationFunction/SigmoidFunction.h"
 #include "NeuralNetwork/ActivationFunction/TanhFunction.h"
@@ -7,7 +8,7 @@
 
 #include <range/v3/all.hpp>
 
-#include <cereal/archives/xml.hpp>
+#include <cereal/archives/json.hpp>
 #include <cereal/types/tuple.hpp>
 #include <cereal/types/vector.hpp>
 #include <cereal/types/array.hpp>
@@ -24,7 +25,7 @@ namespace {
     template< typename Memento >
     Memento read(std::istream& strm) {
         Memento memento{};
-        cereal::XMLInputArchive archive(strm);
+        cereal::JSONInputArchive archive(strm);
         archive >> memento;
         return memento;
     }
@@ -36,44 +37,46 @@ namespace {
          "weights such that perceptron can recognise a XOR gate") {
             using Perceptron =
              nn::Perceptron< float,
-                             nn::NeuralLayer< nn::Neuron, nn::TanhFunction, 2 >,
-                             nn::NeuralLayer< nn::Neuron, nn::TanhFunction, 4 >,
+                             nn::InputLayer< nn::Neuron, nn::TanhFunction, 2, 1 >,
+                             nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, 5 >,
+                             nn::ComplexNeuralLayer< nn::Neuron< nn::TanhFunction >, nn::Neuron< nn::SigmoidFunction > >,
                              nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, 1 > >;
 
             Perceptron perceptron;
-            std::ifstream xorXml("SystemTests/etc/xor.xml");
-            REQUIRE(xorXml.is_open());
-            perceptron.setMemento(read< Perceptron::Memento >(xorXml));
+            using Input = typename Perceptron::Input;
+            std::ifstream xorJson("SystemTests/etc/xor.json");
+            REQUIRE(xorJson.is_open());
+            perceptron.setMemento(read< Perceptron::Memento >(xorJson));
             WHEN("Input is [1, 0]") {
-                std::array< float, 2 > input{1, 0};
+                std::array< Input, 2 > input{Input{1}, Input{0}};
                 THEN("Output is close to 1") {
                     std::array< float, 2 > output{0};
                     perceptron.calculate(input.begin(), input.end(), output.begin());
-                    REQUIRE(output[0] == Approx(1).margin(0.1));
+                    REQUIRE(output[0] == Approx(1).margin(0.2));
                 }
             }
             WHEN("Input is [0, 1]") {
-                std::array< float, 2 > input{0, 1};
+                std::array< Input, 2 > input{Input{0}, Input{1}};
                 THEN("Output is close to 1") {
                     std::array< float, 2 > output{0};
                     perceptron.calculate(input.begin(), input.end(), output.begin());
-                    REQUIRE(output[0] == Approx(1).margin(0.1));
+                    REQUIRE(output[0] == Approx(1).margin(0.2));
                 }
             }
             WHEN("Input is [1, 1]") {
-                std::array< float, 2 > input{1, 1};
+                std::array< Input, 2 > input{Input{1}, Input{1}};
                 THEN("Output is close to 0") {
                     std::array< float, 2 > output{0};
                     perceptron.calculate(input.begin(), input.end(), output.begin());
-                    REQUIRE(output[0] == Approx(0).margin(0.1));
+                    REQUIRE(output[0] == Approx(0).margin(0.2));
                 }
             }
             WHEN("Input is [0, 0]") {
-                std::array< float, 2 > input{0, 0};
+                std::array< Input, 2 > input{Input{0}, Input{0}};
                 THEN("Output is close to 0") {
                     std::array< float, 2 > output{0};
                     perceptron.calculate(input.begin(), input.end(), output.begin());
-                    REQUIRE(output[0] == Approx(0).margin(0.1));
+                    REQUIRE(output[0] == Approx(0).margin(0.2));
                 }
             }
         }

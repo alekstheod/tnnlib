@@ -4,7 +4,7 @@ cc_test(
     srcs = glob([
         "PerceptronTest.cpp",
     ]),
-    data = ["etc/xor.xml"],
+    data = ["etc/xor.json"],
     includes = ["include"],
     tags = ["system"],
     deps = [

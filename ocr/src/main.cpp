@@ -1,5 +1,6 @@
 #include "NeuralNetwork/LearningAlgorithm/BackPropagation/BepAlgorithm.h"
 #include "NeuralNetwork/NeuralLayer/NeuralLayer.h"
+#include "NeuralNetwork/NeuralLayer/InputLayer.h"
 #include "NeuralNetwork/ActivationFunction/BiopolarSigmoidFunction.h"
 #include "NeuralNetwork/ActivationFunction/LogScaleSoftmaxFunction.h"
 #include "NeuralNetwork/ActivationFunction/SigmoidFunction.h"
@@ -55,16 +56,19 @@ namespace {
     using namespace boost::gil;
     using namespace boost::gil::detail;
     const std::string alphabet("0123456789");
-    constexpr std::size_t width = 24;
-    constexpr std::size_t height = 35;
+    constexpr std::size_t width = 10;
+    constexpr std::size_t height = 15;
     constexpr std::size_t inputsNumber = width * height;
 } // namespace
 
 
 using Perceptron =
  nn::Perceptron< VarType,
-                 nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, 12, inputsNumber >,
+                 nn::InputLayer< nn::Neuron, nn::SigmoidFunction, inputsNumber, 1 >,
+                 nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, 12 >,
                  nn::NeuralLayer< nn::Neuron, nn::SoftmaxFunction, 10 > >;
+
+using InputData = typename Perceptron::Input;
 
 using Algo = nn::bp::BepAlgorithm< Perceptron, nn::bp::CrossEntropyError >;
 
@@ -101,7 +105,7 @@ void readImage(std::string fileName, Iterator out) {
     for(int y = 0; y < srcView.height(); ++y) {
         gray8c_view_t::x_iterator src_it(srcView.row_begin(y));
         for(int x = 0; x < srcView.width(); ++x) {
-            *out = static_cast< float >(src_it[x]) / 255.f; // input in a range of (0-1)
+            *out = InputData{static_cast< float >(src_it[x]) / 255.f}; // input in a range of (0-1)
             out++;
         }
     }
@@ -127,7 +131,7 @@ Perceptron readPerceptron(std::string fileName) {
 
 void recognize(std::string perceptron, std::string image) {
     try {
-        std::array< VarType, inputsNumber > inputs = {0};
+        std::array< InputData, inputsNumber > inputs = {InputData{}};
         readImage(image, inputs.begin());
         std::vector< VarType > result(alphabet.length(), VarType(0.f));
         readPerceptron(perceptron)
