@@ -1,5 +1,6 @@
 #include "NeuralNetwork/LearningAlgorithm/BackPropagation/BepAlgorithm.h"
 #include "NeuralNetwork/NeuralLayer/NeuralLayer.h"
+#include "NeuralNetwork/NeuralLayer/InputLayer.h"
 #include "NeuralNetwork/ActivationFunction/SigmoidFunction.h"
 #include "NeuralNetwork/ActivationFunction/SoftmaxFunction.h"
 #include "NeuralNetwork/ActivationFunction/TanhFunction.h"
@@ -11,7 +12,7 @@
 #include <Design/Singleton.h>
 #include <System/Time.h>
 
-#include <cereal/archives/xml.hpp>
+#include <cereal/archives/json.hpp>
 #include <cereal/types/tuple.hpp>
 #include <cereal/types/vector.hpp>
 #include <cereal/types/array.hpp>
@@ -33,17 +34,19 @@ using namespace utils;
 int main(int argc, char** argv) {
     using Perceptron =
      nn::Perceptron< float,
-                     nn::NeuralLayer< nn::Neuron, nn::TanhFunction, 2 >,
+                     nn::InputLayer< nn::Neuron, nn::TanhFunction, 2, 1 >,
                      nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, 5 >,
                      nn::ComplexNeuralLayer< nn::Neuron< nn::TanhFunction >, nn::Neuron< nn::SigmoidFunction > >,
                      nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, 1 > >;
 
     typedef BepAlgorithm< Perceptron > Algo;
     Algo algorithm(0.09f);
-    std::array< Algo::Prototype, 4 > prototypes = {Algo::Prototype{{0.f, 1.f}, {1.f}},
-                                                   Algo::Prototype{{1.f, 0.f}, {1.f}},
-                                                   Algo::Prototype{{1.f, 1.f}, {0.f}},
-                                                   Algo::Prototype{{0.f, 0.f}, {0.f}}};
+    using Input = Perceptron::Input;
+    std::array< Algo::Prototype, 4 > prototypes = {
+     Algo::Prototype{{Input{0.f}, Input{1.f}}, {1.f}},
+     Algo::Prototype{{Input{1.f}, Input{0.f}}, {1.f}},
+     Algo::Prototype{{Input{1.f}, Input{1.f}}, {0.f}},
+     Algo::Prototype{{Input{0.f}, Input{0.f}}, {0.f}}};
 
     unsigned int numOfEpochs =
      argc < 2 ? std::numeric_limits< unsigned int >::max() : std::atoi(argv[1]);
@@ -63,7 +66,7 @@ int main(int argc, char** argv) {
     {
         std::stringstream strm;
         {
-            cereal::XMLOutputArchive oa(strm);
+            cereal::JSONOutputArchive oa(strm);
             oa << cereal::make_nvp("perceptron", memento);
         }
 
@@ -71,25 +74,25 @@ int main(int argc, char** argv) {
 
         std::string str = strm.str();
         std::stringstream strStream(str);
-        cereal::XMLInputArchive ia(strStream);
+        cereal::JSONInputArchive ia(strStream);
         ia >> memento2;
         perceptron2.setMemento(memento);
     }
 
     std::array< float, 2 > outputs{0};
-    std::array< float, 2 > input1{0, 0};
+    std::array< Input, 2 > input1{Input{0.f}, Input{0.f}};
     perceptron2.calculate(input1.begin(), input1.end(), outputs.begin());
     std::cout << "0 0 " << outputs[0] << std::endl;
 
-    std::array< float, 2 > input2{1, 0};
+    std::array< Input, 2 > input2{Input{1}, Input{0}};
     perceptron2.calculate(input2.begin(), input2.end(), outputs.begin());
     std::cout << "1 0 " << outputs[0] << std::endl;
 
-    std::array< float, 2 > input3{1, 1};
+    std::array< Input, 2 > input3{Input{1}, Input{1}};
     perceptron2.calculate(input3.begin(), input3.end(), outputs.begin());
     std::cout << "1 1 " << outputs[0] << std::endl;
 
-    std::array< float, 2 > input4{0, 1};
+    std::array< Input, 2 > input4{Input{0}, Input{1}};
     perceptron2.calculate(input4.begin(), input4.end(), outputs.begin());
     std::cout << "0 1 " << outputs[0] << std::endl;
 

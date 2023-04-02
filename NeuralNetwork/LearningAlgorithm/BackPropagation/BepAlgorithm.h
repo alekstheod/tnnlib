@@ -19,6 +19,7 @@ namespace nn {
         class BepAlgorithm {
           private:
             using Var = typename PerceptronType::Var;
+            using Input = typename PerceptronType::Input;
 
             static constexpr unsigned int inputsNumber = PerceptronType::inputs();
             static constexpr unsigned int outputsNumber = PerceptronType::outputs();
@@ -28,7 +29,7 @@ namespace nn {
 
           public:
             using Prototype =
-             typename std::tuple< std::array< Var, inputsNumber >, std::array< Var, outputsNumber > >;
+             typename std::tuple< std::array< Input, inputsNumber >, std::array< Var, outputsNumber > >;
             using Memento = typename Perceptron::Memento;
 
 
@@ -61,8 +62,9 @@ namespace nn {
                 calculateDelta(prototype, momentum);
 
                 // Calculate weights
-                utils::for_each(m_perceptron.layers(), [this](auto& layer) {
-                    layer.calculateWeights(m_leariningRate);
+                utils::for_< size() - 1 >([this](auto i) {
+                    auto& hiddenLayer = std::get< i.value + 1 >(m_perceptron.layers());
+                    hiddenLayer.calculateWeights(m_leariningRate);
                 });
 
                 m_perceptron.calculate(std::get< 0 >(prototype).begin(),

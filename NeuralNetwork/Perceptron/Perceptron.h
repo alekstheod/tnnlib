@@ -3,6 +3,7 @@
 #include "NeuralNetwork/Serialization/PerceptronMemento.h"
 #include "NeuralNetwork/Utils/Utils.h"
 
+
 #include <MPL/Tuple.h>
 #include <MPL/Algorithm.h>
 
@@ -49,10 +50,12 @@ namespace nn {
             }
 
             static constexpr auto inputs() {
-                return InputLayerType::inputs();
+                return InputLayerType::size();
             }
 
-            using Layers = typename mpl::rebindInputs< inputs(), TmplLayers >::type;
+            using Layers =
+             typename mpl::rebindInputs< InputLayerType::inputs(), TmplLayers >::type;
+
             using OutputLayerType =
              typename std::tuple_element< size() - 1, Layers >::type;
 
@@ -69,6 +72,8 @@ namespace nn {
 
             template< typename T >
             using use = decltype(perceptron< T >(std::declval< Layers >()));
+
+            using Input = typename InputLayerType::Input;
 
           private:
             Layers m_layers;
