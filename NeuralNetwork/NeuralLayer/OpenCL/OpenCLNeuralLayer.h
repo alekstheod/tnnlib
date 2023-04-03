@@ -115,25 +115,22 @@ namespace nn {
                     const auto& defaultDevice = ocl.devices.front();
 
                     // Create a command queue and use the first device
-
-                    const cl_mem_flags inBufFlags =
-                     CL_MEM_READ_ONLY | CL_MEM_HOST_NO_ACCESS | CL_MEM_USE_HOST_PTR;
-                    const cl_mem_flags outBufFlags =
-                     CL_MEM_WRITE_ONLY | CL_MEM_HOST_READ_ONLY | CL_MEM_USE_HOST_PTR;
+                    const cl_mem_flags inBufFlags = CL_MEM_READ_ONLY | CL_MEM_USE_HOST_PTR;
+                    const cl_mem_flags outBufFlags = CL_MEM_WRITE_ONLY | CL_MEM_USE_HOST_PTR;
 
                     Buffer weights(ocl.context,
                                    inBufFlags,
-                                   bufferSize * sizeof(float),
+                                   m_weights.size() * sizeof(float),
                                    m_weights.data());
 
                     Buffer values(ocl.context,
                                   inBufFlags,
-                                  bufferSize * sizeof(float),
+                                  m_inputs.size() * sizeof(float),
                                   m_inputs.data());
 
                     Buffer product(ocl.context,
                                    outBufFlags,
-                                   size() * sizeof(float),
+                                   m_dotProducts.size() * sizeof(float),
                                    m_dotProducts.data());
 
                     CommandQueue queue(ocl.context, defaultDevice);

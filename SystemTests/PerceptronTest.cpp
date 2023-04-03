@@ -5,6 +5,7 @@
 #include "NeuralNetwork/ActivationFunction/SigmoidFunction.h"
 #include "NeuralNetwork/ActivationFunction/TanhFunction.h"
 #include "NeuralNetwork/Perceptron/Perceptron.h"
+#include "NeuralNetwork/Serialization/Cereal.h"
 
 #include <range/v3/all.hpp>
 
@@ -26,7 +27,7 @@ namespace {
     Memento read(std::istream& strm) {
         Memento memento{};
         cereal::JSONInputArchive archive(strm);
-        archive >> memento;
+        archive >> cereal::make_nvp("perceptron", memento);
         return memento;
     }
 
@@ -52,7 +53,7 @@ namespace {
                 THEN("Output is close to 1") {
                     std::array< float, 2 > output{0};
                     perceptron.calculate(input.begin(), input.end(), output.begin());
-                    REQUIRE(output[0] == Approx(1).margin(0.2));
+                    REQUIRE(output[0] == Approx(1).margin(0.1));
                 }
             }
             WHEN("Input is [0, 1]") {
@@ -60,7 +61,7 @@ namespace {
                 THEN("Output is close to 1") {
                     std::array< float, 2 > output{0};
                     perceptron.calculate(input.begin(), input.end(), output.begin());
-                    REQUIRE(output[0] == Approx(1).margin(0.2));
+                    REQUIRE(output[0] == Approx(1).margin(0.1));
                 }
             }
             WHEN("Input is [1, 1]") {
@@ -68,7 +69,7 @@ namespace {
                 THEN("Output is close to 0") {
                     std::array< float, 2 > output{0};
                     perceptron.calculate(input.begin(), input.end(), output.begin());
-                    REQUIRE(output[0] == Approx(0).margin(0.2));
+                    REQUIRE(output[0] == Approx(0).margin(0.1));
                 }
             }
             WHEN("Input is [0, 0]") {
@@ -76,7 +77,7 @@ namespace {
                 THEN("Output is close to 0") {
                     std::array< float, 2 > output{0};
                     perceptron.calculate(input.begin(), input.end(), output.begin());
-                    REQUIRE(output[0] == Approx(0).margin(0.2));
+                    REQUIRE(output[0] == Approx(0).margin(0.1));
                 }
             }
         }

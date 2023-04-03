@@ -12,6 +12,7 @@
 #include "NeuralNetwork/NeuralLayer/OpenCL/OpenCLNeuralLayer.h"
 #include "NeuralNetwork/NeuralLayer/Thread/AsyncNeuralLayer.h"
 #include "NeuralNetwork/LearningAlgorithm/BackPropagation/BPAsyncNeuralLayer.h"
+#include "NeuralNetwork/Serialization/Cereal.h"
 
 #include <MPL/Tuple.h>
 

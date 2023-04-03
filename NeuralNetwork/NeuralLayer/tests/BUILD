@@ -8,6 +8,7 @@ cc_test(
         "//:tnnlib_utils",
         "//NeuralNetwork/ActivationFunction",
         "//NeuralNetwork/NeuralLayer",
+        "//NeuralNetwork/Neuron",
         "//Utilities/catch2:catch2_main",
     ],
 )
@@ -23,6 +24,7 @@ cc_test(
         "//:tnnlib_utils",
         "//NeuralNetwork/ActivationFunction",
         "//NeuralNetwork/NeuralLayer:OpenCLNeuralLayer",
+        "//NeuralNetwork/Neuron",
         "//Utilities/catch2:catch2_main",
         "@OpenCL",
     ],

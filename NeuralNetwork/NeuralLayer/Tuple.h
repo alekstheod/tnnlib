@@ -1,8 +1,8 @@
 #pragma once
 
 #include "NeuralNetwork/NeuralLayer/Container.h"
-#include "NeuralNetwork/Neuron/INeuron.h"
 #include "NeuralNetwork/Serialization/NeuralLayerMemento.h"
+#include "NeuralNetwork/Neuron/INeuron.h"
 
 #include <MPL/Algorithm.h>
 #include <MPL/Utils.h>

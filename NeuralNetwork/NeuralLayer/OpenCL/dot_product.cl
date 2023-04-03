@@ -9,5 +9,6 @@ __kernel void dot_product(global float* weights,
         dot += weights[offset + i] * inputs[offset + i];
     }
 
+    /*printf("%f", dot);*/
     result[idx] = dot;
 }

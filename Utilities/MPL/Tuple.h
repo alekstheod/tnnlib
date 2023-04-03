@@ -1,5 +1,4 @@
-#ifndef Tuple_h
-#define Tuple_h
+#pragma once
 
 #include <cstddef>
 #include <tuple>
@@ -91,10 +90,17 @@ namespace utils {
         typedef typename std::tuple< Elements..., LastElement > type;
     };
 
+    template< typename LastElement, typename... Elements >
+    using push_back_t = push_back< LastElement, Elements... >;
+
+    template< typename Tuple >
+    using back_t = std::tuple_element_t< std::tuple_size< Tuple >::value - 1, Tuple >;
+
+    template< typename Tuple >
+    using front_t = std::tuple_element_t< 0, Tuple >;
+
     template< typename... Args >
     struct reverse< std::tuple< Args... > > {
         using type = typename detail::reverse< Args... >::type;
     };
 } // namespace utils
-
-#endif

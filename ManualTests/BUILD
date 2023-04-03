@@ -2,7 +2,7 @@
 cc_test(
     name = "tnnlib_test",
     srcs = glob(["**/*.cpp"]),
-    args = ["1000"],
+    args = ["10000000"],
     copts = ["-Werror"],
     deps = [
         "//NeuralNetwork/ActivationFunction",

@@ -7,6 +7,7 @@
 #include "NeuralNetwork/Neuron/Neuron.h"
 #include "NeuralNetwork/Perceptron/ComplexLayer.h"
 #include "NeuralNetwork/Perceptron/Perceptron.h"
+#include "NeuralNetwork/Serialization/Cereal.h"
 
 #include <Design/Factory.h>
 #include <Design/Singleton.h>
@@ -57,7 +58,7 @@ int main(int argc, char** argv) {
                          [numOfEpochs](unsigned int epoch, float error) {
                              std::cout << "Epoch: " << epoch
                                        << " error: " << error << std::endl;
-                             return error > 0.01f && epoch < numOfEpochs;
+                             return error > 0.001f && epoch < numOfEpochs;
                          });
 
     using Memento = Perceptron::Memento;
@@ -77,6 +78,7 @@ int main(int argc, char** argv) {
         cereal::JSONInputArchive ia(strStream);
         ia >> memento2;
         perceptron2.setMemento(memento);
+        std::cout << strStream.str() << std::endl;
     }
 
     std::array< float, 2 > outputs{0};
