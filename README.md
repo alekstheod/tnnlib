@@ -14,7 +14,7 @@ Flexible compile time interface which allows to define a neural network with dif
 
 ```cpp
     typedef nn::Perceptron<float,
-                           nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, 2>,
+                           nn::InputLayer<nn::Neuron, nn::SigmoidFunction, 2>,
                            nn::NeuralLayer<nn::Neuron, nn::TanhFunction, 20>,
                            nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, 1>
                            > Perceptron;
@@ -60,7 +60,7 @@ be used to define a neural network (Perceptron) in a modern c++ envirnoment.
 
 ```cpp
     typedef nn::Perceptron<float,
-                           nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, 2>,
+                           nn::InputLayer<nn::Neuron, nn::SigmoidFunction, 2>,
                            nn::NeuralLayer<nn::Neuron, nn::TanhFunction, 20>,
                            nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, 1>
                            > Perceptron;
