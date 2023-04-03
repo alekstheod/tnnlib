@@ -1,19 +1,30 @@
 cc_library(
     name = "Serialization",
-    hdrs = glob(
-        ["*.h"],
-        exclude = [
-            "tests/**",
-        ],
-    ),
+    hdrs = ["Cereal.h"],
     copts = ["-Werror"],
     includes = ["."],
     visibility = [
         "//visibility:public",
     ],
     deps = [
-        "//NeuralNetwork/Neuron",
+        ":Memento",
         "@cereal",
         "@range-v3",
+    ],
+)
+
+cc_library(
+    name = "Memento",
+    hdrs = glob(
+        ["*.h"],
+        exclude = [
+            "tests/**",
+            "Cereal.h",
+        ],
+    ),
+    copts = ["-Werror"],
+    includes = ["."],
+    visibility = [
+        "//visibility:public",
     ],
 )

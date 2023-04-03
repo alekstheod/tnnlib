@@ -27,7 +27,7 @@ namespace nn {
 
             /// @brief a list of the inputs first is the weight, second is the
             /// value
-            using Inputs = typename Memento::Inputs;
+            using Inputs = std::array< nn::Input< Var >, inputsNumber >;
 
             template< typename VarType >
             using use =
@@ -50,11 +50,11 @@ namespace nn {
                 return inputsNumber;
             }
 
-            Input& operator[](std::size_t id) {
+            nn::Input< Var >& operator[](std::size_t id) {
                 return m_inputs[id];
             }
 
-            const Input& operator[](const ::size_t id) const {
+            const nn::Input< Var >& operator[](const ::size_t id) const {
                 return m_inputs[id];
             }
 
@@ -71,12 +71,19 @@ namespace nn {
             }
 
             const Memento getMemento() const {
-                return Memento{m_bias, m_inputs};
+                Memento result;
+                result.bias = m_bias;
+                for(const auto& idx : ranges::views::indices(m_inputs.size())) {
+                    result.weights[idx] = m_inputs[idx].weight;
+                }
+
+                return result;
             }
 
             void setMemento(const Memento& memento) {
-                const auto& inputs = memento.inputs;
-                std::copy(inputs.begin(), inputs.end(), m_inputs.begin());
+                for(const auto i : ranges::views::indices(m_inputs.size())) {
+                    m_inputs[i].weight = memento.weights[i];
+                }
                 m_bias = memento.bias;
             }
 
@@ -90,7 +97,9 @@ namespace nn {
                 };
 
                 auto dotProducts = m_inputs | ranges::views::transform(calcInput);
-                return m_activationFunction.sum(begin(dotProducts), end(dotProducts), m_bias);
+                return m_activationFunction.sum(std::begin(dotProducts),
+                                                std::end(dotProducts),
+                                                m_bias);
             }
 
             const Var& getOutput() const {

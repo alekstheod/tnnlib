@@ -28,8 +28,8 @@ namespace {
 
             nn::bp::BPNeuralLayer< nn::detail::AsyncNeuralLayer< BasicLayer > > asyncLayer;
             asyncLayer.setMemento(regularLayer.getMemento());
-            regularLayer.setInput(0, 0.5f);
-            regularLayer.setInput(1, 0.3f);
+            asyncLayer.setInput(0, 0.5f);
+            asyncLayer.setInput(1, 0.3f);
 
             Prototype prototype{{0.1f, 0.2f}, {1.f, 1.f}};
             const auto momentum = [](auto, auto newDelta) { return newDelta; };

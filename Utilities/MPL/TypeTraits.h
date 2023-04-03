@@ -1,29 +1,28 @@
-#ifndef TYPETRAITS_h
-#define TYPETRAITS_h
-#include <tuple>
-#include "Tuple.h"
+#pragma once
 
-namespace utils
-{
+#include <type_traits>
 
-template <typename T>
-struct hasArrowOperator
-{
-    template <typename C>
-    static char hasArrow(decltype(&C::operator->));
+namespace utils {
 
-    template <typename C>
-    static double hasArrow(...);
+    template< typename T >
+    struct hasArrowOperator {
+        template< typename C >
+        static char hasArrow(decltype(&C::operator->));
 
-    enum
-    {
-        value = sizeof(hasArrow<T>(0)) == sizeof(char)
+        template< typename C >
+        static double hasArrow(...);
+
+        enum { value = sizeof(hasArrow< T >(0)) == sizeof(char) };
     };
-};
 
-struct empty
-{
-};
+    struct empty {};
+
+    template< typename T, typename T2 >
+    struct is_same_template : std::false_type {};
+
+    template< template< class > class T, typename T2 >
+    struct is_same_template< T< T2 >, T< T2 > > : std::true_type {};
+
+    template< typename T, typename T2 >
+    constexpr auto is_same_template_v = is_same_template< T, T2 >::value();
 } // namespace utils
-
-#endif

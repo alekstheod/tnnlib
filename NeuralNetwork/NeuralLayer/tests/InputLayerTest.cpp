@@ -9,7 +9,7 @@ namespace {
     SCENARIO("InputLayer basic calculation",
              "[layer][basic][sigmoid][forward]") {
         GIVEN("A neural layer with 2 neurons and 2 features (inputs)") {
-            nn::InputLayer< nn::Neuron, nn::SigmoidFunction, 2 > layer;
+            nn::InputLayer< nn::Neuron, nn::SigmoidFunction, 2, 2 > layer;
             layer.setInput(0, {0.6f, 0.5});
             layer.setInput(1, {0.3f, 0.4f});
             WHEN("calculateOutputs is called") {

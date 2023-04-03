@@ -13,6 +13,7 @@ cc_library(
     ],
     deps = [
         "//:tnnlib_utils",
+        "//NeuralNetwork/Serialization:Memento",
         "//NeuralNetwork/Utils",
     ],
 )

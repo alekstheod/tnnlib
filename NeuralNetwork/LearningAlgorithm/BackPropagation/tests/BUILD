@@ -8,6 +8,7 @@ cc_test(
         "//:tnnlib_utils",
         "//NeuralNetwork/ActivationFunction",
         "//NeuralNetwork/LearningAlgorithm/BackPropagation",
+        "//NeuralNetwork/Neuron",
         "//Utilities/catch2:catch2_main",
     ],
 )
@@ -22,6 +23,7 @@ cc_test(
         "//NeuralNetwork/LearningAlgorithm/BackPropagation",
         "//NeuralNetwork/LearningAlgorithm/BackPropagation:OpenCLNeuralLayer",
         "//NeuralNetwork/NeuralLayer:OpenCLNeuralLayer",
+        "//NeuralNetwork/Neuron",
         "//Utilities/catch2:catch2_main",
     ],
 )

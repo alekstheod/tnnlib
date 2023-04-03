@@ -3,13 +3,12 @@
 #include "NeuralNetwork/Serialization/PerceptronMemento.h"
 #include "NeuralNetwork/Utils/Utils.h"
 
-
 #include <MPL/Tuple.h>
 #include <MPL/Algorithm.h>
+#include <MPL/TypeTraits.h>
 
 #include <algorithm>
 #include <cassert>
-#include <functional>
 #include <tuple>
 #include <type_traits>
 
@@ -43,7 +42,7 @@ namespace nn {
             using TmplLayers = std::tuple< typename L::template use< Var >... >;
 
           public:
-            using InputLayerType = typename std::tuple_element< 0, TmplLayers >::type;
+            using InputLayerType = utils::front_t< TmplLayers >;
 
             static constexpr auto size() {
                 return sizeof...(L);
@@ -68,7 +67,7 @@ namespace nn {
              decltype(perceptron< Var >(wrap_layers< Layer >(std::declval< Layers >())));
 
             using LayersMemento = decltype(layers_memento(std::declval< Layers >()));
-            typedef PerceptronMemento< LayersMemento > Memento;
+            using Memento = PerceptronMemento< LayersMemento >;
 
             template< typename T >
             using use = decltype(perceptron< T >(std::declval< Layers >()));
