@@ -60,7 +60,8 @@ namespace nn {
                 utils::for_< size() >([this, &dotFuture](auto i) {
                     std::promise< Var > promise;
                     dotFuture[i.value] = promise.get_future();
-                    auto& neuron = operator[](i.value);
+                    auto& self = *this;
+                    auto& neuron = self[i.value];
                     boost::asio::post(pool(), [&neuron, promise = std::move(promise)]() mutable {
                         promise.set_value(neuron.calcDotProduct());
                     });
@@ -74,7 +75,8 @@ namespace nn {
                 ranges::copy(products, std::begin(dotProducts));
 
                 utils::for_< size() >([&, this](auto i) {
-                    auto& neuron = operator[](i.value);
+                    auto& self = *this;
+                    auto& neuron = self[i.value];
                     neuron.calculateOutput(dotProducts[i.value],
                                            std::cbegin(dotProducts),
                                            std::cend(dotProducts));
