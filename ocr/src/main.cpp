@@ -32,6 +32,7 @@
 #include <boost/gil/channel.hpp>
 #include <boost/gil.hpp>
 #include <boost/gil/image.hpp>
+#include <boost/gil/io/read_and_convert_image.hpp>
 
 #include <boost/gil/extension/io/png.hpp>
 #include <boost/gil/extension/numeric/sampler.hpp>
@@ -57,8 +58,8 @@ namespace {
     using namespace boost::gil;
     using namespace boost::gil::detail;
     const std::string alphabet("0123456789");
-    constexpr std::size_t width = 10;
-    constexpr std::size_t height = 13;
+    constexpr std::size_t width = 12;
+    constexpr std::size_t height = 16;
     constexpr std::size_t inputsNumber = width * height;
 } // namespace
 
@@ -66,7 +67,7 @@ namespace {
 using Perceptron =
  nn::Perceptron< VarType,
                  nn::InputLayer< nn::Neuron, nn::SigmoidFunction, inputsNumber, 1 >,
-                 nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, 50 >,
+                 nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, 80 >,
                  nn::NeuralLayer< nn::Neuron, nn::SoftmaxFunction, 10 > >;
 
 using InputData = typename Perceptron::Input;
@@ -89,7 +90,7 @@ void readImage(std::string fileName, Iterator out) {
     using namespace nn::bp;
 
     rgb8_image_t srcImg;
-    read_image(fileName.c_str(), srcImg, png_tag());
+    read_and_convert_image(fileName.c_str(), srcImg, png_tag());
 
     gray8_image_t dstImg(srcImg.dimensions());
     gray8_pixel_t white(255);
@@ -171,9 +172,9 @@ void calculateWeights(std::string imagesPath) {
 
 
     std::cout << "Perceptron calculation started" << std::endl;
-    // static Perceptron tmp = readPerceptron("perceptron.json");
-    static Algo algorithm(0.001f);
-    // algorithm.setMemento(tmp.getMemento());
+    static Perceptron tmp = readPerceptron("perceptron.json");
+    static Algo algorithm(0.0009f);
+    algorithm.setMemento(tmp.getMemento());
 
     std::vector< Algo::Prototype > prototypes;
 
@@ -196,7 +197,7 @@ void calculateWeights(std::string imagesPath) {
 
     auto errorFunc = [](unsigned int epoch, VarType error) {
         std::cout << "Epoch:" << epoch << " error:" << error << std::endl;
-        return error > 0.1f;
+        return error > 0.02f;
     };
 
     const auto momentum = [](const auto, const auto newDelta) {
