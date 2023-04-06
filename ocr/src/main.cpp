@@ -58,8 +58,8 @@ namespace {
     using namespace boost::gil;
     using namespace boost::gil::detail;
     const std::string alphabet("0123456789");
-    constexpr std::size_t width = 12;
-    constexpr std::size_t height = 16;
+    constexpr std::size_t width = 5;
+    constexpr std::size_t height = 8;
     constexpr std::size_t inputsNumber = width * height;
 } // namespace
 
@@ -67,7 +67,7 @@ namespace {
 using Perceptron =
  nn::Perceptron< VarType,
                  nn::InputLayer< nn::Neuron, nn::SigmoidFunction, inputsNumber, 1 >,
-                 nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, 80 >,
+                 nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, 20 >,
                  nn::NeuralLayer< nn::Neuron, nn::SoftmaxFunction, 10 > >;
 
 using InputData = typename Perceptron::Input;
@@ -197,7 +197,7 @@ void calculateWeights(std::string imagesPath) {
 
     auto errorFunc = [](unsigned int epoch, VarType error) {
         std::cout << "Epoch:" << epoch << " error:" << error << std::endl;
-        return error > 0.02f;
+        return error > 0.1f;
     };
 
     const auto momentum = [](const auto, const auto newDelta) {

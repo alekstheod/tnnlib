@@ -13,6 +13,7 @@ local_repository(
 http_archive(
     name = "OcrSamples",
     build_file = "samples.BUILD",
+    sha256 = "165a7e4e56a2307cb74e212c83456627f5ab91516a35c51114626f488b96da77",
     urls = ["https://github.com/alekstheod/tnnlib/raw/master/ocr/samples.zip"],
 )
 
