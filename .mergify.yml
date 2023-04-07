@@ -3,7 +3,7 @@ pull_request_rules:
     conditions:
       - base=master
       - label!=WIP
-      - "check-success=Travis CI - Pull Request"
+      - status-success=Travis CI - Pull Request
     actions:
       merge:
         method: merge
