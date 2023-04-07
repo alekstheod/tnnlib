@@ -15,7 +15,7 @@ namespace nn {
                                             (cl_context_properties)(platforms.front())(),
                                             0};
 
-            return cl::Context(CL_DEVICE_TYPE_GPU, cps);
+            return cl::Context(CL_DEVICE_TYPE_DEFAULT, cps);
         }
 
         cl::Program createProgram(const std::string& programPath,

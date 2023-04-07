@@ -165,7 +165,7 @@ namespace nn {
                                                m_dotProducts.end());
                     }
                 } catch(const cl::Error& e) {
-                    std::cerr << "Calculation error" << std::endl;
+                    std::cerr << "Calculation error: " << e.what() << std::endl;
                 }
             }
 
