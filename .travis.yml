@@ -5,6 +5,7 @@ addons:
       - wget
       - libpocl2
       - ocl-icd-opencl-dev
+      - pocl-opencl-icd
       - clinfo
 
 install:
