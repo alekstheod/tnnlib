@@ -6,8 +6,6 @@
  \__|_| |_|_| |_|_|_|_.__/
 ```
 
-[![CircleCI](https://dl.circleci.com/status-badge/img/gh/alekstheod/tnnlib/tree/master.svg?style=svg)](https://dl.circleci.com/status-badge/redirect/gh/alekstheod/tnnlib/tree/master)
-
 template neural network library v3
 
 Flexible compile time interface which allows to define a neural network with different types of layers, Neurons and Activation functions:
