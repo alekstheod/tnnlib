@@ -5,6 +5,7 @@ addons:
       - wget
       - libpocl2
       - ocl-icd-opencl-dev
+      - clinfo
 
 install:
   - sudo ln -s /usr/lib/x86_64-linux-gnu/*.so /usr/lib/
@@ -19,6 +20,7 @@ notifications:
     on_failure: always
 
 script:
+  - clinfo
   - bazelisk build --config=asan //...
   - bazelisk test --config=asan //...
 before_script:
