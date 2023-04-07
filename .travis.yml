@@ -21,8 +21,7 @@ notifications:
 
 script:
   - bazelisk build --config=asan //...
-  - bazelisk test --config=asan //...
-before_script:
+  - bazelisk test --config=asan //... --test_tag_filters="-openCL"
 
 os:
   - linux
