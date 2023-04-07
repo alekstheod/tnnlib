@@ -56,7 +56,8 @@ namespace nn {
                 std::array< std::future< void >, size() > weightFutures;
 
                 utils::for_< size() >([&, this](const auto& i) {
-                    auto& neuron = operator[](i.value);
+                    auto& self = *this;
+                    auto& neuron = self[i.value];
                     std::promise< void > promise;
                     weightFutures[i.value] = promise.get_future();
                     boost::asio::post(nn::detail::pool(),

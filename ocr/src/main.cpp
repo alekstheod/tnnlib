@@ -172,9 +172,9 @@ void calculateWeights(std::string imagesPath) {
 
 
     std::cout << "Perceptron calculation started" << std::endl;
-    static Perceptron tmp = readPerceptron("perceptron.json");
+    // static Perceptron tmp = readPerceptron("perceptron.json");
     static Algo algorithm(0.0009f);
-    algorithm.setMemento(tmp.getMemento());
+    // algorithm.setMemento(tmp.getMemento());
 
     std::vector< Algo::Prototype > prototypes;
 
