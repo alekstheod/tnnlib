@@ -4,9 +4,9 @@
 
 #include <range/v3/all.hpp>
 
-#define CL_HPP_TARGET_OPENCL_VERSION 220
+#define CL_HPP_TARGET_OPENCL_VERSION 200
 #define CL_HPP_ENABLE_EXCEPTIONS
-#include <CL/cl2.hpp>
+#include <CL/opencl.hpp>
 
 #include <array>
 #include <exception>
@@ -115,8 +115,8 @@ namespace nn {
                     const auto& defaultDevice = ocl.devices.front();
 
                     // Create a command queue and use the first device
-                    const cl_mem_flags inBufFlags = CL_MEM_READ_ONLY | CL_MEM_USE_HOST_PTR;
-                    const cl_mem_flags outBufFlags = CL_MEM_WRITE_ONLY | CL_MEM_USE_HOST_PTR;
+                    const cl_mem_flags inBufFlags = CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR;
+                    const cl_mem_flags outBufFlags = CL_MEM_WRITE_ONLY | CL_MEM_COPY_HOST_PTR;
 
                     Buffer weights(ocl.context,
                                    inBufFlags,
@@ -165,7 +165,7 @@ namespace nn {
                                                m_dotProducts.end());
                     }
                 } catch(const cl::Error& e) {
-                    std::cerr << "Calculation error" << std::endl;
+                    std::cerr << "Calculation error: " << e.what() << std::endl;
                 }
             }
 

@@ -5,9 +5,10 @@ addons:
       - wget
       - libpocl2
       - ocl-icd-opencl-dev
+      - pocl-opencl-icd
 
 install:
-  - sudo ln -s /usr/lib/x86_64-linux-gnu/libOpenCL.so /usr/lib/
+  - sudo ln -s /usr/lib/x86_64-linux-gnu/*.so /usr/lib/
   - sudo wget -O /usr/bin/bazelisk https://github.com/bazelbuild/bazelisk/releases/download/v1.16.0/bazelisk-linux-amd64
   - sudo chmod +x /usr/bin/bazelisk
 
@@ -21,7 +22,6 @@ notifications:
 script:
   - bazelisk build --config=asan //...
   - bazelisk test --config=asan //... --test_tag_filters="-openCL"
-before_script:
 
 os:
   - linux

@@ -4,6 +4,8 @@
 #include "NeuralNetwork/NeuralLayer/OpenCL/OpenCLNeuralLayer.h"
 #include "NeuralNetwork/LearningAlgorithm/BackPropagation/BPNeuralLayer.h"
 
+#include <CL/opencl.hpp>
+
 namespace nn {
 
     namespace bp {
@@ -71,9 +73,9 @@ namespace nn {
                     const auto& defaultDevice = ocl.devices.front();
 
                     const cl_mem_flags inBufFlags =
-                     CL_MEM_READ_ONLY | CL_MEM_HOST_NO_ACCESS | CL_MEM_USE_HOST_PTR;
+                     CL_MEM_READ_ONLY | CL_MEM_HOST_NO_ACCESS | CL_MEM_COPY_HOST_PTR;
 
-                    const cl_mem_flags outBufFlags = CL_MEM_READ_WRITE | CL_MEM_USE_HOST_PTR;
+                    const cl_mem_flags outBufFlags = CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR;
 
                     Buffer values(ocl.context,
                                   inBufFlags,
