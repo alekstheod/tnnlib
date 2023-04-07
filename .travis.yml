@@ -3,8 +3,11 @@ addons:
   apt:
     packages:
       - wget
+      - libpocl2
+      - ocl-icd-opencl-dev
 
 install:
+  - sudo ln -s /usr/lib/x86_64-linux-gnu/libOpenCL.so /usr/lib/
   - sudo wget -O /usr/bin/bazelisk https://github.com/bazelbuild/bazelisk/releases/download/v1.16.0/bazelisk-linux-amd64
   - sudo chmod +x /usr/bin/bazelisk
 
