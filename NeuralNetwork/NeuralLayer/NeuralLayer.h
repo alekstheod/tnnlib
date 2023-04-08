@@ -34,6 +34,8 @@ namespace nn {
             template< typename VarType >
             using use = typename Base::template use_var< NeuralLayer, VarType >;
 
+            using Input = Var;
+
             using Base::begin;
             using Base::cbegin;
             using Base::cend;
