@@ -2,7 +2,10 @@ cc_binary(
     name = "ocr",
     srcs = glob(["src/*.cpp"]),
     copts = ["-Werror"],
-    data = ["@OcrSamples//:samples"],
+    data = [
+        "etc/perceptron.json",
+        "@OcrSamples//:samples",
+    ],
     deps = [
         "//:tnnlib_utils",
         "//NeuralNetwork/ActivationFunction",

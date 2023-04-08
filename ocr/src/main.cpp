@@ -67,7 +67,7 @@ namespace {
 using Perceptron =
  nn::Perceptron< VarType,
                  nn::InputLayer< nn::Neuron, nn::SigmoidFunction, inputsNumber, 1 >,
-                 nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, 50 >,
+                 nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, 30 >,
                  nn::NeuralLayer< nn::Neuron, nn::SoftmaxFunction, 10 > >;
 
 using InputData = typename Perceptron::Input;
@@ -200,11 +200,8 @@ void calculateWeights(std::string imagesPath) {
         return error > 0.1f;
     };
 
-    const auto momentum = [](const auto, const auto newDelta) {
-        return newDelta;
-    };
     static Perceptron perceptron =
-     algorithm.calculate(prototypes.begin(), prototypes.end(), errorFunc, momentum);
+     algorithm.calculate(prototypes.begin(), prototypes.end(), errorFunc);
 
     save(perceptron, "perceptron.json");
 }
