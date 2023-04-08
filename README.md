@@ -27,9 +27,9 @@ Calculating perceptron by using BEP algorithm:
     Algo algorithm (0.09f );
 
     std::array< Algo::Prototype, 4> prototypes= { Algo::Prototype{{0.f, 1.f}, {1.f}} ,
-        Algo::Prototype{{1.f, 0.f}, {1.f}} ,
-        Algo::Prototype{{1.f, 1.f}, {0.f}} ,
-        Algo::Prototype{{0.f, 0.f}, {0.f}}
+        Algo::Prototype{{Input{1.f}, Input{0.f}}, {1.f}} ,
+        Algo::Prototype{{Input{1.f}, Input{1.f}}, {0.f}} ,
+        Algo::Prototype{{Input{0.f}, Input{0.f}}, {0.f}}
     };
 
     unsigned int numOfEpochs = std::numeric_limits< unsigned int >::max();
