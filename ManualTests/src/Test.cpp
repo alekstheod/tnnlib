@@ -62,24 +62,27 @@ int main(int argc, char** argv) {
                          });
 
     using Memento = Perceptron::Memento;
-    Memento memento = perceptron.getMemento();
-    Perceptron perceptron2;
-    {
+    const auto store = [](const auto& memento) {
         std::stringstream strm;
         {
             cereal::JSONOutputArchive oa(strm);
             oa << cereal::make_nvp("perceptron", memento);
+            std::cout << strm.str() << std::endl;
         }
+        return strm.str();
+    };
 
-        Memento memento2;
+    const auto restore = [](const auto& str) {
+        std::stringstream strm{str};
+        cereal::JSONInputArchive ia(strm);
+        Memento memento;
+        ia >> memento;
+        return memento;
+    };
 
-        std::string str = strm.str();
-        std::stringstream strStream(str);
-        cereal::JSONInputArchive ia(strStream);
-        ia >> memento2;
-        perceptron2.setMemento(memento);
-        std::cout << strStream.str() << std::endl;
-    }
+    Perceptron perceptron2;
+    const auto mementoStr = store(perceptron.getMemento());
+    perceptron2.setMemento(restore(mementoStr));
 
     std::array< float, 2 > outputs{0};
     std::array< Input, 2 > input1{Input{0.f}, Input{0.f}};
