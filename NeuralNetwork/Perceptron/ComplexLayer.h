@@ -2,12 +2,13 @@
 
 #include "NeuralNetwork/Serialization/ComplexLayerMemento.h"
 
+#include <array>
+
 namespace nn {
 
     /// @brief adapter of perceptron to a neural layer.
     template< typename Perceptron >
-    class ComplexLayer {
-      public:
+    struct ComplexLayer {
         using Var = typename Perceptron::Var;
         using Memento = ComplexLayerMemento< Var >;
         using OutputLayerType = typename Perceptron::OutputLayerType;
@@ -24,35 +25,20 @@ namespace nn {
         template< std::size_t inputs >
         using resize = ComplexLayer< typename Perceptron::template resize< inputs > >;
 
-      private:
-        std::array< Var, CONST_INPUTS_NUMBER > m_inputs;
-        std::array< Var, CONST_NEURONS_NUMBER > m_outputs;
-        Perceptron m_perceptron;
-
-      public:
         ComplexLayer() {
         }
 
         ComplexLayer(const Perceptron& perceptron) : m_perceptron(perceptron) {
         }
 
-        /**
-         * @see {INeuralLayer}
-         */
         Memento getMemento() {
             return m_perceptron.getMemento();
         }
 
-        /**
-         * @see {INeuralLayer}
-         */
         void setMemento(const Memento& memento) {
             m_perceptron.setMemento();
         }
 
-        /**
-         * @see {INeuralLayer}
-         */
         template< typename Layer >
         void calculateOutputs(Layer& nextLayer) {
             m_perceptron.calculate(m_inputs.begin(), m_inputs.end(), m_outputs.begin());
@@ -61,32 +47,25 @@ namespace nn {
             }
         }
 
-        /**
-         * @see {INeuralLayer}
-         */
         void calculateOutputs() {
             m_perceptron.calculate(m_inputs.begin(), m_inputs.end(), m_outputs.begin());
         }
 
-        /**
-         * @see {INeuralLayer}
-         */
         auto begin() const {
             return std::get< CONST_LAYERS_NUMBER - 1 >(m_perceptron.layers()).begin();
         }
 
-        /**
-         * @see {INeuralLayer}
-         */
         auto end() const {
             return std::get< CONST_LAYERS_NUMBER - 1 >(m_perceptron.layers()).end();
         }
 
-        /**
-         * @see {INeuralLayer}
-         */
         void setInput(std::size_t inputId, const Var& value) {
             m_inputs[inputId] = value;
         }
+
+      private:
+        std::array< Var, CONST_INPUTS_NUMBER > m_inputs;
+        std::array< Var, CONST_NEURONS_NUMBER > m_outputs;
+        Perceptron m_perceptron;
     };
 } // namespace nn

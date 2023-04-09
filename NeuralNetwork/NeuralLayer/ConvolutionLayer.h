@@ -101,9 +101,6 @@ namespace nn {
              ConvolutionLayer< typename Internal::template use< VarType >, Grid >;
             static constexpr std::size_t CONST_INPUTS_NUMBER = Grid::size;
 
-            /**
-             * @see {INeuralLayer}
-             */
             void setInput(unsigned int inputId, const Var& value) {
                 std::size_t neuronId = 0;
                 for(auto& neuron : *this) {
