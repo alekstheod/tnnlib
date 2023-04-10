@@ -1,3 +1,5 @@
+![Build result](https://app.travis-ci.com/alekstheod/tnnlib.svg?branch=master)
+
 ```
  _               _ _ _
 | |_ _ __  _ __ | (_) |__
