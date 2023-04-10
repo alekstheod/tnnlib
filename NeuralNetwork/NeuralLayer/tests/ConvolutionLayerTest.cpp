@@ -32,7 +32,7 @@ namespace {
              typename nn::ConvolutionGrid< width, height, stride, margin >::define;
 
             using ConvolutionLayer =
-             nn::ConvolutionLayer< nn::NeuralLayer, nn::Neuron, nn::SigmoidFunction, 25, ConvolutionGrid >;
+             nn::ConvolutionLayer< nn::NeuralLayer, nn::Neuron, nn::SigmoidFunction, ConvolutionGrid >;
             auto layer = ConvolutionLayer{};
             WHEN(
              "input is a grid filled with the increasing sequence of "
