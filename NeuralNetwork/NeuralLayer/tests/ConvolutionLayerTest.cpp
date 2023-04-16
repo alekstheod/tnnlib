@@ -20,16 +20,14 @@ namespace {
         return true;
     }
 
-    SCENARIO("Convolution grid set inputs",
-             "[layer][convolution][grid][forward]") {
+    SCENARIO("Convolution layer set inputs", "[layer][convolution][forward]") {
         GIVEN(
-         "A convolution layer for an image 5*5, stride = 2 and margin = 1") {
+         "A convolution layer for an image 5*5, stride = 3 and kernel 3*3") {
             constexpr std::size_t width = 5;
             constexpr std::size_t height = 5;
-            constexpr std::size_t margin = 1;
             constexpr std::size_t stride = 2;
             using ConvolutionGrid =
-             typename nn::ConvolutionGrid< width, height, stride, margin >::define;
+             typename nn::ConvolutionGrid< width, height, nn::Kernel< 3, 3, stride > >::define;
 
             using ConvolutionLayer =
              nn::ConvolutionLayer< nn::NeuralLayer, nn::Neuron, nn::SigmoidFunction, ConvolutionGrid >;
@@ -45,11 +43,42 @@ namespace {
                     std::vector< std::vector< float > > inputs = {
                      {1, 2, 3, 6, 7, 8, 11, 12, 13},
                      {3, 4, 5, 8, 9, 10, 13, 14, 15},
+                     {5, 0, 0, 10, 0, 0, 15, 0, 0},
                      {11, 12, 13, 16, 17, 18, 21, 22, 23},
-                     {13, 14, 15, 18, 19, 20, 23, 24, 25}};
-                    for(const auto id : ranges::views::ints(0, 4)) {
+                     {13, 14, 15, 18, 19, 20, 23, 24, 25},
+                     {15, 0, 0, 20, 0, 0, 25, 0, 0},
+                     {21, 22, 23, 0, 0, 0, 0, 0, 0},
+                     {23, 24, 25, 0, 0, 0, 0, 0, 0},
+                     {25, 0, 0, 0, 0, 0, 0, 0, 0}};
+                    for(const auto id : ranges::views::ints(0, 9)) {
                         REQUIRE(hasValidInputs(layer[id], inputs[id]));
                     }
+                }
+            }
+        }
+    }
+
+    SCENARIO("Convolution grid calculate frames",
+             "[grid][convolution][forward]") {
+        GIVEN(
+         "A convolution layer for an image 5*5, stride = 2 and margin = "
+         "1") {
+            constexpr std::size_t width = 5;
+            constexpr std::size_t height = 5;
+            constexpr std::size_t stride = 2;
+            using ConvolutionGrid =
+             nn::ConvolutionGrid< width, height, nn::Kernel< 2, 2, stride > >;
+
+            ConvolutionGrid grid;
+            WHEN("calcPoint is called it") {
+                grid.calcPoint(0);
+                THEN("It returns a first value of the frame") {
+                    REQUIRE(0 == grid.calcPoint(0));
+                    REQUIRE(2 == grid.calcPoint(1));
+                    REQUIRE(4 == grid.calcPoint(2));
+                    REQUIRE(10 == grid.calcPoint(3));
+                    REQUIRE(12 == grid.calcPoint(4));
+                    REQUIRE(14 == grid.calcPoint(5));
                 }
             }
         }
