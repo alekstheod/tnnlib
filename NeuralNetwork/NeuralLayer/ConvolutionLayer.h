@@ -48,8 +48,7 @@ namespace nn {
             auto sw = detail::ceil(static_cast< float >(gridWidth) /
                                    static_cast< float >(Kernel::stride));
             const auto lines = id / sw;
-            return lines * Kernel::stride * gridWidth +
-                   id * Kernel::stride % (gridWidth + 1);
+            return ((lines * Kernel::stride) * gridWidth) + (id % sw) * Kernel::stride;
         }
 
         template< std::size_t pos >
@@ -60,8 +59,6 @@ namespace nn {
 
         template< std::size_t startPos >
         struct Area {
-            static constexpr std::size_t X = startPos % gridWidth;
-            static constexpr std::size_t Y = startPos / gridWidth;
             static constexpr Point< startPos > topLeft{};
             bool doesIntersect(std::size_t inputId) {
                 std::size_t x = inputId % gridWidth;
@@ -153,4 +150,5 @@ namespace nn {
               typename Var = float >
     using ConvolutionLayer =
      detail::ConvolutionLayer< NeuralLayerType< NeuronType, ActivationFunctionType, Grid::framesNumber, Grid::K::size >, Grid >;
+
 } // namespace nn
