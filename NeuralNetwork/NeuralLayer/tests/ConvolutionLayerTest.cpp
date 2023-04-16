@@ -10,14 +10,10 @@
 
 namespace {
     template< typename Neuron >
-    bool hasValidInputs(const Neuron& neuron, const std::vector< float >& expected) {
+    void assertValidInputs(const Neuron& neuron, const std::vector< float >& expected) {
         for(std::size_t i = 0; i < expected.size(); i++) {
-            if(neuron[i].value != expected[i]) {
-                return false;
-            }
+            REQUIRE_THAT(neuron[i].value, Catch::WithinRel(expected[i]));
         }
-
-        return true;
     }
 
     SCENARIO("Convolution layer set inputs", "[layer][convolution][forward]") {
@@ -51,7 +47,7 @@ namespace {
                      {23, 24, 25, 0, 0, 0, 0, 0, 0},
                      {25, 0, 0, 0, 0, 0, 0, 0, 0}};
                     for(const auto id : ranges::views::ints(0, 9)) {
-                        REQUIRE(hasValidInputs(layer[id], inputs[id]));
+                        assertValidInputs(layer[id], inputs[id]);
                     }
                 }
             }
