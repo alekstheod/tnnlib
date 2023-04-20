@@ -11,7 +11,7 @@ namespace nn {
 
         template< typename LayerType, typename Grid >
         struct BPNeuralLayer< nn::detail::ConvolutionLayer< LayerType, Grid > >
-         : nn::detail::ConvolutionLayer< typename LayerType::template wrap< BPNeuron >, Grid > {
+         : private nn::detail::ConvolutionLayer< typename LayerType::template wrap< BPNeuron >, Grid > {
             using Base =
              nn::detail::ConvolutionLayer< typename LayerType::template wrap< BPNeuron >, Grid >;
 
@@ -27,9 +27,19 @@ namespace nn {
             template< std::size_t inputs >
             using adjust = BPNeuralLayer;
 
+            using Memento = typename Base::Memento;
+            using Base::begin;
+            using Base::cbegin;
+            using Base::cend;
+            using Base::end;
             using Base::for_each;
             using Base::inputs;
+            using Base::setInput;
             using Base::size;
+            using Base::operator[];
+            using Base::calculateOutputs;
+            using Base::getMemento;
+            using Base::setMemento;
 
             void calculateWeights(Var learningRate) {
                 for(const auto inputId : ranges::views::indices(Grid::width * Grid::height)) {
@@ -54,10 +64,10 @@ namespace nn {
           private:
             void adjustWeight(const std::size_t inputId, const Var& gradient, const Var& learningRate) {
                 auto& self = *this;
-                utils::for_each(m_grid.connections, [&](auto& connection) {
-                    if(connection.area.doesIntersect(inputId)) {
-                        const auto localInputId = connection.area.localize(inputId);
-                        auto& neuron = self[connection.neuronId];
+                utils::for_each(m_grid.frames, [&](auto& frame) {
+                    if(frame.area.doesIntersect(inputId)) {
+                        const auto localInputId = frame.area.localize(inputId);
+                        auto& neuron = self[frame.neuronId];
                         neuron[localInputId].weight =
                          neuron[localInputId].weight - learningRate * gradient;
                     }
@@ -67,10 +77,10 @@ namespace nn {
             Var calculateGradient(const std::size_t inputId) {
                 Var sum{};
                 auto& self = *this;
-                utils::for_each(m_grid.connections, [&](auto& connection) {
-                    if(connection.area.doesIntersect(inputId)) {
-                        const auto localInputId = connection.area.localize(inputId);
-                        const auto& neuron = self[connection.neuronId];
+                utils::for_each(m_grid.frames, [&](auto& frame) {
+                    if(frame.area.doesIntersect(inputId)) {
+                        const auto localInputId = frame.area.localize(inputId);
+                        const auto& neuron = self[frame.neuronId];
                         sum += neuron.getDelta() * neuron[localInputId].value;
                     }
                 });
@@ -79,7 +89,6 @@ namespace nn {
             }
 
             Grid m_grid;
-            std::array< Var, inputs() > m_weights;
         }; // namespace bp
     } // namespace bp
 } // namespace nn

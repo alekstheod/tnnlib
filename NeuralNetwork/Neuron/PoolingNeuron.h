@@ -1,6 +1,9 @@
 #pragma once
 
-#include "NeuralNetwork/Neuron/Neuron.h"
+#include "NeuralNetwork/Serialization/NeuronMemento.h"
+
+#include <algorithm>
+#include <numeric>
 
 namespace nn {
     template< typename T >
@@ -28,7 +31,8 @@ namespace nn {
         struct PoolingNeuron {
             using Var = VarType;
 
-            using Memento = EmptyMemento;
+            using OutputFunction = PoolingAlgo;
+            using Memento = StaticNeuronMemento;
             using Input = Var;
             using Inputs = std::array< Var, inputsNumber >;
 
@@ -36,7 +40,7 @@ namespace nn {
             using use = PoolingNeuron< V, PoolingAlgo, inputsNumber >;
 
             template< std::size_t inputs >
-            using resize = Neuron< Var, inputs >;
+            using resize = PoolingNeuron< Var, PoolingAlgo, inputs >;
 
             static_assert(inputsNumber > 0, "Invalid number of inputs");
 

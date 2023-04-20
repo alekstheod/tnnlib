@@ -32,4 +32,9 @@ namespace nn {
     void serialize(Archive& ar, nn::ComplexLayerMemento< Perceptron >& complexLayer) {
         ar(cereal::make_nvp("perceptron", complexLayer.perceptron));
     }
+
+    template< typename Archive >
+    void serialize(Archive& ar, nn::StaticNeuronMemento& neuron) {
+        ar(cereal::make_nvp("neuron", neuron));
+    }
 } // namespace nn

@@ -3,6 +3,8 @@
 #include <array>
 
 namespace nn {
+    struct StaticNeuronMemento {};
+
     template< class Var, std::size_t inputsNumber >
     struct NeuronMemento {
         Var bias;

@@ -24,7 +24,7 @@ namespace nn {
     } // namespace detail
 
     template< typename AreaType, std::size_t NeuronId >
-    struct Connection {
+    struct Frame {
         using Area = AreaType;
         Area area;
         static constexpr std::size_t neuronId = NeuronId;
@@ -76,18 +76,17 @@ namespace nn {
 
         template< std::size_t... ints >
         static constexpr auto makeArea(std::index_sequence< ints... >) {
-            return std::tuple< Connection< Area< calcPoint(ints) >, ints >... >{};
+            return std::tuple< Frame< Area< calcPoint(ints) >, ints >... >{};
         }
 
-        template< typename Connections >
+        template< typename Frames >
         struct Grid {
             using K = Kernel;
-            static constexpr std::size_t framesNumber =
-             std::tuple_size< Connections >::value;
+            static constexpr std::size_t framesNumber = std::tuple_size< Frames >::value;
             static constexpr std::size_t width = gridWidth;
             static constexpr std::size_t height = gridHeight;
             static constexpr std::size_t size = width * height;
-            Connections connections;
+            Frames frames;
         };
 
       public:
@@ -124,12 +123,16 @@ namespace nn {
             using use =
              ConvolutionLayer< typename Internal::template use< VarType >, Grid >;
 
+            template< template< class > typename NewType >
+            using wrap =
+             ConvolutionLayer< typename Internal::template wrap< NewType >, Grid >;
+
             void setInput(unsigned int inputId, const Var& value) {
                 auto& self = *this;
-                utils::for_each(m_grid.connections, [&](auto& connection) {
-                    auto& neuron = self[connection.neuronId];
-                    if(connection.area.doesIntersect(inputId)) {
-                        const auto localInputId = connection.area.localize(inputId);
+                utils::for_each(m_grid.frames, [&](auto& frame) {
+                    auto& neuron = self[frame.neuronId];
+                    if(frame.area.doesIntersect(inputId)) {
+                        const auto localInputId = frame.area.localize(inputId);
                         neuron.setInput(localInputId, value);
                     }
                 });
