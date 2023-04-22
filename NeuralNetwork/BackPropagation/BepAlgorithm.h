@@ -1,8 +1,8 @@
 #pragma once
 
-#include "NeuralNetwork/LearningAlgorithm/BackPropagation/BPNeuralLayer.h"
-#include "NeuralNetwork/LearningAlgorithm/BackPropagation/BPConvolutionNeuralLayer.h"
-#include "NeuralNetwork/LearningAlgorithm/BackPropagation/ErrorFunction.h"
+#include "NeuralNetwork/BackPropagation/BPNeuralLayer.h"
+#include "NeuralNetwork/BackPropagation/BPConvolutionNeuralLayer.h"
+#include "NeuralNetwork/BackPropagation/ErrorFunction.h"
 #include "NeuralNetwork/Perceptron/Perceptron.h"
 #include <System/Time.h>
 
@@ -151,7 +151,7 @@ namespace nn {
                     constexpr auto idx = size() - i.value - 1;
                     auto& frontLayer = std::get< idx >(layers);
                     auto& backLayer = std::get< idx - 1 >(layers);
-                    detail::calculateHiddenDeltas(backLayer, frontLayer, momentum);
+                    backLayer.calculateHiddenDeltas(frontLayer, momentum);
                 });
             }
         };

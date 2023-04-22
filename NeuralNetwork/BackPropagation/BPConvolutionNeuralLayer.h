@@ -1,6 +1,6 @@
 #pragma once
 
-#include "NeuralNetwork/LearningAlgorithm/BackPropagation/BPNeuralLayer.h"
+#include "NeuralNetwork//BackPropagation/BPNeuralLayer.h"
 #include "NeuralNetwork/NeuralLayer/ConvolutionLayer.h"
 
 #include <algorithm>
@@ -54,6 +54,11 @@ namespace nn {
                     Var newWeight = weight - learningRate * neuron.getDelta();
                     neuron.setBias(newWeight);
                 }
+            }
+
+            template< typename AffectedLayer, typename MomentumFunc >
+            void calculateHiddenDeltas(AffectedLayer& affectedLayer, MomentumFunc momentum) {
+                detail::calculateHiddenDeltas(*this, affectedLayer, momentum);
             }
 
             const Var& getDelta(std::size_t neuronId) const {

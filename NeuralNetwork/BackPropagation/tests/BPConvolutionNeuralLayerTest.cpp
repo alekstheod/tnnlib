@@ -1,5 +1,5 @@
-#include "NeuralNetwork/LearningAlgorithm/BackPropagation/BPNeuralLayer.h"
-#include "NeuralNetwork/LearningAlgorithm/BackPropagation/BPConvolutionNeuralLayer.h"
+#include "NeuralNetwork/BackPropagation/BPNeuralLayer.h"
+#include "NeuralNetwork/BackPropagation/BPConvolutionNeuralLayer.h"
 #include "NeuralNetwork/NeuralLayer/NeuralLayer.h"
 #include "NeuralNetwork/ActivationFunction/TanhFunction.h"
 #include "NeuralNetwork/Neuron/Neuron.h"

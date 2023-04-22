@@ -1,6 +1,7 @@
-#include "NeuralNetwork/LearningAlgorithm/BackPropagation/BepAlgorithm.h"
+#include "NeuralNetwork/BackPropagation/BepAlgorithm.h"
 #include "NeuralNetwork/NeuralLayer/NeuralLayer.h"
 #include "NeuralNetwork/NeuralLayer/InputLayer.h"
+#include "NeuralNetwork/NeuralLayer/PoolingLayer.h"
 #include "NeuralNetwork/ActivationFunction/BiopolarSigmoidFunction.h"
 #include "NeuralNetwork/ActivationFunction/LogScaleSoftmaxFunction.h"
 #include "NeuralNetwork/ActivationFunction/SigmoidFunction.h"
@@ -10,8 +11,9 @@
 #include "NeuralNetwork/Neuron/Neuron.h"
 #include "NeuralNetwork/Perceptron/Perceptron.h"
 #include "NeuralNetwork/NeuralLayer/OpenCL/OpenCLNeuralLayer.h"
+#include "NeuralNetwork/NeuralLayer/ConvolutionLayer.h"
 #include "NeuralNetwork/NeuralLayer/Thread/AsyncNeuralLayer.h"
-#include "NeuralNetwork/LearningAlgorithm/BackPropagation/BPAsyncNeuralLayer.h"
+#include "NeuralNetwork//BackPropagation/BPAsyncNeuralLayer.h"
 #include "NeuralNetwork/Serialization/Cereal.h"
 
 #include <MPL/Tuple.h>
@@ -63,11 +65,14 @@ namespace {
     constexpr std::size_t inputsNumber = width * height;
 } // namespace
 
+using ConvGrid = nn::ConvolutionGrid< width, height, nn::Kernel< 3, 3, 2 > >::define;
+// using PoolingGrid = nn::ConvolutionGrid<width/2, height/2, nn::Kernel<3, 3, 3>>::define;
 
 using Perceptron =
  nn::Perceptron< VarType,
                  nn::InputLayer< nn::Neuron, nn::SigmoidFunction, inputsNumber, 1 >,
-                 nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, 30 >,
+                 nn::ConvolutionLayer< nn::NeuralLayer, nn::Neuron, nn::SigmoidFunction, ConvGrid >,
+                 // nn::PoolingLayer<nn::NeuralLayer, nn::Max, PoolingGrid>,
                  nn::NeuralLayer< nn::Neuron, nn::SoftmaxFunction, 10 > >;
 
 using InputData = typename Perceptron::Input;

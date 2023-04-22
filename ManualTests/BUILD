@@ -6,7 +6,7 @@ cc_test(
     copts = ["-Werror"],
     deps = [
         "//NeuralNetwork/ActivationFunction",
-        "//NeuralNetwork/LearningAlgorithm/BackPropagation",
+        "//NeuralNetwork/BackPropagation",
         "//NeuralNetwork/NeuralLayer",
         "//NeuralNetwork/NeuralLayer:OpenCLNeuralLayer",
         "//NeuralNetwork/Neuron",

@@ -1,8 +1,8 @@
 #pragma once
 
-#include "NeuralNetwork/LearningAlgorithm/BackPropagation/OpenCL/BPOpenCLNeuralLayer.h"
+#include "NeuralNetwork//BackPropagation/OpenCL/BPOpenCLNeuralLayer.h"
 #include "NeuralNetwork/NeuralLayer/OpenCL/OpenCLNeuralLayer.h"
-#include "NeuralNetwork/LearningAlgorithm/BackPropagation/BPNeuralLayer.h"
+#include "NeuralNetwork//BackPropagation/BPNeuralLayer.h"
 
 #include <CL/opencl.hpp>
 
@@ -54,7 +54,7 @@ namespace nn {
                 cl::Context context{nn::detail::createContext()};
                 std::vector< cl::Device > devices{context.getInfo< CL_CONTEXT_DEVICES >()};
                 cl::Program program{
-                 nn::detail::createProgram("NeuralNetwork/LearningAlgorithm/"
+                 nn::detail::createProgram("NeuralNetwork//"
                                            "BackPropagation/OpenCL/"
                                            "calc_weights.cl",
                                            context,

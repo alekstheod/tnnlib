@@ -9,8 +9,8 @@ cc_binary(
     deps = [
         "//:tnnlib_utils",
         "//NeuralNetwork/ActivationFunction",
-        "//NeuralNetwork/LearningAlgorithm/BackPropagation",
-        "//NeuralNetwork/LearningAlgorithm/BackPropagation:OpenCLNeuralLayer",
+        "//NeuralNetwork/BackPropagation",
+        "//NeuralNetwork/BackPropagation:OpenCLNeuralLayer",
         "//NeuralNetwork/NeuralLayer:OpenCLNeuralLayer",
         "//NeuralNetwork/Neuron",
         "//NeuralNetwork/Serialization",
