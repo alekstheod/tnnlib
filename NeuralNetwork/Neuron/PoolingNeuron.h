@@ -71,12 +71,20 @@ namespace nn {
             void setMemento(const Memento& memento) {
             }
 
-            void setInput(unsigned int inputId, const Var& value) {
+            void setInput(std::size_t inputId, const Var& value) {
                 m_inputs[inputId] = value;
             }
 
             const Var& getOutput() const {
                 return m_output;
+            }
+
+            Var getWeight(std::size_t) const {
+                return {};
+            }
+
+            Var getBias() const {
+                return {};
             }
 
             template< typename Iterator >

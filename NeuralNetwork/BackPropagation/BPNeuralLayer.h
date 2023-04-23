@@ -27,7 +27,7 @@ namespace nn::bp {
                 Var sum{}; // sum(aDelta*aWeight)
                 affectedLayer.for_each([&sum, &i](auto, auto& neuron) {
                     auto affectedDelta = neuron.getDelta();
-                    auto affectedWeight = neuron[i.value].weight;
+                    auto affectedWeight = neuron.getWeight(i.value);
                     sum += affectedDelta * affectedWeight;
                     sum += affectedDelta * neuron.getBias();
                 });
