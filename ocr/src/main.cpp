@@ -2,7 +2,7 @@
 #include "NeuralNetwork/NeuralLayer/NeuralLayer.h"
 #include "NeuralNetwork/NeuralLayer/InputLayer.h"
 #include "NeuralNetwork/NeuralLayer/PoolingLayer.h"
-#include "NeuralNetwork/BackPropagation/BPPoolingNeuralLayer.h"
+#include "NeuralNetwork/BackPropagation/BPPoolingLayer.h"
 #include "NeuralNetwork/ActivationFunction/BiopolarSigmoidFunction.h"
 #include "NeuralNetwork/ActivationFunction/LogScaleSoftmaxFunction.h"
 #include "NeuralNetwork/ActivationFunction/SigmoidFunction.h"
