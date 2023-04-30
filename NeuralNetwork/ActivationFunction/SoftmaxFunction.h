@@ -9,13 +9,11 @@
 namespace nn {
 
     template< typename VarType >
-    class SoftmaxFunction {
-      public:
+    struct SoftmaxFunction {
         typedef VarType Var;
         template< typename V >
         using use = SoftmaxFunction< V >;
 
-      public:
         template< typename Iterator >
         Var calculate(const Var& sum, Iterator begin, Iterator end) const {
             return std::exp(sum) /

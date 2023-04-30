@@ -8,14 +8,12 @@
 namespace nn {
 
     template< class VarType >
-    class TanhFunction {
-      public:
+    struct TanhFunction {
         typedef VarType Var;
 
         template< typename V >
         using use = TanhFunction< V >;
 
-      public:
         // 2 / (1 + exp(-2 * x)) - 1
         template< typename Iterator >
         Var calculate(const Var& sum, Iterator, Iterator) const {
