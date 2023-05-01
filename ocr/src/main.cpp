@@ -22,12 +22,6 @@
 #undef BOOST_SYSTEM_NO_DEPRECATED
 #endif
 
-#if defined(NN_CC_MSVC)
-#pragma warning(push)
-// This function or variable may be unsafe
-#pragma warning(disable : 4996)
-#endif
-
 #include <boost/gil/channel_algorithm.hpp>
 #include <boost/gil/channel.hpp>
 #include <boost/gil.hpp>
