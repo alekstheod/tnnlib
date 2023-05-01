@@ -25,6 +25,8 @@ namespace nn {
         virtual Var calcDotProduct() const = 0;
         virtual const Var& getBias() const = 0;
         virtual void setBias(Var weight) = 0;
-        virtual ~INeuron() = default;
+
+      protected:
+        ~INeuron() = default;
     };
 } // namespace nn

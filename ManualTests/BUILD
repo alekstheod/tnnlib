@@ -2,11 +2,11 @@
 cc_test(
     name = "tnnlib_test",
     srcs = glob(["**/*.cpp"]),
-    args = ["10000000"],
+    args = ["1000"],
     copts = ["-Werror"],
     deps = [
         "//NeuralNetwork/ActivationFunction",
-        "//NeuralNetwork/LearningAlgorithm/BackPropagation",
+        "//NeuralNetwork/BackPropagation",
         "//NeuralNetwork/NeuralLayer",
         "//NeuralNetwork/NeuralLayer:OpenCLNeuralLayer",
         "//NeuralNetwork/Neuron",

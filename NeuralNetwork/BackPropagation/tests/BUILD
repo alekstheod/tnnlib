@@ -7,8 +7,8 @@ cc_test(
     deps = [
         "//:tnnlib_utils",
         "//NeuralNetwork/ActivationFunction",
-        "//NeuralNetwork/LearningAlgorithm/BackPropagation",
-        "//NeuralNetwork/Neuron",
+        "//NeuralNetwork/BackPropagation",
+        "//NeuralNetwork/NeuralLayer",
         "//Utilities/catch2:catch2_main",
     ],
 )
@@ -20,8 +20,8 @@ cc_test(
     deps = [
         "//:tnnlib_utils",
         "//NeuralNetwork/ActivationFunction",
-        "//NeuralNetwork/LearningAlgorithm/BackPropagation",
-        "//NeuralNetwork/LearningAlgorithm/BackPropagation:OpenCLNeuralLayer",
+        "//NeuralNetwork/BackPropagation",
+        "//NeuralNetwork/BackPropagation:OpenCLNeuralLayer",
         "//NeuralNetwork/NeuralLayer:OpenCLNeuralLayer",
         "//NeuralNetwork/Neuron",
         "//Utilities/catch2:catch2_main",

@@ -8,68 +8,91 @@
 #include <tuple>
 #include <utility>
 
+#include <iostream>
+
 namespace nn {
+
+    namespace detail {
+
+        template< typename T >
+        constexpr std::size_t ceil(T num) {
+            return (static_cast< T >(static_cast< std::size_t >(num)) == num) ?
+                    static_cast< std::size_t >(num) :
+                    static_cast< std::size_t >(num) + ((num > 0) ? 1 : 0);
+        }
+
+    } // namespace detail
+
     template< typename AreaType, std::size_t NeuronId >
-    struct Connection {
+    struct Frame {
         using Area = AreaType;
         Area area;
         static constexpr std::size_t neuronId = NeuronId;
+    };
+
+    template< std::size_t w, std::size_t h, std::size_t s >
+    struct Kernel {
+        static constexpr std::size_t width = w;
+        static constexpr std::size_t height = h;
+        static constexpr std::size_t stride = s;
+        static constexpr std::size_t size = w * h;
     };
 
     /// The idea behind the convolution grid is that each input
     /// is checked against the areas [windows] and if it has
     /// overlap with one particular area then the input will be set.
     /// otherwise it will be dropped.each area covers a set of inputs - neurons
-    template< std::size_t width, std::size_t height, std::size_t stride, std::size_t margin >
+    template< std::size_t gridWidth, std::size_t gridHeight, typename Kernel >
     struct ConvolutionGrid {
-      private:
         static constexpr auto calcPoint(std::size_t id) {
-            auto sw = width / stride;
-            return (id / sw) * stride * width + (stride - 1) * width +
-                   id % sw * stride + stride;
+            auto sw = detail::ceil(static_cast< float >(gridWidth) /
+                                   static_cast< float >(Kernel::stride));
+            const auto lines = id / sw;
+            return ((lines * Kernel::stride) * gridWidth) + (id % sw) * Kernel::stride;
         }
 
-        template< std::size_t areaId >
+        template< std::size_t pos >
+        struct Point {
+            static constexpr std::size_t x = pos % gridWidth;
+            static constexpr std::size_t y = pos / gridWidth;
+        };
+
+        template< std::size_t startPos >
         struct Area {
-            static constexpr std::size_t ar = areaId;
-            static constexpr std::size_t X = areaId % width - 1;
-            static constexpr std::size_t Y = areaId / width;
-            static constexpr std::size_t right = X + margin;
-            static constexpr std::size_t left = X - margin;
-            static constexpr std::size_t top = Y - margin;
+            static constexpr Point< startPos > topLeft{};
             bool doesIntersect(std::size_t inputId) {
-                std::size_t bottom = Y + margin;
-                std::size_t x = inputId % width;
-                std::size_t y = inputId / width;
-                return top <= y && bottom >= y && right >= x && left <= x;
+                std::size_t x = inputId % gridWidth;
+                std::size_t y = inputId / gridWidth;
+                return ((topLeft.y <= y) && (topLeft.y + Kernel::height > y) &&
+                        (topLeft.x + Kernel::width > x) && (topLeft.x <= x));
             }
 
             std::size_t localize(std::size_t inputId) {
-                std::size_t x = inputId % width;
-                std::size_t y = inputId / width;
-                return (y - top) * (margin * 2 + 1) + x - left;
+                std::size_t x = inputId % gridWidth;
+                std::size_t y = inputId / gridWidth;
+                return (y - topLeft.y) * Kernel::width + x - topLeft.x;
             }
         };
 
         template< std::size_t... ints >
         static constexpr auto makeArea(std::index_sequence< ints... >) {
-            return std::tuple< Connection< Area< calcPoint(ints) >, ints >... >{};
+            return std::tuple< Frame< Area< calcPoint(ints) >, ints >... >{};
         }
 
-        template< typename Connections >
+        template< typename Frames >
         struct Grid {
-            static constexpr std::size_t filterWidth = margin * 2 + 1;
-            static constexpr std::size_t frameSize = filterWidth * filterWidth;
-            static constexpr std::size_t framesNumber =
-             std::tuple_size< Connections >::value;
+            using K = Kernel;
+            static constexpr std::size_t framesNumber = std::tuple_size< Frames >::value;
+            static constexpr std::size_t width = gridWidth;
+            static constexpr std::size_t height = gridHeight;
             static constexpr std::size_t size = width * height;
-            static constexpr std::size_t rowSize = width / stride;
-            Connections connections;
+            Frames frames;
         };
 
       public:
-        using define =
-         Grid< decltype(makeArea(std::make_index_sequence< (width / stride) * (height / stride) >{})) >;
+        using define = Grid< decltype(makeArea(
+         std::make_index_sequence< detail::ceil((gridWidth + 1) / Kernel::stride) *
+                                   detail::ceil((gridHeight + 1) / Kernel::stride) >{})) >;
     };
 
     namespace detail {
@@ -99,21 +122,20 @@ namespace nn {
             template< typename VarType >
             using use =
              ConvolutionLayer< typename Internal::template use< VarType >, Grid >;
-            static constexpr std::size_t CONST_INPUTS_NUMBER = Grid::size;
+
+            template< template< class > typename NewType >
+            using wrap =
+             ConvolutionLayer< typename Internal::template wrap< NewType >, Grid >;
 
             void setInput(unsigned int inputId, const Var& value) {
-                std::size_t neuronId = 0;
-                for(auto& neuron : *this) {
-                    utils::for_each(m_grid.connections, [&](auto& connection) {
-                        if(neuronId == connection.neuronId &&
-                           connection.area.doesIntersect(inputId)) {
-                            const auto localInputId = connection.area.localize(inputId);
-                            neuron.setInput(localInputId, value);
-                        }
-                    });
-
-                    neuronId++;
-                }
+                auto& self = *this;
+                utils::for_each(m_grid.frames, [&](auto& frame) {
+                    auto& neuron = self[frame.neuronId];
+                    if(frame.area.doesIntersect(inputId)) {
+                        const auto localInputId = frame.area.localize(inputId);
+                        neuron.setInput(localInputId, value);
+                    }
+                });
             }
 
           private:
@@ -122,14 +144,14 @@ namespace nn {
     } // namespace detail
 
     template< template< template< template< class > class, class, std::size_t > class NeuronType, template< class > class ActivationFunctionType, std::size_t size, std::size_t inputsNumber = 2, typename Var = float >
-              class NeuralLayerType,
+              typename NeuralLayerType,
               template< template< class > class, class, std::size_t >
-              class NeuronType,
+              typename NeuronType,
               template< class >
               class ActivationFunctionType,
-              std::size_t,
               typename Grid,
               typename Var = float >
     using ConvolutionLayer =
-     detail::ConvolutionLayer< NeuralLayerType< NeuronType, ActivationFunctionType, Grid::framesNumber, Grid::frameSize >, Grid >;
+     detail::ConvolutionLayer< NeuralLayerType< NeuronType, ActivationFunctionType, Grid::framesNumber, Grid::K::size >, Grid >;
+
 } // namespace nn

@@ -12,8 +12,7 @@ namespace nn {
      * Used by not-linear neural networks.
      */
     template< class VarType >
-    class SigmoidFunction {
-      public:
+    struct SigmoidFunction {
         typedef VarType Var;
         template< typename V >
         using use = SigmoidFunction< V >;

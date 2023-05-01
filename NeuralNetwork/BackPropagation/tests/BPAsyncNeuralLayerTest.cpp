@@ -1,5 +1,5 @@
-#include "NeuralNetwork/LearningAlgorithm/BackPropagation/OpenCL/BPOpenCLNeuralLayer.h"
-#include "NeuralNetwork/LearningAlgorithm/BackPropagation/BPNeuralLayer.h"
+#include "NeuralNetwork/BackPropagation/BPAsyncNeuralLayer.h"
+#include "NeuralNetwork/BackPropagation/BPNeuralLayer.h"
 #include "NeuralNetwork/NeuralLayer/Thread/AsyncNeuralLayer.h"
 #include "NeuralNetwork/NeuralLayer/NeuralLayer.h"
 #include "NeuralNetwork/ActivationFunction/TanhFunction.h"
@@ -26,40 +26,40 @@ namespace {
             regularLayer.setInput(0, 0.5f);
             regularLayer.setInput(1, 0.3f);
 
-            nn::bp::BPNeuralLayer< nn::detail::OpenCLNeuralLayer< BasicLayer > > openclLayer;
-            openclLayer.setMemento(regularLayer.getMemento());
-            openclLayer.setInput(0, 0.5f);
-            openclLayer.setInput(1, 0.3f);
+            nn::bp::BPNeuralLayer< nn::detail::AsyncNeuralLayer< BasicLayer > > asyncLayer;
+            asyncLayer.setMemento(regularLayer.getMemento());
+            asyncLayer.setInput(0, 0.5f);
+            asyncLayer.setInput(1, 0.3f);
 
             Prototype prototype{{0.1f, 0.2f}, {1.f, 1.f}};
             const auto momentum = [](auto, auto newDelta) { return newDelta; };
             regularLayer.calculateOutputs();
-            openclLayer.calculateOutputs();
+            asyncLayer.calculateOutputs();
             WHEN("The weights identical") {
-                THEN("The deltas of both layers are identical") {
+                THEN("The deltas of both layers is identical") {
                     regularLayer.calculateDeltas(prototype, momentum);
-                    openclLayer.calculateDeltas(prototype, momentum);
+                    asyncLayer.calculateDeltas(prototype, momentum);
                     utils::for_< 2 >([&](auto i) {
                         const auto expected_delta = regularLayer.getDelta(i.value);
-                        const auto actual_delta = openclLayer.getDelta(i.value);
+                        const auto actual_delta = asyncLayer.getDelta(i.value);
                         REQUIRE_THAT(expected_delta, Catch::WithinRel(actual_delta));
                     });
                 }
             }
             WHEN("Deltas of both layers are identical") {
                 regularLayer.calculateDeltas(prototype, momentum);
-                openclLayer.calculateDeltas(prototype, momentum);
+                asyncLayer.calculateDeltas(prototype, momentum);
                 THEN("Calculated weights are identical") {
                     regularLayer.calculateWeights(0.001);
-                    openclLayer.calculateWeights(0.001);
+                    asyncLayer.calculateWeights(0.001);
                     utils::for_< 2 >([&](auto i) {
                         utils::for_< 2 >([&](auto j) {
                             const auto expectedWeight =
                              regularLayer[i.value][j.value].weight;
                             const auto actualWeight =
-                             openclLayer.getWeight(i.value, j.value);
+                             asyncLayer[i.value][j.value].weight;
                             const auto expectedBias = regularLayer[i.value].getBias();
-                            const auto actualBias = openclLayer[i.value].getBias();
+                            const auto actualBias = asyncLayer[i.value].getBias();
 
                             REQUIRE_THAT(expectedWeight, Catch::WithinRel(actualWeight));
                             REQUIRE_THAT(expectedBias, Catch::WithinRel(actualBias));

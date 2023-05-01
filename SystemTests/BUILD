@@ -10,7 +10,7 @@ cc_test(
     deps = [
         "//:tnnlib_utils",
         "//NeuralNetwork/ActivationFunction",
-        "//NeuralNetwork/LearningAlgorithm/BackPropagation",
+        "//NeuralNetwork/BackPropagation",
         "//NeuralNetwork/NeuralLayer",
         "//NeuralNetwork/Neuron",
         "//NeuralNetwork/Serialization",

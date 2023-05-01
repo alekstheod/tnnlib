@@ -1,4 +1,4 @@
-#include "NeuralNetwork/LearningAlgorithm/BackPropagation/BepAlgorithm.h"
+#include "NeuralNetwork//BackPropagation/BepAlgorithm.h"
 #include "NeuralNetwork/NeuralLayer/NeuralLayer.h"
 #include "NeuralNetwork/NeuralLayer/InputLayer.h"
 #include "NeuralNetwork/ActivationFunction/SigmoidFunction.h"

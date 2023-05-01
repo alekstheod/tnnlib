@@ -3,12 +3,8 @@
 #include <array>
 
 namespace nn {
-    /**
-     * @author alekstheod
-     * Represents the Neuron's memento (state)
-     * class. The instance of this class is enough in order
-     * to restore the Neuron's state.
-     */
+    struct StaticNeuronMemento {};
+
     template< class Var, std::size_t inputsNumber >
     struct NeuronMemento {
         Var bias;

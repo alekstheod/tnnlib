@@ -46,6 +46,14 @@ namespace nn {
                 return std::cend(m_inputs);
             }
 
+            auto begin() {
+                return std::begin(m_inputs);
+            }
+
+            auto end() {
+                return std::end(m_inputs);
+            }
+
             static constexpr auto size() {
                 return inputsNumber;
             }
@@ -112,10 +120,6 @@ namespace nn {
 
             void setBias(Var weight) {
                 m_bias = weight;
-            }
-
-            const Var& getNeuronWeight() const {
-                return m_bias;
             }
 
             template< typename Iterator >

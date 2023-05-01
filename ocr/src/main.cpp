@@ -1,4 +1,4 @@
-#include "NeuralNetwork/LearningAlgorithm/BackPropagation/BepAlgorithm.h"
+#include "NeuralNetwork/BackPropagation/BepAlgorithm.h"
 #include "NeuralNetwork/NeuralLayer/NeuralLayer.h"
 #include "NeuralNetwork/NeuralLayer/InputLayer.h"
 #include "NeuralNetwork/ActivationFunction/BiopolarSigmoidFunction.h"
@@ -11,7 +11,7 @@
 #include "NeuralNetwork/Perceptron/Perceptron.h"
 #include "NeuralNetwork/NeuralLayer/OpenCL/OpenCLNeuralLayer.h"
 #include "NeuralNetwork/NeuralLayer/Thread/AsyncNeuralLayer.h"
-#include "NeuralNetwork/LearningAlgorithm/BackPropagation/BPAsyncNeuralLayer.h"
+#include "NeuralNetwork/BackPropagation/BPAsyncNeuralLayer.h"
 #include "NeuralNetwork/Serialization/Cereal.h"
 
 #include <MPL/Tuple.h>

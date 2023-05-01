@@ -4,11 +4,13 @@
 
 namespace nn {
 
-    template< typename Var >
+    template< typename VarType >
     struct ReluFunction {
 
         template< typename V >
         using use = ReluFunction< V >;
+
+        using Var = VarType;
 
         /**
          * Will calculate the equation

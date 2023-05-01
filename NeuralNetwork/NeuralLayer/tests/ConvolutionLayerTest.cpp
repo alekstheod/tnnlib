@@ -10,29 +10,23 @@
 
 namespace {
     template< typename Neuron >
-    bool hasValidInputs(const Neuron& neuron, const std::vector< float >& expected) {
+    void assertValidInputs(const Neuron& neuron, const std::vector< float >& expected) {
         for(std::size_t i = 0; i < expected.size(); i++) {
-            if(neuron[i].value != expected[i]) {
-                return false;
-            }
+            REQUIRE_THAT(neuron[i].value, Catch::WithinRel(expected[i]));
         }
-
-        return true;
     }
 
-    SCENARIO("Convolution grid set inputs",
-             "[layer][convolution][grid][forward]") {
+    SCENARIO("Convolution layer set inputs", "[layer][convolution][forward]") {
         GIVEN(
-         "A convolution layer for an image 5*5, stride = 2 and margin = 1") {
+         "A convolution layer for an image 5*5, stride = 3 and kernel 3*3") {
             constexpr std::size_t width = 5;
             constexpr std::size_t height = 5;
-            constexpr std::size_t margin = 1;
             constexpr std::size_t stride = 2;
             using ConvolutionGrid =
-             typename nn::ConvolutionGrid< width, height, stride, margin >::define;
+             typename nn::ConvolutionGrid< width, height, nn::Kernel< 3, 3, stride > >::define;
 
             using ConvolutionLayer =
-             nn::ConvolutionLayer< nn::NeuralLayer, nn::Neuron, nn::SigmoidFunction, 25, ConvolutionGrid >;
+             nn::ConvolutionLayer< nn::NeuralLayer, nn::Neuron, nn::SigmoidFunction, ConvolutionGrid >;
             auto layer = ConvolutionLayer{};
             WHEN(
              "input is a grid filled with the increasing sequence of "
@@ -45,11 +39,57 @@ namespace {
                     std::vector< std::vector< float > > inputs = {
                      {1, 2, 3, 6, 7, 8, 11, 12, 13},
                      {3, 4, 5, 8, 9, 10, 13, 14, 15},
+                     {5, 0, 0, 10, 0, 0, 15, 0, 0},
                      {11, 12, 13, 16, 17, 18, 21, 22, 23},
-                     {13, 14, 15, 18, 19, 20, 23, 24, 25}};
-                    for(const auto id : ranges::views::ints(0, 4)) {
-                        REQUIRE(hasValidInputs(layer[id], inputs[id]));
+                     {13, 14, 15, 18, 19, 20, 23, 24, 25},
+                     {15, 0, 0, 20, 0, 0, 25, 0, 0},
+                     {21, 22, 23, 0, 0, 0, 0, 0, 0},
+                     {23, 24, 25, 0, 0, 0, 0, 0, 0},
+                     {25, 0, 0, 0, 0, 0, 0, 0, 0}};
+                    for(const auto id : ranges::views::ints(0, 9)) {
+                        assertValidInputs(layer[id], inputs[id]);
                     }
+                }
+            }
+        }
+    }
+
+    SCENARIO("Convolution grid calculate frames", "[grid][convolution]") {
+        GIVEN(
+         "A convolution grid for an image 5*5, stride = 2 and Kernel -> 2*2 "
+         "1") {
+            constexpr std::size_t width = 5;
+            constexpr std::size_t height = 5;
+            constexpr std::size_t stride = 2;
+            using ConvolutionGrid =
+             nn::ConvolutionGrid< width, height, nn::Kernel< 2, 2, stride > >;
+
+            ConvolutionGrid grid;
+            WHEN("calcPoint is called it") {
+                THEN("It returns a first value of the frame") {
+                    REQUIRE(0 == grid.calcPoint(0));
+                    REQUIRE(2 == grid.calcPoint(1));
+                    REQUIRE(4 == grid.calcPoint(2));
+                    REQUIRE(10 == grid.calcPoint(3));
+                    REQUIRE(12 == grid.calcPoint(4));
+                    REQUIRE(14 == grid.calcPoint(5));
+                }
+            }
+        }
+        GIVEN("A grid for an image 6*6, stride = 3 and Kernel -> 3*3 ") {
+            constexpr std::size_t width = 6;
+            constexpr std::size_t height = 6;
+            constexpr std::size_t stride = 3;
+            using ConvolutionGrid =
+             nn::ConvolutionGrid< width, height, nn::Kernel< 3, 3, stride > >;
+
+            ConvolutionGrid grid;
+            WHEN("calcPoint is called it") {
+                THEN("It returns a first value of the frame") {
+                    REQUIRE(0 == grid.calcPoint(0));
+                    REQUIRE(3 == grid.calcPoint(1));
+                    REQUIRE(18 == grid.calcPoint(2));
+                    REQUIRE(21 == grid.calcPoint(3));
                 }
             }
         }
