@@ -5,7 +5,7 @@ namespace nn {
     template< typename Func, unsigned int threshold >
     struct Binary {
 
-        typedef typename Func::Var Var;
+        using Var = typename Func::Var;
 
         /**
          * Will calculate the equation
