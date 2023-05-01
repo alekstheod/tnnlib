@@ -152,5 +152,5 @@ This command will calculate the probabilities of all the digits (0-9) in the ima
 
 ### WIP
 
-- Convolution layer
+- Pooling layer
 - Build on windows
