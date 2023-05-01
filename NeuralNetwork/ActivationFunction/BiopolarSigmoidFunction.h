@@ -9,14 +9,12 @@
 namespace nn {
 
     template< typename VarType >
-    class BiopolarSigmoidFunction {
-      public:
+    struct BiopolarSigmoidFunction {
         typedef VarType Var;
 
         template< typename V >
         using use = BiopolarSigmoidFunction< V >;
 
-      public:
         template< typename Iterator >
         Var calculate(const Var& sum, Iterator begin, Iterator end) const {
             Var tmp = sum * Var{-2.0f};
