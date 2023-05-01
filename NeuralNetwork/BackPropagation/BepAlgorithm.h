@@ -17,7 +17,6 @@ namespace nn {
 
         template< typename PerceptronType, template< class > class ErrorCalculator = SquaredError >
         class BepAlgorithm {
-          private:
             using Var = typename PerceptronType::Var;
             using Input = typename PerceptronType::Input;
 
