@@ -1,7 +1,6 @@
 #include "NeuralNetwork/BackPropagation/BepAlgorithm.h"
 #include "NeuralNetwork/NeuralLayer/NeuralLayer.h"
 #include "NeuralNetwork/NeuralLayer/InputLayer.h"
-#include "NeuralNetwork/NeuralLayer/PoolingLayer.h"
 #include "NeuralNetwork/ActivationFunction/BiopolarSigmoidFunction.h"
 #include "NeuralNetwork/ActivationFunction/LogScaleSoftmaxFunction.h"
 #include "NeuralNetwork/ActivationFunction/SigmoidFunction.h"
@@ -11,9 +10,8 @@
 #include "NeuralNetwork/Neuron/Neuron.h"
 #include "NeuralNetwork/Perceptron/Perceptron.h"
 #include "NeuralNetwork/NeuralLayer/OpenCL/OpenCLNeuralLayer.h"
-#include "NeuralNetwork/NeuralLayer/ConvolutionLayer.h"
 #include "NeuralNetwork/NeuralLayer/Thread/AsyncNeuralLayer.h"
-#include "NeuralNetwork//BackPropagation/BPAsyncNeuralLayer.h"
+#include "NeuralNetwork/BackPropagation/BPAsyncNeuralLayer.h"
 #include "NeuralNetwork/Serialization/Cereal.h"
 
 #include <MPL/Tuple.h>
@@ -60,18 +58,15 @@ namespace {
     using namespace boost::gil;
     using namespace boost::gil::detail;
     const std::string alphabet("0123456789");
-    constexpr std::size_t width = 24;
-    constexpr std::size_t height = 30;
+    constexpr std::size_t width = 12;
+    constexpr std::size_t height = 15;
     constexpr std::size_t inputsNumber = width * height;
 } // namespace
 
-using ConvGrid = nn::ConvolutionGrid< width, height, nn::Kernel< 5, 5, 3 > >::define;
-using ConvGrid2 = nn::ConvolutionGrid< width, height, nn::Kernel< 3, 3, 2 > >::define;
 
 using Perceptron =
  nn::Perceptron< VarType,
                  nn::InputLayer< nn::Neuron, nn::SigmoidFunction, inputsNumber, 1 >,
-                 nn::ConvolutionLayer< nn::NeuralLayer, nn::Neuron, nn::ReluFunction, ConvGrid >,
                  nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, 30 >,
                  nn::NeuralLayer< nn::Neuron, nn::SoftmaxFunction, 10 > >;
 
@@ -112,7 +107,7 @@ void readImage(std::string fileName, Iterator out) {
     for(int y = 0; y < srcView.height(); ++y) {
         gray8c_view_t::x_iterator src_it(srcView.row_begin(y));
         for(int x = 0; x < srcView.width(); ++x) {
-            *out = InputData{static_cast< float >(src_it[x])}; // input in a range of (0-1)
+            *out = InputData{static_cast< float >(src_it[x]) / 255.f}; // input in a range of (0-1)
             out++;
         }
     }
