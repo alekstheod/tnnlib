@@ -10,14 +10,12 @@
 namespace nn {
 
     template< typename VarType >
-    class LogScaleSoftmaxFunction {
-      public:
+    struct LogScaleSoftmaxFunction {
         typedef VarType Var;
 
         template< typename V >
         using use = LogScaleSoftmaxFunction< V >;
 
-      public:
         template< typename Iterator >
         Var calculate(const Var& sum, Iterator begin, Iterator end) const {
             Var sum2{};
