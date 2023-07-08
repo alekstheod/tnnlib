@@ -57,6 +57,7 @@ namespace nn {
 
                 utils::for_< size() >([&, this](const auto& i) {
                     auto& self = *this;
+                    self = *this;
                     auto& neuron = self[i.value];
                     std::promise< void > promise;
                     weightFutures[i.value] = promise.get_future();

@@ -16,7 +16,7 @@ namespace nn {
     namespace bp {
 
         template< typename PerceptronType, template< class > class ErrorCalculator = SquaredError >
-        class BepAlgorithm {
+        struct BepAlgorithm {
             using Var = typename PerceptronType::Var;
             using Input = typename PerceptronType::Input;
 
@@ -26,7 +26,6 @@ namespace nn {
             using Perceptron = typename PerceptronType::template wrap< BPNeuralLayer >;
             using Layers = typename Perceptron::Layers;
 
-          public:
             using Prototype =
              typename std::tuple< std::array< Input, inputsNumber >, std::array< Var, outputsNumber > >;
             using Memento = typename Perceptron::Memento;
