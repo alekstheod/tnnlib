@@ -1,34 +1,26 @@
 #pragma once
+
 #include <MPL/Tuple.h>
 
-namespace nn {
+namespace nn::detail::mpl {
 
-    namespace detail {
-        namespace mpl {
-            template< std::size_t FirstInputs, typename RebindedTuple, typename Tuple >
-            struct RebindInputsHelper;
+    template< typename Pred, typename Layer, typename... Other >
+    constexpr auto adjust(Pred, Layer);
 
-            template< std::size_t FirstInputs, typename RebindedTuple, typename FirstLayer, typename... Layers >
-            struct RebindInputsHelper< FirstInputs, RebindedTuple, std::tuple< FirstLayer, Layers... > > {
-                typedef
-                 typename utils::push_back< typename FirstLayer::template adjust< FirstInputs >, RebindedTuple >::type CurrentRebindedTuple;
-                typedef typename std::conditional<
-                 sizeof...(Layers) == 0,
-                 CurrentRebindedTuple,
-                 typename RebindInputsHelper< FirstLayer::size(), CurrentRebindedTuple, std::tuple< Layers... > >::type >::type type;
-            };
+    template< typename Pred >
+    constexpr auto adjust(Pred) -> Pred;
 
-            template< std::size_t FirstInputs, typename RebindedTuple, typename... Layers >
-            struct RebindInputsHelper< FirstInputs, RebindedTuple, std::tuple< Layers... > > {
-                typedef RebindedTuple type;
-            };
+    // clang-format off
+    template< typename Pred, typename Layer, typename... Other >
+    constexpr auto adjust(Pred, Layer) 
+		-> utils::push_back_t< typename Layer::template adjust< Pred::size() >,
+							   decltype(adjust(std::declval< Layer >(), std::declval< Other >()...))
+						  	 >;
+    // clang-format on
 
-            template< std::size_t FirstInputs, typename Tuple >
-            struct rebindInputs {
-                static_assert(std::tuple_size< Tuple >::value >= 1, "Invalid");
-                typedef
-                 typename RebindInputsHelper< FirstInputs, std::tuple<>, Tuple >::type type;
-            };
-        } // namespace mpl
-    } // namespace detail
-} // namespace nn
+    template< typename Pred, typename Layer, typename... Other >
+    constexpr auto adjust(const std::tuple< Pred, Layer, Other... >&)
+     -> utils::push_back_t< typename Layer::template adjust< Pred::size() >,
+                            decltype(adjust(std::declval< Layer >(), std::declval< Other >()...)) >;
+
+} // namespace nn::detail::mpl

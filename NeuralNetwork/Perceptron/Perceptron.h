@@ -7,10 +7,7 @@
 #include <MPL/Algorithm.h>
 #include <MPL/TypeTraits.h>
 
-#include <algorithm>
-#include <cassert>
 #include <tuple>
-#include <type_traits>
 
 namespace nn {
 
@@ -52,8 +49,7 @@ namespace nn {
                 return InputLayerType::size();
             }
 
-            using Layers =
-             typename mpl::rebindInputs< InputLayerType::inputs(), TmplLayers >::type;
+            using Layers = decltype(mpl::adjust(std::declval< TmplLayers >()));
 
             using OutputLayerType =
              typename std::tuple_element< size() - 1, Layers >::type;
