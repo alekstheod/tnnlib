@@ -2,9 +2,7 @@
 
 #include "Utilities/MPL/Algorithm.h"
 
-#include <cstddef>
 #include <tuple>
-#include <type_traits>
 #include <utility>
 
 
@@ -19,11 +17,22 @@ namespace utils {
 
     template< typename LastElement, typename... Elements >
     struct push_back< LastElement, std::tuple< Elements... > > {
-        typedef typename std::tuple< Elements..., LastElement > type;
+        using type = typename std::tuple< Elements..., LastElement >;
     };
 
-    template< typename LastElement, typename... Elements >
-    using push_back_t = push_back< LastElement, Elements... >;
+    template< typename Element, typename... Elements >
+    using push_back_t = typename push_back< Element, Elements... >::type;
+
+    template< typename Element, typename... Elements >
+    struct push_front;
+
+    template< typename Element, typename... Elements >
+    struct push_front< Element, std::tuple< Elements... > > {
+        using type = typename std::tuple< Element, Elements... >;
+    };
+
+    template< typename Element, typename... Elements >
+    using push_front_t = typename push_front< Element, Elements... >::type;
 
     template< typename Tuple >
     using back_t = std::tuple_element_t< std::tuple_size< Tuple >::value - 1, Tuple >;
