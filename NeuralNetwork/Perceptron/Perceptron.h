@@ -52,8 +52,7 @@ namespace nn {
                 return InputLayerType::size();
             }
 
-            using Layers =
-             typename mpl::rebindInputs< InputLayerType::inputs(), TmplLayers >::type;
+            using Layers = typename mpl::rebindInputs< TmplLayers >::type;
 
             using OutputLayerType =
              typename std::tuple_element< size() - 1, Layers >::type;
