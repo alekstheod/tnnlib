@@ -6,11 +6,7 @@
 
 #include <MPL/Algorithm.h>
 
-#include <range/v3/all.hpp>
-
-#include <algorithm>
 #include <array>
-#include <functional>
 
 namespace nn {
 

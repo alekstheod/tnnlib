@@ -2,14 +2,12 @@
 
 #include "NeuralNetwork/NeuralLayer/NeuralLayer.h"
 
-#include <range/v3/all.hpp>
+#include <range/v3/view.hpp>
+#include <range/v3/algorithm.hpp>
 
 #include <boost/asio/thread_pool.hpp>
 #include <boost/asio/post.hpp>
 
-#include <range/v3/all.hpp>
-
-#include <thread>
 #include <future>
 
 namespace nn {

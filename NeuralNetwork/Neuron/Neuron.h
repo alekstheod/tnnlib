@@ -8,8 +8,6 @@
 
 #include <range/v3/all.hpp>
 
-#include <utility>
-
 namespace nn {
     /**
      * Neuron class.

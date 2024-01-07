@@ -2,15 +2,13 @@
 
 #include "NeuralNetwork/NeuralLayer/NeuralLayer.h"
 
-#include <range/v3/all.hpp>
+#include <range/v3/view.hpp>
 
 #define CL_HPP_TARGET_OPENCL_VERSION 200
 #define CL_HPP_ENABLE_EXCEPTIONS
 #include <CL/opencl.hpp>
 
 #include <array>
-#include <exception>
-#include <fstream>
 
 namespace nn {
 
