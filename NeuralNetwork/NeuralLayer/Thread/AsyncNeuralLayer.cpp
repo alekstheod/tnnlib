@@ -1,12 +1,10 @@
 #include "NeuralNetwork/NeuralLayer/Thread/AsyncNeuralLayer.h"
 
-namespace nn {
-    namespace detail {
+namespace nn::detail {
 
-        boost::asio::thread_pool& pool(std::size_t numberOfThreads) {
-            static boost::asio::thread_pool threadPool{numberOfThreads};
-            return threadPool;
-        }
+    boost::asio::thread_pool& pool(std::size_t numberOfThreads) {
+        static boost::asio::thread_pool threadPool{numberOfThreads};
+        return threadPool;
+    }
 
-    } // namespace detail
-} // namespace nn
+} // namespace nn::detail

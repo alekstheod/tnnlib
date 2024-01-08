@@ -2,6 +2,8 @@
 
 #include "NeuralNetwork/NeuralLayer/NeuralLayer.h"
 
+#include <range/v3/view.hpp>
+
 namespace nn {
     namespace detail {
 

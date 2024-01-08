@@ -6,8 +6,7 @@
 namespace nn {
 
     template< typename Var >
-    class INeuron {
-      public:
+    struct INeuron {
         using Input = nn::Input< Var >;
 
         /**

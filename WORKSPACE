@@ -64,6 +64,6 @@ new_git_repository(
 new_git_repository(
     name = "range-v3",
     build_file = "range-v3.BUILD",
-    commit = "4d6a463bca51bc316f9b565edd94e82388206093",
+    commit = "a81477931a8aa2ad025c6bda0609f38e09e4d7ec",
     remote = "https://github.com/ericniebler/range-v3",
 )

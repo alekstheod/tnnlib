@@ -7,10 +7,7 @@
 #include <MPL/Algorithm.h>
 #include <MPL/TypeTraits.h>
 
-#include <algorithm>
-#include <cassert>
 #include <tuple>
-#include <type_traits>
 
 namespace nn {
 
