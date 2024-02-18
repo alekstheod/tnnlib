@@ -112,10 +112,6 @@ namespace nn {
                 return m_output;
             }
 
-            unsigned int getInputsNumber() const {
-                return m_inputs.size();
-            }
-
             void setBias(Var weight) {
                 m_bias = weight;
             }
@@ -125,9 +121,6 @@ namespace nn {
                 m_output = m_activationFunction.calculate(dotProduct, begin, end);
                 return m_output;
             }
-
-            template< typename Test >
-            void supportTest(Test&);
 
           private:
             /**

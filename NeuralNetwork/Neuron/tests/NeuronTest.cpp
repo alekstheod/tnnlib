@@ -1,4 +1,5 @@
 #include "NeuralNetwork/Neuron/Neuron.h"
+#include "NeuralNetwork/Neuron/RecurrentNeuron.h"
 #include "NeuralNetwork/ActivationFunction/SigmoidFunction.h"
 
 #include <range/v3/all.hpp>
@@ -54,6 +55,23 @@ namespace {
                                                                dotProducts.begin(),
                                                                dotProducts.end());
                     REQUIRE(output == Approx(0.5f).margin(0.001));
+                }
+            }
+        }
+        GIVEN("Recurrent neuron with 1 input") {
+            nn::RecurrentNeuron< nn::SigmoidFunction, float, 1 > unit;
+            WHEN("Provided number of inputs is 1") {
+                THEN("Neuron has one more hidden recurrent input") {
+                    REQUIRE(unit.size() == 2);
+                }
+            }
+            WHEN("Outputs are calculated") {
+                std::array< float, 2 > vals = {0.f, 0.f};
+                auto output =
+                 unit.calculateOutput(0.5f, std::begin(vals), std::end(vals));
+                THEN(
+                 "the recurrent input is equal to the output of the neuron") {
+                    REQUIRE(output == unit[unit.size() - 1].value);
                 }
             }
         }
