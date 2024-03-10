@@ -1,15 +1,13 @@
 #pragma once
 
-#include <functional>
 #include <numeric>
-#include <utility>
 #include <cmath>
 
 namespace nn {
 
     template< class VarType >
     struct TanhFunction {
-        typedef VarType Var;
+        using Var = VarType;
 
         template< typename V >
         using use = TanhFunction< V >;

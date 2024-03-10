@@ -4,18 +4,18 @@
 namespace nn::detail::mpl {
 
     template< typename... Layers >
-    struct adjustIntputs;
+    struct adjustInputs;
 
     template< typename Pred, typename Suc >
-    struct adjustIntputs< Pred, Suc > {
+    struct adjustInputs< Pred, Suc > {
         using type = std::tuple< typename Suc::template adjust< Pred::size() > >;
     };
 
     template< typename Pred, typename Suc, typename... Layers >
-    struct adjustIntputs< Pred, Suc, Layers... > {
+    struct adjustInputs< Pred, Suc, Layers... > {
         using type =
          utils::push_front_t< typename Suc::template adjust< Pred::size() >,
-                              typename adjustIntputs< Suc, Layers... >::type >;
+                              typename adjustInputs< Suc, Layers... >::type >;
     };
 
     template< typename... Layers >
@@ -24,6 +24,6 @@ namespace nn::detail::mpl {
     template< typename FirstLayer, typename... Layers >
     struct rebindInputs< std::tuple< FirstLayer, Layers... > > {
         using type =
-         utils::push_front_t< FirstLayer, typename adjustIntputs< FirstLayer, Layers... >::type >;
+         utils::push_front_t< FirstLayer, typename adjustInputs< FirstLayer, Layers... >::type >;
     };
 } // namespace nn::detail::mpl

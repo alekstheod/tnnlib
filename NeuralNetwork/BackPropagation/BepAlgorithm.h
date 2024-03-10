@@ -12,7 +12,7 @@
 namespace nn::bp {
 
     template< typename PerceptronType, template< class > class ErrorCalculator = SquaredError >
-    class BepAlgorithm {
+    struct BepAlgorithm {
         using Var = typename PerceptronType::Var;
         using Input = typename PerceptronType::Input;
 
@@ -22,11 +22,9 @@ namespace nn::bp {
         using Perceptron = typename PerceptronType::template wrap< BPNeuralLayer >;
         using Layers = typename Perceptron::Layers;
 
-      public:
         using Prototype =
          typename std::tuple< std::array< Input, inputsNumber >, std::array< Var, outputsNumber > >;
         using Memento = typename Perceptron::Memento;
-
 
         static constexpr auto size() {
             return PerceptronType::size();
@@ -74,7 +72,7 @@ namespace nn::bp {
 
         template< typename Iterator, typename ErrorFunc >
         PerceptronType calculate(Iterator begin, Iterator end, ErrorFunc func) {
-            return calculate(begin, end, func, DummyMomentum());
+            return calculate(begin, end, func, DummyMomentum{});
         }
 
         void setMemento(Memento memento) {
@@ -91,7 +89,7 @@ namespace nn::bp {
         PerceptronType calculate(Iterator begin,
                                  Iterator end,
                                  ErrorFunc errorFunc,
-                                 MomentumFunc momentum = DummyMomentum()) {
+                                 MomentumFunc momentum = DummyMomentum{}) {
             unsigned int epochCounter = 0;
             typename std::vector< Prototype > prototypes(begin, end);
 
@@ -118,7 +116,7 @@ namespace nn::bp {
             return perceptron;
         }
 
-      private:
+      protected:
         /// @brief current perceptron.
         Perceptron m_perceptron;
 

@@ -41,15 +41,6 @@ namespace {
                     layer.setInput(i, static_cast< float >(1.f));
                 }
 
-                for(auto& neuron : layer) {
-                    for(auto i : ranges::views::ints(0, 9)) {
-                        // neuron[i].weight = 0.5f;
-                        std::cout << neuron[i].value << " ";
-                    }
-
-                    std::cout << std::endl;
-                }
-
                 REQUIRE(9 == layer.size());
 
                 layer.calculateWeights(1.f);

@@ -6,10 +6,10 @@
 
 namespace nn {
 
-    template< template< class > typename OutputFunctionType, typename Var = float, std::size_t inputsNumber = 1 >
+    template< template< class > typename OutputFunctionType, typename VarType = float, std::size_t inputsNumber = 1 >
     struct RecurrentNeuron
-     : private nn::Neuron< OutputFunctionType, Var, inputsNumber + 1 > {
-        using Neuron = nn::Neuron< OutputFunctionType, Var, inputsNumber + 1 >;
+     : private nn::Neuron< OutputFunctionType, VarType, inputsNumber + 1 > {
+        using Neuron = nn::Neuron< OutputFunctionType, VarType, inputsNumber + 1 >;
         using Neuron::calcDotProduct;
         using Neuron::cbegin;
         using Neuron::cend;
@@ -23,6 +23,8 @@ namespace nn {
         using Neuron::operator[];
         using typename Neuron::Input;
         using typename Neuron::Inputs;
+        using typename Neuron::Memento;
+        using typename Neuron::Var;
 
         template< std::size_t newSize >
         using resize = RecurrentNeuron< OutputFunctionType, Var, newSize + 1 >;

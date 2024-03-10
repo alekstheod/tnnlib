@@ -1,13 +1,15 @@
 #pragma once
 #include <utility>
 #include <tuple>
-#include <vector>
 
 namespace utils {
 
     template< std::size_t N >
     struct num {
         static const constexpr auto value = N;
+        constexpr std::size_t operator()() {
+            return value;
+        }
     };
 
     template< class F, std::size_t... Is >
