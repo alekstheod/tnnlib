@@ -41,23 +41,36 @@ namespace nn::bp {
         using Base::setMemento;
 
         void calculateWeights(Var learningRate) {
+            // Process each input position in the grid
             for(const auto inputId : ranges::views::indices(Grid::width * Grid::height)) {
                 const auto gradient = calculateGradient(inputId);
                 adjustWeight(inputId, gradient, learningRate);
             }
 
+            // Update biases for each neuron
             auto& self = *this;
             for(const auto i : ranges::views::indices(size())) {
                 auto& neuron = self[i];
-                Var weight = neuron.getBias();
-                Var newWeight = weight - learningRate * neuron.getDelta();
-                neuron.setBias(newWeight);
+                Var currentBias = neuron.getBias();
+                Var newBias = currentBias - learningRate * neuron.getDelta();
+                neuron.setBias(newBias);
             }
         }
 
         template< typename AffectedLayer, typename MomentumFunc >
         void calculateHiddenDeltas(AffectedLayer& affectedLayer, MomentumFunc momentum) {
-            detail::calculateHiddenDeltas(*this, affectedLayer, momentum);
+            using Var = typename AffectedLayer::Var;
+            this->for_each([&affectedLayer, &momentum](auto i, auto& currentNeuron) {
+                Var sum{}; // sum(aDelta*aWeight)
+                affectedLayer.for_each([&sum, &i](auto, auto& neuron) {
+                    auto affectedDelta = neuron.getDelta();
+                    auto affectedWeight = neuron.getWeight(i.value);
+                    sum += affectedDelta * affectedWeight;
+                });
+
+                currentNeuron.setDelta(momentum(currentNeuron.getDelta(),
+                                                sum * currentNeuron.calculateDerivate()));
+            });
         }
 
         const Var& getDelta(std::size_t neuronId) const {
@@ -72,8 +85,9 @@ namespace nn::bp {
                 if(frame.area.doesIntersect(inputId)) {
                     const auto localInputId = frame.area.localize(inputId);
                     auto& neuron = self[frame.neuronId];
-                    neuron[localInputId].weight =
-                     neuron[localInputId].weight - learningRate * gradient;
+                    // Use proper neuron interface methods
+                    Var currentWeight = neuron.getWeight(localInputId);
+                    neuron.setWeight(localInputId, currentWeight - learningRate * gradient);
                 }
             });
         }
@@ -81,10 +95,13 @@ namespace nn::bp {
         Var calculateGradient(const std::size_t inputId) {
             Var sum{};
             auto& self = *this;
+
+            // Accumulate gradients from all frames that use this input
             utils::for_each(m_grid.frames, [&](auto& frame) {
                 if(frame.area.doesIntersect(inputId)) {
                     const auto localInputId = frame.area.localize(inputId);
                     const auto& neuron = self[frame.neuronId];
+                    // Standard gradient: delta * input_value
                     sum += neuron.getDelta() * neuron[localInputId].value;
                 }
             });

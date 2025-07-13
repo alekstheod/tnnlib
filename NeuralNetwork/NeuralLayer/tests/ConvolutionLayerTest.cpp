@@ -94,4 +94,36 @@ namespace {
             }
         }
     }
+
+    SCENARIO("ConvolutionGrid calcPoint correctness",
+             "[grid][convolution][calcPoint]") {
+        GIVEN("A 4x4 grid with 2x2 kernel and stride=1") {
+            constexpr std::size_t width = 4;
+            constexpr std::size_t height = 4;
+            constexpr std::size_t stride = 1;
+            using ConvolutionGrid =
+             nn::ConvolutionGrid< width, height, nn::Kernel< 2, 2, stride > >;
+
+            ConvolutionGrid grid;
+
+            WHEN("calcPoint is called for each frame") {
+                THEN("Each frame should start at the correct grid position") {
+                    // With 4x4 grid, 2x2 kernel, stride=1: we get 3x3=9 frames
+                    // Frame layout: (0,0), (0,1), (0,2), (1,0), (1,1), (1,2), (2,0), (2,1), (2,2)
+
+                    REQUIRE(0 == grid.calcPoint(0));
+                    REQUIRE(1 == grid.calcPoint(1));
+                    REQUIRE(2 == grid.calcPoint(2));
+                    REQUIRE(3 == grid.calcPoint(3));
+                    REQUIRE(4 == grid.calcPoint(4));
+                    REQUIRE(5 == grid.calcPoint(5));
+                    REQUIRE(6 == grid.calcPoint(6));
+                    REQUIRE(7 == grid.calcPoint(7));
+                    REQUIRE(8 == grid.calcPoint(8));
+                    REQUIRE(9 == grid.calcPoint(9));
+                    REQUIRE(10 == grid.calcPoint(10));
+                }
+            }
+        }
+    }
 } // namespace

@@ -10,8 +10,10 @@
 #include "NeuralNetwork/Neuron/Neuron.h"
 #include "NeuralNetwork/Perceptron/Perceptron.h"
 #include "NeuralNetwork/NeuralLayer/OpenCL/OpenCLNeuralLayer.h"
+#include "NeuralNetwork/NeuralLayer/ConvolutionLayer.h"
 #include "NeuralNetwork/NeuralLayer/Thread/AsyncNeuralLayer.h"
 #include "NeuralNetwork/BackPropagation/BPAsyncNeuralLayer.h"
+#include "NeuralNetwork/BackPropagation/BPConvolutionNeuralLayer.h"
 #include "NeuralNetwork/Serialization/Cereal.h"
 
 #include <MPL/Tuple.h>
@@ -57,11 +59,13 @@ namespace {
     constexpr std::size_t inputsNumber = width * height;
 } // namespace
 
+using ConvolutionGrid =
+ typename nn::ConvolutionGrid< width, height, nn::Kernel< 3, 3, 2 > >::define;
 
 using Perceptron =
  nn::Perceptron< VarType,
                  nn::InputLayer< nn::Neuron, nn::SigmoidFunction, inputsNumber, 1 >,
-                 nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, 30 >,
+                 nn::ConvolutionLayer< nn::NeuralLayer, nn::Neuron, nn::TanhFunction, ConvolutionGrid >,
                  nn::NeuralLayer< nn::Neuron, nn::SoftmaxFunction, 10 > >;
 
 using InputData = typename Perceptron::Input;
@@ -167,7 +171,7 @@ void calculateWeights(std::string imagesPath) {
 
     std::cout << "Perceptron calculation started" << std::endl;
     // static Perceptron tmp = readPerceptron("perceptron.json");
-    static Algo algorithm(0.0009f);
+    static Algo algorithm(0.09f);
     // algorithm.setMemento(tmp.getMemento());
 
     std::vector< Algo::Prototype > prototypes;
