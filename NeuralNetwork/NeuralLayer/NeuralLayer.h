@@ -120,8 +120,7 @@ namespace nn {
     } // namespace detail
 
     template< template< template< class > class, class, std::size_t > class NeuronType,
-              template< class >
-              class ActivationFunctionType,
+              template< class > class ActivationFunctionType,
               std::size_t size,
               std::size_t inputsNumber = size,
               typename Var = float >
