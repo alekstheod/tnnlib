@@ -4,6 +4,9 @@ load(
     "new_git_repository",
 )
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+load("//third_party/llvm:llvm_workspace.bzl", "init_llvm_repo")
+
+init_llvm_repo()
 
 local_repository(
     name = "libpng_config",
@@ -26,26 +29,43 @@ http_archive(
 
 new_local_repository(
     name = "OpenCL",
-    build_file = "third_party/OpenCL.BUILD",
+    build_file = "//third_party/opencl:OpenCL.BUILD",
     path = "/usr/",
 )
 
-git_repository(
-    name = "com_github_nelhage_rules_boost",
-    commit = "ed844db5990d21b75dc3553c057069f324b3916b",
-    remote = "https://github.com/nelhage/rules_boost",
+http_archive(
+    name = "boost.asio",
+    strip_prefix = "bazel-central-registry-main/modules/boost.asio/1.89.0.bcr.2",
+    urls = ["https://github.com/bazelbuild/bazel-central-registry/archive/refs/heads/main.zip"],
 )
 
-load("@com_github_nelhage_rules_boost//:boost/boost.bzl", "boost_deps")
-
-boost_deps()
-
-new_git_repository(
-    name = "zlib",
-    build_file = "//third_party:zlib.BUILD",
-    commit = "cacf7f1d4e3d44d871b605da3b647f07d718623f",
-    remote = "https://github.com/madler/zlib",
+http_archive(
+    name = "boost.filesystem",
+    strip_prefix = "bazel-central-registry-main/modules/boost.filesystem/1.89.0.bcr.2",
+    urls = ["https://github.com/bazelbuild/bazel-central-registry/archive/refs/heads/main.zip"],
 )
+
+http_archive(
+    name = "boost.variant",
+    strip_prefix = "bazel-central-registry-main/modules/boost.variant/1.89.0.bcr.2",
+    urls = ["https://github.com/bazelbuild/bazel-central-registry/archive/refs/heads/main.zip"],
+)
+
+http_archive(
+    name = "boost.numeric_conversion",
+    strip_prefix = "bazel-central-registry-main/modules/boost.numeric_conversion/1.89.0.bcr.2",
+    urls = ["https://github.com/bazelbuild/bazel-central-registry/archive/refs/heads/main.zip"],
+)
+
+new_local_repository(
+    name = "boost",
+    build_file = "//third_party/boost:BUILD_aliases",
+    path = ".",
+)
+
+load("//third_party/zlib:workspace.bzl", "init_zlib_repo")
+
+init_zlib_repo()
 
 new_git_repository(
     name = "libpng",
@@ -54,19 +74,13 @@ new_git_repository(
     remote = "https://github.com/glennrp/libpng",
 )
 
-new_git_repository(
-    name = "cereal",
-    build_file = "//third_party:cereal.BUILD",
-    commit = "02eace19a99ce3cd564ca4e379753d69af08c2c8",
-    remote = "https://github.com/USCiLab/cereal",
-)
+load("//third_party/cereal:workspace.bzl", "init_cereal_repo")
 
-new_git_repository(
-    name = "range-v3",
-    build_file = "//third_party:range-v3.BUILD",
-    commit = "a81477931a8aa2ad025c6bda0609f38e09e4d7ec",
-    remote = "https://github.com/ericniebler/range-v3",
-)
+init_cereal_repo()
+
+load("//third_party/range-v3:workspace.bzl", "init_range_v3_repo")
+
+init_range_v3_repo()
 
 http_archive(
     name = "hedron_compile_commands",
@@ -89,10 +103,3 @@ hedron_compile_commands_setup_transitive_transitive()
 load("@hedron_compile_commands//:workspace_setup_transitive_transitive_transitive.bzl", "hedron_compile_commands_setup_transitive_transitive_transitive")
 
 hedron_compile_commands_setup_transitive_transitive_transitive()
-
-# Hermetic LLVM toolchain using system clang but enforced through Bazel
-http_archive(
-    name = "rules_cc",
-    urls = ["https://github.com/bazelbuild/rules_cc/archive/main.zip"],
-    strip_prefix = "rules_cc-main",
-)

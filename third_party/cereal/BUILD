@@ -1,4 +1,3 @@
-
 cc_library(
 	name = "cereal",
 	hdrs = glob(["include/**/*.hpp", "include/**/*.h"]),

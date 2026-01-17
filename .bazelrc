@@ -1,6 +1,4 @@
-build --extra_toolchains=//:hermetic_llvm_toolchain
-build --cxxopt='-std=c++17'
-build --host_cxxopt='-std=c++17'
+build --extra_toolchains=//third_party/llvm:hermetic_llvm_toolchain
 
 build:asan --strip=never
 build:asan --copt -fsanitize=address
