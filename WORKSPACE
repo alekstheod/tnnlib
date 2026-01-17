@@ -90,41 +90,9 @@ load("@hedron_compile_commands//:workspace_setup_transitive_transitive_transitiv
 
 hedron_compile_commands_setup_transitive_transitive_transitive()
 
-# Hermetic LLVM toolchain
+# Hermetic LLVM toolchain using system clang but enforced through Bazel
 http_archive(
-    name = "llvm_toolchain",
-    build_file_content = """
-package(default_visibility = ["//visibility:public"])
-
-filegroup(
-    name = "bin",
-    srcs = glob(["bin/**"]),
+    name = "rules_cc",
+    urls = ["https://github.com/bazelbuild/rules_cc/archive/main.zip"],
+    strip_prefix = "rules_cc-main",
 )
-
-filegroup(
-    name = "lib",
-    srcs = glob(["lib/**"]),
-)
-
-filegroup(
-    name = "include",
-    srcs = glob(["include/**"]),
-)
-
-filegroup(
-    name = "all",
-    srcs = [
-        ":bin",
-        ":lib", 
-        ":include",
-    ],
-)
-""",
-    sha256 = "d89331f09562768d69429545265ca8d6458fa67c98f562b6be8962336c01b69b",
-    strip_prefix = "llvm-project-15.0.7",
-    urls = ["https://github.com/llvm/llvm-project/releases/download/llvmorg-15.0.7/llvm-project-15.0.7.src.tar.xz"],
-)
-
-load("@llvm_toolchain//:all", "llvm_toolchain_deps")
-
-llvm_toolchain_deps()
