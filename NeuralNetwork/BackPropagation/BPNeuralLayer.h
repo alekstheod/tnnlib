@@ -29,7 +29,6 @@ namespace nn::bp {
                     auto affectedDelta = neuron.getDelta();
                     auto affectedWeight = neuron.getWeight(i.value);
                     sum += affectedDelta * affectedWeight;
-                    sum += affectedDelta * neuron.getBias();
                 });
 
                 currentNeuron.setDelta(momentum(currentNeuron.getDelta(),
