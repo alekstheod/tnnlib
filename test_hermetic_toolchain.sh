@@ -4,17 +4,17 @@
 
 echo "Building with hermetic LLVM toolchain..."
 
-# Test basic build with hermetic toolchain
-bazel build --config=hermetic //...
+# Test basic build
+bazel build //...
 
-echo "Testing OCR build with hermetic toolchain..."
+echo "Testing OCR build..."
 
 # Test OCR application build
-bazel build --config=hermetic //ocr:ocr
+bazel build //ocr:ocr
 
-echo "Running tests with hermetic toolchain..."
+echo "Running tests..."
 
-# Run tests with hermetic toolchain
-bazel test --config=hermetic //...
+# Run tests
+bazel test //...
 
 echo "Hermetic LLVM toolchain test completed!"

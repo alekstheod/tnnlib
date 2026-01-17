@@ -10,28 +10,28 @@ This PR introduces a hermetic LLVM toolchain for tnnlib, allowing the project to
 - **`BUILD.toolchain`**: Toolchain registration and implementation
 
 ### 2. Build Configuration Updates
-- **`.bazelrc`**: Added `--config=hermetic` and `--config=asan_hermetic` configurations
-- **`test_hermetic_toolchain.sh`**: Test script for validating hermetic toolchain
+- **`.bazelrc`**: Default hermetic toolchain configuration
+- **`test_hermetic_toolchain.sh`**: Test script for validating toolchain
 
 ### 3. Features
 - **Self-contained**: LLVM 15.0.7 toolchain downloaded and managed by Bazel
 - **Cross-platform**: Works on Linux and macOS
 - **Optimized**: Includes optimization flags and proper library linking
-- **Debug support**: AddressSanitizer support with hermetic toolchain
+- **Debug support**: AddressSanitizer support
 
 ## Usage
 
-### Build with Hermetic Toolchain
+### Standard Build
 ```bash
-bazel build --config=hermetic //...
+bazel build //...
 ```
 
 ### Build with AddressSanitizer
 ```bash
-bazel build --config=asan_hermetic //...
+bazel build --config=asan //...
 ```
 
-### Test Hermetic Toolchain
+### Test Toolchain
 ```bash
 ./test_hermetic_toolchain.sh
 ```
@@ -52,4 +52,4 @@ The hermetic toolchain provides:
 - `llvm-nm`, `llvm-objcopy`, `llvm-strip` for binary utilities
 - Proper C++17 standard library linkage
 
-The toolchain is automatically registered and can be used via the `--config=hermetic` flag.
+The toolchain is automatically registered and used by default for all builds.
