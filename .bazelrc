@@ -1,4 +1,8 @@
 build -c opt --cxxopt='-std=c++17'
+build:hermetic --extra_toolchains=//:hermetic_llvm_toolchain
+build:hermetic --host_cxxopt='-std=c++17'
+build:hermetic --cxxopt='-std=c++17'
+
 build:asan --strip=never
 build:asan --copt -fsanitize=address
 build:asan --copt -DADDRESS_SANITIZER
@@ -6,4 +10,15 @@ build:asan --copt -O1
 build:asan --copt -g
 build:asan --copt -fno-omit-frame-pointer
 build:asan --linkopt -fsanitize=address
+
+build:asan_hermetic --strip=never
+build:asan_hermetic --extra_toolchains=//:hermetic_llvm_toolchain
+build:asan_hermetic --host_cxxopt='-std=c++17'
+build:asan_hermetic --cxxopt='-std=c++17'
+build:asan_hermetic --copt -fsanitize=address
+build:asan_hermetic --copt -DADDRESS_SANITIZER
+build:asan_hermetic --copt -O1
+build:asan_hermetic --copt -g
+build:asan_hermetic --copt -fno-omit-frame-pointer
+build:asan_hermetic --linkopt -fsanitize=address
 

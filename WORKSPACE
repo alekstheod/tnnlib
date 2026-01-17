@@ -89,3 +89,42 @@ hedron_compile_commands_setup_transitive_transitive()
 load("@hedron_compile_commands//:workspace_setup_transitive_transitive_transitive.bzl", "hedron_compile_commands_setup_transitive_transitive_transitive")
 
 hedron_compile_commands_setup_transitive_transitive_transitive()
+
+# Hermetic LLVM toolchain
+http_archive(
+    name = "llvm_toolchain",
+    build_file_content = """
+package(default_visibility = ["//visibility:public"])
+
+filegroup(
+    name = "bin",
+    srcs = glob(["bin/**"]),
+)
+
+filegroup(
+    name = "lib",
+    srcs = glob(["lib/**"]),
+)
+
+filegroup(
+    name = "include",
+    srcs = glob(["include/**"]),
+)
+
+filegroup(
+    name = "all",
+    srcs = [
+        ":bin",
+        ":lib", 
+        ":include",
+    ],
+)
+""",
+    sha256 = "d89331f09562768d69429545265ca8d6458fa67c98f562b6be8962336c01b69b",
+    strip_prefix = "llvm-project-15.0.7",
+    urls = ["https://github.com/llvm/llvm-project/releases/download/llvmorg-15.0.7/llvm-project-15.0.7.src.tar.xz"],
+)
+
+load("@llvm_toolchain//:all", "llvm_toolchain_deps")
+
+llvm_toolchain_deps()

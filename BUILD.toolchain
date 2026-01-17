@@ -1,0 +1,38 @@
+load("@bazel_tools//tools/build_defs/toolchain:toolchain_definition.bzl", "toolchain")
+load("//:hermetic_llvm_toolchain.bzl", "hermetic_llvm_toolchain")
+
+# Register the hermetic LLVM toolchain
+toolchain(
+    name = "hermetic_llvm_toolchain",
+    toolchain = ":hermetic_llvm_toolchain_impl",
+    toolchain_type = "@bazel_tools//tools/cpp:toolchain_type",
+    target_settings = [],
+    exec_compatible_with = [],
+    target_compatible_with = [],
+)
+
+# Create the toolchain implementation
+hermetic_llvm_toolchain(
+    name = "hermetic_llvm_toolchain_impl",
+    visibility = ["//visibility:public"],
+)
+
+load("@hedron_compile_commands//:refresh_compile_commands.bzl", "refresh_compile_commands")
+
+cc_library(
+    name = "tnnlib_utils",
+    srcs = glob(["Utilities/**/*.cpp"]),
+    hdrs = glob(["Utilities/**/*.h"]),
+    copts = ["-Werror"],
+    includes = ["Utilities"],
+    strip_include_prefix = "Utilities",
+    visibility = ["//visibility:public"],
+    deps = ["@boost//:numeric_conversion"],
+)
+
+refresh_compile_commands(
+    name = "refresh_compile_commands",
+    targets = {
+        "//ocr:ocr": "",
+    },
+)
