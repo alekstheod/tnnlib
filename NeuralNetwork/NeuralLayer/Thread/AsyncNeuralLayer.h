@@ -92,8 +92,7 @@ namespace nn {
     /// initialization a final weight will be calculated in a following way
     /// random(0, 1)/scaleFactor
     template< template< template< class > class, class, std::size_t > class NeuronType,
-              template< class >
-              class ActivationFunctionType,
+              template< class > class ActivationFunctionType,
               std::size_t size,
               std::size_t inputsNumber = 2,
               typename Var = float >
