@@ -1,4 +1,5 @@
-build -c opt --cxxopt='-std=c++17'
+build --extra_toolchains=//third_party/llvm:hermetic_llvm_toolchain
+
 build:asan --strip=never
 build:asan --copt -fsanitize=address
 build:asan --copt -DADDRESS_SANITIZER

@@ -4,6 +4,9 @@ load(
     "new_git_repository",
 )
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+load("//third_party/llvm:llvm_workspace.bzl", "init_llvm_repo")
+
+init_llvm_repo()
 
 local_repository(
     name = "libpng_config",
@@ -26,26 +29,17 @@ http_archive(
 
 new_local_repository(
     name = "OpenCL",
-    build_file = "third_party/OpenCL.BUILD",
+    build_file = "//third_party/opencl:OpenCL.BUILD",
     path = "/usr/",
 )
 
-git_repository(
-    name = "com_github_nelhage_rules_boost",
-    commit = "ed844db5990d21b75dc3553c057069f324b3916b",
-    remote = "https://github.com/nelhage/rules_boost",
-)
+load("//third_party/boost:workspace.bzl", "init_boost_repo")
 
-load("@com_github_nelhage_rules_boost//:boost/boost.bzl", "boost_deps")
+init_boost_repo()
 
-boost_deps()
+load("//third_party/zlib:workspace.bzl", "init_zlib_repo")
 
-new_git_repository(
-    name = "zlib",
-    build_file = "//third_party:zlib.BUILD",
-    commit = "cacf7f1d4e3d44d871b605da3b647f07d718623f",
-    remote = "https://github.com/madler/zlib",
-)
+init_zlib_repo()
 
 new_git_repository(
     name = "libpng",
@@ -54,19 +48,13 @@ new_git_repository(
     remote = "https://github.com/glennrp/libpng",
 )
 
-new_git_repository(
-    name = "cereal",
-    build_file = "//third_party:cereal.BUILD",
-    commit = "02eace19a99ce3cd564ca4e379753d69af08c2c8",
-    remote = "https://github.com/USCiLab/cereal",
-)
+load("//third_party/cereal:workspace.bzl", "init_cereal_repo")
 
-new_git_repository(
-    name = "range-v3",
-    build_file = "//third_party:range-v3.BUILD",
-    commit = "a81477931a8aa2ad025c6bda0609f38e09e4d7ec",
-    remote = "https://github.com/ericniebler/range-v3",
-)
+init_cereal_repo()
+
+load("//third_party/range-v3:workspace.bzl", "init_range_v3_repo")
+
+init_range_v3_repo()
 
 http_archive(
     name = "hedron_compile_commands",

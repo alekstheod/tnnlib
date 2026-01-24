@@ -32,4 +32,3 @@ cc_library(
     deps = ["@zlib",
 	"@libpng_config"],
 )
-
