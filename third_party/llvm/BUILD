@@ -10,7 +10,8 @@ cc_toolchain_suite(
     name = "toolchain",
     toolchains = {
         "local|local": ":cc-compiler-local",
-        "k8|local": ":cc-compiler-local", 
+        "k8|local": ":cc-compiler-local",
+        "k8": ":cc-compiler-local",
         "x86_64|local": ":cc-compiler-local",
     },
 )
@@ -27,10 +28,10 @@ cc_toolchain(
     toolchain_identifier = "llvm-hermetic",
 )
 
-toolchain(
-    name = "hermetic_llvm_toolchain",
-    exec_compatible_with = [],
-    target_compatible_with = [],
-    toolchain = ":toolchain",
-    toolchain_type = "@bazel_tools//tools/cpp:toolchain_type",
-)
+# toolchain(
+#     name = "hermetic_llvm_toolchain",
+#     exec_compatible_with = [],
+#     target_compatible_with = [],
+#     toolchain = ":toolchain",
+#     toolchain_type = "@bazel_tools//tools/cpp:toolchain_type",
+# )

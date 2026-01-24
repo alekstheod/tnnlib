@@ -1,32 +1,32 @@
 package(default_visibility = ["//visibility:public"])
 
-# Boost aliases that reference individual Bazel registry modules
+# Boost aliases that reference the single boost archive
 alias(
     name = "asio",
-    actual = "@boost.asio//:asio",
+    actual = "@boost//:asio",
     visibility = ["//visibility:public"],
 )
 
 alias(
     name = "numeric_conversion", 
-    actual = "@boost.numeric_conversion//:numeric_conversion",
+    actual = "@boost//:numeric_conversion",
     visibility = ["//visibility:public"],
 )
 
 alias(
     name = "filesystem",
-    actual = "@boost.filesystem//:filesystem", 
+    actual = "@boost//:filesystem", 
     visibility = ["//visibility:public"],
 )
 
 alias(
     name = "gil",
-    actual = "@boost.filesystem//:filesystem",  # GIL often included with filesystem
+    actual = "@boost//:filesystem",  # GIL often included with filesystem
     visibility = ["//visibility:public"],
 )
 
 alias(
     name = "variant",
-    actual = "@boost.variant//:variant",
+    actual = "@boost//:variant",
     visibility = ["//visibility:public"],
 )

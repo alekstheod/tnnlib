@@ -33,35 +33,9 @@ new_local_repository(
     path = "/usr/",
 )
 
-http_archive(
-    name = "boost.asio",
-    strip_prefix = "bazel-central-registry-main/modules/boost.asio/1.89.0.bcr.2",
-    urls = ["https://github.com/bazelbuild/bazel-central-registry/archive/refs/heads/main.zip"],
-)
+load("//third_party/boost:workspace.bzl", "init_boost_repo")
 
-http_archive(
-    name = "boost.filesystem",
-    strip_prefix = "bazel-central-registry-main/modules/boost.filesystem/1.89.0.bcr.2",
-    urls = ["https://github.com/bazelbuild/bazel-central-registry/archive/refs/heads/main.zip"],
-)
-
-http_archive(
-    name = "boost.variant",
-    strip_prefix = "bazel-central-registry-main/modules/boost.variant/1.89.0.bcr.2",
-    urls = ["https://github.com/bazelbuild/bazel-central-registry/archive/refs/heads/main.zip"],
-)
-
-http_archive(
-    name = "boost.numeric_conversion",
-    strip_prefix = "bazel-central-registry-main/modules/boost.numeric_conversion/1.89.0.bcr.2",
-    urls = ["https://github.com/bazelbuild/bazel-central-registry/archive/refs/heads/main.zip"],
-)
-
-new_local_repository(
-    name = "boost",
-    build_file = "//third_party/boost:BUILD_aliases",
-    path = ".",
-)
+init_boost_repo()
 
 load("//third_party/zlib:workspace.bzl", "init_zlib_repo")
 
