@@ -15,9 +15,7 @@ cc_test(
 
 cc_test(
     name = "opencl_utest",
-    srcs = glob([
-        "OpenCLNeuralLayerTest.cpp",
-    ]),
+    srcs = ["OpenCLNeuralLayerTest.cpp"],
     includes = ["include"],
     tags = ["openCL"],
     deps = [
@@ -26,6 +24,6 @@ cc_test(
         "//NeuralNetwork/NeuralLayer:OpenCLNeuralLayer",
         "//NeuralNetwork/Neuron",
         "//Utilities/catch2:catch2_main",
-        "@OpenCL",
+        "@opencl_headers//:OpenCL",
     ],
 )

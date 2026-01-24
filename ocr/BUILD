@@ -14,7 +14,7 @@ cc_binary(
         "//NeuralNetwork/NeuralLayer:OpenCLNeuralLayer",
         "//NeuralNetwork/Neuron",
         "//NeuralNetwork/Serialization",
-        "@OpenCL",
+        "@opencl_headers//:OpenCL",
         "@boost//:asio",
         "@boost//:filesystem",
         "@boost//:gil",

@@ -4,8 +4,9 @@
 
 #include <range/v3/view.hpp>
 
-#define CL_HPP_TARGET_OPENCL_VERSION 200
-#define CL_HPP_ENABLE_EXCEPTIONS
+// Use C++ OpenCL wrapper with system header isolation
+#define CL_TARGET_OPENCL_VERSION 120
+#define CL_HPP_MINIMUM_OPENCL_VERSION 120
 #include <CL/opencl.hpp>
 
 #include <array>
@@ -194,8 +195,7 @@ namespace nn {
     /// initialization a final weight will be calculated in a following way
     /// random(0, 1)/scaleFactor
     template< template< template< class > class, class, std::size_t > class NeuronType,
-              template< class >
-              class ActivationFunctionType,
+              template< class > class ActivationFunctionType,
               std::size_t size,
               std::size_t inputsNumber = 2,
               typename Var = float >
