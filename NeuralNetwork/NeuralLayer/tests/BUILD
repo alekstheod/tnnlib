@@ -13,6 +13,7 @@ cc_test(
     ],
 )
 
+# OpenCL tests are enabled with version compatibility fixes
 cc_test(
     name = "opencl_utest",
     srcs = ["OpenCLNeuralLayerTest.cpp"],

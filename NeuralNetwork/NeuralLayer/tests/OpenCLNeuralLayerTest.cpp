@@ -31,11 +31,11 @@ namespace {
                     openClLayer.calculateOutputs();
                     const auto expected_output = regularLayer.getOutput(0);
                     const auto actual_output = openClLayer.getOutput(0);
-                    REQUIRE_THAT(expected_output, Catch::WithinRel(actual_output));
+                    REQUIRE_THAT(expected_output, Catch::Matchers::WithinRel(actual_output));
 
                     const auto expected_output2 = regularLayer.getOutput(1);
                     const auto actual_output2 = openClLayer.getOutput(1);
-                    REQUIRE_THAT(expected_output2, Catch::WithinRel(actual_output2));
+                    REQUIRE_THAT(expected_output2, Catch::Matchers::WithinRel(actual_output2));
                 }
             }
         }
