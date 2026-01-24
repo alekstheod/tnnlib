@@ -16,10 +16,11 @@
 
 #define CATCH_CONFIG_MAIN
 #define CATCH_CONFIG_NO_CPP17_UNCAUGHT_EXCEPTIONS
-#include <catch2/catch.hpp>
+#include <catch2/catch_all.hpp>
 
 #include <vector>
 #include <string>
+#include <fstream>
 
 namespace {
 
@@ -53,7 +54,7 @@ namespace {
                 THEN("Output is close to 1") {
                     std::array< float, 2 > output{0};
                     perceptron.calculate(input.begin(), input.end(), output.begin());
-                    REQUIRE(output[0] == Approx(1).margin(0.1));
+                    REQUIRE(output[0] == Catch::Approx(1).margin(0.1));
                 }
             }
             WHEN("Input is [0, 1]") {
@@ -61,7 +62,7 @@ namespace {
                 THEN("Output is close to 1") {
                     std::array< float, 2 > output{0};
                     perceptron.calculate(input.begin(), input.end(), output.begin());
-                    REQUIRE(output[0] == Approx(1).margin(0.1));
+                    REQUIRE(output[0] == Catch::Approx(1).margin(0.1));
                 }
             }
             WHEN("Input is [1, 1]") {
@@ -69,7 +70,7 @@ namespace {
                 THEN("Output is close to 0") {
                     std::array< float, 2 > output{0};
                     perceptron.calculate(input.begin(), input.end(), output.begin());
-                    REQUIRE(output[0] == Approx(0).margin(0.1));
+                    REQUIRE(output[0] == Catch::Approx(0).margin(0.1));
                 }
             }
             WHEN("Input is [0, 0]") {
@@ -77,7 +78,7 @@ namespace {
                 THEN("Output is close to 0") {
                     std::array< float, 2 > output{0};
                     perceptron.calculate(input.begin(), input.end(), output.begin());
-                    REQUIRE(output[0] == Approx(0).margin(0.1));
+                    REQUIRE(output[0] == Catch::Approx(0).margin(0.1));
                 }
             }
         }

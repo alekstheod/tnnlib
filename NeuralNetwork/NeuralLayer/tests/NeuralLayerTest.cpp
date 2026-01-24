@@ -3,7 +3,7 @@
 #include "NeuralNetwork/ActivationFunction/SigmoidFunction.h"
 
 #define CATCH_CONFIG_NO_CPP17_UNCAUGHT_EXCEPTIONS
-#include <catch2/catch.hpp>
+#include <catch2/catch_all.hpp>
 
 namespace {
     SCENARIO("NeuralLayer basic calculation",
@@ -24,8 +24,8 @@ namespace {
                 THEN(
                  "Neurons outputs are equal with a result of the function 1 / "
                  "(1 + std::exp(-dot_pruduct))") {
-                    REQUIRE(layer[0].getOutput() == Approx(1.f / (1.f + std::exp(-3.f))));
-                    REQUIRE(layer[1].getOutput() == Approx(1.f / (1.f + std::exp(-3.f))));
+                    REQUIRE(layer[0].getOutput() == Catch::Approx(1.f / (1.f + std::exp(-3.f))));
+                    REQUIRE(layer[1].getOutput() == Catch::Approx(1.f / (1.f + std::exp(-3.f))));
                 }
             }
         }
