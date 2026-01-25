@@ -1,14 +1,16 @@
 #pragma once
 
 #include "NeuralNetwork/NeuralLayer/NeuralLayer.h"
+#include "Utilities/MPL/Algorithm.h"
 
 #include <range/v3/view.hpp>
 
-#define CL_HPP_TARGET_OPENCL_VERSION 200
+#define CL_HPP_TARGET_OPENCL_VERSION 300
 #define CL_HPP_ENABLE_EXCEPTIONS
 #include <CL/opencl.hpp>
 
 #include <array>
+#include <iostream>
 
 namespace nn {
 
@@ -31,15 +33,22 @@ namespace nn {
 
             struct OpenCLProgram {
                 cl::Context context{createContext()};
-                std::vector< cl::Device > devices{context.getInfo< CL_CONTEXT_DEVICES >()};
-                cl::Program program{
-                 createProgram("NeuralNetwork/NeuralLayer/OpenCL/"
-                               "dot_product.cl",
-                               context,
-                               devices.front())};
+                std::vector< cl::Device > devices;
+                cl::Program program;
+
+                OpenCLProgram() {
+                    devices = context.getInfo< CL_CONTEXT_DEVICES >();
+                    if(!devices.empty()) {
+                        program = createProgram(
+                         "NeuralNetwork/NeuralLayer/OpenCL/dot_product.cl",
+                         context,
+                         devices.front());
+                    }
+                }
+
                 static OpenCLProgram& instance() {
-                    static OpenCLProgram program;
-                    return program;
+                    static OpenCLProgram instance;
+                    return instance;
                 }
             };
 
@@ -110,12 +119,18 @@ namespace nn {
                 try {
                     using namespace cl;
                     auto& ocl = OpenCLProgram::instance();
+
+                    if(ocl.devices.empty()) {
+                        throw std::runtime_error("No OpenCL devices available");
+                    }
+
                     const auto& defaultDevice = ocl.devices.front();
 
-                    // Create a command queue and use the first device
+                    // Modern OpenCL v3 buffer creation with proper flags
                     const cl_mem_flags inBufFlags = CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR;
-                    const cl_mem_flags outBufFlags = CL_MEM_WRITE_ONLY | CL_MEM_COPY_HOST_PTR;
+                    const cl_mem_flags outBufFlags = CL_MEM_WRITE_ONLY;
 
+                    // Use move semantics for buffers
                     Buffer weights(ocl.context,
                                    inBufFlags,
                                    m_weights.size() * sizeof(float),
@@ -126,31 +141,33 @@ namespace nn {
                                   m_inputs.size() * sizeof(float),
                                   m_inputs.data());
 
-                    Buffer product(ocl.context,
-                                   outBufFlags,
-                                   m_dotProducts.size() * sizeof(float),
-                                   m_dotProducts.data());
+                    Buffer product(ocl.context, outBufFlags, m_dotProducts.size() * sizeof(float));
 
+                    // Command queue creation - use default properties for broad compatibility
                     CommandQueue queue(ocl.context, defaultDevice);
                     cl::Kernel kernel{ocl.program, "dot_product"};
 
-                    // Set arguments to kernel
-                    kernel.setArg(0, weights);
-                    kernel.setArg(1, values);
-                    kernel.setArg(2, product);
-                    kernel.setArg(3, static_cast< unsigned int >(Internal::inputs()));
+                    // Set arguments using pointer cast method for OpenCL v3
+                    kernel.setArg(0, sizeof(cl_mem), &weights);
+                    kernel.setArg(1, sizeof(cl_mem), &values);
+                    kernel.setArg(2, sizeof(cl_mem), &product);
+                    cl_uint inputs_count = static_cast< cl_uint >(Internal::inputs());
+                    kernel.setArg(3, sizeof(cl_uint), &inputs_count);
 
+                    // Execute kernel with proper error handling
                     queue.enqueueNDRangeKernel(kernel,
                                                cl::NullRange,
                                                cl::NDRange(size()),
                                                cl::NullRange);
 
+                    // Read results back
                     queue.enqueueReadBuffer(product,
                                             CL_TRUE,
                                             0,
                                             m_dotProducts.size() * sizeof(float),
                                             m_dotProducts.data());
 
+                    // Finalize computation with bias and activation
                     auto& self = *this;
                     for(const auto i : ranges::views::indices(size())) {
                         m_dotProducts[i] += self[i].getBias();
@@ -163,7 +180,10 @@ namespace nn {
                                                m_dotProducts.end());
                     }
                 } catch(const cl::Error& e) {
-                    std::cerr << "Calculation error: " << e.what() << std::endl;
+                    std::cout << "OpenCL error (" << e.err()
+                              << "): " << e.what() << std::endl;
+                } catch(const std::exception& e) {
+                    std::cout << "Calculation error: " << e.what() << std::endl;
                 }
             }
 
@@ -194,8 +214,7 @@ namespace nn {
     /// initialization a final weight will be calculated in a following way
     /// random(0, 1)/scaleFactor
     template< template< template< class > class, class, std::size_t > class NeuronType,
-              template< class >
-              class ActivationFunctionType,
+              template< class > class ActivationFunctionType,
               std::size_t size,
               std::size_t inputsNumber = 2,
               typename Var = float >
