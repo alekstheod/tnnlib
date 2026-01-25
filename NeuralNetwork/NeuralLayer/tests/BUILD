@@ -9,7 +9,7 @@ cc_test(
         "//NeuralNetwork/ActivationFunction",
         "//NeuralNetwork/NeuralLayer",
         "//NeuralNetwork/Neuron",
-        "//Utilities/catch2:catch2_main",
+        "@catch2//:catch2_main",
     ],
 )
 
@@ -24,7 +24,7 @@ cc_test(
         "//NeuralNetwork/ActivationFunction",
         "//NeuralNetwork/NeuralLayer:OpenCLNeuralLayer",
         "//NeuralNetwork/Neuron",
-        "//Utilities/catch2:catch2_main",
+        "@catch2//:catch2_main",
         "@opencl_headers//:OpenCL",
     ],
 )

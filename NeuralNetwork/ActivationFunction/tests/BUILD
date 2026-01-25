@@ -4,6 +4,6 @@ cc_test(
     deps = [
         "//:tnnlib_utils",
         "//NeuralNetwork/ActivationFunction",
-        "//Utilities/catch2:catch2_main",
+        "@catch2//:catch2_main",
     ],
 )
