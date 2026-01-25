@@ -4,7 +4,9 @@
 #include "NeuralNetwork/NeuralLayer/OpenCL/OpenCLNeuralLayer.h"
 #include "NeuralNetwork//BackPropagation/BPNeuralLayer.h"
 
-#include <CL/opencl.hpp>
+#include <CL/cl.h>
+#include <CL/cl_ext.h>
+#include <CL/cl_platform.h>
 
 namespace nn {
 

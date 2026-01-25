@@ -1,0 +1,59 @@
+package(default_visibility = ["//visibility:public"])
+
+genrule(
+    name = "icd_cmake_config_h",
+    outs = ["icd_cmake_config.h"],
+    cmd = """
+cat > $@ << 'EOF'
+#ifndef ICD_CMAKE_CONFIG_H
+#define ICD_CMAKE_CONFIG_H
+
+/* Define if secure_getenv is available */
+#define HAVE_SECURE_GETENV 1
+
+/* Define if __secure_getenv is available */
+#undef HAVE___SECURE_GETENV
+
+#endif /* ICD_CMAKE_CONFIG_H */
+EOF
+""",
+)
+
+# Hermetic OpenCL ICD Loader build from source
+cc_library(
+    name = "opencl_icd_loader",
+    srcs = [
+        "loader/icd.c",
+        "loader/icd_dispatch.c", 
+        "loader/icd_dispatch_generated.c",
+        "loader/linux/icd_linux.c",
+        "loader/linux/icd_linux_envvars.c",
+        ":icd_cmake_config_h",
+    ],
+    hdrs = [
+        "loader/icd.h",
+        "loader/icd_dispatch.h",
+        "loader/icd_envvars.h",
+        "loader/icd_platform.h",
+        "loader/icd_version.h",
+        "icd_cmake_config.h",
+    ],
+    copts = [
+        "-std=c99",
+        "-DCL_TARGET_OPENCL_VERSION=300",
+        "-DCL_NO_NON_ICD_DISPATCH_EXTENSION_PROTOTYPES",
+        "-DOPENCL_ICD_LOADER_VERSION_MAJOR=3",
+        "-DOPENCL_ICD_LOADER_VERSION_MINOR=0", 
+        "-DOPENCL_ICD_LOADER_VERSION_REV=7",
+        "-DCL_ENABLE_LAYERS",
+        "-DCL_ENABLE_LOADER_MANAGED_DISPATCH",
+    ],
+    includes = [
+        "loader",
+        "loader/linux",
+        ".",
+    ],
+    deps = ["@opencl_headers//:opencl_headers"],
+    linkopts = ["-ldl", "-lpthread"],
+    visibility = ["//visibility:public"],
+)

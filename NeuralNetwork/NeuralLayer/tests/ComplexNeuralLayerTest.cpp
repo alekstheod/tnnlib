@@ -4,7 +4,7 @@
 #include "NeuralNetwork/ActivationFunction/SoftmaxFunction.h"
 
 #define CATCH_CONFIG_NO_CPP17_UNCAUGHT_EXCEPTIONS
-#include <catch2/catch.hpp>
+#include <catch2/catch_all.hpp>
 
 namespace {
     SCENARIO("Complex neural layer basic calculation",
@@ -25,11 +25,12 @@ namespace {
                 THEN(
                  "Neurons output of the SigmoidNeuron is equal to 1 / (1 + "
                  "std::exp(-dot_pruduct))") {
-                    REQUIRE(layer[0].getOutput() == Approx(1.f / (1.f + std::exp(-3.f))));
+                    REQUIRE(layer[0].getOutput() ==
+                            Catch::Approx(1.f / (1.f + std::exp(-3.f))));
                 }
                 THEN("Neurons output of the SoftmaxNeuron is equal to ") {
                     REQUIRE(layer[1].getOutput() ==
-                            Approx(std::exp(3.f) / (std::exp(3.f) + std::exp(3.f))));
+                            Catch::Approx(std::exp(3.f) / (std::exp(3.f) + std::exp(3.f))));
                 }
             }
         }

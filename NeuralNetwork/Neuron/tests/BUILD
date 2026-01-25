@@ -7,6 +7,6 @@ cc_test(
         "//NeuralNetwork/ActivationFunction",
         "//NeuralNetwork/Neuron",
         "//NeuralNetwork/Serialization",
-        "@catch2",
+        "@catch2//:catch2_main",
     ],
 )

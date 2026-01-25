@@ -1,0 +1,9 @@
+package(default_visibility = ["//visibility:public"])
+
+# OpenCL headers (header-only)
+cc_library(
+    name = "opencl_headers",
+    hdrs = glob(["**/*.h", "**/*.hpp"]),
+    includes = ["."],
+    copts = ["-DCL_TARGET_OPENCL_VERSION=300"],
+)

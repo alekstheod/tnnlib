@@ -1,4 +1,11 @@
 build -c opt --cxxopt='-std=c++17'
+
+# OpenCL configuration
+# Use --config=opencl to enable OpenCL features
+build:opencl --define=opencl=true
+build:opencl --cxxopt='-std=c++17'
+
+# AddressSanitizer configuration
 build:asan --strip=never
 build:asan --copt -fsanitize=address
 build:asan --copt -DADDRESS_SANITIZER
@@ -6,4 +13,7 @@ build:asan --copt -O1
 build:asan --copt -g
 build:asan --copt -fno-omit-frame-pointer
 build:asan --linkopt -fsanitize=address
+
+# Common configurations
+build --verbose_failures
 

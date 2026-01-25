@@ -1,0 +1,46 @@
+module(
+    name = "tnnlib",
+    version = "0.1.0",
+    repo_name = "tnnlib",
+)
+
+# Core BCR dependencies
+bazel_dep(name = "platforms", version = "0.0.11")
+bazel_dep(name = "rules_cc", version = "0.0.17")
+bazel_dep(name = "rules_license", version = "1.0.0")
+
+# BCR third-party dependencies
+bazel_dep(name = "catch2", version = "3.12.0")
+bazel_dep(name = "zlib", version = "1.3.1.bcr.5")
+bazel_dep(name = "libpng", version = "1.6.47.bcr.1")
+bazel_dep(name = "cereal", version = "1.3.2.bcr.3")
+bazel_dep(name = "range-v3", version = "0.12.0")
+
+# Boost (non-BCR, using archive_override)
+bazel_dep(name = "rules_boost", repo_name = "com_github_nelhage_rules_boost")
+archive_override(
+    module_name = "rules_boost",
+    strip_prefix = "rules_boost-master",
+    urls = "https://github.com/nelhage/rules_boost/archive/refs/heads/master.tar.gz",
+)
+
+# Boost repositories extension
+non_module_boost_repositories = use_extension("@com_github_nelhage_rules_boost//:boost/repositories.bzl", "non_module_dependencies")
+use_repo(
+    non_module_boost_repositories,
+    "boost",
+)
+
+# Development tools
+# Hedron's Compile Commands Extractor for Bazel
+# https://github.com/hedronvision/bazel-compile-commands-extractor
+bazel_dep(name = "hedron_compile_commands", dev_dependency = True)
+git_override(
+    module_name = "hedron_compile_commands",
+    commit = "0e990032f3c5a866e72615cf67e5ce22186dcb97",
+    remote = "https://github.com/hedronvision/bazel-compile-commands-extractor.git",
+    # Replace with the latest commit (https://github.com/hedronvision/bazel-compile-commands-extractor/commits/main).
+    # Even better, set up Renovate and let it do the work for you (see "Suggestion: Updates" in README).
+)
+
+
