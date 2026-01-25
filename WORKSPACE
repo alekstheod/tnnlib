@@ -19,16 +19,16 @@ http_archive(
 http_archive(
     name = "opencl_headers",
     build_file = "//third_party/opencl:BUILD.opencl_headers",
-    sha256 = "407d5e109a70ec1b6cd3380ce357c21e3d3651a91caae6d0d8e1719c69a1791d",
-    strip_prefix = "OpenCL-Headers-2023.12.14",
-    urls = ["https://github.com/KhronosGroup/OpenCL-Headers/archive/refs/tags/v2023.12.14.tar.gz"],
+    sha256 = "159f2a550592bae49859fee83d372acd152328fdf95c0dcd8b9409f8fad5db93",
+    strip_prefix = "OpenCL-Headers-2024.10.24",
+    urls = ["https://github.com/KhronosGroup/OpenCL-Headers/archive/refs/tags/v2024.10.24.tar.gz"],
 )
 
 # OpenCL ICD Loader (provides libOpenCL.so symbols)
 http_archive(
     name = "opencl_icd_loader",
     build_file = "//third_party/opencl:BUILD.opencl_icd_loader",
-    sha256 = "af8df96f1e1030329e8d4892ba3aa761b923838d4c689ef52d97822ab0bd8917",
-    strip_prefix = "OpenCL-ICD-Loader-2023.12.14",
-    urls = ["https://github.com/KhronosGroup/OpenCL-ICD-Loader/archive/refs/tags/v2023.12.14.tar.gz"],
+    sha256 = "95f2f0cda375b13d2760290df044ebea9c6ff954a7d7faa0867422442c9174dc",
+    strip_prefix = "OpenCL-ICD-Loader-2024.10.24",
+    urls = ["https://github.com/KhronosGroup/OpenCL-ICD-Loader/archive/refs/tags/v2024.10.24.tar.gz"],
 )
