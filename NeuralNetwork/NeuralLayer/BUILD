@@ -47,6 +47,6 @@ cc_library(
     deps = [
         ":NeuralLayer",
         "//:tnnlib_utils",
-        "@opencl_headers//:OpenCL",
+        "//third_party/opencl:opencl",
     ],
 )

@@ -1,0 +1,7 @@
+package(default_visibility = ["//visibility:public"])
+
+# OpenCL system library fallback - simpler approach
+cc_library(
+    name = "opencl_icd_loader",
+    linkopts = ["-lOpenCL", "-ldl", "-lpthread"],
+)

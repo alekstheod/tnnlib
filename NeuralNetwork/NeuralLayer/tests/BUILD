@@ -25,6 +25,5 @@ cc_test(
         "//NeuralNetwork/NeuralLayer:OpenCLNeuralLayer",
         "//NeuralNetwork/Neuron",
         "@catch2//:catch2_main",
-        "@opencl_headers//:OpenCL",
     ],
 )
