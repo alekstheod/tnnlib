@@ -17,8 +17,10 @@ namespace {
                 THEN(
                  "Neurons outputs are equal with a result of the function 1 / "
                  "(1 + std::exp(-dot_pruduct))") {
-                    REQUIRE(layer[0].getOutput() == Catch::Approx(1.f / (1.f + std::exp(-1.1f))));
-                    REQUIRE(layer[1].getOutput() == Catch::Approx(1.f / (1.f + std::exp(-0.7f))));
+                    REQUIRE(layer[0].getOutput() ==
+                            Catch::Approx(1.f / (1.f + std::exp(-1.1f))));
+                    REQUIRE(layer[1].getOutput() ==
+                            Catch::Approx(1.f / (1.f + std::exp(-0.7f))));
                 }
             }
         }

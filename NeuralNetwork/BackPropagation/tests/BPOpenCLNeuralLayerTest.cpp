@@ -61,7 +61,8 @@ namespace {
                             const auto expectedBias = regularLayer[i.value].getBias();
                             const auto actualBias = openclLayer[i.value].getBias();
 
-                            REQUIRE_THAT(expectedWeight, Catch::Matchers::WithinRel(actualWeight));
+                            REQUIRE_THAT(expectedWeight,
+                                         Catch::Matchers::WithinRel(actualWeight));
                             REQUIRE_THAT(expectedBias, Catch::Matchers::WithinRel(actualBias));
                         });
                     });

@@ -25,7 +25,8 @@ namespace {
                 THEN(
                  "Neurons output of the SigmoidNeuron is equal to 1 / (1 + "
                  "std::exp(-dot_pruduct))") {
-                    REQUIRE(layer[0].getOutput() == Catch::Approx(1.f / (1.f + std::exp(-3.f))));
+                    REQUIRE(layer[0].getOutput() ==
+                            Catch::Approx(1.f / (1.f + std::exp(-3.f))));
                 }
                 THEN("Neurons output of the SoftmaxNeuron is equal to ") {
                     REQUIRE(layer[1].getOutput() ==
