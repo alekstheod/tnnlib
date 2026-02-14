@@ -1,16 +1,11 @@
 #pragma once
 
 #include "NeuralNetwork//BackPropagation/BPNeuron.h"
-#include "NeuralNetwork/NeuralLayer/ConvolutionLayer.h"
 
 #include <MPL/TypeTraits.h>
 
 #include <range/v3/all.hpp>
 
-#include <algorithm>
-#include <functional>
-#include <tuple>
-#include <type_traits>
 
 namespace nn::bp {
     template< typename Internal >
