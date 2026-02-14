@@ -7,6 +7,6 @@ export USE_BAZEL_VERSION=7.3.1
 bazelisk --host_jvm_args=-Xmx3g --host_jvm_args=-Xms512m test \
 	--jobs=2 \
 	--config=asan //... \
-	--test_tag_filters="-manual,-openCL" \
+	--test_tag_filters="-manual" \
 	--keep_going \
 	--test_output=all

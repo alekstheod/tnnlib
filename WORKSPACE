@@ -24,6 +24,15 @@ http_archive(
     urls = ["https://github.com/KhronosGroup/OpenCL-Headers/archive/refs/tags/v2024.10.24.tar.gz"],
 )
 
+# OpenCL C++ headers (hermetic)
+http_archive(
+    name = "opencl_clhpp",
+    build_file = "//third_party/opencl:BUILD.opencl_clhpp",
+    sha256 = "51aebe848514b3bc74101036e111f8ee98703649eec7035944831dc6e05cec14",
+    strip_prefix = "OpenCL-CLHPP-2024.10.24",
+    urls = ["https://github.com/KhronosGroup/OpenCL-CLHPP/archive/refs/tags/v2024.10.24.tar.gz"],
+)
+
 # OpenCL ICD Loader (provides libOpenCL.so symbols)
 http_archive(
     name = "opencl_icd_loader",
