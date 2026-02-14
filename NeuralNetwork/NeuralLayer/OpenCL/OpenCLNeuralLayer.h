@@ -17,6 +17,7 @@ namespace nn {
     namespace detail {
 
         cl::Context createContext();
+        bool isOpenCLAvailable();
         cl::Program createProgram(const std::string& programPath,
                                   const cl::Context& context,
                                   const cl::Device& devices);

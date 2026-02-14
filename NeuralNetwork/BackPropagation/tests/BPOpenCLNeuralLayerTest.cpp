@@ -13,12 +13,18 @@
 
 namespace {
 
+    bool opencl_available = nn::detail::isOpenCLAvailable();
+
     using Prototype =
      typename std::tuple< std::array< float, 2 >, std::array< float, 2 > >;
     using BasicLayer = nn::NeuralLayer< nn::Neuron, nn::TanhFunction, 2, 2 >;
 
     SCENARIO("BPAsyncNeuralLayer compared to regular BPNeuralLayer",
              "[layer][thread][backward]") {
+        if(!opencl_available) {
+            SKIP("OpenCL not available");
+        }
+
         GIVEN(
          "A AsyncNeuralLayer layer with 2 neurons and 2 inputs as well as a "
          "regular layer with the same topology") {

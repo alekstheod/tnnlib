@@ -6,6 +6,17 @@
 
 namespace nn::detail {
 
+    bool isOpenCLAvailable() {
+        using namespace cl;
+        try {
+            std::vector< cl::Platform > platforms;
+            cl::Platform::get(&platforms);
+            return !platforms.empty();
+        } catch(const cl::Error&) {
+            return false;
+        }
+    }
+
     cl::Context createContext() {
         using namespace cl;
         // Get available platforms

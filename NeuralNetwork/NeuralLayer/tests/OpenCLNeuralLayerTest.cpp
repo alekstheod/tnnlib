@@ -9,8 +9,13 @@
 #include <catch2/catch_all.hpp>
 
 namespace {
+    bool opencl_available = nn::detail::isOpenCLAvailable();
+
     SCENARIO("OpenCLNeuralLayer compared to regular NeuralLayer",
              "[layer][opencl][forward]") {
+        if(!opencl_available) {
+            SKIP("OpenCL not available");
+        }
         GIVEN(
          "A OpenCLNeuralLayer layer with 2 neurons and 2 inputs as well as a "
          "regular layer with the same topology") {
