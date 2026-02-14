@@ -2,7 +2,7 @@
 #include <cstdlib>
 
 #define CATCH_CONFIG_NO_CPP17_UNCAUGHT_EXCEPTIONS
-#include <catch2/catch.hpp>
+#include <catch2/catch_all.hpp>
 
 namespace {
     template< std::size_t result, std::size_t delta_result, std::size_t derivative_result, std::size_t sum_result >
@@ -39,21 +39,21 @@ namespace {
                 using Function = ActivationFunctionStub< 70U, 20U, 30U, 40U >;
                 nn::Binary< Function, 69U > binary;
                 THEN("binary filter outputs 1") {
-                    REQUIRE(binary.calculate(0.F, 0, 1) == Approx(1.f));
+                    REQUIRE(binary.calculate(0.F, 0, 1) == Catch::Approx(1.f));
                 }
             }
             WHEN("Activation function output is equal to threshold") {
                 using Function = ActivationFunctionStub< 69U, 20U, 30U, 40U >;
                 nn::Binary< Function, 69U > binary;
                 THEN("binary filter outputs 0") {
-                    REQUIRE(binary.calculate(0.F, 0, 1) == Approx(0.f));
+                    REQUIRE(binary.calculate(0.F, 0, 1) == Catch::Approx(0.f));
                 }
             }
             WHEN("Activation function output is below to threshold") {
                 using Function = ActivationFunctionStub< 69U, 20U, 30U, 40U >;
                 nn::Binary< Function, 69U > binary;
                 THEN("binary filter outputs 0") {
-                    REQUIRE(binary.calculate(0.F, 0, 1) == Approx(0.f));
+                    REQUIRE(binary.calculate(0.F, 0, 1) == Catch::Approx(0.f));
                 }
             }
             WHEN("calling delta on binary function") {
@@ -63,7 +63,7 @@ namespace {
                  "the result is the same as when calling delta on activation "
                  "function") {
                     REQUIRE(binary.delta(0.F, 0.F) ==
-                            Approx(ActivationFunction{}.delta(0.f, 0.f)));
+                            Catch::Approx(ActivationFunction{}.delta(0.f, 0.f)));
                 }
             }
             WHEN("calling sum on binary function") {
@@ -73,7 +73,7 @@ namespace {
                  "the result is the same as when calling sum on activation "
                  "function") {
                     REQUIRE(binary.sum(0U, 1U, 0.1F) ==
-                            Approx(ActivationFunction{}.sum(0U, 1U, 0.1F)));
+                            Catch::Approx(ActivationFunction{}.sum(0U, 1U, 0.1F)));
                 }
             }
             WHEN("calling derivative on binary function") {
@@ -84,7 +84,7 @@ namespace {
                  "activation "
                  "function") {
                     REQUIRE(binary.derivate(0.f) ==
-                            Approx(ActivationFunction{}.derivate(0.f)));
+                            Catch::Approx(ActivationFunction{}.derivate(0.f)));
                 }
             }
         }

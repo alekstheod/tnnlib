@@ -10,7 +10,7 @@ jobs:
       - run: apt install -y wget git gcc g++ clang
       - run: wget -O /usr/bin/bazelisk https://github.com/bazelbuild/bazelisk/releases/download/v1.16.0/bazelisk-linux-amd64
       - run: chmod +x /usr/bin/bazelisk
-      - run: apt -y install opencl-headers ocl-icd-opencl-dev
+      - run: apt -y install pocl-opencl-icd
       - run: ln -s /usr/lib/x86_64-linux-gnu/libOpenCL.so /usr/lib/
-      - run: bazelisk --host_jvm_args=-Xmx3g --host_jvm_args=-Xms512m test --jobs=2 --config=asan //... --test_tag_filters="-openCL"
+      - run: bazelisk --host_jvm_args=-Xmx3g --host_jvm_args=-Xms512m test --jobs=2 --config=asan //...
 version: 2

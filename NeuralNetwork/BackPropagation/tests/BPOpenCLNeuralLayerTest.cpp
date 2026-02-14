@@ -9,9 +9,11 @@
 #include <range/v3/all.hpp>
 
 #define CATCH_CONFIG_NO_CPP17_UNCAUGHT_EXCEPTIONS
-#include <catch2/catch.hpp>
+#include <catch2/catch_all.hpp>
 
 namespace {
+
+    bool opencl_available = nn::detail::isOpenCLAvailable();
 
     using Prototype =
      typename std::tuple< std::array< float, 2 >, std::array< float, 2 > >;
@@ -19,6 +21,10 @@ namespace {
 
     SCENARIO("BPAsyncNeuralLayer compared to regular BPNeuralLayer",
              "[layer][thread][backward]") {
+        if(!opencl_available) {
+            SKIP("OpenCL not available");
+        }
+
         GIVEN(
          "A AsyncNeuralLayer layer with 2 neurons and 2 inputs as well as a "
          "regular layer with the same topology") {
@@ -42,7 +48,7 @@ namespace {
                     utils::for_< 2 >([&](auto i) {
                         const auto expected_delta = regularLayer.getDelta(i.value);
                         const auto actual_delta = openclLayer.getDelta(i.value);
-                        REQUIRE_THAT(expected_delta, Catch::WithinRel(actual_delta));
+                        REQUIRE_THAT(expected_delta, Catch::Matchers::WithinRel(actual_delta));
                     });
                 }
             }
@@ -61,8 +67,9 @@ namespace {
                             const auto expectedBias = regularLayer[i.value].getBias();
                             const auto actualBias = openclLayer[i.value].getBias();
 
-                            REQUIRE_THAT(expectedWeight, Catch::WithinRel(actualWeight));
-                            REQUIRE_THAT(expectedBias, Catch::WithinRel(actualBias));
+                            REQUIRE_THAT(expectedWeight,
+                                         Catch::Matchers::WithinRel(actualWeight));
+                            REQUIRE_THAT(expectedBias, Catch::Matchers::WithinRel(actualBias));
                         });
                     });
                 }

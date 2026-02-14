@@ -9,7 +9,6 @@
 #include "NeuralNetwork/ActivationFunction/ReluFunction.h"
 #include "NeuralNetwork/Neuron/Neuron.h"
 #include "NeuralNetwork/Perceptron/Perceptron.h"
-#include "NeuralNetwork/NeuralLayer/OpenCL/OpenCLNeuralLayer.h"
 #include "NeuralNetwork/NeuralLayer/Thread/AsyncNeuralLayer.h"
 #include "NeuralNetwork/BackPropagation/BPAsyncNeuralLayer.h"
 #include "NeuralNetwork/Serialization/Cereal.h"

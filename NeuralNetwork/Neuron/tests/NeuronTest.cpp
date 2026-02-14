@@ -6,7 +6,7 @@
 
 #define CATCH_CONFIG_NO_CPP17_UNCAUGHT_EXCEPTIONS
 #define CATCH_CONFIG_MAIN
-#include <catch2/catch.hpp>
+#include <catch2/catch_all.hpp>
 
 #include <vector>
 
@@ -26,7 +26,7 @@ namespace {
                     const auto output = neuron.calculateOutput(neuron.calcDotProduct(),
                                                                dotProducts.begin(),
                                                                dotProducts.end());
-                    REQUIRE(output == Approx(0.982f).margin(0.001));
+                    REQUIRE(output == Catch::Approx(0.982f).margin(0.001));
                 }
             }
             WHEN("Weights are set to 0 and bias is equal to 0") {
@@ -39,7 +39,7 @@ namespace {
                     const auto output = neuron.calculateOutput(neuron.calcDotProduct(),
                                                                dotProducts.begin(),
                                                                dotProducts.end());
-                    REQUIRE(output == Approx(0.5f).margin(0.001));
+                    REQUIRE(output == Catch::Approx(0.5f).margin(0.001));
                 }
             }
             WHEN(
@@ -54,7 +54,7 @@ namespace {
                     const auto output = neuron.calculateOutput(neuron.calcDotProduct(),
                                                                dotProducts.begin(),
                                                                dotProducts.end());
-                    REQUIRE(output == Approx(0.5f).margin(0.001));
+                    REQUIRE(output == Catch::Approx(0.5f).margin(0.001));
                 }
             }
         }

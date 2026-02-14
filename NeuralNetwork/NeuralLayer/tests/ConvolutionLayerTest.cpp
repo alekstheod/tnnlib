@@ -6,13 +6,13 @@
 #include <range/v3/all.hpp>
 
 #define CATCH_CONFIG_NO_CPP17_UNCAUGHT_EXCEPTIONS
-#include <catch2/catch.hpp>
+#include <catch2/catch_all.hpp>
 
 namespace {
     template< typename Neuron >
     void assertValidInputs(const Neuron& neuron, const std::vector< float >& expected) {
         for(std::size_t i = 0; i < expected.size(); i++) {
-            REQUIRE_THAT(neuron[i].value, Catch::WithinRel(expected[i]));
+            REQUIRE_THAT(neuron[i].value, Catch::Matchers::WithinRel(expected[i]));
         }
     }
 

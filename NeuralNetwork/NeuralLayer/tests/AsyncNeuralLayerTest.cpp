@@ -6,7 +6,7 @@
 #include <range/v3/all.hpp>
 
 #define CATCH_CONFIG_NO_CPP17_UNCAUGHT_EXCEPTIONS
-#include <catch2/catch.hpp>
+#include <catch2/catch_all.hpp>
 
 
 namespace {
@@ -32,7 +32,7 @@ namespace {
                     asyncLayer.calculateOutputs();
                     const auto expected_output = regularLayer.getOutput(0);
                     const auto actual_output = asyncLayer.getOutput(0);
-                    REQUIRE_THAT(expected_output, Catch::WithinRel(actual_output));
+                    REQUIRE_THAT(expected_output, Catch::Matchers::WithinRel(actual_output));
                 }
             }
         }

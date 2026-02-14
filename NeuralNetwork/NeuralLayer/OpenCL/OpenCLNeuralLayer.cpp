@@ -1,8 +1,21 @@
 #include "NeuralNetwork/NeuralLayer/OpenCL/OpenCLNeuralLayer.h"
 
 #include <fstream>
+#include <stdexcept>
+#include <vector>
 
 namespace nn::detail {
+
+    bool isOpenCLAvailable() {
+        using namespace cl;
+        try {
+            std::vector< cl::Platform > platforms;
+            cl::Platform::get(&platforms);
+            return !platforms.empty();
+        } catch(const cl::Error&) {
+            return false;
+        }
+    }
 
     cl::Context createContext() {
         using namespace cl;
@@ -10,13 +23,21 @@ namespace nn::detail {
         std::vector< cl::Platform > platforms;
         cl::Platform::get(&platforms);
 
-        // Select the default platform and create a context using this
-        // platform and the GPU
-        cl_context_properties cps[3] = {CL_CONTEXT_PLATFORM,
-                                        (cl_context_properties)(platforms.front())(),
-                                        0};
+        if(platforms.empty()) {
+            throw std::runtime_error("No OpenCL platforms found");
+        }
 
-        return cl::Context(CL_DEVICE_TYPE_DEFAULT, cps);
+        // Modern OpenCL v3 context creation with properties
+        cl_context_properties properties[] = {CL_CONTEXT_PLATFORM,
+                                              (cl_context_properties)platforms.front()(),
+                                              0};
+
+        // Try GPU first, then fallback to any device type
+        try {
+            return cl::Context(CL_DEVICE_TYPE_GPU, properties);
+        } catch(const cl::Error&) {
+            return cl::Context(CL_DEVICE_TYPE_DEFAULT, properties);
+        }
     }
 
     cl::Program createProgram(const std::string& programPath,
@@ -25,6 +46,9 @@ namespace nn::detail {
         using namespace cl;
 
         std::ifstream strm(programPath, std::ios_base::binary);
+        if(!strm.is_open()) {
+            throw std::runtime_error("Failed to open OpenCL kernel file: " + programPath);
+        }
 
         using It = std::istreambuf_iterator< char >;
         std::string src{(It(strm)), It()};
@@ -32,15 +56,21 @@ namespace nn::detail {
         Program::Sources source{1, {src}};
         cl::Program program = cl::Program{context, source};
 
-        // Build program for these specific devices
+        // Build program with OpenCL v3 options and error handling
+        cl_int build_err = CL_SUCCESS;
         try {
-            program.build({device});
+            build_err = program.build({device}, "-cl-std=CL3.0");
         } catch(const cl::Error& e) {
+            build_err = e.err();
+        }
+
+        if(build_err != CL_SUCCESS) {
             cl_int err;
             const auto buildlog =
              program.getBuildInfo< CL_PROGRAM_BUILD_LOG >(device, &err);
-            std::cerr << "Building error! Log: " << buildlog << std::endl;
-            throw std::runtime_error{"Build opencl program error"};
+            std::cout << "OpenCL build error (" << build_err
+                      << "): " << buildlog << std::endl;
+            throw std::runtime_error("OpenCL program build failed");
         }
 
         return program;

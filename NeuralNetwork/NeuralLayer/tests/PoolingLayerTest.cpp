@@ -6,7 +6,7 @@
 #include <range/v3/all.hpp>
 
 #define CATCH_CONFIG_NO_CPP17_UNCAUGHT_EXCEPTIONS
-#include <catch2/catch.hpp>
+#include <catch2/catch_all.hpp>
 
 namespace {
     template< typename T >
@@ -59,7 +59,7 @@ namespace {
                     for(const auto id : ranges::views::ints(0, 4)) {
                         for(const auto input : ranges::views::ints(0, 9)) {
                             REQUIRE_THAT(layer[id][input],
-                                         Catch::WithinRel(inputs[id][input]));
+                                         Catch::Matchers::WithinRel(inputs[id][input]));
                         }
                     }
                 }
@@ -68,10 +68,10 @@ namespace {
                     THEN(
                      "The outputs are the max of the inputs for each neuron") {
                         layer.calculateOutputs();
-                        REQUIRE_THAT(15.0f, Catch::WithinRel(layer[0].getOutput()));
-                        REQUIRE_THAT(18.0f, Catch::WithinRel(layer[1].getOutput()));
-                        REQUIRE_THAT(33.0f, Catch::WithinRel(layer[2].getOutput()));
-                        REQUIRE_THAT(36.0f, Catch::WithinRel(layer[3].getOutput()));
+                        REQUIRE_THAT(15.0f, Catch::Matchers::WithinRel(layer[0].getOutput()));
+                        REQUIRE_THAT(18.0f, Catch::Matchers::WithinRel(layer[1].getOutput()));
+                        REQUIRE_THAT(33.0f, Catch::Matchers::WithinRel(layer[2].getOutput()));
+                        REQUIRE_THAT(36.0f, Catch::Matchers::WithinRel(layer[3].getOutput()));
                     }
                 }
             }

@@ -14,6 +14,6 @@ cc_test(
         "//NeuralNetwork/NeuralLayer",
         "//NeuralNetwork/Neuron",
         "//NeuralNetwork/Serialization",
-        "@catch2",
+        "@catch2//:catch2_main",
     ],
 )
