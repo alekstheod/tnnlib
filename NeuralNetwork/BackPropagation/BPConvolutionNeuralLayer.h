@@ -41,17 +41,21 @@ namespace nn::bp {
         using Base::setMemento;
 
         void calculateWeights(Var learningRate) {
-            for(const auto inputId : ranges::views::indices(Grid::width * Grid::height)) {
-                const auto gradient = calculateGradient(inputId);
-                adjustWeight(inputId, gradient, learningRate);
-            }
-
             auto& self = *this;
-            for(const auto i : ranges::views::indices(size())) {
-                auto& neuron = self[i];
-                Var weight = neuron.getBias();
-                Var newWeight = weight - learningRate * neuron.getDelta();
-                neuron.setBias(newWeight);
+            for(const auto neuronId : ranges::views::indices(size())) {
+                auto& neuron = self[neuronId];
+                const Var neuronDelta = neuron.getDelta();
+
+                for(const auto weightId : ranges::views::indices(Grid::K::size)) {
+                    const Var inputValue = neuron[weightId].value;
+                    const Var weightGradient = neuronDelta * inputValue;
+                    neuron[weightId].weight =
+                     neuron[weightId].weight - learningRate * weightGradient;
+                }
+
+                Var bias = neuron.getBias();
+                Var newBias = bias - learningRate * neuronDelta;
+                neuron.setBias(newBias);
             }
         }
 
@@ -66,32 +70,6 @@ namespace nn::bp {
         }
 
       private:
-        void adjustWeight(const std::size_t inputId, const Var& gradient, const Var& learningRate) {
-            auto& self = *this;
-            utils::for_each(m_grid.frames, [&](auto& frame) {
-                if(frame.area.doesIntersect(inputId)) {
-                    const auto localInputId = frame.area.localize(inputId);
-                    auto& neuron = self[frame.neuronId];
-                    neuron[localInputId].weight =
-                     neuron[localInputId].weight - learningRate * gradient;
-                }
-            });
-        }
-
-        Var calculateGradient(const std::size_t inputId) {
-            Var sum{};
-            auto& self = *this;
-            utils::for_each(m_grid.frames, [&](auto& frame) {
-                if(frame.area.doesIntersect(inputId)) {
-                    const auto localInputId = frame.area.localize(inputId);
-                    const auto& neuron = self[frame.neuronId];
-                    sum += neuron.getDelta() * neuron[localInputId].value;
-                }
-            });
-
-            return sum;
-        }
-
         Grid m_grid;
     };
 
