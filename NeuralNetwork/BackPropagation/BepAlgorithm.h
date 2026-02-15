@@ -52,8 +52,7 @@ namespace nn::bp {
                                    std::get< 0 >(prototype).end(),
                                    m_outputs.begin());
 
-            // Calculate deltas
-            std::get< Perceptron::size() - 1 >(m_perceptron.layers()).calculateDeltas(prototype, momentum);
+            // Calculate deltas (output layer and propagate to hidden layers)
             calculateDelta(prototype, momentum);
 
             // Calculate weights
@@ -62,11 +61,7 @@ namespace nn::bp {
                 hiddenLayer.calculateWeights(m_leariningRate);
             });
 
-            m_perceptron.calculate(std::get< 0 >(prototype).begin(),
-                                   std::get< 0 >(prototype).end(),
-                                   m_outputs.begin());
-
-            // Calculate error
+            // Calculate error using cached outputs from forward pass
             return m_errorCalculator(m_outputs.begin(),
                                      m_outputs.end(),
                                      std::get< 1 >(prototype).begin());
