@@ -22,7 +22,7 @@ namespace util {
                 m_after();
             }
 
-            auto operator-> () -> Internal* {
+            auto operator->() -> Internal* {
                 return &m_internal;
             }
 
@@ -39,7 +39,7 @@ namespace util {
          : m_internal(internal), m_before(before), m_after(after) {
         }
 
-        auto operator-> () -> detail::Operation< Internal > {
+        auto operator->() -> detail::Operation< Internal > {
             return detail::Operation< Internal >(m_internal, m_before, m_after);
         }
 

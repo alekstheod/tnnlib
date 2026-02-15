@@ -82,7 +82,7 @@ namespace utils {
 
           protected:
             IState(StateHolder< Transitions... >& stateHolder)
-             : m_owner(stateHolder){};
+             : m_owner(stateHolder) {};
             IState(IState&) = delete;
 
           public:
