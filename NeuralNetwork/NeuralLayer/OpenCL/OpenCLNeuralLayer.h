@@ -1,6 +1,7 @@
 #pragma once
 
 #include "NeuralNetwork/NeuralLayer/NeuralLayer.h"
+#include "dot_product_kernel_binary.h"
 #include "Utilities/MPL/Algorithm.h"
 
 #include <range/v3/view.hpp>
@@ -18,6 +19,38 @@ namespace nn {
 
         cl::Context createContext();
         bool isOpenCLAvailable();
+
+        inline cl::Program createProgramFromBinary(const cl::Context& context,
+                                                   const cl::Device& device,
+                                                   const std::string& name,
+                                                   const uint8_t* data,
+                                                   size_t size) {
+            cl_int err;
+
+            cl_program program = clCreateProgramWithIL(context.get(), data, size, &err);
+
+            if(err != CL_SUCCESS) {
+                throw std::runtime_error("Failed to create program from IL: " + name);
+            }
+
+            cl_device_id device_id = device();
+            err = clBuildProgram(program, 1, &device_id, nullptr, nullptr, nullptr);
+            if(err != CL_SUCCESS) {
+                size_t log_size;
+                clGetProgramBuildInfo(program, device_id, CL_PROGRAM_BUILD_LOG, 0, nullptr, &log_size);
+                std::vector< char > log(log_size);
+                clGetProgramBuildInfo(
+                 program, device_id, CL_PROGRAM_BUILD_LOG, log_size, log.data(), nullptr);
+                std::cout << "OpenCL binary build error for " << name << ": "
+                          << log.data() << std::endl;
+                clReleaseProgram(program);
+                throw std::runtime_error(
+                 "Failed to build OpenCL program from binary: " + name);
+            }
+
+            return cl::Program(program);
+        }
+
         cl::Program createProgram(const std::string& programPath,
                                   const cl::Context& context,
                                   const cl::Device& devices);
@@ -40,10 +73,21 @@ namespace nn {
                 OpenCLProgram() {
                     devices = context.getInfo< CL_CONTEXT_DEVICES >();
                     if(!devices.empty()) {
-                        program = createProgram(
-                         "NeuralNetwork/NeuralLayer/OpenCL/dot_product.cl",
-                         context,
-                         devices.front());
+                        try {
+                            program = createProgramFromBinary(context,
+                                                              devices.front(),
+                                                              "dot_product",
+                                                              dot_product_t::data,
+                                                              dot_product_t::size);
+                        } catch(const std::exception& e) {
+                            std::cout << "Failed to load precompiled kernel, "
+                                         "falling back to source: "
+                                      << e.what() << std::endl;
+                            program = createProgram(
+                             "NeuralNetwork/NeuralLayer/OpenCL/dot_product.cl",
+                             context,
+                             devices.front());
+                        }
                     }
                 }
 

@@ -5,11 +5,11 @@ __kernel void dot_product(__global const float* weights,
                           const uint sz) {
     const size_t gid = get_global_id(0);
     const size_t offset = gid * sz;
-    
+
     float dot = 0.0f;
-    
+
     // Unrolled loop for better performance when possible
-    for (uint i = 0; i < sz; ++i) {
+    for(uint i = 0; i < sz; ++i) {
         dot += weights[offset + i] * inputs[offset + i];
     }
 

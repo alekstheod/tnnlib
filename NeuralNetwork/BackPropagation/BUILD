@@ -1,3 +1,11 @@
+load("//:opencl_kernel.bzl", "opencl_kernel", "opencl_kernel_binary")
+
+filegroup(
+    name = "opencl_kernels",
+    srcs = glob(["OpenCL/*.cl"]),
+    visibility = ["//visibility:public"],
+)
+
 cc_library(
     name = "BackPropagation",
     srcs = glob(
@@ -26,6 +34,24 @@ cc_library(
     ],
 )
 
+opencl_kernel(
+    name = "calc_weights_kernel",
+    src = "OpenCL/calc_weights.cl",
+)
+
+opencl_kernel_binary(
+    name = "calc_weights_kernel_binary",
+    src = ":calc_weights_kernel.spv",
+    var_name = "calc_weights",
+)
+
+cc_library(
+    name = "calc_weights_kernel_binary_h",
+    hdrs = [":calc_weights_kernel_binary.h"],
+    includes = ["."],
+    visibility = ["//visibility:public"],
+)
+
 cc_library(
     name = "OpenCLNeuralLayer",
     srcs = glob(
@@ -39,9 +65,10 @@ cc_library(
         exclude = [
             "tests/**",
         ],
-    ),
+    ) + [
+        ":calc_weights_kernel_binary.h",
+    ],
     copts = ["-Werror"],
-    data = ["OpenCL/calc_weights.cl"],
     includes = ["."],
     visibility = [
         "//visibility:public",

@@ -2,6 +2,7 @@
 
 #include "NeuralNetwork//BackPropagation/OpenCL/BPOpenCLNeuralLayer.h"
 #include "NeuralNetwork/NeuralLayer/OpenCL/OpenCLNeuralLayer.h"
+#include "calc_weights_kernel_binary.h"
 #include "NeuralNetwork//BackPropagation/BPNeuralLayer.h"
 
 #include <CL/cl.h>
@@ -55,12 +56,30 @@ namespace nn {
             struct OpenCLProgram {
                 cl::Context context{nn::detail::createContext()};
                 std::vector< cl::Device > devices{context.getInfo< CL_CONTEXT_DEVICES >()};
-                cl::Program program{
-                 nn::detail::createProgram("NeuralNetwork//"
-                                           "BackPropagation/OpenCL/"
-                                           "calc_weights.cl",
-                                           context,
-                                           devices.front())};
+                cl::Program program;
+
+                OpenCLProgram() {
+                    if(!devices.empty()) {
+                        try {
+                            program =
+                             nn::detail::createProgramFromBinary(context,
+                                                                 devices.front(),
+                                                                 "calc_weights",
+                                                                 calc_weights_t::data,
+                                                                 calc_weights_t::size);
+                        } catch(const std::exception& e) {
+                            std::cout
+                             << "Failed to load precompiled calc_weights "
+                                "kernel, falling back to source: "
+                             << e.what() << std::endl;
+                            program = nn::detail::createProgram(
+                             "NeuralNetwork//BackPropagation/OpenCL/"
+                             "calc_weights.cl",
+                             context,
+                             devices.front());
+                        }
+                    }
+                }
 
                 static OpenCLProgram& instance() {
                     static OpenCLProgram program;

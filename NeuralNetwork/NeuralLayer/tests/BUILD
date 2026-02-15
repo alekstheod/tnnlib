@@ -19,6 +19,9 @@ cc_test(
     srcs = ["OpenCLNeuralLayerTest.cpp"],
     includes = ["include"],
     tags = ["openCL"],
+    data = [
+        "//NeuralNetwork/NeuralLayer:opencl_kernels",
+    ],
     deps = [
         "//:tnnlib_utils",
         "//NeuralNetwork/ActivationFunction",

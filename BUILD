@@ -3,7 +3,7 @@ load("@hedron_compile_commands//:refresh_compile_commands.bzl", "refresh_compile
 cc_library(
     name = "tnnlib_utils",
     srcs = glob(["Utilities/**/*.cpp"]),
-    hdrs = glob(["Utilities/**/*.h"]),
+    hdrs =glob(["Utilities/**/*.h"]),
     copts = ["-Werror"],
     includes = ["Utilities"],
     strip_include_prefix = "Utilities",
