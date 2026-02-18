@@ -50,7 +50,7 @@ int main(int argc, char** argv) {
      Algo::Prototype{{Input{0.f}, Input{0.f}}, {0.f}}};
 
     unsigned int numOfEpochs =
-     argc < 2 ? std::numeric_limits< unsigned int >::max() : std::atoi(argv[1]);
+     argc < 2 ? std::numeric_limits< unsigned int >::max() : std::strtol(argv[1]);
 
     Perceptron perceptron =
      algorithm.calculate(prototypes.begin(),
