@@ -64,13 +64,12 @@ namespace nn::bp {
             detail::calculateHiddenDeltas(*this, affectedLayer, momentum);
         }
 
+        using Base::m_grid;
+
         const Var& getDelta(std::size_t neuronId) const {
             auto& self = *this;
             return self[neuronId].getDelta();
         }
-
-      private:
-        Grid m_grid;
     };
 
 } // namespace nn::bp

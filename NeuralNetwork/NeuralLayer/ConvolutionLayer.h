@@ -138,17 +138,18 @@ namespace nn {
                 });
             }
 
-          private:
+          public:
             Grid m_grid;
         };
     } // namespace detail
 
-    template< template< template< template< class > class, class, std::size_t > class NeuronType, template< class > class ActivationFunctionType, std::size_t size, std::size_t inputsNumber = 2, typename Var = float >
-              typename NeuralLayerType,
-              template< template< class > class, class, std::size_t >
-              typename NeuronType,
-              template< class >
-              class ActivationFunctionType,
+    template< template< template< template< class > class, class, std::size_t > class NeuronType,
+                        template< class > class ActivationFunctionType,
+                        std::size_t size,
+                        std::size_t inputsNumber = 2,
+                        typename Var = float > typename NeuralLayerType,
+              template< template< class > class, class, std::size_t > typename NeuronType,
+              template< class > class ActivationFunctionType,
               typename Grid,
               typename Var = float >
     using ConvolutionLayer =
