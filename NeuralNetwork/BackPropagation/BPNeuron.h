@@ -42,6 +42,7 @@ namespace nn::bp {
 
         template< unsigned int inputs >
         using resize = BPNeuron< typename Internal::template resize< inputs > >;
+        using Internal::getMemento;
         using Internal::setMemento;
 
       public:
