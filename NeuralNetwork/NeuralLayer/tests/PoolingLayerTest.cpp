@@ -77,4 +77,162 @@ namespace {
             }
         }
     }
+
+    SCENARIO("Pooling with Average algorithm", "[layer][pooling][average]") {
+        GIVEN(
+         "A pooling layer for an image 4*4, kernel 2*2 stride 2 with Avg "
+         "pooling") {
+            constexpr std::size_t width = 4;
+            constexpr std::size_t height = 4;
+            constexpr std::size_t stride = 2;
+
+            using Grid =
+             typename nn::ConvolutionGrid< width, height, nn::Kernel< 2, 2, stride > >::define;
+            using PoolingLayer = nn::PoolingLayer< nn::NeuralLayer, nn::Avg, Grid >;
+
+            auto layer = PoolingLayer{};
+            WHEN("all 16 inputs are 1.0") {
+                for(std::size_t i = 0; i < 16; ++i) {
+                    layer.setInput(i, 1.0f);
+                }
+
+                THEN("The layer has 4 neurons") {
+                    REQUIRE(4 == layer.size());
+                }
+
+                WHEN("calculateOutputs is called") {
+                    THEN("All outputs should be 1.0 (average of all ones)") {
+                        layer.calculateOutputs();
+                        for(std::size_t i = 0; i < 4; ++i) {
+                            REQUIRE_THAT(1.0f,
+                                         Catch::Matchers::WithinRel(layer[i].getOutput(), 0.001f));
+                        }
+                    }
+                }
+            }
+        }
+
+        GIVEN("A pooling layer with all ones input") {
+            constexpr std::size_t width = 4;
+            constexpr std::size_t height = 4;
+            constexpr std::size_t stride = 2;
+
+            using Grid =
+             typename nn::ConvolutionGrid< width, height, nn::Kernel< 2, 2, stride > >::define;
+            using PoolingLayer = nn::PoolingLayer< nn::NeuralLayer, nn::Avg, Grid >;
+
+            auto layer = PoolingLayer{};
+            WHEN("all 16 inputs are 1.0") {
+                for(std::size_t i = 0; i < 16; ++i) {
+                    layer.setInput(i, 1.0f);
+                }
+
+                WHEN("calculateOutputs is called") {
+                    THEN("All outputs should be 1.0 (average of 4 ones)") {
+                        layer.calculateOutputs();
+                        for(std::size_t i = 0; i < 4; ++i) {
+                            REQUIRE_THAT(1.0f,
+                                         Catch::Matchers::WithinRel(layer[i].getOutput(), 0.001f));
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    SCENARIO("Pooling with L2 algorithm", "[layer][pooling][l2]") {
+        GIVEN(
+         "A pooling layer for an image 4*4, kernel 2*2 stride 2 with L2 "
+         "pooling") {
+            constexpr std::size_t width = 4;
+            constexpr std::size_t height = 4;
+            constexpr std::size_t stride = 2;
+
+            using Grid =
+             typename nn::ConvolutionGrid< width, height, nn::Kernel< 2, 2, stride > >::define;
+            using PoolingLayer = nn::PoolingLayer< nn::NeuralLayer, nn::L2, Grid >;
+
+            auto layer = PoolingLayer{};
+            WHEN("inputs are 3, 4 in first frame") {
+                layer.setInput(0, 3.0f);
+                layer.setInput(1, 4.0f);
+                for(std::size_t i = 2; i < 16; ++i) {
+                    layer.setInput(i, 0.0f);
+                }
+
+                THEN("The layer has 4 neurons") {
+                    REQUIRE(4 == layer.size());
+                }
+
+                WHEN("calculateOutputs is called") {
+                    THEN("First neuron output is sqrt(3^2 + 4^2) = 5") {
+                        layer.calculateOutputs();
+                        REQUIRE_THAT(5.0f, Catch::Matchers::WithinRel(layer[0].getOutput(), 0.001f));
+                    }
+                }
+            }
+        }
+
+        GIVEN("A pooling layer with L2 values") {
+            constexpr std::size_t width = 4;
+            constexpr std::size_t height = 4;
+            constexpr std::size_t stride = 2;
+
+            using Grid =
+             typename nn::ConvolutionGrid< width, height, nn::Kernel< 2, 2, stride > >::define;
+            using PoolingLayer = nn::PoolingLayer< nn::NeuralLayer, nn::L2, Grid >;
+
+            auto layer = PoolingLayer{};
+            WHEN("inputs are 1, 1 in first frame") {
+                layer.setInput(0, 1.0f);
+                layer.setInput(1, 1.0f);
+                for(std::size_t i = 2; i < 16; ++i) {
+                    layer.setInput(i, 0.0f);
+                }
+
+                WHEN("calculateOutputs is called") {
+                    THEN("First neuron output is sqrt(1^2 + 1^2) = sqrt(2)") {
+                        layer.calculateOutputs();
+                        REQUIRE_THAT(1.41421356f,
+                                     Catch::Matchers::WithinRel(layer[0].getOutput(), 0.001f));
+                    }
+                }
+            }
+        }
+    }
+
+    SCENARIO("Pooling with different kernel sizes", "[layer][pooling][kernel]") {
+        GIVEN("A pooling layer with 4x4 kernel") {
+            constexpr std::size_t width = 8;
+            constexpr std::size_t height = 8;
+            constexpr std::size_t stride = 4;
+
+            using Grid =
+             typename nn::ConvolutionGrid< width, height, nn::Kernel< 4, 4, stride > >::define;
+            using PoolingLayer = nn::PoolingLayer< nn::NeuralLayer, nn::Max, Grid >;
+
+            auto layer = PoolingLayer{};
+            WHEN("all inputs from 1 to 64") {
+                for(auto i : ranges::views::ints(0, 64)) {
+                    layer.setInput(i, static_cast< float >(i + 1));
+                }
+
+                THEN(
+                 "The layer has 4 neurons (matches ConvolutionLayer grid "
+                 "size)") {
+                    REQUIRE(4 == layer.size());
+                }
+
+                WHEN("calculateOutputs is called") {
+                    THEN("Each output is the max of its frame's inputs") {
+                        layer.calculateOutputs();
+                        REQUIRE_THAT(28.0f, Catch::Matchers::WithinRel(layer[0].getOutput()));
+                        REQUIRE_THAT(32.0f, Catch::Matchers::WithinRel(layer[1].getOutput()));
+                        REQUIRE_THAT(60.0f, Catch::Matchers::WithinRel(layer[2].getOutput()));
+                        REQUIRE_THAT(64.0f, Catch::Matchers::WithinRel(layer[3].getOutput()));
+                    }
+                }
+            }
+        }
+    }
 } // namespace

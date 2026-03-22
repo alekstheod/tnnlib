@@ -3,6 +3,7 @@
 #include "NeuralNetwork/Serialization/NeuronMemento.h"
 
 #include <algorithm>
+#include <cmath>
 #include <numeric>
 
 namespace nn {
@@ -20,6 +21,18 @@ namespace nn {
         template< typename I >
         T operator()(I begin, I end) const {
             return *std::max_element(begin, end);
+        }
+    };
+
+    template< typename T >
+    struct L2 {
+        template< typename I >
+        T operator()(I begin, I end) const {
+            T sumSquares = T{};
+            for(auto it = begin; it != end; ++it) {
+                sumSquares += (*it) * (*it);
+            }
+            return std::sqrt(sumSquares);
         }
     };
 
