@@ -70,9 +70,6 @@ namespace nn::bp {
             auto& self = *this;
             return self[neuronId].getDelta();
         }
-
-      private:
-        Grid m_grid;
     };
 
 } // namespace nn::bp
