@@ -106,8 +106,9 @@ namespace nn {
                      utils::get< i.value >(m_neurons).calcDotProduct();
                 });
 
-                for_each([&dotProducts](auto, auto& neuron) {
-                    neuron.calculateOutput(neuron.calcDotProduct(),
+                utils::for_< size() >([this, &dotProducts](auto i) {
+                    auto& neuron = utils::get< i.value >(m_neurons);
+                    neuron.calculateOutput(dotProducts[i.value],
                                            std::cbegin(dotProducts),
                                            std::cend(dotProducts));
                 });
@@ -120,8 +121,7 @@ namespace nn {
     } // namespace detail
 
     template< template< template< class > class, class, std::size_t > class NeuronType,
-              template< class >
-              class ActivationFunctionType,
+              template< class > class ActivationFunctionType,
               std::size_t size,
               std::size_t inputsNumber = size,
               typename Var = float >

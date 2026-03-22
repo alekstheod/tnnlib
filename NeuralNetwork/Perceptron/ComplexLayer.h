@@ -36,7 +36,7 @@ namespace nn {
         }
 
         void setMemento(const Memento& memento) {
-            m_perceptron.setMemento();
+            m_perceptron.setMemento(memento);
         }
 
         template< typename Layer >

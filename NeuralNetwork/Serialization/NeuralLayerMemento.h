@@ -4,11 +4,11 @@
 
 #include <cereal/cereal.hpp>
 
-#include <vector>
+#include <array>
 
 namespace nn {
     template< typename NeuronMemento, std::size_t neuronsNumber >
     struct NeuralLayerMemento {
-        std::vector< NeuronMemento > neurons{neuronsNumber};
+        std::array< NeuronMemento, neuronsNumber > neurons;
     };
 } // namespace nn
