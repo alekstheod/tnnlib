@@ -146,8 +146,8 @@ void recognize(std::string perceptron, std::string image) {
         std::array< InputData, inputsNumber > inputs = {InputData{}};
         readImage(image, inputs.begin());
         std::vector< VarType > result(alphabet.length(), VarType(0.f));
-        readPerceptron(perceptron)
-         .calculate(inputs.begin(), inputs.end(), result.begin());
+        CNNPerceptron perc = readPerceptron(perceptron);
+        perc.calculate(inputs.begin(), inputs.end(), result.begin());
         for(unsigned int i = 0; i < result.size(); i++) {
             std::cout << "Symbol: " << alphabet[i] << " " << result[i] << std::endl;
         }
@@ -207,7 +207,7 @@ void calculateWeights(std::string imagesPath) {
 
     auto errorFunc = [](unsigned int epoch, VarType error) {
         std::cout << "Epoch:" << epoch << " error:" << error << std::endl;
-        return error > 0.1f;
+        return error > 0.15f;
     };
 
     static CNNPerceptron perceptron =
