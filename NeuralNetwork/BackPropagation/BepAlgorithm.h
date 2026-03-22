@@ -107,10 +107,14 @@ namespace nn::bp {
 
             } while(errorFunc(++epochCounter, error / prototypes.size()));
 
-            PerceptronType perceptron;
-            perceptron.setMemento(m_perceptron.getMemento());
+            PerceptronType result;
+            utils::for_< PerceptronType::size() - 1 >([this, &result](auto i) {
+                auto& srcLayer = std::get< i.value + 1 >(m_perceptron.layers());
+                auto& dstLayer = utils::get< i.value + 1 >(result.layers());
+                dstLayer.setMemento(srcLayer.getMemento());
+            });
 
-            return perceptron;
+            return result;
         }
 
       private:

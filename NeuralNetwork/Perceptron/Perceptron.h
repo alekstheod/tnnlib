@@ -108,9 +108,15 @@ namespace nn {
              */
             template< typename Iterator, typename OutputIterator >
             void calculate(Iterator begin, Iterator end, OutputIterator out) {
+                auto& inputLayer = std::get< 0 >(m_layers);
                 unsigned int inputId = 0;
                 while(begin != end) {
-                    std::get< 0 >(m_layers).setInput(inputId, *begin);
+                    for(std::size_t featureIdx = 0; featureIdx < begin->value.size();
+                        ++featureIdx) {
+                        inputLayer[inputId][featureIdx].weight = 1.f;
+                        inputLayer[inputId].setBias({});
+                        inputLayer[inputId][featureIdx].value = begin->value[featureIdx];
+                    }
                     begin++;
                     inputId++;
                 }

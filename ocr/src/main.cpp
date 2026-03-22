@@ -1,6 +1,7 @@
 #include "NeuralNetwork/BackPropagation/BepAlgorithm.h"
 #include "NeuralNetwork/NeuralLayer/NeuralLayer.h"
 #include "NeuralNetwork/NeuralLayer/InputLayer.h"
+#include "NeuralNetwork/NeuralLayer/ConvolutionLayer.h"
 #include "NeuralNetwork/ActivationFunction/BiopolarSigmoidFunction.h"
 #include "NeuralNetwork/ActivationFunction/LogScaleSoftmaxFunction.h"
 #include "NeuralNetwork/ActivationFunction/SigmoidFunction.h"
@@ -63,9 +64,25 @@ using Perceptron =
                  nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, 30 >,
                  nn::NeuralLayer< nn::Neuron, nn::SoftmaxFunction, 10 > >;
 
-using InputData = typename Perceptron::Input;
+constexpr std::size_t cnnWidth = 12;
+constexpr std::size_t cnnHeight = 15;
+constexpr std::size_t cnnStride = 2;
+using CNNConvolutionGrid =
+ typename nn::ConvolutionGrid< cnnWidth, cnnHeight, nn::Kernel< 3, 3, cnnStride > >::define;
 
-using Algo = nn::bp::BepAlgorithm< Perceptron, nn::bp::CrossEntropyError >;
+using CNNConvolutionLayer =
+ nn::ConvolutionLayer< nn::NeuralLayer, nn::Neuron, nn::SigmoidFunction, CNNConvolutionGrid >;
+
+using CNNPerceptron =
+ nn::Perceptron< VarType,
+                 nn::InputLayer< nn::Neuron, nn::SigmoidFunction, inputsNumber, 1 >,
+                 CNNConvolutionLayer,
+                 nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, 30 >,
+                 nn::NeuralLayer< nn::Neuron, nn::SoftmaxFunction, 10 > >;
+
+using InputData = typename CNNPerceptron::Input;
+
+using CNNAlgo = nn::bp::BepAlgorithm< CNNPerceptron, nn::bp::CrossEntropyError >;
 
 template< typename SrcView, typename DstView >
 void convert_color(const SrcView& src, const DstView& dst) {
@@ -106,12 +123,12 @@ void readImage(std::string fileName, Iterator out) {
     }
 }
 
-Perceptron readPerceptron(std::string fileName) {
-    Perceptron perceptron;
+CNNPerceptron readPerceptron(std::string fileName) {
+    CNNPerceptron perceptron;
     if(boost::filesystem::exists(fileName.c_str())) {
         std::ifstream file(fileName);
         if(file.good()) {
-            Perceptron::Memento memento;
+            CNNPerceptron::Memento memento;
             cereal::JSONInputArchive ia(file);
             ia >> memento;
 
@@ -165,16 +182,16 @@ void calculateWeights(std::string imagesPath) {
 
 
     std::cout << "Perceptron calculation started" << std::endl;
-    // static Perceptron tmp = readPerceptron("perceptron.json");
-    static Algo algorithm(0.0009f);
+    // static CNNPerceptron tmp = readPerceptron("perceptron.json");
+    static CNNAlgo algorithm(0.01f);
     // algorithm.setMemento(tmp.getMemento());
 
-    std::vector< Algo::Prototype > prototypes;
+    std::vector< CNNAlgo::Prototype > prototypes;
 
     for(auto image : files) {
         if(!boost::filesystem::is_directory(image)) {
             try {
-                Algo::Prototype proto;
+                CNNAlgo::Prototype proto;
                 readImage(image, std::get< 0 >(proto).begin());
                 std::fill(std::get< 1 >(proto).begin(), std::get< 1 >(proto).end(), 0.f);
                 char ch = path(image).filename().string()[0];
@@ -193,7 +210,7 @@ void calculateWeights(std::string imagesPath) {
         return error > 0.1f;
     };
 
-    static Perceptron perceptron =
+    static CNNPerceptron perceptron =
      algorithm.calculate(prototypes.begin(), prototypes.end(), errorFunc);
 
     save(perceptron, "perceptron.json");
