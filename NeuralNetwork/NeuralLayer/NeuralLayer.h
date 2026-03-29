@@ -30,6 +30,9 @@ namespace nn {
             template< typename VarType >
             using use = typename Base::template use_var< NeuralLayer, VarType >;
 
+            template< typename NewNeuron >
+            using with_neuron = typename Base::template with_neuron< NewNeuron >;
+
             using Input = Var;
 
             using Base::begin;
@@ -120,8 +123,7 @@ namespace nn {
     } // namespace detail
 
     template< template< template< class > class, class, std::size_t > class NeuronType,
-              template< class >
-              class ActivationFunctionType,
+              template< class > class ActivationFunctionType,
               std::size_t size,
               std::size_t inputsNumber = size,
               typename Var = float >

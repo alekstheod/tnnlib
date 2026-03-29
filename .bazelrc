@@ -1,9 +1,9 @@
-build -c opt --cxxopt='-std=c++17'
+build -c opt --cxxopt='-std=c++23'
 
 # OpenCL configuration
 # Use --config=opencl to enable OpenCL features
 build:opencl --define=opencl=true
-build:opencl --cxxopt='-std=c++17'
+build:opencl --cxxopt='-std=c++23'
 
 # AddressSanitizer configuration
 build:asan --strip=never
