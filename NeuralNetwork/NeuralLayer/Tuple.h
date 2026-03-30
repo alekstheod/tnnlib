@@ -29,6 +29,10 @@ namespace nn {
             using adjust_inputs =
              L< Tuple< Var, newInputs, typename T::template resize< newInputs >... > >;
 
+            template< typename Neuron >
+            using with_neuron =
+             Layer< Tuple< Var, inputsNumber, typename T::template replace< Neuron >... > >;
+
             using Container = std::tuple< T... >;
 
             using Memento =

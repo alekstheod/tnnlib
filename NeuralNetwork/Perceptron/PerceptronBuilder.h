@@ -4,7 +4,10 @@
 #include "NeuralNetwork/NeuralLayer/ConvolutionLayer.h"
 #include "NeuralNetwork/NeuralLayer/InputLayer.h"
 #include "NeuralNetwork/NeuralLayer/NeuralLayer.h"
+#include "NeuralNetwork/NeuralLayer/PoolingLayer.h"
+#include "NeuralNetwork/NeuralLayer/Thread/AsyncNeuralLayer.h"
 #include "NeuralNetwork/Neuron/Neuron.h"
+#include "NeuralNetwork/Neuron/PoolingNeuron.h"
 #include "NeuralNetwork/ActivationFunction/SigmoidFunction.h"
 
 #include "Utilities/MPL/Tuple.h"
@@ -15,14 +18,6 @@
 #include <tuple>
 
 namespace nn {
-
-    template< std::size_t W, std::size_t H, std::size_t S >
-    struct ConvKernel {
-        static constexpr std::size_t width = W;
-        static constexpr std::size_t height = H;
-        static constexpr std::size_t stride = S;
-        static constexpr std::size_t size = W * H;
-    };
 
     template< std::size_t W, std::size_t H, typename K >
     struct ConvGridConfig {
@@ -39,7 +34,7 @@ namespace nn {
         template< std::size_t W, std::size_t H, std::size_t S >
         constexpr auto with_kernel() const {
             using NewConfig =
-             ConvGridConfig< ConvConfig::width, ConvConfig::height, ConvKernel< W, H, S > >;
+             ConvGridConfig< ConvConfig::width, ConvConfig::height, nn::Kernel< W, H, S > >;
             return ConvBuilder< VarType, NewConfig, CurrentLayer, PrevLayers... >{};
         }
 
@@ -81,8 +76,20 @@ namespace nn {
         }
 
         constexpr auto conv() const {
-            using DefaultConfig = ConvGridConfig< 8, 8, ConvKernel< 3, 3, 1 > >;
+            using DefaultConfig = ConvGridConfig< 8, 8, nn::Kernel< 3, 3, 1 > >;
             return ConvBuilder< VarType, DefaultConfig, CurrentLayer, PrevLayers... >{};
+        }
+
+        template< template< class > class PoolingAlgo, typename PoolGrid >
+        constexpr auto pool() const {
+            using L = PoolingLayer< nn::NeuralLayer, PoolingAlgo, PoolGrid, VarType >;
+            return PerceptronBuilder< VarType, L, PrevLayers..., CurrentLayer >{};
+        }
+
+        template< std::size_t size >
+        constexpr auto async() const {
+            using L = nn::AsyncNeuralLayer< Neuron, SigmoidFunction, size >;
+            return PerceptronBuilder< VarType, L, PrevLayers..., CurrentLayer >{};
         }
 
         template< typename N >

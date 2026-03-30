@@ -266,5 +266,225 @@ IActivationFunction <|.. BiopolarSigmoidFunction
 
 ---
 
+# PerceptronBuilder
+
+The PerceptronBuilder provides a fluent template API for constructing neural network perceptrons with a more intuitive and readable syntax. Instead of manually specifying complex type hierarchies, you can use the builder pattern to construct perceptrons step by step.
+
+## Getting Started
+
+Start building a perceptron by calling `nn::build<VarType>()`:
+
+```cpp
+auto builder = nn::build<float>();
+```
+
+Then chain layer additions and finally call `.type` to get the constructed perceptron type:
+
+```cpp
+using MyPerceptron = decltype(nn::build<float>()
+    .template input<100>()
+    .template dense<50>()
+    .template dense<10>()
+)::type;
+```
+
+---
+
+## Layer Types
+
+### Input Layer
+
+```cpp
+template<std::size_t size>
+constexpr auto input() const;
+```
+
+Creates an input layer with the specified number of inputs.
+
+```cpp
+nn::build<float>().template input<100>()  // 100 inputs
+```
+
+---
+
+### Dense Layer
+
+```cpp
+template<std::size_t size>
+constexpr auto dense() const;
+```
+
+Adds a fully connected (dense) layer with the specified number of neurons.
+
+```cpp
+nn::build<float>()
+    .template input<100>()
+    .template dense<50>()   // 50 neurons hidden layer
+    .template dense<10>()   // 10 output neurons
+```
+
+---
+
+### Convolution Layer
+
+There are two ways to add convolution layers:
+
+#### Explicit ConvGrid
+
+```cpp
+template<typename ConvGrid>
+constexpr auto conv() const;
+```
+
+Pass an explicit `ConvolutionGrid` type for full control:
+
+```cpp
+using MyGrid = typename nn::ConvolutionGrid<12, 15, nn::Kernel<3, 3, 2>>::define;
+
+nn::build<float>()
+    .template input<180>()
+    .conv<MyGrid>()
+    .template dense<30>()
+    .template dense<10>()
+```
+
+#### Default Configuration
+
+```cpp
+constexpr auto conv() const;
+```
+
+Uses default configuration (8x8 grid, 3x3 kernel, stride 1). Configure using the returned builder:
+
+```cpp
+nn::build<float>()
+    .template input<180>()
+    .conv()
+        .with_kernel<5, 5, 1>()   // 5x5 kernel, stride 1
+        .with_grid<12, 12>()      // 12x12 grid
+        .build()                  // finalize convolution layer
+    .template dense<30>()
+    .template dense<10>()
+```
+
+**ConvBuilder Methods:**
+
+| Method | Description |
+|--------|-------------|
+| `with_kernel<W, H, S>()` | Set kernel width, height, and stride |
+| `with_grid<W, H>()` | Set convolution grid dimensions |
+| `build()` | Finalize and add the convolution layer |
+
+---
+
+### Pooling Layer
+
+```cpp
+template<template<class> class PoolingAlgo, typename PoolGrid>
+constexpr auto pool() const;
+```
+
+Adds a pooling layer. Available pooling algorithms:
+- `nn::MaxPooling` - Max pooling
+- `nn::AveragePooling` - Average pooling
+
+```cpp
+using PoolGrid = nn::PoolingGrid<2, 2>;
+
+nn::build<float>()
+    .template input<180>()
+    .conv<MyGrid>()
+    .pool<nn::MaxPooling, PoolGrid>()  // 2x2 max pooling
+    .template dense<30>()
+    .template dense<10>()
+```
+
+---
+
+### Async Layer
+
+```cpp
+template<std::size_t size>
+constexpr auto async() const;
+```
+
+Adds an asynchronous neural layer that processes in a separate thread:
+
+```cpp
+nn::build<float>()
+    .template input<100>()
+    .template dense<50>()
+    .template async<30>()   // async layer with 30 neurons
+    .template dense<10>()
+```
+
+---
+
+### Custom Neuron Type
+
+```cpp
+template<typename N>
+constexpr auto with_neuron() const;
+```
+
+Replace the neuron type in the most recently added layer:
+
+```cpp
+using SoftmaxNeuron = nn::Neuron<nn::SoftmaxFunction>;
+
+nn::build<float>()
+    .template input<100>()
+    .template dense<50>()
+    .template dense<10>()
+    .with_neuron<SoftmaxNeuron>()  // use SoftmaxNeuron in output layer
+```
+
+---
+
+## Complete Example
+
+```cpp
+// Define convolution grid
+constexpr std::size_t cnnWidth = 12;
+constexpr std::size_t cnnHeight = 15;
+constexpr std::size_t cnnStride = 2;
+using CNNConvolutionGrid =
+    typename nn::ConvolutionGrid<cnnWidth, cnnHeight, nn::Kernel<3, 3, cnnStride>>::define;
+
+// Build the perceptron type
+using CNNPerceptron = decltype(
+    nn::build<float>()
+        .template input<180>()           // 12 * 15 = 180 inputs
+        .conv<CNNConvolutionGrid>()      // convolution layer
+        .template dense<30>()             // hidden layer
+        .template dense<10>()             // output layer
+)::type;
+
+// Create and use the perceptron
+CNNPerceptron perceptron;
+std::vector<float> input(180, 0.0f);
+std::vector<float> output(10, 0.0f);
+perceptron.calculate(input.begin(), input.end(), output.begin());
+```
+
+---
+
+## Builder API Reference
+
+| Method | Returns | Description |
+|--------|---------|-------------|
+| `build<VarType>()` | `PerceptronBuilderBegin<VarType>` | Start building a perceptron |
+| `input<size>()` | `PerceptronBuilder` | Add input layer |
+| `dense<size>()` | `PerceptronBuilder` | Add dense layer |
+| `conv<ConvGrid>()` | `PerceptronBuilder` | Add convolution with explicit grid |
+| `conv()` | `ConvBuilder` | Add convolution with default config |
+| `pool<Algo, Grid>()` | `PerceptronBuilder` | Add pooling layer |
+| `async<size>()` | `PerceptronBuilder` | Add async layer |
+| `with_neuron<N>()` | `PerceptronBuilder` | Replace neuron type in last layer |
+| `.size()` | `std::size_t` | Get total number of neurons |
+| `.type` | `Perceptron<...>` | Get the constructed perceptron type |
+
+---
+
 Next steps
 =================

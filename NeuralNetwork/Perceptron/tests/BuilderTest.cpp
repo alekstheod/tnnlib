@@ -1,5 +1,7 @@
 #include "NeuralNetwork/Perceptron/PerceptronBuilder.h"
 #include "NeuralNetwork/NeuralLayer/ConvolutionLayer.h"
+#include "NeuralNetwork/NeuralLayer/PoolingLayer.h"
+#include "NeuralNetwork/Neuron/PoolingNeuron.h"
 #include "NeuralNetwork/ActivationFunction/TanhFunction.h"
 #include <type_traits>
 #include <catch2/catch_all.hpp>
@@ -53,5 +55,36 @@ TEST_CASE("PerceptronBuilder conv with_kernel and with_grid",
              .with_grid< 8, 8 >()
              .build()
              .dense< 20 >()
+             .size() == 3);
+}
+
+TEST_CASE("PerceptronBuilder pool max", "[PerceptronBuilder]") {
+    using PoolGrid = typename nn::ConvolutionGrid< 8, 8, nn::Kernel< 2, 2, 2 > >::define;
+    REQUIRE(
+     nn::build< float >().input< 64 >().template pool< nn::Max, PoolGrid >().size() == 2);
+}
+
+TEST_CASE("PerceptronBuilder pool avg", "[PerceptronBuilder]") {
+    using PoolGrid = typename nn::ConvolutionGrid< 8, 8, nn::Kernel< 2, 2, 2 > >::define;
+    REQUIRE(
+     nn::build< float >().input< 64 >().template pool< nn::Avg, PoolGrid >().size() == 2);
+}
+
+TEST_CASE("PerceptronBuilder pool after conv", "[PerceptronBuilder]") {
+    using ConvGrid = typename nn::ConvolutionGrid< 8, 8, nn::Kernel< 3, 3, 1 > >::define;
+    using PoolGrid = typename nn::ConvolutionGrid< 6, 6, nn::Kernel< 2, 2, 2 > >::define;
+    REQUIRE(nn::build< float >()
+             .input< 64 >()
+             .conv< ConvGrid >()
+             .template pool< nn::Max, PoolGrid >()
+             .dense< 10 >()
+             .size() == 4);
+}
+
+TEST_CASE("PerceptronBuilder async", "[PerceptronBuilder]") {
+    REQUIRE(nn::build< float >()
+             .input< 180 >()
+             .template async< 30 >()
+             .template async< 10 >()
              .size() == 3);
 }
