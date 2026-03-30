@@ -1,6 +1,7 @@
 #pragma once
 
 #include "NeuralNetwork/Perceptron/Perceptron.h"
+#include "NeuralNetwork/NeuralLayer/ConvolutionLayer.h"
 #include "NeuralNetwork/NeuralLayer/InputLayer.h"
 #include "NeuralNetwork/NeuralLayer/NeuralLayer.h"
 #include "NeuralNetwork/Neuron/Neuron.h"
@@ -15,6 +16,48 @@
 
 namespace nn {
 
+    template< std::size_t W, std::size_t H, std::size_t S >
+    struct ConvKernel {
+        static constexpr std::size_t width = W;
+        static constexpr std::size_t height = H;
+        static constexpr std::size_t stride = S;
+        static constexpr std::size_t size = W * H;
+    };
+
+    template< std::size_t W, std::size_t H, typename K >
+    struct ConvGridConfig {
+        static constexpr std::size_t width = W;
+        static constexpr std::size_t height = H;
+        using Kernel = K;
+    };
+
+    template< typename VarType, typename CurrentLayer, typename... PrevLayers >
+    struct PerceptronBuilder;
+
+    template< typename VarType, typename ConvConfig, typename CurrentLayer, typename... PrevLayers >
+    struct ConvBuilder {
+        template< std::size_t W, std::size_t H, std::size_t S >
+        constexpr auto with_kernel() const {
+            using NewConfig =
+             ConvGridConfig< ConvConfig::width, ConvConfig::height, ConvKernel< W, H, S > >;
+            return ConvBuilder< VarType, NewConfig, CurrentLayer, PrevLayers... >{};
+        }
+
+        template< std::size_t W, std::size_t H >
+        constexpr auto with_grid() const {
+            using NewConfig = ConvGridConfig< W, H, typename ConvConfig::Kernel >;
+            return ConvBuilder< VarType, NewConfig, CurrentLayer, PrevLayers... >{};
+        }
+
+        constexpr auto build() const {
+            using Grid =
+             typename nn::ConvolutionGrid< ConvConfig::width, ConvConfig::height, typename ConvConfig::Kernel >::define;
+            using L =
+             ConvolutionLayer< nn::NeuralLayer, Neuron, SigmoidFunction, Grid, VarType >;
+            return PerceptronBuilder< VarType, L, PrevLayers..., CurrentLayer >{};
+        }
+    };
+
     template< typename VarType, typename CurrentLayer, typename... PrevLayers >
     struct PerceptronBuilder {
 
@@ -28,6 +71,18 @@ namespace nn {
         constexpr auto dense_complex() const {
             using L = nn::ComplexNeuralLayer< Neurons... >;
             return PerceptronBuilder< VarType, L, PrevLayers..., CurrentLayer >{};
+        }
+
+        template< typename ConvGrid >
+        constexpr auto conv() const {
+            using L =
+             ConvolutionLayer< nn::NeuralLayer, Neuron, SigmoidFunction, ConvGrid, VarType >;
+            return PerceptronBuilder< VarType, L, PrevLayers..., CurrentLayer >{};
+        }
+
+        constexpr auto conv() const {
+            using DefaultConfig = ConvGridConfig< 8, 8, ConvKernel< 3, 3, 1 > >;
+            return ConvBuilder< VarType, DefaultConfig, CurrentLayer, PrevLayers... >{};
         }
 
         template< typename N >

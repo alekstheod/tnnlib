@@ -10,6 +10,7 @@
 #include "NeuralNetwork/ActivationFunction/ReluFunction.h"
 #include "NeuralNetwork/Neuron/Neuron.h"
 #include "NeuralNetwork/Perceptron/Perceptron.h"
+#include "NeuralNetwork/Perceptron/PerceptronBuilder.h"
 #include "NeuralNetwork/NeuralLayer/Thread/AsyncNeuralLayer.h"
 #include "NeuralNetwork/BackPropagation/BPAsyncNeuralLayer.h"
 #include "NeuralNetwork/Serialization/Cereal.h"
@@ -57,28 +58,15 @@ namespace {
     constexpr std::size_t inputsNumber = width * height;
 } // namespace
 
-
-using Perceptron =
- nn::Perceptron< VarType,
-                 nn::InputLayer< nn::Neuron, nn::SigmoidFunction, inputsNumber, 1 >,
-                 nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, 30 >,
-                 nn::NeuralLayer< nn::Neuron, nn::SoftmaxFunction, 10 > >;
-
-constexpr std::size_t cnnWidth = 12;
-constexpr std::size_t cnnHeight = 15;
-constexpr std::size_t cnnStride = 2;
-using CNNConvolutionGrid =
- typename nn::ConvolutionGrid< cnnWidth, cnnHeight, nn::Kernel< 3, 3, cnnStride > >::define;
-
-using CNNConvolutionLayer =
- nn::ConvolutionLayer< nn::NeuralLayer, nn::Neuron, nn::SigmoidFunction, CNNConvolutionGrid >;
-
-using CNNPerceptron =
- nn::Perceptron< VarType,
-                 nn::InputLayer< nn::Neuron, nn::SigmoidFunction, inputsNumber, 1 >,
-                 CNNConvolutionLayer,
-                 nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, 30 >,
-                 nn::NeuralLayer< nn::Neuron, nn::SoftmaxFunction, 10 > >;
+using CNNPerceptron = decltype(nn::build< VarType >()
+                                .template input< inputsNumber >()
+                                .conv()
+                                .with_grid< width, height >()
+                                .with_kernel< 3, 3, 2 >()
+                                .build() // end conv
+                                .dense< 30 >()
+                                .dense< 10 >()
+                                .with_neuron< nn::Neuron< nn::SoftmaxFunction > >())::type;
 
 using InputData = typename CNNPerceptron::Input;
 
@@ -207,7 +195,7 @@ void calculateWeights(std::string imagesPath) {
 
     auto errorFunc = [](unsigned int epoch, VarType error) {
         std::cout << "Epoch:" << epoch << " error:" << error << std::endl;
-        return error > 0.15f;
+        return error > 0.21f;
     };
 
     static CNNPerceptron perceptron =
