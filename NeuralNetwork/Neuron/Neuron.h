@@ -31,6 +31,9 @@ namespace nn {
             using use =
              Neuron< typename OutputFunctionType::template use< VarType >, inputsNumber >;
 
+            template< typename NewNeuron >
+            using replace = NewNeuron;
+
             template< std::size_t inputs >
             using resize = Neuron< OutputFunctionType, inputs >;
 
