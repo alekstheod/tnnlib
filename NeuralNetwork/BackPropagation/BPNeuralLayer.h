@@ -1,10 +1,11 @@
 #pragma once
 
-#include "NeuralNetwork//BackPropagation/BPNeuron.h"
+#include "NeuralNetwork/BackPropagation/ErrorFunction.h"
 
 #include <MPL/TypeTraits.h>
 
 #include <range/v3/all.hpp>
+#include <vector>
 
 
 namespace nn::bp {
@@ -18,24 +19,34 @@ namespace nn::bp {
                                    AffectedLayer& affectedLayer,
                                    MomentumFunc momentum) {
             using Var = typename AffectedLayer::Var;
-            currentLayer.for_each([&affectedLayer, &momentum](auto i, auto& currentNeuron) {
-                Var sum{}; // sum(aDelta*aWeight)
-                affectedLayer.for_each([&sum, &i](auto, auto& neuron) {
-                    auto affectedDelta = neuron.getDelta();
+            auto& currentDeltas = currentLayer.deltas();
+            auto& affectedDeltas = affectedLayer.deltas();
+
+            currentLayer.for_each([&affectedLayer,
+                                   &currentLayer,
+                                   &currentDeltas,
+                                   &affectedDeltas,
+                                   &momentum](auto i, auto& currentNeuron) {
+                Var sum{};
+                affectedLayer.for_each([&sum, &i, &affectedDeltas](auto j, auto& neuron) {
+                    auto affectedDelta = affectedDeltas[j.value];
                     auto affectedWeight = neuron.getWeight(i.value);
                     sum += affectedDelta * affectedWeight;
                 });
 
-                currentNeuron.setDelta(momentum(currentNeuron.getDelta(),
-                                                sum * currentNeuron.calculateDerivate()));
+                auto currentDerivative =
+                 currentNeuron.getOutputFunction().derivate(currentNeuron.getOutput());
+                currentDeltas[i.value] =
+                 momentum(currentDeltas[i.value], sum * currentDerivative);
             });
         }
 
     } // namespace detail
 
+
     template< typename NeuralLayerType >
-    struct BPNeuralLayer : NeuralLayerType::template wrap< BPNeuron > {
-        using Base = typename NeuralLayerType::template wrap< BPNeuron >;
+    struct BPNeuralLayer : NeuralLayerType {
+        using Base = NeuralLayerType;
 
         using NeuralLayer = NeuralLayerType;
         using Var = typename NeuralLayer::Var;
@@ -47,20 +58,40 @@ namespace nn::bp {
         using adjust =
          BPNeuralLayer< typename NeuralLayerType::template adjust< inputs > >;
 
-        using Base::for_each;
+        static constexpr auto size() {
+            return NeuralLayerType::size();
+        }
 
-        /**
-         * @brief Will calculate the deltas for the current layer. This
-         * method must be called for the output layer layers.
-         * @param current data set based on which the deltas will be
-         * calculated.
-         */
+        static constexpr auto inputs() {
+            return NeuralLayerType::inputs();
+        }
+
+        using Memento = typename Base::Memento;
+
+        using Base::begin;
+        using Base::cbegin;
+        using Base::cend;
+        using Base::end;
+        using Base::for_each;
+        using Base::operator[];
+        using Base::calculateOutputs;
+        using Base::getMemento;
+        using Base::getOutput;
+        using Base::setInput;
+        using Base::setMemento;
+
+
         template< typename Prototype, typename MomentumFunc >
         void calculateDeltas(const Prototype& prototype, MomentumFunc momentum) {
-            std::size_t neuronId = 0;
-            for(auto& neuron : *this) {
-                neuron.calculateDelta(std::get< 1 >(prototype)[neuronId], momentum);
-                neuronId++;
+            auto& outputs = std::get< 1 >(prototype);
+            for(std::size_t neuronId = 0; neuronId < size(); ++neuronId) {
+                auto& neuron = (*this)[neuronId];
+                auto expectedOutput = outputs[neuronId];
+                auto actualOutput = neuron.getOutput();
+                auto delta =
+                 momentum(m_deltas[neuronId],
+                          neuron.getOutputFunction().delta(actualOutput, expectedOutput));
+                m_deltas[neuronId] = delta;
             }
         }
 
@@ -70,53 +101,75 @@ namespace nn::bp {
         }
 
         void calculateWeights(const Var& learningRate) {
-            for_each([&learningRate](auto, auto& neuron) {
-                std::size_t inputsNumber = neuron.size();
-                auto delta = neuron.getDelta();
-                for(std::size_t i = 0; i < inputsNumber; i++) {
-
-                    auto input = neuron[i].value;
-                    auto weight = neuron[i].weight;
-                    auto newWeight = weight - learningRate * input * delta;
-                    neuron.setWeight(i, newWeight);
+            for_each([this, learningRate](auto i, auto& neuron) {
+                auto delta = m_deltas[i.value];
+                for(std::size_t j = 0; j < inputs(); ++j) {
+                    auto input = neuron[j].value;
+                    auto weight = neuron[j].weight;
+                    neuron[j].weight = weight - learningRate * input * delta;
                 }
 
-                Var weight = neuron.getBias();
-                Var newWeight = weight - learningRate * delta;
-                neuron.setBias(newWeight);
+                auto bias = neuron.getBias();
+                neuron.setBias(bias - learningRate * delta);
             });
         }
 
         void accumulateGradients() {
-            for_each([](auto i, auto& neuron) {
-                const auto inputsNumber = neuron.size();
-                auto delta = neuron.getDelta();
-                for(std::size_t j = 0; j < inputsNumber; j++) {
+            for_each([this](auto i, auto& neuron) {
+                auto delta = m_deltas[i.value];
+                for(std::size_t j = 0; j < inputs(); ++j) {
                     auto input = neuron[j].value;
-                    neuron.accumulateGradient(j, input * delta);
+                    m_accumulatedWeightGradients[i.value][j] += input * delta;
                 }
-                neuron.accumulateBiasGradient(delta);
+                m_accumulatedBiasGradients[i.value] += delta;
             });
         }
 
         void applyGradients(const Var& learningRate) {
-            for_each([&learningRate](auto, auto& neuron) {
-                std::size_t inputsNumber = neuron.size();
-                for(std::size_t i = 0; i < inputsNumber; i++) {
-                    auto newWeight = neuron[i].weight -
-                                     learningRate * neuron.getAccumulatedGradient(i);
-                    neuron.setWeight(i, newWeight);
+            for_each([this, learningRate](auto i, auto& neuron) {
+                for(std::size_t j = 0; j < inputs(); ++j) {
+                    auto weight = neuron[j].weight;
+                    auto gradient = m_accumulatedWeightGradients[i.value][j];
+                    neuron[j].weight = weight - learningRate * gradient;
                 }
 
-                Var newBias = neuron.getBias() -
-                              learningRate * neuron.getAccumulatedBiasGradient();
-                neuron.setBias(newBias);
-                neuron.resetGradients();
+                auto bias = neuron.getBias();
+                neuron.setBias(bias - learningRate * m_accumulatedBiasGradients[i.value]);
             });
+
+            resetGradients();
+        }
+
+        void resetGradients() {
+            for(auto& neuronGradients : m_accumulatedWeightGradients) {
+                std::fill(neuronGradients.begin(), neuronGradients.end(), Var{});
+            }
+            std::fill(m_accumulatedBiasGradients.begin(),
+                      m_accumulatedBiasGradients.end(),
+                      Var{});
+            std::fill(m_deltas.begin(), m_deltas.end(), Var{});
+        }
+
+        std::vector< Var >& deltas() {
+            return m_deltas;
+        }
+
+        const std::vector< Var >& deltas() const {
+            return m_deltas;
         }
 
         const Var& getDelta(std::size_t neuronId) const {
-            return Base::operator[](neuronId).getDelta();
+            return m_deltas[neuronId];
         }
+
+        BPNeuralLayer()
+         : m_deltas(size(), Var{}), m_accumulatedBiasGradients(size(), Var{}),
+           m_accumulatedWeightGradients(size(), std::vector< Var >(inputs(), Var{})) {
+        }
+
+      private:
+        std::vector< Var > m_deltas;
+        std::vector< Var > m_accumulatedBiasGradients;
+        std::vector< std::vector< Var > > m_accumulatedWeightGradients;
     };
 } // namespace nn::bp

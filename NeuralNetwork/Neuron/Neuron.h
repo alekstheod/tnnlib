@@ -119,6 +119,10 @@ namespace nn {
                 m_bias = weight;
             }
 
+            const OutputFunction& getOutputFunction() const {
+                return m_activationFunction;
+            }
+
             template< typename Iterator >
             const Var& calculateOutput(const Var& dotProduct, Iterator begin, Iterator end) {
                 m_output = m_activationFunction.calculate(dotProduct, begin, end);

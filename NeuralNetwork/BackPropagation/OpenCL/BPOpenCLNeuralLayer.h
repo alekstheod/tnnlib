@@ -1,12 +1,14 @@
 #pragma once
 
-#include "NeuralNetwork//BackPropagation/OpenCL/BPOpenCLNeuralLayer.h"
 #include "NeuralNetwork/NeuralLayer/OpenCL/OpenCLNeuralLayer.h"
-#include "NeuralNetwork//BackPropagation/BPNeuralLayer.h"
+#include "NeuralNetwork/BackPropagation/BPNeuralLayer.h"
 
 #include <CL/cl.h>
 #include <CL/cl_ext.h>
 #include <CL/cl_platform.h>
+
+#include <array>
+#include <vector>
 
 namespace nn {
 
@@ -14,10 +16,9 @@ namespace nn {
 
         template< typename Internal >
         struct BPNeuralLayer< nn::detail::OpenCLNeuralLayer< Internal > >
-         : private nn::detail::OpenCLNeuralLayer< Internal >::template wrap< BPNeuron > {
+         : public BPNeuralLayer< Internal > {
 
-            using Base =
-             typename nn::detail::OpenCLNeuralLayer< Internal >::template wrap< BPNeuron >;
+            using Base = BPNeuralLayer< Internal >;
 
             using NeuralLayerType = nn::detail::OpenCLNeuralLayer< Internal >;
             using Var = typename NeuralLayerType::Var;
@@ -31,15 +32,42 @@ namespace nn {
              BPNeuralLayer< typename NeuralLayerType::template adjust< inputs > >;
 
             using Memento = typename Base::Memento;
-            using Base::calculateOutputs;
+
+            using Base::begin;
+            using Base::cbegin;
+            using Base::cend;
+            using Base::end;
             using Base::for_each;
             using Base::getMemento;
             using Base::getOutput;
-            using Base::getWeight;
             using Base::inputs;
             using Base::setMemento;
             using Base::size;
             using Base::operator[];
+            using Base::calculateOutputs;
+            using Base::setInput;
+
+            template< typename Prototype, typename MomentumFunc >
+            void calculateDeltas(const Prototype& prototype, MomentumFunc momentum) {
+                auto& outputs = std::get< 1 >(prototype);
+                for(std::size_t neuronId = 0; neuronId < size(); ++neuronId) {
+                    auto& neuron = (*this)[neuronId];
+                    auto expectedOutput = outputs[neuronId];
+                    auto actualOutput = neuron.getOutput();
+                    auto delta =
+                     momentum(m_deltas[neuronId],
+                              neuron.getOutputFunction().delta(actualOutput, expectedOutput));
+                    m_deltas[neuronId] = delta;
+                }
+            }
+
+            std::vector< Var >& deltas() {
+                return m_deltas;
+            }
+
+            const std::vector< Var >& deltas() const {
+                return m_deltas;
+            }
 
             void setInput(unsigned int inputId, const Var& value) {
                 auto& self = *this;
@@ -67,6 +95,10 @@ namespace nn {
                     return program;
                 }
             };
+
+            const Var& getWeight(std::size_t neuronId, std::size_t inputId) const {
+                return m_weights[neuronId * inputs() + inputId];
+            }
 
             void calculateWeights(const Var& learningRate) {
                 try {
@@ -97,7 +129,6 @@ namespace nn {
                     CommandQueue queue(ocl.context, defaultDevice);
                     cl::Kernel kernel{ocl.program, "calc_weights"};
 
-                    // Set arguments to kernel
                     kernel.setArg(0, values);
                     kernel.setArg(1, deltas);
                     kernel.setArg(2, weights);
@@ -115,9 +146,9 @@ namespace nn {
                                             m_weights.size() * sizeof(float),
                                             m_weights.data());
 
-                    for_each([&learningRate](auto, auto& neuron) {
+                    for_each([this, &learningRate](auto i, auto& neuron) {
                         Var weight = neuron.getBias();
-                        Var newWeight = weight - learningRate * neuron.getDelta();
+                        Var newWeight = weight - learningRate * m_deltas[i.value];
                         neuron.setBias(newWeight);
                     });
 
@@ -126,24 +157,18 @@ namespace nn {
                 }
             }
 
-            template< typename Prototype, typename MomentumFunc >
-            void calculateDeltas(const Prototype& prototype, MomentumFunc momentum) {
-                auto& self = *this;
-                utils::for_< size() >([&](auto i) {
-                    m_deltas[i.value] =
-                     self[i.value].calculateDelta(std::get< 1 >(prototype)[i.value], momentum);
-                });
-            }
-
             const Var& getDelta(std::size_t neuronId) const {
                 return m_deltas[neuronId];
             }
 
+            BPNeuralLayer() : m_deltas(size(), Var{}) {
+            }
+
           private:
-            using Base::bufferSize;
-            using Base::m_inputs;
-            using Base::m_weights;
-            std::array< Var, size() > m_deltas;
+            static constexpr auto bufferSize = size() * inputs();
+            std::array< float, bufferSize > m_weights;
+            std::array< float, bufferSize > m_inputs;
+            std::vector< Var > m_deltas;
         };
 
     } // namespace bp

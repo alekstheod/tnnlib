@@ -28,13 +28,14 @@ namespace {
              "[layer][convolution][backward]") {
         GIVEN("A BPConvolutionNeuralLayer with 9 neurons and kernel 3x3") {
             auto layer = BPConvolutionNeuralLayer{};
+            auto& deltas = layer.deltas();
             WHEN(
              "calculateWeights is called with learning rate 1, delta = 0.5, "
              "inputs = 1.0 and weights = 0.5") {
-                for(auto& neuron : layer) {
-                    neuron.setDelta(0.5f);
-                    for(auto i : ranges::views::indices(neuron.size())) {
-                        neuron[i].weight = 0.5f;
+                for(std::size_t nid = 0; nid < 9; ++nid) {
+                    deltas[nid] = 0.5f;
+                    for(std::size_t i = 0; i < 9; ++i) {
+                        layer[nid][i].weight = 0.5f;
                     }
                 }
 

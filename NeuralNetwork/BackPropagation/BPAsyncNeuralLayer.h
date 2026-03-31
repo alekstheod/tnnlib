@@ -35,22 +35,25 @@ namespace nn {
             using Base::setMemento;
             using Base::size;
             using Base::operator[];
+            using Base::deltas;
 
             void calculateWeights(const Var& learningRate) {
-                const auto calculateWeight = [&learningRate](auto& neuron) {
-                    auto delta = neuron.getDelta();
-                    const std::size_t inputsNumber = neuron.size();
-                    for(std::size_t i = 0; i < inputsNumber; i++) {
-                        auto input = neuron[i].value;
-                        auto weight = neuron[i].weight;
-                        auto newWeight = weight - learningRate * input * delta;
-                        neuron.setWeight(i, newWeight);
-                    }
+                auto& deltas = this->deltas();
+                const auto calculateWeight =
+                 [&learningRate, &deltas](std::size_t neuronId, auto& neuron) {
+                     auto delta = deltas[neuronId];
+                     const std::size_t inputsNumber = neuron.size();
+                     for(std::size_t i = 0; i < inputsNumber; i++) {
+                         auto input = neuron[i].value;
+                         auto weight = neuron[i].weight;
+                         auto newWeight = weight - learningRate * input * delta;
+                         neuron[i].weight = newWeight;
+                     }
 
-                    Var weight = neuron.getBias();
-                    Var newWeight = weight - learningRate * delta;
-                    neuron.setBias(newWeight);
-                };
+                     Var bias = neuron.getBias();
+                     Var newWeight = bias - learningRate * delta;
+                     neuron.setBias(newWeight);
+                 };
 
 
                 std::array< std::future< void >, size() > weightFutures;
@@ -61,8 +64,8 @@ namespace nn {
                     std::promise< void > promise;
                     weightFutures[i.value] = promise.get_future();
                     boost::asio::post(nn::detail::pool(),
-                                      [&neuron, promise = std::move(promise), &calculateWeight]() mutable {
-                                          calculateWeight(neuron);
+                                      [&neuron, promise = std::move(promise), &calculateWeight, i]() mutable {
+                                          calculateWeight(i.value, neuron);
                                           promise.set_value();
                                       });
                 });
@@ -73,7 +76,7 @@ namespace nn {
             }
 
             const Var& getDelta(std::size_t neuronId) const {
-                return Base::operator[](neuronId).getDelta();
+                return this->deltas()[neuronId];
             }
         };
 
