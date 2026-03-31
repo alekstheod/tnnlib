@@ -2,6 +2,8 @@
 
 #include <MPL/TypeTraits.h>
 
+#include <array>
+
 namespace nn::bp {
 
     template< typename Internal >
@@ -73,6 +75,27 @@ namespace nn::bp {
             return m_outputFunction.derivate(Neuron::getOutput());
         }
 
+        void accumulateGradient(std::size_t inputIdx, const Var& gradient) {
+            m_accumulatedWeightGradients[inputIdx] += gradient;
+        }
+
+        void accumulateBiasGradient(const Var& gradient) {
+            m_accumulatedBiasGradient += gradient;
+        }
+
+        Var getAccumulatedGradient(std::size_t inputIdx) const {
+            return m_accumulatedWeightGradients[inputIdx];
+        }
+
+        Var getAccumulatedBiasGradient() const {
+            return m_accumulatedBiasGradient;
+        }
+
+        void resetGradients() {
+            m_accumulatedWeightGradients.fill(Var{});
+            m_accumulatedBiasGradient = Var{};
+        }
+
       private:
         /**
          * Neurons error delta
@@ -83,5 +106,8 @@ namespace nn::bp {
          * Equation needed in order to calculate the differential value;
          */
         OutputFunction m_outputFunction{};
+
+        std::array< Var, Neuron::size() > m_accumulatedWeightGradients{};
+        Var m_accumulatedBiasGradient{};
     };
 } // namespace nn::bp

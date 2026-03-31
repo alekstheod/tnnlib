@@ -87,6 +87,34 @@ namespace nn::bp {
             });
         }
 
+        void accumulateGradients() {
+            for_each([](auto i, auto& neuron) {
+                const auto inputsNumber = neuron.size();
+                auto delta = neuron.getDelta();
+                for(std::size_t j = 0; j < inputsNumber; j++) {
+                    auto input = neuron[j].value;
+                    neuron.accumulateGradient(j, input * delta);
+                }
+                neuron.accumulateBiasGradient(delta);
+            });
+        }
+
+        void applyGradients(const Var& learningRate) {
+            for_each([&learningRate](auto, auto& neuron) {
+                std::size_t inputsNumber = neuron.size();
+                for(std::size_t i = 0; i < inputsNumber; i++) {
+                    auto newWeight = neuron[i].weight -
+                                     learningRate * neuron.getAccumulatedGradient(i);
+                    neuron.setWeight(i, newWeight);
+                }
+
+                Var newBias = neuron.getBias() -
+                              learningRate * neuron.getAccumulatedBiasGradient();
+                neuron.setBias(newBias);
+                neuron.resetGradients();
+            });
+        }
+
         const Var& getDelta(std::size_t neuronId) const {
             return Base::operator[](neuronId).getDelta();
         }
