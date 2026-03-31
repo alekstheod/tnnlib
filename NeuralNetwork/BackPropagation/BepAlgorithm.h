@@ -47,24 +47,95 @@ namespace nn::bp {
         /// @return error on this step.
         template< typename MomentumFunc >
         Var executeTrainingStep(const Prototype& prototype, MomentumFunc momentum) {
-            // Calculate values with current inputs
             m_perceptron.calculate(std::get< 0 >(prototype).begin(),
                                    std::get< 0 >(prototype).end(),
                                    m_outputs.begin());
 
-            // Calculate deltas (output layer and propagate to hidden layers)
             calculateDelta(prototype, momentum);
 
-            // Calculate weights
             utils::for_< size() - 1 >([this](auto i) {
                 auto& hiddenLayer = std::get< i.value + 1 >(m_perceptron.layers());
                 hiddenLayer.calculateWeights(m_leariningRate);
             });
 
-            // Calculate error using cached outputs from forward pass
             return m_errorCalculator(m_outputs.begin(),
                                      m_outputs.end(),
                                      std::get< 1 >(prototype).begin());
+        }
+
+        template< typename MomentumFunc >
+        Var executeBatchTrainingStep(const Prototype& prototype, MomentumFunc momentum) {
+            m_perceptron.calculate(std::get< 0 >(prototype).begin(),
+                                   std::get< 0 >(prototype).end(),
+                                   m_outputs.begin());
+
+            calculateDelta(prototype, momentum);
+
+            utils::for_< size() - 1 >([this](auto i) {
+                auto& hiddenLayer = std::get< i.value + 1 >(m_perceptron.layers());
+                hiddenLayer.accumulateGradients();
+            });
+
+            return m_errorCalculator(m_outputs.begin(),
+                                     m_outputs.end(),
+                                     std::get< 1 >(prototype).begin());
+        }
+
+        void applyBatchGradients() {
+            utils::for_< size() - 1 >([this](auto i) {
+                auto& hiddenLayer = std::get< i.value + 1 >(m_perceptron.layers());
+                hiddenLayer.applyGradients(m_leariningRate);
+            });
+        }
+
+        template< typename Iterator, typename BatchErrorFunc >
+        PerceptronType calculateWithBatchTraining(Iterator begin,
+                                                  Iterator end,
+                                                  std::size_t batchSize,
+                                                  BatchErrorFunc batchErrorFunc) {
+            return calculateWithBatchTraining(begin, end, batchSize, batchErrorFunc, DummyMomentum());
+        }
+
+        template< typename Iterator, typename BatchErrorFunc, typename MomentumFunc >
+        PerceptronType calculateWithBatchTraining(Iterator begin,
+                                                  Iterator end,
+                                                  std::size_t batchSize,
+                                                  BatchErrorFunc batchErrorFunc,
+                                                  MomentumFunc momentum) {
+            unsigned int epochCounter = 0;
+            typename std::vector< Prototype > prototypes(begin, end);
+
+            Var error{};
+            do {
+                auto seed = std::chrono::system_clock::now().time_since_epoch().count();
+
+                std::vector< int > idxs(prototypes.size());
+                std::iota(std::begin(idxs), std::end(idxs), 0);
+                std::shuffle(std::begin(idxs),
+                             std::end(idxs),
+                             std::default_random_engine(static_cast< unsigned int >(seed)));
+
+                error = {};
+                for(std::size_t i = 0; i < prototypes.size(); i += batchSize) {
+                    error = {};
+                    for(std::size_t j = i;
+                        j < std::min(i + batchSize, prototypes.size());
+                        ++j) {
+                        error += executeBatchTrainingStep(prototypes[j], momentum);
+                    }
+                    applyBatchGradients();
+                }
+
+            } while(batchErrorFunc(++epochCounter, error / prototypes.size()));
+
+            PerceptronType result;
+            utils::for_< PerceptronType::size() - 1 >([this, &result](auto i) {
+                auto& srcLayer = std::get< i.value + 1 >(m_perceptron.layers());
+                auto& dstLayer = utils::get< i.value + 1 >(result.layers());
+                dstLayer.setMemento(srcLayer.getMemento());
+            });
+
+            return result;
         }
 
         template< typename Iterator, typename ErrorFunc >
