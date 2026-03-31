@@ -31,10 +31,10 @@ namespace {
             WHEN(
              "calculateWeights is called with learning rate 1, delta = 0.5, "
              "inputs = 1.0 and weights = 0.5") {
-                for(auto& neuron : layer) {
-                    neuron.setDelta(0.5f);
-                    for(auto i : ranges::views::indices(neuron.size())) {
-                        neuron[i].weight = 0.5f;
+                for(auto nid : ranges::views::ints(0, 9)) {
+                    layer.setDelta(nid, 0.5f);
+                    for(auto i : ranges::views::indices(layer[nid].size())) {
+                        layer[nid][i].weight = 0.5f;
                     }
                 }
 

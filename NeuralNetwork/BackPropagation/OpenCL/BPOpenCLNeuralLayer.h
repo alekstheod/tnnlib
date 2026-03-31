@@ -1,12 +1,13 @@
 #pragma once
 
-#include "NeuralNetwork//BackPropagation/OpenCL/BPOpenCLNeuralLayer.h"
+#include "NeuralNetwork/BackPropagation/BPNeuralLayer.h"
 #include "NeuralNetwork/NeuralLayer/OpenCL/OpenCLNeuralLayer.h"
-#include "NeuralNetwork//BackPropagation/BPNeuralLayer.h"
 
 #include <CL/cl.h>
 #include <CL/cl_ext.h>
 #include <CL/cl_platform.h>
+
+#include <vector>
 
 namespace nn {
 
@@ -14,13 +15,13 @@ namespace nn {
 
         template< typename Internal >
         struct BPNeuralLayer< nn::detail::OpenCLNeuralLayer< Internal > >
-         : private nn::detail::OpenCLNeuralLayer< Internal >::template wrap< BPNeuron > {
+         : private nn::detail::OpenCLNeuralLayer< Internal > {
 
-            using Base =
-             typename nn::detail::OpenCLNeuralLayer< Internal >::template wrap< BPNeuron >;
+            using Base = nn::detail::OpenCLNeuralLayer< Internal >;
 
             using NeuralLayerType = nn::detail::OpenCLNeuralLayer< Internal >;
             using Var = typename NeuralLayerType::Var;
+            using OutputFunction = nn::TanhFunction< Var >;
 
             template< typename VarType >
             using use =
@@ -41,6 +42,22 @@ namespace nn {
             using Base::size;
             using Base::operator[];
 
+            BPNeuralLayer() {
+                initializeBPState();
+            }
+
+            template< typename... Args >
+            BPNeuralLayer(Args&&... args)
+             : Base(std::forward< Args >(args)...) {
+                initializeBPState();
+            }
+
+          private:
+            void initializeBPState() {
+                m_deltas.resize(size(), Var{});
+            }
+
+          public:
             void setInput(unsigned int inputId, const Var& value) {
                 auto& self = *this;
                 utils::for_< size() >([&self, inputId, &value](const auto& i) mutable {
@@ -115,9 +132,15 @@ namespace nn {
                                             m_weights.size() * sizeof(float),
                                             m_weights.data());
 
-                    for_each([&learningRate](auto, auto& neuron) {
+                    for(auto i = 0u; i < size(); ++i) {
+                        for(auto j = 0u; j < inputs(); ++j) {
+                            (*this)[i][j].weight = m_weights[i * inputs() + j];
+                        }
+                    }
+
+                    for_each([this, &learningRate](auto i, auto& neuron) {
                         Var weight = neuron.getBias();
-                        Var newWeight = weight - learningRate * neuron.getDelta();
+                        Var newWeight = weight - learningRate * m_deltas[i.value];
                         neuron.setBias(newWeight);
                     });
 
@@ -130,8 +153,12 @@ namespace nn {
             void calculateDeltas(const Prototype& prototype, MomentumFunc momentum) {
                 auto& self = *this;
                 utils::for_< size() >([&](auto i) {
-                    m_deltas[i.value] =
-                     self[i.value].calculateDelta(std::get< 1 >(prototype)[i.value], momentum);
+                    auto& neuron = self[i.value];
+                    auto delta =
+                     momentum(m_deltas[i.value],
+                              m_outputFunction.delta(neuron.getOutput(),
+                                                     std::get< 1 >(prototype)[i.value]));
+                    m_deltas[i.value] = delta;
                 });
             }
 
@@ -139,11 +166,23 @@ namespace nn {
                 return m_deltas[neuronId];
             }
 
+            void setDelta(std::size_t neuronId, const Var& delta) {
+                m_deltas[neuronId] = delta;
+            }
+
+            std::vector< Var >& deltas() {
+                return m_deltas;
+            }
+            const std::vector< Var >& deltas() const {
+                return m_deltas;
+            }
+
           private:
             using Base::bufferSize;
             using Base::m_inputs;
             using Base::m_weights;
-            std::array< Var, size() > m_deltas;
+            OutputFunction m_outputFunction;
+            std::vector< Var > m_deltas;
         };
 
     } // namespace bp

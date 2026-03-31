@@ -1,7 +1,9 @@
 #pragma once
 
-#include "NeuralNetwork//BackPropagation/BPNeuralLayer.h"
+#include "NeuralNetwork/BackPropagation/BPNeuralLayer.h"
 #include "NeuralNetwork/NeuralLayer/Thread/AsyncNeuralLayer.h"
+
+#include <future>
 
 namespace nn {
 
@@ -28,6 +30,7 @@ namespace nn {
             using Base::calculateDeltas;
             using Base::calculateOutputs;
             using Base::for_each;
+            using Base::getDelta;
             using Base::getMemento;
             using Base::getOutput;
             using Base::inputs;
@@ -37,8 +40,7 @@ namespace nn {
             using Base::operator[];
 
             void calculateWeights(const Var& learningRate) {
-                const auto calculateWeight = [&learningRate](auto& neuron) {
-                    auto delta = neuron.getDelta();
+                const auto calculateWeight = [&learningRate](auto& neuron, Var delta) {
                     const std::size_t inputsNumber = neuron.size();
                     for(std::size_t i = 0; i < inputsNumber; i++) {
                         auto input = neuron[i].value;
@@ -58,11 +60,12 @@ namespace nn {
                 utils::for_< size() >([&, this](const auto& i) {
                     auto& self = *this;
                     auto& neuron = self[i.value];
+                    auto delta = getDelta(i.value);
                     std::promise< void > promise;
                     weightFutures[i.value] = promise.get_future();
                     boost::asio::post(nn::detail::pool(),
-                                      [&neuron, promise = std::move(promise), &calculateWeight]() mutable {
-                                          calculateWeight(neuron);
+                                      [&neuron, delta, promise = std::move(promise), &calculateWeight]() mutable {
+                                          calculateWeight(neuron, delta);
                                           promise.set_value();
                                       });
                 });
@@ -70,10 +73,6 @@ namespace nn {
                 for(auto& future : weightFutures) {
                     future.get();
                 }
-            }
-
-            const Var& getDelta(std::size_t neuronId) const {
-                return Base::operator[](neuronId).getDelta();
             }
         };
 
