@@ -5,9 +5,7 @@
 #include <MPL/TypeTraits.h>
 
 #include <range/v3/all.hpp>
-#include <vector>
-#include <tuple>
-
+#include <array>
 
 namespace nn::bp {
     template< typename Internal >
@@ -84,12 +82,9 @@ namespace nn::bp {
 
       private:
         void initializeBPState() {
-            m_deltas.resize(size(), Var{});
-            m_accumulatedWeightGradients.resize(size());
-            m_accumulatedBiasGradient.resize(size(), Var{});
-
             for(std::size_t i = 0; i < size(); ++i) {
-                m_accumulatedWeightGradients[i].resize(inputs(), Var{});
+                m_accumulatedWeightGradients[i].fill(Var{});
+                m_accumulatedBiasGradient[i] = Var{};
             }
         }
 
@@ -106,11 +101,11 @@ namespace nn::bp {
             m_deltas[neuronId] = std::move(delta);
         }
 
-        std::vector< Var >& deltas() {
+        std::array< Var, NeuralLayerType::size() >& deltas() {
             return m_deltas;
         }
 
-        const std::vector< Var >& deltas() const {
+        const std::array< Var, NeuralLayerType::size() >& deltas() const {
             return m_deltas;
         }
 
@@ -198,14 +193,14 @@ namespace nn::bp {
 
         void resetGradients() {
             for(std::size_t i = 0; i < size(); ++i) {
-                m_accumulatedWeightGradients[i].assign(inputs(), Var{});
+                m_accumulatedWeightGradients[i].fill(Var{});
                 m_accumulatedBiasGradient[i] = Var{};
             }
         }
 
       private:
-        std::vector< Var > m_deltas;
-        std::vector< std::vector< Var > > m_accumulatedWeightGradients;
-        std::vector< Var > m_accumulatedBiasGradient;
+        std::array< Var, size() > m_deltas{};
+        std::array< std::array< Var, inputs() >, size() > m_accumulatedWeightGradients{};
+        std::array< Var, size() > m_accumulatedBiasGradient{};
     };
 } // namespace nn::bp

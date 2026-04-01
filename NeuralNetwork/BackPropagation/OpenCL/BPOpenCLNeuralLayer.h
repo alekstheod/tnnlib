@@ -8,7 +8,6 @@
 #include <CL/cl_platform.h>
 
 #include <vector>
-#include <tuple>
 
 namespace nn {
 
@@ -23,18 +22,6 @@ namespace nn {
             using NeuralLayerType = nn::detail::OpenCLNeuralLayer< Internal >;
             using Var = typename NeuralLayerType::Var;
             using ActivationFunctions = typename NeuralLayerType::ActivationFunctions;
-
-          private:
-            ActivationFunctions m_activationFunctions{};
-
-          public:
-            ActivationFunctions& activationFunctions() {
-                return m_activationFunctions;
-            }
-
-            const ActivationFunctions& activationFunctions() const {
-                return m_activationFunctions;
-            }
 
             template< typename VarType >
             using use =
@@ -195,6 +182,7 @@ namespace nn {
             using Base::bufferSize;
             using Base::m_inputs;
             using Base::m_weights;
+            ActivationFunctions m_activationFunctions{};
             std::vector< Var > m_deltas;
         };
 
