@@ -41,7 +41,7 @@ cc_library(
         ],
     ),
     copts = ["-Werror"],
-    data = ["OpenCL/calc_weights.cl"],
+    data = ["OpenCL/bp_kernels.cl", "OpenCL/calc_weights.cl"],
     includes = ["."],
     visibility = [
         "//visibility:public",

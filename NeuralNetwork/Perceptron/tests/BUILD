@@ -5,6 +5,7 @@ cc_test(
         "//:tnnlib_utils",
         "//NeuralNetwork/ActivationFunction",
         "//NeuralNetwork/NeuralLayer",
+        "//NeuralNetwork/NeuralLayer:OpenCLNeuralLayer",
         "//NeuralNetwork/Neuron",
         "//NeuralNetwork/Perceptron",
         "@catch2//:catch2_main",

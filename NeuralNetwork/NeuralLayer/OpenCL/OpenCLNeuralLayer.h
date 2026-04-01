@@ -29,6 +29,7 @@ namespace nn {
         struct OpenCLNeuralLayer : private Internal {
 
             OpenCLNeuralLayer() {
+                initializeOpenCLBuffers();
                 syncWeights();
             }
 
@@ -53,6 +54,71 @@ namespace nn {
                 }
             };
 
+          private:
+            void initializeOpenCLBuffers() {
+                auto& ocl = OpenCLProgram::instance();
+                if(ocl.devices.empty()) {
+                    return;
+                }
+                m_weightsBuffer = cl::Buffer(ocl.context,
+                                             CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR,
+                                             m_weights.size() * sizeof(float));
+                m_inputsBuffer = cl::Buffer(ocl.context,
+                                            CL_MEM_READ_WRITE | CL_MEM_ALLOC_HOST_PTR,
+                                            m_inputs.size() * sizeof(float));
+                m_outputsBuffer = cl::Buffer(ocl.context,
+                                             CL_MEM_WRITE_ONLY | CL_MEM_ALLOC_HOST_PTR,
+                                             m_dotProducts.size() * sizeof(float));
+            }
+
+            void syncWeightsToGPU() {
+                if(!m_weightsBuffer()) {
+                    return;
+                }
+                try {
+                    auto& ocl = OpenCLProgram::instance();
+                    cl::CommandQueue queue(ocl.context, ocl.devices.front());
+                    float* weightsHost = static_cast< float* >(queue.enqueueMapBuffer(
+                     m_weightsBuffer, CL_TRUE, CL_MAP_WRITE, 0, m_weights.size() * sizeof(float)));
+                    std::copy(m_weights.begin(), m_weights.end(), weightsHost);
+                    queue.enqueueUnmapMemObject(m_weightsBuffer, weightsHost);
+                } catch(const cl::Error&) {
+                }
+            }
+
+            void syncInputsToGPU() {
+                if(!m_inputsBuffer()) {
+                    return;
+                }
+                try {
+                    auto& ocl = OpenCLProgram::instance();
+                    cl::CommandQueue queue(ocl.context, ocl.devices.front());
+                    float* inputsHost = static_cast< float* >(queue.enqueueMapBuffer(
+                     m_inputsBuffer, CL_TRUE, CL_MAP_WRITE, 0, m_inputs.size() * sizeof(float)));
+                    std::copy(m_inputs.begin(), m_inputs.end(), inputsHost);
+                    queue.enqueueUnmapMemObject(m_inputsBuffer, inputsHost);
+                } catch(const cl::Error&) {
+                }
+            }
+
+            void syncOutputsFromGPU() {
+                if(!m_outputsBuffer()) {
+                    return;
+                }
+                try {
+                    auto& ocl = OpenCLProgram::instance();
+                    cl::CommandQueue queue(ocl.context, ocl.devices.front());
+                    float* outputsHost = static_cast< float* >(queue.enqueueMapBuffer(
+                     m_outputsBuffer, CL_TRUE, CL_MAP_READ, 0, m_dotProducts.size() * sizeof(float)));
+                    std::copy(outputsHost,
+                              outputsHost + m_dotProducts.size(),
+                              m_dotProducts.begin());
+                    queue.enqueueUnmapMemObject(m_outputsBuffer, outputsHost);
+                } catch(const cl::Error&) {
+                }
+            }
+
+          public:
             using Var = typename Internal::Var;
             using Memento = typename Internal::Memento;
             using ActivationFunctions = typename Internal::ActivationFunctions;
@@ -83,7 +149,7 @@ namespace nn {
             using Internal::getOutput;
             using Internal::inputs;
 
-
+          public:
             void setMemento(const Memento& memento) {
                 Internal::setMemento(memento);
                 syncWeights();
@@ -128,46 +194,63 @@ namespace nn {
 
                     const auto& defaultDevice = ocl.devices.front();
 
-                    // Modern OpenCL v3 buffer creation with proper flags
-                    const cl_mem_flags inBufFlags = CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR;
-                    const cl_mem_flags outBufFlags = CL_MEM_WRITE_ONLY;
+                    cl::CommandQueue queue(ocl.context, defaultDevice);
 
-                    // Use move semantics for buffers
-                    Buffer weights(ocl.context,
-                                   inBufFlags,
-                                   m_weights.size() * sizeof(float),
-                                   m_weights.data());
+                    if(m_weightsBuffer() && m_inputsBuffer() && m_outputsBuffer()) {
+                        syncWeightsToGPU();
+                        syncInputsToGPU();
 
-                    Buffer values(ocl.context,
-                                  inBufFlags,
-                                  m_inputs.size() * sizeof(float),
-                                  m_inputs.data());
+                        cl::Kernel kernel{ocl.program, "dot_product"};
+                        kernel.setArg(0, m_weightsBuffer);
+                        kernel.setArg(1, m_inputsBuffer);
+                        kernel.setArg(2, m_outputsBuffer);
+                        cl_uint inputs_count =
+                         static_cast< cl_uint >(Internal::inputs());
+                        kernel.setArg(3, sizeof(cl_uint), &inputs_count);
 
-                    Buffer product(ocl.context, outBufFlags, m_dotProducts.size() * sizeof(float));
+                        queue.enqueueNDRangeKernel(kernel,
+                                                   cl::NullRange,
+                                                   cl::NDRange(size()),
+                                                   cl::NullRange);
 
-                    // Command queue creation - use default properties for broad compatibility
-                    CommandQueue queue(ocl.context, defaultDevice);
-                    cl::Kernel kernel{ocl.program, "dot_product"};
+                        syncOutputsFromGPU();
+                    } else {
+                        const cl_mem_flags inBufFlags = CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR;
+                        const cl_mem_flags outBufFlags = CL_MEM_WRITE_ONLY;
 
-                    // Set arguments using pointer cast method for OpenCL v3
-                    kernel.setArg(0, sizeof(cl_mem), &weights);
-                    kernel.setArg(1, sizeof(cl_mem), &values);
-                    kernel.setArg(2, sizeof(cl_mem), &product);
-                    cl_uint inputs_count = static_cast< cl_uint >(Internal::inputs());
-                    kernel.setArg(3, sizeof(cl_uint), &inputs_count);
+                        Buffer weights(ocl.context,
+                                       inBufFlags,
+                                       m_weights.size() * sizeof(float),
+                                       m_weights.data());
 
-                    // Execute kernel with proper error handling
-                    queue.enqueueNDRangeKernel(kernel,
-                                               cl::NullRange,
-                                               cl::NDRange(size()),
-                                               cl::NullRange);
+                        Buffer values(ocl.context,
+                                      inBufFlags,
+                                      m_inputs.size() * sizeof(float),
+                                      m_inputs.data());
 
-                    // Read results back
-                    queue.enqueueReadBuffer(product,
-                                            CL_TRUE,
-                                            0,
-                                            m_dotProducts.size() * sizeof(float),
-                                            m_dotProducts.data());
+                        Buffer product(ocl.context,
+                                       outBufFlags,
+                                       m_dotProducts.size() * sizeof(float));
+
+                        cl::Kernel kernel{ocl.program, "dot_product"};
+                        kernel.setArg(0, sizeof(cl_mem), &weights);
+                        kernel.setArg(1, sizeof(cl_mem), &values);
+                        kernel.setArg(2, sizeof(cl_mem), &product);
+                        cl_uint inputs_count =
+                         static_cast< cl_uint >(Internal::inputs());
+                        kernel.setArg(3, sizeof(cl_uint), &inputs_count);
+
+                        queue.enqueueNDRangeKernel(kernel,
+                                                   cl::NullRange,
+                                                   cl::NDRange(size()),
+                                                   cl::NullRange);
+
+                        queue.enqueueReadBuffer(product,
+                                                CL_TRUE,
+                                                0,
+                                                m_dotProducts.size() * sizeof(float),
+                                                m_dotProducts.data());
+                    }
 
                     // Finalize computation with bias and activation
                     auto& self = *this;
@@ -197,6 +280,7 @@ namespace nn {
                         m_weights[i * inputs() + j] = self[i][j].weight;
                     }
                 }
+                syncWeightsToGPU();
             }
 
           protected:
@@ -204,6 +288,9 @@ namespace nn {
             std::array< float, bufferSize > m_weights;
             std::array< float, bufferSize > m_inputs;
             std::array< float, size() > m_dotProducts;
+            cl::Buffer m_weightsBuffer;
+            cl::Buffer m_inputsBuffer;
+            cl::Buffer m_outputsBuffer;
         };
     } // namespace detail
 

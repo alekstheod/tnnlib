@@ -1,19 +1,8 @@
 #include "NeuralNetwork/BackPropagation/BepAlgorithm.h"
-#include "NeuralNetwork/NeuralLayer/NeuralLayer.h"
-#include "NeuralNetwork/NeuralLayer/InputLayer.h"
-#include "NeuralNetwork/NeuralLayer/ConvolutionLayer.h"
-#include "NeuralNetwork/ActivationFunction/BiopolarSigmoidFunction.h"
-#include "NeuralNetwork/ActivationFunction/LogScaleSoftmaxFunction.h"
-#include "NeuralNetwork/ActivationFunction/SigmoidFunction.h"
 #include "NeuralNetwork/ActivationFunction/SoftmaxFunction.h"
-#include "NeuralNetwork/ActivationFunction/TanhFunction.h"
-#include "NeuralNetwork/ActivationFunction/ReluFunction.h"
 #include "NeuralNetwork/Neuron/Neuron.h"
 #include "NeuralNetwork/Perceptron/Perceptron.h"
 #include "NeuralNetwork/Perceptron/PerceptronBuilder.h"
-#include "NeuralNetwork/NeuralLayer/Thread/AsyncNeuralLayer.h"
-#include "NeuralNetwork/BackPropagation/BPAsyncNeuralLayer.h"
-#include "NeuralNetwork/Serialization/Cereal.h"
 
 #include <MPL/Tuple.h>
 
@@ -40,12 +29,8 @@
 #include <cereal/types/tuple.hpp>
 #include <cereal/types/vector.hpp>
 
-#include <tuple>
-#include <cmath>
 #include <fstream>
-#include <iomanip>
 #include <iostream>
-#include <set>
 
 typedef float VarType;
 
@@ -59,23 +44,13 @@ namespace {
 } // namespace
 
 
-using Perceptron =
- nn::Perceptron< VarType,
-                 nn::InputLayer< nn::Neuron, nn::SigmoidFunction, inputsNumber, 1 >,
-                 nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, 30 >,
-                 nn::NeuralLayer< nn::Neuron, nn::SoftmaxFunction, 10 > >;
-
-constexpr std::size_t cnnWidth = 12;
-constexpr std::size_t cnnHeight = 15;
-constexpr std::size_t cnnStride = 2;
-
 using CNNPerceptron = decltype(nn::build< VarType >()
                                 .input< inputsNumber >()
                                 .conv()
-                                .with_grid< cnnWidth, cnnHeight >()
-                                .with_kernel< 3, 3, cnnStride >()
+                                .with_grid< 12, 15 >()
+                                .with_kernel< 3, 3, 2 >()
                                 .build() // conv end
-                                .dense< 30 >()
+                                .dense_opencl< 3000 >()
                                 .dense< 10 >()
                                 .with_neuron< nn::Neuron< nn::SoftmaxFunction > >())::type;
 

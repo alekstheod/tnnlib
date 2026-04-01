@@ -6,6 +6,7 @@
 #include "NeuralNetwork/NeuralLayer/NeuralLayer.h"
 #include "NeuralNetwork/NeuralLayer/PoolingLayer.h"
 #include "NeuralNetwork/NeuralLayer/Thread/AsyncNeuralLayer.h"
+#include "NeuralNetwork/NeuralLayer/OpenCL/OpenCLNeuralLayer.h"
 #include "NeuralNetwork/Neuron/Neuron.h"
 #include "NeuralNetwork/Neuron/PoolingNeuron.h"
 #include "NeuralNetwork/ActivationFunction/SigmoidFunction.h"
@@ -59,6 +60,13 @@ namespace nn {
         template< std::size_t size >
         constexpr auto dense() const {
             using L = nn::NeuralLayer< Neuron, SigmoidFunction, size >;
+            return PerceptronBuilder< VarType, L, PrevLayers..., CurrentLayer >{};
+        }
+
+        template< std::size_t size >
+        constexpr auto dense_opencl() const {
+            using L =
+             nn::detail::OpenCLNeuralLayer< nn::NeuralLayer< Neuron, SigmoidFunction, size > >;
             return PerceptronBuilder< VarType, L, PrevLayers..., CurrentLayer >{};
         }
 
