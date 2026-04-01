@@ -14,8 +14,10 @@ namespace nn {
 
         template< typename Internal >
         struct InputLayer : private Internal {
+          public:
             using Var = typename Internal::Var;
             using Memento = typename Internal::Memento;
+            using ActivationFunctions = typename Internal::ActivationFunctions;
 
             using Internal::begin;
             using Internal::cbegin;

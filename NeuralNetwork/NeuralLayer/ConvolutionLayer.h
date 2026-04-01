@@ -101,6 +101,7 @@ namespace nn {
           public:
             using Var = typename Internal::Var;
             using Memento = typename Internal::Memento;
+            using ActivationFunctions = typename Internal::ActivationFunctions;
             using Internal::begin;
             using Internal::cbegin;
             using Internal::cend;

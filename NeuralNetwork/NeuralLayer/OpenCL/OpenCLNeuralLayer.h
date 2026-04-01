@@ -55,6 +55,7 @@ namespace nn {
 
             using Var = typename Internal::Var;
             using Memento = typename Internal::Memento;
+            using ActivationFunctions = typename Internal::ActivationFunctions;
 
             template< template< class > class NewType >
             using wrap =

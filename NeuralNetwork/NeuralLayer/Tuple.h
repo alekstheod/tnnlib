@@ -17,7 +17,9 @@ namespace nn {
 
         template< typename VarType, std::size_t inputsNumber, typename... T >
         struct Layer< Tuple< VarType, inputsNumber, T... > > {
+          public:
             using Var = VarType;
+            using ActivationFunctions = std::tuple< typename T::OutputFunction... >;
 
             template< template< class > typename L, template< class > class NewType >
             using wrap_neuron = L< Tuple< VarType, inputsNumber, NewType< T >... > >;
