@@ -6,6 +6,7 @@
 #include <MPL/Algorithm.h>
 
 #include <vector>
+#include <tuple>
 
 
 namespace nn {
@@ -19,9 +20,12 @@ namespace nn {
 
         template< typename T, std::size_t sz >
         struct Layer< detail::Vector< T, sz > > {
+          public:
             using Container = std::vector< T >;
             using Neuron = T;
             using Var = typename Neuron::Var;
+            using OutputFunction = typename Neuron::OutputFunction;
+            using ActivationFunctions = std::tuple< OutputFunction >;
             using NeuronMemento = typename Neuron::Memento;
             using Memento = NeuralLayerMemento< NeuronMemento, sz >;
 

@@ -17,9 +17,12 @@ namespace nn {
         template< typename T >
         struct NeuralLayer : private Layer< T > {
             using Base = Layer< T >;
+
+          public:
             using Container = typename Base::Container;
             using Var = typename Base::Var;
             using Memento = typename Base::Memento;
+            using ActivationFunctions = typename Base::ActivationFunctions;
 
             template< template< class > typename NewType >
             using wrap = typename Base::template wrap_neuron< NeuralLayer, NewType >;

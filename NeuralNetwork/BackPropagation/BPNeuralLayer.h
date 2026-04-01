@@ -1,12 +1,12 @@
 #pragma once
 
 #include "NeuralNetwork/NeuralLayer/NeuralLayer.h"
-#include "NeuralNetwork/ActivationFunction/TanhFunction.h"
 
 #include <MPL/TypeTraits.h>
 
 #include <range/v3/all.hpp>
 #include <vector>
+#include <tuple>
 
 
 namespace nn::bp {
@@ -20,9 +20,11 @@ namespace nn::bp {
                                    AffectedLayer& affectedLayer,
                                    MomentumFunc momentum) {
             using Var = typename AffectedLayer::Var;
-            using OutputFunction = nn::TanhFunction< Var >;
+            auto& funcs = currentLayer.activationFunctions();
+            auto& outputFunc = std::get< 0 >(funcs);
+
             currentLayer.for_each(
-             [&currentLayer, &affectedLayer, &momentum](auto i, auto& currentNeuron) {
+             [&currentLayer, &affectedLayer, &momentum, &outputFunc](auto i, auto& currentNeuron) {
                  Var sum{};
                  affectedLayer.for_each([&sum, &i, &affectedLayer](auto j, auto& neuron) {
                      auto affectedDelta = affectedLayer.getDelta(j.value);
@@ -30,7 +32,6 @@ namespace nn::bp {
                      sum += affectedDelta * affectedWeight;
                  });
 
-                 OutputFunction outputFunc;
                  currentLayer.setDelta(i.value,
                                        momentum(currentLayer.getDelta(i.value),
                                                 sum * outputFunc.derivate(
@@ -46,7 +47,19 @@ namespace nn::bp {
 
         using NeuralLayer = NeuralLayerType;
         using Var = typename NeuralLayer::Var;
-        using OutputFunction = nn::TanhFunction< Var >;
+        using ActivationFunctions = typename NeuralLayer::ActivationFunctions;
+
+      private:
+        ActivationFunctions m_activationFunctions{};
+
+      public:
+        ActivationFunctions& activationFunctions() {
+            return m_activationFunctions;
+        }
+
+        const ActivationFunctions& activationFunctions() const {
+            return m_activationFunctions;
+        }
 
         template< typename VarType >
         using use = BPNeuralLayer< typename NeuralLayerType::template use< VarType > >;
@@ -109,7 +122,7 @@ namespace nn::bp {
          */
         template< typename Prototype, typename MomentumFunc >
         void calculateDeltas(const Prototype& prototype, MomentumFunc momentum) {
-            OutputFunction outputFunc;
+            auto& outputFunc = std::get< 0 >(m_activationFunctions);
             std::size_t neuronId = 0;
             for(auto& neuron : *this) {
                 auto delta =
@@ -191,7 +204,6 @@ namespace nn::bp {
         }
 
       private:
-        OutputFunction m_outputFunction;
         std::vector< Var > m_deltas;
         std::vector< std::vector< Var > > m_accumulatedWeightGradients;
         std::vector< Var > m_accumulatedBiasGradient;

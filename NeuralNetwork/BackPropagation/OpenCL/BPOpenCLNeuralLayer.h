@@ -8,6 +8,7 @@
 #include <CL/cl_platform.h>
 
 #include <vector>
+#include <tuple>
 
 namespace nn {
 
@@ -21,7 +22,19 @@ namespace nn {
 
             using NeuralLayerType = nn::detail::OpenCLNeuralLayer< Internal >;
             using Var = typename NeuralLayerType::Var;
-            using OutputFunction = nn::TanhFunction< Var >;
+            using ActivationFunctions = typename NeuralLayerType::ActivationFunctions;
+
+          private:
+            ActivationFunctions m_activationFunctions{};
+
+          public:
+            ActivationFunctions& activationFunctions() {
+                return m_activationFunctions;
+            }
+
+            const ActivationFunctions& activationFunctions() const {
+                return m_activationFunctions;
+            }
 
             template< typename VarType >
             using use =
@@ -152,12 +165,13 @@ namespace nn {
             template< typename Prototype, typename MomentumFunc >
             void calculateDeltas(const Prototype& prototype, MomentumFunc momentum) {
                 auto& self = *this;
+                auto& outputFunc = std::get< 0 >(m_activationFunctions);
                 utils::for_< size() >([&](auto i) {
                     auto& neuron = self[i.value];
                     auto delta =
                      momentum(m_deltas[i.value],
-                              m_outputFunction.delta(neuron.getOutput(),
-                                                     std::get< 1 >(prototype)[i.value]));
+                              outputFunc.delta(neuron.getOutput(),
+                                               std::get< 1 >(prototype)[i.value]));
                     m_deltas[i.value] = delta;
                 });
             }
@@ -181,7 +195,6 @@ namespace nn {
             using Base::bufferSize;
             using Base::m_inputs;
             using Base::m_weights;
-            OutputFunction m_outputFunction;
             std::vector< Var > m_deltas;
         };
 

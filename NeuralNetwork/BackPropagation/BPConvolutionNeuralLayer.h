@@ -19,7 +19,19 @@ namespace nn::bp {
         using NeuralLayerType = typename nn::detail::ConvolutionLayer< LayerType, Grid >;
 
         using Var = typename NeuralLayerType::Var;
-        using OutputFunction = nn::TanhFunction< Var >;
+        using ActivationFunctions = typename NeuralLayerType::ActivationFunctions;
+
+      private:
+        ActivationFunctions m_activationFunctions{};
+
+      public:
+        ActivationFunctions& activationFunctions() {
+            return m_activationFunctions;
+        }
+
+        const ActivationFunctions& activationFunctions() const {
+            return m_activationFunctions;
+        }
 
         template< typename VarType >
         using use = BPNeuralLayer< typename NeuralLayerType::template use< VarType > >;
@@ -72,12 +84,13 @@ namespace nn::bp {
 
         template< typename Prototype, typename MomentumFunc >
         void calculateDeltas(const Prototype& prototype, MomentumFunc momentum) {
+            auto& outputFunc = std::get< 0 >(m_activationFunctions);
             for(std::size_t neuronId = 0; neuronId < size(); ++neuronId) {
                 auto& neuron = (*this)[neuronId];
                 auto delta =
                  momentum(m_deltas[neuronId],
-                          m_outputFunction.delta(neuron.getOutput(),
-                                                 std::get< 1 >(prototype)[neuronId]));
+                          outputFunc.delta(neuron.getOutput(),
+                                           std::get< 1 >(prototype)[neuronId]));
                 m_deltas[neuronId] = delta;
             }
         }
@@ -148,7 +161,6 @@ namespace nn::bp {
         }
 
       private:
-        OutputFunction m_outputFunction;
         std::vector< Var > m_deltas;
         std::vector< std::vector< Var > > m_accumulatedWeightGradients;
         std::vector< Var > m_accumulatedBiasGradient;
