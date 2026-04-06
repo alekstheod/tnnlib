@@ -1,18 +1,8 @@
 #include "NeuralNetwork/BackPropagation/BepAlgorithm.h"
-#include "NeuralNetwork/NeuralLayer/NeuralLayer.h"
-#include "NeuralNetwork/NeuralLayer/InputLayer.h"
-#include "NeuralNetwork/NeuralLayer/ConvolutionLayer.h"
-#include "NeuralNetwork/ActivationFunction/BiopolarSigmoidFunction.h"
-#include "NeuralNetwork/ActivationFunction/LogScaleSoftmaxFunction.h"
-#include "NeuralNetwork/ActivationFunction/SigmoidFunction.h"
 #include "NeuralNetwork/ActivationFunction/SoftmaxFunction.h"
-#include "NeuralNetwork/ActivationFunction/TanhFunction.h"
-#include "NeuralNetwork/ActivationFunction/ReluFunction.h"
 #include "NeuralNetwork/Neuron/Neuron.h"
 #include "NeuralNetwork/Perceptron/Perceptron.h"
 #include "NeuralNetwork/Perceptron/PerceptronBuilder.h"
-#include "NeuralNetwork/NeuralLayer/Thread/AsyncNeuralLayer.h"
-#include "NeuralNetwork/BackPropagation/BPAsyncNeuralLayer.h"
 #include "NeuralNetwork/Serialization/Cereal.h"
 
 #include <MPL/Tuple.h>
@@ -40,12 +30,8 @@
 #include <cereal/types/tuple.hpp>
 #include <cereal/types/vector.hpp>
 
-#include <tuple>
-#include <cmath>
 #include <fstream>
-#include <iomanip>
 #include <iostream>
-#include <set>
 
 typedef float VarType;
 
@@ -59,29 +45,19 @@ namespace {
 } // namespace
 
 
-using Perceptron =
- nn::Perceptron< VarType,
-                 nn::InputLayer< nn::Neuron, nn::SigmoidFunction, inputsNumber, 1 >,
-                 nn::NeuralLayer< nn::Neuron, nn::SigmoidFunction, 30 >,
-                 nn::NeuralLayer< nn::Neuron, nn::SoftmaxFunction, 10 > >;
+using Perceptron = decltype(nn::build< VarType >()
+                             .input< inputsNumber >()
+                             .conv()
+                             .with_grid< 12, 15 >()
+                             .with_kernel< 3, 3, 2 >()
+                             .build() // conv end
+                             .dense< 30 >()
+                             .dense< 10 >()
+                             .with_neuron< nn::Neuron< nn::SoftmaxFunction > >())::type;
 
-constexpr std::size_t cnnWidth = 12;
-constexpr std::size_t cnnHeight = 15;
-constexpr std::size_t cnnStride = 2;
+using InputData = typename Perceptron::Input;
 
-using CNNPerceptron = decltype(nn::build< VarType >()
-                                .input< inputsNumber >()
-                                .conv()
-                                .with_grid< cnnWidth, cnnHeight >()
-                                .with_kernel< 3, 3, cnnStride >()
-                                .build() // conv end
-                                .dense< 30 >()
-                                .dense< 10 >()
-                                .with_neuron< nn::Neuron< nn::SoftmaxFunction > >())::type;
-
-using InputData = typename CNNPerceptron::Input;
-
-using CNNAlgo = nn::bp::BepAlgorithm< CNNPerceptron, nn::bp::CrossEntropyError >;
+using CNNAlgo = nn::bp::BepAlgorithm< Perceptron, nn::bp::CrossEntropyError >;
 
 template< typename SrcView, typename DstView >
 void convert_color(const SrcView& src, const DstView& dst) {
@@ -122,12 +98,12 @@ void readImage(std::string fileName, Iterator out) {
     }
 }
 
-CNNPerceptron readPerceptron(std::string fileName) {
-    CNNPerceptron perceptron;
+Perceptron readPerceptron(std::string fileName) {
+    Perceptron perceptron;
     if(boost::filesystem::exists(fileName.c_str())) {
         std::ifstream file(fileName);
         if(file.good()) {
-            CNNPerceptron::Memento memento;
+            Perceptron::Memento memento;
             cereal::JSONInputArchive ia(file);
             ia >> memento;
 
@@ -145,7 +121,7 @@ void recognize(std::string perceptron, std::string image) {
         std::array< InputData, inputsNumber > inputs = {InputData{}};
         readImage(image, inputs.begin());
         std::vector< VarType > result(alphabet.length(), VarType(0.f));
-        CNNPerceptron perc = readPerceptron(perceptron);
+        Perceptron perc = readPerceptron(perceptron);
         perc.calculate(inputs.begin(), inputs.end(), result.begin());
         for(unsigned int i = 0; i < result.size(); i++) {
             std::cout << "Symbol: " << alphabet[i] << " " << result[i] << std::endl;
@@ -209,7 +185,7 @@ void calculateWeights(std::string imagesPath) {
         return error > 0.15f;
     };
 
-    static CNNPerceptron perceptron =
+    static Perceptron perceptron =
      algorithm.calculate(prototypes.begin(), prototypes.end(), errorFunc);
 
     save(perceptron, "perceptron.json");
