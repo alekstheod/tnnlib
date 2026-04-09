@@ -17,7 +17,7 @@ namespace nn {
      */
     namespace detail {
         template< typename OutputFunctionType, std::size_t inputsNumber >
-        struct Neuron : INeuron< typename OutputFunctionType::Var > {
+        struct Neuron final : INeuron< typename OutputFunctionType::Var > {
             using OutputFunction = OutputFunctionType;
             using Var = typename OutputFunction::Var;
             using Memento = NeuronMemento< Var, inputsNumber >;
