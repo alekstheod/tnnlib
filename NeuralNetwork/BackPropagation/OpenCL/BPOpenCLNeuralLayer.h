@@ -8,7 +8,6 @@
 #include <CL/cl_platform.h>
 
 #include <vector>
-#include <tuple>
 
 namespace nn {
 
