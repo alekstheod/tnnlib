@@ -37,6 +37,7 @@ namespace nn {
             template< std::size_t inputs >
             using resize = Neuron< OutputFunctionType, inputs >;
 
+            virtual ~Neuron() = default;
             static_assert(inputsNumber > 0, "Invalid number of inputs");
 
             auto cbegin() const {

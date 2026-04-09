@@ -1,9 +1,7 @@
 #pragma once
 
-#include <functional>
 #include <numeric>
 #include <cmath>
-#include <utility>
 
 namespace nn {
 
