@@ -157,9 +157,8 @@ void calculateWeights(std::string imagesPath) {
 
 
     std::cout << "Perceptron calculation started" << std::endl;
-    // static CNNPerceptron tmp = readPerceptron("perceptron.json");
-    static CNNAlgo algorithm(0.01f);
-    // algorithm.setMemento(tmp.getMemento());
+    nn::bp::SgdOptimizer< float > optimizer{0.01f};
+    static CNNAlgo algorithm(optimizer);
 
     std::vector< CNNAlgo::Prototype > prototypes;
 

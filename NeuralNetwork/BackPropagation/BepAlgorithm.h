@@ -3,6 +3,7 @@
 #include "NeuralNetwork/BackPropagation/BPNeuralLayer.h"
 #include "NeuralNetwork/BackPropagation/BPConvolutionNeuralLayer.h"
 #include "NeuralNetwork/BackPropagation/ErrorFunction.h"
+#include "NeuralNetwork/BackPropagation/Optimizers.h"
 #include <System/Time.h>
 
 #include <algorithm>
@@ -37,7 +38,7 @@ namespace nn::bp {
         /// @param varP the learning rate.
         /// @param maxError the limit for the error. Algorithm will stop
         /// when we reach the limit.
-        BepAlgorithm(Var learningRate) : m_leariningRate(learningRate) {
+        BepAlgorithm(IOptimizer< Var >& optimizer) : m_optimizer{optimizer} {
         }
 
         /// @brief execution of the single learning step in this algorithm.
@@ -53,9 +54,10 @@ namespace nn::bp {
 
             calculateDelta(prototype, momentum);
 
+            // Create optimizer from learning rate for backward compatibility
             utils::for_< size() - 1 >([this](auto i) {
                 auto& hiddenLayer = std::get< i.value + 1 >(m_perceptron.layers());
-                hiddenLayer.calculateWeights(m_leariningRate);
+                hiddenLayer.calculateWeights(m_optimizer);
             });
 
             return m_errorCalculator(m_outputs.begin(),
@@ -76,15 +78,22 @@ namespace nn::bp {
                 hiddenLayer.accumulateGradients();
             });
 
+            // Apply gradients using optimizer
+            utils::for_< size() - 1 >([this](auto i) {
+                auto& hiddenLayer = std::get< i.value + 1 >(m_perceptron.layers());
+                hiddenLayer.applyGradients(m_optimizer);
+            });
+
             return m_errorCalculator(m_outputs.begin(),
                                      m_outputs.end(),
                                      std::get< 1 >(prototype).begin());
         }
 
         void applyBatchGradients() {
+            // Create optimizer from learning rate for backward compatibility
             utils::for_< size() - 1 >([this](auto i) {
                 auto& hiddenLayer = std::get< i.value + 1 >(m_perceptron.layers());
-                hiddenLayer.applyGradients(m_leariningRate);
+                hiddenLayer.applyGradients(m_optimizer);
             });
         }
 
@@ -193,7 +202,7 @@ namespace nn::bp {
         Perceptron m_perceptron;
 
         /// @brief the learning rate.
-        Var m_leariningRate;
+        IOptimizer< Var >& m_optimizer;
 
         /// @brief outputs stored for each step.
         std::array< Var, outputsNumber > m_outputs;

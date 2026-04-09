@@ -39,19 +39,22 @@ namespace nn {
             using Base::size;
             using Base::operator[];
 
-            void calculateWeights(const Var& learningRate) {
-                const auto calculateWeight = [&learningRate](auto& neuron, Var delta) {
+            template< typename Optimizer >
+            void calculateWeights(Optimizer& optimizer) {
+                const auto calculateWeight = [&optimizer](auto& neuron, Var delta) {
                     const std::size_t inputsNumber = neuron.size();
                     for(std::size_t i = 0; i < inputsNumber; i++) {
                         auto input = neuron[i].value;
                         auto weight = neuron[i].weight;
-                        auto newWeight = weight - learningRate * input * delta;
+                        auto gradient = input * delta;
+                        auto newWeight = optimizer(weight, gradient);
                         neuron.setWeight(i, newWeight);
                     }
 
                     Var weight = neuron.getBias();
-                    Var newWeight = weight - learningRate * delta;
-                    neuron.setBias(newWeight);
+                    auto gradient = delta;
+                    auto newBias = optimizer(weight, gradient);
+                    neuron.setBias(newBias);
                 };
 
 

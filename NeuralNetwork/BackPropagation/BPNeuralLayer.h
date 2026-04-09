@@ -134,21 +134,24 @@ namespace nn::bp {
             detail::calculateHiddenDeltas(*this, affectedLayer, momentum);
         }
 
-        void calculateWeights(const Var& learningRate) {
-            for_each([this, &learningRate](auto i, auto& neuron) {
+        template< typename Optimizer >
+        void calculateWeights(Optimizer& optimizer) {
+            for_each([this, &optimizer](auto i, auto& neuron) {
                 std::size_t inputsNumber = neuron.size();
                 auto delta = m_deltas[i.value];
                 for(std::size_t j = 0; j < inputsNumber; j++) {
 
                     auto input = neuron[j].value;
                     auto weight = neuron[j].weight;
-                    auto newWeight = weight - learningRate * input * delta;
+                    auto gradient = input * delta;
+                    auto newWeight = optimizer(weight, gradient);
                     neuron.setWeight(j, newWeight);
                 }
 
                 Var weight = neuron.getBias();
-                Var newWeight = weight - learningRate * delta;
-                neuron.setBias(newWeight);
+                auto gradient = delta;
+                auto newBias = optimizer(weight, gradient);
+                neuron.setBias(newBias);
             });
         }
 
@@ -164,18 +167,20 @@ namespace nn::bp {
             });
         }
 
-        void applyGradients(const Var& learningRate) {
-            for_each([this, &learningRate](auto i, auto& neuron) {
+        template< typename Optimizer >
+        void applyGradients(Optimizer& optimizer) {
+            for_each([this, &optimizer](auto i, auto& neuron) {
                 std::size_t inputsNumber = neuron.size();
                 for(std::size_t j = 0; j < inputsNumber; j++) {
-                    auto newWeight =
-                     neuron[j].weight -
-                     learningRate * m_accumulatedWeightGradients[i.value][j];
+                    auto weight = neuron[j].weight;
+                    auto gradient = m_accumulatedWeightGradients[i.value][j];
+                    auto newWeight = optimizer(weight, gradient);
                     neuron.setWeight(j, newWeight);
                 }
 
-                Var newBias = neuron.getBias() -
-                              learningRate * m_accumulatedBiasGradient[i.value];
+                Var weight = neuron.getBias();
+                Var gradient = m_accumulatedBiasGradient[i.value];
+                auto newBias = optimizer(weight, gradient);
                 neuron.setBias(newBias);
 
                 m_accumulatedWeightGradients[i.value].assign(inputsNumber, Var{});
