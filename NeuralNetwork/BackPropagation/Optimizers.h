@@ -2,90 +2,120 @@
 
 #include <cmath>
 #include <limits>
+#include <array>
 
 namespace nn::bp {
 
-    template< typename Var >
+    template< typename Var, size_t Size >
     struct IOptimizer {
-        virtual Var operator()(Var weight, Var gradient) = 0;
+        virtual Var operator()(size_t index, Var weight, Var gradient) = 0;
 
       protected:
         ~IOptimizer() = default;
     };
 
     // Adam optimizer: maintains moving averages of gradient and squared gradient
-    template< typename Var >
-    struct AdamOptimizer final : public IOptimizer< Var > {
+    template< typename Var, size_t Size >
+    struct AdamOptimizer final : public IOptimizer< Var, Size > {
         Var learningRate;
         Var beta1; // exponential decay rate for first moment estimates
         Var beta2; // exponential decay rate for second moment estimates
         Var epsilon; // small value to prevent division by zero
         size_t t; // timestep
 
-        // State variables (these would normally be per-parameter)
-        Var m; // first moment vector
-        Var v; // second moment vector
+        std::array<Var, Size> m; // first moment vector
+        std::array<Var, Size> v; // second moment vector
 
-        AdamOptimizer(Var lr = 0.001, Var b1 = 0.9, Var b2 = 0.999, Var eps = 1e-8)
-         : learningRate(lr), beta1(b1), beta2(b2), epsilon(eps), t(0), m(0), v(0) {
+        AdamOptimizer() : learningRate(0.001f), beta1(0.9f), beta2(0.999f), epsilon(1e-8f), t(0), m{}, v{} {
         }
 
-        Var operator()(Var weight, Var gradient) final override {
-            t++;
-            m = beta1 * m + (1 - beta1) * gradient;
-            v = beta2 * v + (1 - beta2) * (gradient * gradient);
+        AdamOptimizer(Var lr, Var b1, Var b2, Var eps = 1e-8f)
+         : learningRate(lr), beta1(b1), beta2(b2), epsilon(eps), t(0), m{}, v{} {
+        }
 
-            // Bias correction
-            Var m_hat = m / (1 - std::pow(beta1, t));
-            Var v_hat = v / (1 - std::pow(beta2, t));
+        Var operator()(size_t index, Var weight, Var gradient) final override {
+            t++;
+
+            Var clippedGradient = gradient;
+            if (std::abs(gradient) > 10.0f) {
+                clippedGradient = (gradient > 0 ? 10.0f : -10.0f);
+            }
+
+            m[index] = beta1 * m[index] + (1 - beta1) * clippedGradient;
+            v[index] = beta2 * v[index] + (1 - beta2) * (clippedGradient * clippedGradient);
+
+            Var m_hat = m[index] / (1 - std::pow(beta1, t));
+            Var v_hat = v[index] / (1 - std::pow(beta2, t));
 
             return weight - learningRate * m_hat / (std::sqrt(v_hat) + epsilon);
         }
     };
 
     // Adagrad optimizer: adapts learning rate based on historical sum of squares
-    template< typename Var >
-    struct AdagradOptimizer final : public IOptimizer< Var > {
+    template< typename Var, size_t Size >
+    struct AdagradOptimizer final : public IOptimizer< Var, Size > {
         Var learningRate;
         Var epsilon;
-        Var cache; // sum of squares of past gradients
+        std::array<Var, Size> cache; // sum of squares of past gradients
 
-        AdagradOptimizer(Var lr = 0.01, Var eps = 1e-8)
-         : learningRate(lr), epsilon(eps), cache(0) {
+        AdagradOptimizer() : learningRate(0.01f), epsilon(1e-8f), cache{} {
         }
 
-        Var operator()(Var weight, Var gradient) final override {
-            cache += gradient * gradient;
-            return weight - learningRate * gradient / (std::sqrt(cache) + epsilon);
+        AdagradOptimizer(Var lr, Var eps = 1e-8f)
+         : learningRate(lr), epsilon(eps), cache{} {
+        }
+
+        Var operator()(size_t index, Var weight, Var gradient) final override {
+            Var clippedGradient = gradient;
+            if (std::abs(gradient) > 10.0f) {
+                clippedGradient = (gradient > 0 ? 10.0f : -10.0f);
+            }
+
+            cache[index] += clippedGradient * clippedGradient;
+            return weight - learningRate * clippedGradient / (std::sqrt(cache[index]) + epsilon);
         }
     };
 
-    template< typename Var >
-    struct SgdOptimizer final : public IOptimizer< Var > {
+    template< typename Var, size_t Size >
+    struct SgdOptimizer final : public IOptimizer< Var, Size > {
         Var learningRate;
+
+        SgdOptimizer() : learningRate(0.01f) {
+        }
 
         SgdOptimizer(Var lr) : learningRate(lr) {
         }
 
-        Var operator()(Var weight, Var gradient) final override {
-            return weight - learningRate * gradient;
+        Var operator()(size_t index, Var weight, Var gradient) final override {
+            Var clippedGradient = gradient;
+            if (std::abs(gradient) > 10.0f) {
+                clippedGradient = (gradient > 0 ? 10.0f : -10.0f);
+            }
+            return weight - learningRate * clippedGradient;
         }
     };
 
     // Momentum optimizer
-    template< typename Var >
-    struct MomentumOptimizer final : public IOptimizer< Var > {
+    template< typename Var, size_t Size >
+    struct MomentumOptimizer final : public IOptimizer< Var, Size > {
         Var learningRate;
         Var beta; // momentum coefficient
-        Var velocity; // velocity term
+        std::array<Var, Size> velocity; // velocity term
 
-        MomentumOptimizer(Var lr, Var b = 0.9)
-         : learningRate(lr), beta(b), velocity(0) {
+        MomentumOptimizer() : learningRate(0.01f), beta(0.9f), velocity{} {
         }
 
-        Var operator()(Var weight, Var gradient) final override {
-            velocity = beta * velocity + (1 - beta) * gradient;
-            return weight - learningRate * velocity;
+        MomentumOptimizer(Var lr, Var b)
+         : learningRate(lr), beta(b), velocity{} {
+        }
+
+        Var operator()(size_t index, Var weight, Var gradient) final override {
+            Var clippedGradient = gradient;
+            if (std::abs(gradient) > 10.0f) {
+                clippedGradient = (gradient > 0 ? 10.0f : -10.0f);
+            }
+            velocity[index] = beta * velocity[index] + (1 - beta) * clippedGradient;
+            return weight - learningRate * velocity[index];
         }
     };
 

@@ -2,13 +2,23 @@ cc_test(
     name = "tests",
     srcs = glob(
         ["*.cpp"],
-        exclude = ["BPOpenCLNeuralLayerTest.cpp"],
+        exclude = ["BPOpenCLNeuralLayerTest.cpp", "BPConvolutionNeuralLayerTest.cpp", "OptimizerTest.cpp"],
     ),
     deps = [
         "//:tnnlib_utils",
         "//NeuralNetwork/ActivationFunction",
         "//NeuralNetwork/BackPropagation",
         "//NeuralNetwork/NeuralLayer",
+        "@catch2//:catch2_main",
+    ],
+)
+
+cc_test(
+    name = "optimizer_test",
+    srcs = ["OptimizerTest.cpp"],
+    deps = [
+        "//:tnnlib_utils",
+        "//NeuralNetwork/BackPropagation",
         "@catch2//:catch2_main",
     ],
 )

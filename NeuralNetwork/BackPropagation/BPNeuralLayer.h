@@ -8,7 +8,7 @@
 #include <array>
 
 namespace nn::bp {
-    template< typename Internal >
+    template< typename NeuralLayerType, template< typename, size_t > class OptimizerType >
     struct BPNeuralLayer;
 
     namespace detail {
@@ -39,7 +39,7 @@ namespace nn::bp {
 
     } // namespace detail
 
-    template< typename NeuralLayerType >
+    template< typename NeuralLayerType, template< typename, size_t > class OptimizerType >
     struct BPNeuralLayer : NeuralLayerType {
         using Base = NeuralLayerType;
 
@@ -47,8 +47,11 @@ namespace nn::bp {
         using Var = typename NeuralLayer::Var;
         using ActivationFunctions = typename NeuralLayer::ActivationFunctions;
 
+        static constexpr size_t optimizerSize = NeuralLayer::inputs() * NeuralLayer::size() + NeuralLayer::size();
+
       private:
         ActivationFunctions m_activationFunctions{};
+        OptimizerType<Var, optimizerSize> m_optimizer;
 
       public:
         ActivationFunctions& activationFunctions() {
@@ -60,11 +63,11 @@ namespace nn::bp {
         }
 
         template< typename VarType >
-        using use = BPNeuralLayer< typename NeuralLayerType::template use< VarType > >;
+        using use = BPNeuralLayer< typename NeuralLayerType::template use< VarType >, OptimizerType >;
 
         template< std::size_t inputs >
         using adjust =
-         BPNeuralLayer< typename NeuralLayerType::template adjust< inputs > >;
+         BPNeuralLayer< typename NeuralLayerType::template adjust< inputs >, OptimizerType >;
 
         using Base::for_each;
         using Base::inputs;
@@ -109,12 +112,6 @@ namespace nn::bp {
             return m_deltas;
         }
 
-        /**
-         * @brief Will calculate the deltas for the current layer. This
-         * method must be called for the output layer layers.
-         * @param current data set based on which the deltas will be
-         * calculated.
-         */
         template< typename Prototype, typename MomentumFunc >
         void calculateDeltas(const Prototype& prototype, MomentumFunc momentum) {
             auto& outputFunc = std::get< 0 >(m_activationFunctions);
@@ -134,23 +131,21 @@ namespace nn::bp {
             detail::calculateHiddenDeltas(*this, affectedLayer, momentum);
         }
 
-        template< typename Optimizer >
-        void calculateWeights(Optimizer& optimizer) {
-            for_each([this, &optimizer](auto i, auto& neuron) {
+        void calculateWeights() {
+            for_each([this](auto i, auto& neuron) {
                 std::size_t inputsNumber = neuron.size();
                 auto delta = m_deltas[i.value];
                 for(std::size_t j = 0; j < inputsNumber; j++) {
-
                     auto input = neuron[j].value;
                     auto weight = neuron[j].weight;
                     auto gradient = input * delta;
-                    auto newWeight = optimizer(weight, gradient);
+                    auto newWeight = m_optimizer(i.value * inputsNumber + j, weight, gradient);
                     neuron.setWeight(j, newWeight);
                 }
 
                 Var weight = neuron.getBias();
                 auto gradient = delta;
-                auto newBias = optimizer(weight, gradient);
+                auto newBias = m_optimizer(i.value + inputsNumber * size(), weight, gradient);
                 neuron.setBias(newBias);
             });
         }
@@ -167,23 +162,22 @@ namespace nn::bp {
             });
         }
 
-        template< typename Optimizer >
-        void applyGradients(Optimizer& optimizer) {
-            for_each([this, &optimizer](auto i, auto& neuron) {
+        void applyGradients() {
+            for_each([this](auto i, auto& neuron) {
                 std::size_t inputsNumber = neuron.size();
                 for(std::size_t j = 0; j < inputsNumber; j++) {
                     auto weight = neuron[j].weight;
                     auto gradient = m_accumulatedWeightGradients[i.value][j];
-                    auto newWeight = optimizer(weight, gradient);
+                    auto newWeight = m_optimizer(i.value * inputsNumber + j, weight, gradient);
                     neuron.setWeight(j, newWeight);
                 }
 
                 Var weight = neuron.getBias();
                 Var gradient = m_accumulatedBiasGradient[i.value];
-                auto newBias = optimizer(weight, gradient);
+                auto newBias = m_optimizer(i.value + inputsNumber * size(), weight, gradient);
                 neuron.setBias(newBias);
 
-                m_accumulatedWeightGradients[i.value].assign(inputsNumber, Var{});
+                m_accumulatedWeightGradients[i.value].fill(Var{});
                 m_accumulatedBiasGradient[i.value] = Var{};
             });
         }
@@ -196,11 +190,19 @@ namespace nn::bp {
             return m_accumulatedBiasGradient[neuronId];
         }
 
-        void resetGradients() {
+void resetGradients() {
             for(std::size_t i = 0; i < size(); ++i) {
                 m_accumulatedWeightGradients[i].fill(Var{});
                 m_accumulatedBiasGradient[i] = Var{};
             }
+        }
+
+        OptimizerType<Var, optimizerSize>& getOptimizer() {
+            return m_optimizer;
+        }
+
+        const OptimizerType<Var, optimizerSize>& getOptimizer() const {
+            return m_optimizer;
         }
 
       private:

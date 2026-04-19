@@ -1,4 +1,5 @@
 #include "NeuralNetwork/BackPropagation/BepAlgorithm.h"
+#include "NeuralNetwork/BackPropagation/Optimizers.h"
 #include "NeuralNetwork/ActivationFunction/SoftmaxFunction.h"
 #include "NeuralNetwork/Neuron/Neuron.h"
 #include "NeuralNetwork/Perceptron/Perceptron.h"
@@ -47,17 +48,14 @@ namespace {
 
 using Perceptron = decltype(nn::build< VarType >()
                              .input< inputsNumber >()
-                             .conv()
-                             .with_grid< 12, 15 >()
-                             .with_kernel< 3, 3, 2 >()
-                             .build() // conv end
                              .dense< 30 >()
                              .dense< 10 >()
                              .with_neuron< nn::Neuron< nn::SoftmaxFunction > >())::type;
 
 using InputData = typename Perceptron::Input;
 
-using CNNAlgo = nn::bp::BepAlgorithm< Perceptron, nn::bp::CrossEntropyError >;
+using CNNAlgo =
+ nn::bp::BepAlgorithm< Perceptron, nn::bp::AdamOptimizer, nn::bp::CrossEntropyError >;
 
 template< typename SrcView, typename DstView >
 void convert_color(const SrcView& src, const DstView& dst) {
@@ -157,8 +155,7 @@ void calculateWeights(std::string imagesPath) {
 
 
     std::cout << "Perceptron calculation started" << std::endl;
-    nn::bp::SgdOptimizer< float > optimizer{0.01f};
-    static CNNAlgo algorithm(optimizer);
+    static CNNAlgo algorithm{};
 
     std::vector< CNNAlgo::Prototype > prototypes;
 

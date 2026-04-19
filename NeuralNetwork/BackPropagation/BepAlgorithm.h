@@ -3,7 +3,6 @@
 #include "NeuralNetwork/BackPropagation/BPNeuralLayer.h"
 #include "NeuralNetwork/BackPropagation/BPConvolutionNeuralLayer.h"
 #include "NeuralNetwork/BackPropagation/ErrorFunction.h"
-#include "NeuralNetwork/BackPropagation/Optimizers.h"
 #include <System/Time.h>
 
 #include <algorithm>
@@ -12,7 +11,9 @@
 
 namespace nn::bp {
 
-    template< typename PerceptronType, template< class > class ErrorCalculator = SquaredError >
+    template< typename PerceptronType,
+              template< typename, size_t > class OptimizerType,
+              template< class > class ErrorCalculator = SquaredError >
     class BepAlgorithm {
         using Var = typename PerceptronType::Var;
         using Input = typename PerceptronType::Input;
@@ -20,7 +21,10 @@ namespace nn::bp {
         static constexpr unsigned int inputsNumber = PerceptronType::inputs();
         static constexpr unsigned int outputsNumber = PerceptronType::outputs();
 
-        using Perceptron = typename PerceptronType::template wrap< BPNeuralLayer >;
+        template< typename Layer >
+        using BPWrappedLayer = BPNeuralLayer< Layer, OptimizerType >;
+
+        using Perceptron = typename PerceptronType::template wrap< BPWrappedLayer >;
         using Layers = typename Perceptron::Layers;
 
       public:
@@ -33,14 +37,6 @@ namespace nn::bp {
             return PerceptronType::size();
         }
 
-        /// @brief constructor will initialize the object with a learning
-        /// rate and maximum error limit.
-        /// @param varP the learning rate.
-        /// @param maxError the limit for the error. Algorithm will stop
-        /// when we reach the limit.
-        BepAlgorithm(IOptimizer< Var >& optimizer) : m_optimizer{optimizer} {
-        }
-
         /// @brief execution of the single learning step in this algorithm.
         /// @param prototype a prototype used for this step.
         /// @param momentum a callback which will calculate a new delta,
@@ -50,14 +46,14 @@ namespace nn::bp {
         Var executeTrainingStep(const Prototype& prototype, MomentumFunc momentum) {
             m_perceptron.calculate(std::get< 0 >(prototype).begin(),
                                    std::get< 0 >(prototype).end(),
-                                   m_outputs.begin());
+m_outputs.begin());
 
             calculateDelta(prototype, momentum);
 
-            // Create optimizer from learning rate for backward compatibility
+            // Calculate weights for dense layers (they have internal optimizer)
             utils::for_< size() - 1 >([this](auto i) {
                 auto& hiddenLayer = std::get< i.value + 1 >(m_perceptron.layers());
-                hiddenLayer.calculateWeights(m_optimizer);
+                hiddenLayer.calculateWeights();
             });
 
             return m_errorCalculator(m_outputs.begin(),
@@ -78,10 +74,10 @@ namespace nn::bp {
                 hiddenLayer.accumulateGradients();
             });
 
-            // Apply gradients using optimizer
+            // Apply gradients
             utils::for_< size() - 1 >([this](auto i) {
                 auto& hiddenLayer = std::get< i.value + 1 >(m_perceptron.layers());
-                hiddenLayer.applyGradients(m_optimizer);
+                hiddenLayer.applyGradients();
             });
 
             return m_errorCalculator(m_outputs.begin(),
@@ -90,10 +86,9 @@ namespace nn::bp {
         }
 
         void applyBatchGradients() {
-            // Create optimizer from learning rate for backward compatibility
             utils::for_< size() - 1 >([this](auto i) {
                 auto& hiddenLayer = std::get< i.value + 1 >(m_perceptron.layers());
-                hiddenLayer.applyGradients(m_optimizer);
+                hiddenLayer.applyGradients();
             });
         }
 
@@ -200,9 +195,6 @@ namespace nn::bp {
       private:
         /// @brief current perceptron.
         Perceptron m_perceptron;
-
-        /// @brief the learning rate.
-        IOptimizer< Var >& m_optimizer;
 
         /// @brief outputs stored for each step.
         std::array< Var, outputsNumber > m_outputs;
