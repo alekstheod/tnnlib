@@ -2,17 +2,17 @@
 
 #include "NeuralNetwork/BackPropagation/BPNeuralLayer.h"
 #include "NeuralNetwork/NeuralLayer/ConvolutionLayer.h"
+#include "NeuralNetwork/BackPropagation/Optimizers.h"
 
 #include <range/v3/view.hpp>
-#include <algorithm>
 #include <vector>
 
 namespace nn::bp {
-    template< typename >
+    template< typename, template< typename, size_t > class >
     struct BPNeuralLayer;
 
-    template< typename LayerType, typename Grid >
-    struct BPNeuralLayer< nn::detail::ConvolutionLayer< LayerType, Grid > >
+    template< typename LayerType, typename Grid, template< typename, size_t > class OptimizerType >
+    struct BPNeuralLayer< nn::detail::ConvolutionLayer< LayerType, Grid >, OptimizerType >
      : private nn::detail::ConvolutionLayer< LayerType, Grid > {
         using Base = nn::detail::ConvolutionLayer< LayerType, Grid >;
 
@@ -34,10 +34,7 @@ namespace nn::bp {
         }
 
         template< typename VarType >
-        using use = BPNeuralLayer< typename NeuralLayerType::template use< VarType > >;
-
-        template< std::size_t inputs >
-        using adjust = BPNeuralLayer;
+        using use = BPNeuralLayer< typename NeuralLayerType::template use< VarType >, OptimizerType >;
 
         using Memento = typename Base::Memento;
         using Base::begin;
@@ -95,25 +92,6 @@ namespace nn::bp {
             }
         }
 
-        void calculateWeights(Var learningRate) {
-            auto& self = *this;
-            for(const auto neuronId : ranges::views::indices(size())) {
-                auto& neuron = self[neuronId];
-                const Var neuronDelta = m_deltas[neuronId];
-
-                for(const auto weightId : ranges::views::indices(Grid::K::size)) {
-                    const Var inputValue = neuron[weightId].value;
-                    const Var weightGradient = neuronDelta * inputValue;
-                    neuron[weightId].weight =
-                     neuron[weightId].weight - learningRate * weightGradient;
-                }
-
-                Var bias = neuron.getBias();
-                Var newBias = bias - learningRate * neuronDelta;
-                neuron.setBias(newBias);
-            }
-        }
-
         void accumulateGradients() {
             auto& self = *this;
             for(std::size_t neuronId = 0; neuronId < size(); ++neuronId) {
@@ -125,24 +103,6 @@ namespace nn::bp {
                     m_accumulatedWeightGradients[neuronId][weightId] += inputValue * delta;
                 }
                 m_accumulatedBiasGradient[neuronId] += delta;
-            }
-        }
-
-        void applyGradients(const Var& learningRate) {
-            auto& self = *this;
-            for(std::size_t neuronId = 0; neuronId < size(); ++neuronId) {
-                auto& neuron = self[neuronId];
-                for(std::size_t weightId = 0; weightId < Grid::K::size; ++weightId) {
-                    neuron[weightId].weight -=
-                     learningRate * m_accumulatedWeightGradients[neuronId][weightId];
-                }
-
-                Var newBias = neuron.getBias() -
-                              learningRate * m_accumulatedBiasGradient[neuronId];
-                neuron.setBias(newBias);
-
-                m_accumulatedWeightGradients[neuronId].assign(Grid::K::size, Var{});
-                m_accumulatedBiasGradient[neuronId] = Var{};
             }
         }
 
