@@ -32,9 +32,7 @@ namespace nn {
             using Base::for_each;
             using Base::getDelta;
             using Base::getMemento;
-            using Base::getOutput;
             using Base::inputs;
-            using Base::setInput;
             using Base::setMemento;
             using Base::size;
             using Base::operator[];

@@ -112,6 +112,14 @@ namespace nn {
                                                 m_bias);
             }
 
+            Var calcDotProduct(const Var* inputs, std::size_t count) const {
+                Var result = m_bias;
+                for (std::size_t i = 0; i < count; ++i) {
+                    result += inputs[i] * m_inputs[i].weight;
+                }
+                return result;
+            }
+
             const Var& getOutput() const {
                 return m_output;
             }

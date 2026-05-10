@@ -47,7 +47,6 @@ namespace nn {
             using Base::calculateOutputs;
             using Base::for_each;
             using Base::getMemento;
-            using Base::getOutput;
             using Base::getWeight;
             using Base::inputs;
             using Base::setMemento;

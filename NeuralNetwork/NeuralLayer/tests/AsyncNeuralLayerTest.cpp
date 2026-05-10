@@ -20,18 +20,24 @@ namespace {
             const auto memento = regularLayer.getMemento();
             asyncLayer.setMemento(memento);
 
-            regularLayer.setInput(0, 0.1f);
-            regularLayer.setInput(1, 0.2f);
+            regularLayer[0].setInput(0, 0.1f);
+            regularLayer[0].setInput(1, 0.2f);
+            regularLayer[1].setInput(0, 0.1f);
+            regularLayer[1].setInput(1, 0.2f);
 
-            asyncLayer.setInput(0, 0.1f);
-            asyncLayer.setInput(1, 0.2f);
+            asyncLayer[0].setInput(0, 0.1f);
+            asyncLayer[0].setInput(1, 0.2f);
+            asyncLayer[1].setInput(0, 0.1f);
+            asyncLayer[1].setInput(1, 0.2f);
 
             WHEN("The weights and the inputs of both layers are identical") {
                 THEN("The output is of both layers identical") {
-                    regularLayer.calculateOutputs();
-                    asyncLayer.calculateOutputs();
-                    const auto expected_output = regularLayer.getOutput(0);
-                    const auto actual_output = asyncLayer.getOutput(0);
+                    using Context = std::tuple<std::array<float, 2>>;
+                    Context regCtx, asyncCtx;
+                    regularLayer.calculateOutputs<Context, 0>(regCtx);
+                    asyncLayer.calculateOutputs<Context, 0>(asyncCtx);
+                    const auto expected_output = std::get<0>(regCtx)[0];
+                    const auto actual_output = std::get<0>(asyncCtx)[0];
                     REQUIRE_THAT(expected_output, Catch::Matchers::WithinRel(actual_output));
                 }
             }

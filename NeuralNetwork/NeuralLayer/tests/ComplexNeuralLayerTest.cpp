@@ -21,7 +21,9 @@ namespace {
             layer[0].setBias(1.f);
             layer[1].setBias(1.f);
             WHEN("calculateOutputs is called") {
-                layer.calculateOutputs();
+                using Context = std::tuple<std::array<float, 2>>;
+                Context ctx;
+                layer.calculateOutputs<Context, 0>(ctx);
                 THEN(
                  "Neurons output of the SigmoidNeuron is equal to 1 / (1 + "
                  "std::exp(-dot_pruduct))") {

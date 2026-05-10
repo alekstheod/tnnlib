@@ -51,10 +51,6 @@ namespace nn {
             static_assert(inputs() >= 1,
                           "Invalid template argument inputsNumber <= 1");
 
-            const Var& getOutput(unsigned int outputId) const {
-                return self[outputId].getOutput();
-            }
-
             template< typename Func >
             void for_each(Func func) {
                 utils::for_< size() >([this, &func](auto i) {
@@ -66,12 +62,6 @@ namespace nn {
             void for_each(Func func) const {
                 utils::for_< size() >([this, &func](auto i) {
                     func(i, utils::get< i.value >(m_neurons));
-                });
-            }
-
-            void setInput(unsigned int inputId, const Var& value) {
-                utils::for_< size() >([this, inputId, value](auto i) {
-                    utils::get< i.value >(m_neurons).setInput(inputId, value);
                 });
             }
 
@@ -94,17 +84,12 @@ namespace nn {
             void calculateOutputs(Context& ctx) {
                 auto& predecessorOutputs = std::get< predecessorIdx >(ctx);
                 auto& myOutputs = std::get< myIdx >(ctx);
-                for (std::size_t inputSlot = 0; inputSlot < inputs(); ++inputSlot) {
-                    auto value = predecessorOutputs[inputSlot];
-                    utils::for_< size() >([this, inputSlot, value](auto neuronIdx) {
-                        utils::get< neuronIdx.value >(m_neurons).setInput(inputSlot, value);
-                    });
-                }
 
                 std::array< Var, size() > dotProducts;
-                utils::for_< size() >([this, &dotProducts](auto i) {
+                utils::for_< size() >([this, &predecessorOutputs, &dotProducts](auto i) {
+                    auto& neuron = utils::get< i.value >(m_neurons);
                     dotProducts[i.value] =
-                     utils::get< i.value >(m_neurons).calcDotProduct();
+                     neuron.calcDotProduct(predecessorOutputs.data(), predecessorOutputs.size());
                 });
 
                 utils::for_< size() >([this, &dotProducts, &myOutputs](auto i) {

@@ -13,7 +13,7 @@ namespace nn::bp {
 
     template< typename PerceptronType, template< class > class ErrorCalculator = SquaredError >
     class BepAlgorithm {
-        using Var = typename PerceptronType::Var;
+        using Var = typename PerceptronType::VarType;
         using Input = typename PerceptronType::Input;
 
         static constexpr unsigned int inputsNumber = PerceptronType::inputs();
@@ -199,7 +199,7 @@ namespace nn::bp {
         std::array< Var, outputsNumber > m_outputs;
 
         /// @brief execution error calculator.
-        ErrorCalculator< typename PerceptronType::Var > m_errorCalculator;
+        ErrorCalculator< typename PerceptronType::VarType > m_errorCalculator;
 
         struct DummyMomentum {
             Var operator()(const Var& oldDelta, const Var& newDelta) {

@@ -29,8 +29,10 @@ namespace {
          "A AsyncNeuralLayer layer with 2 neurons and 2 inputs as well as a "
          "regular layer with the same topology") {
             nn::bp::BPNeuralLayer< BasicLayer > regularLayer;
-            regularLayer.setInput(0, 0.5f);
-            regularLayer.setInput(1, 0.3f);
+            regularLayer[0][0].value = 0.5f;
+            regularLayer[0][1].value = 0.3f;
+            regularLayer[1][0].value = 0.5f;
+            regularLayer[1][1].value = 0.3f;
 
             nn::bp::BPNeuralLayer< nn::detail::OpenCLNeuralLayer< BasicLayer > > openclLayer;
             openclLayer.setMemento(regularLayer.getMemento());
@@ -39,8 +41,10 @@ namespace {
 
             Prototype prototype{{0.1f, 0.2f}, {1.f, 1.f}};
             const auto momentum = [](auto, auto newDelta) { return newDelta; };
-            regularLayer.calculateOutputs();
-            openclLayer.calculateOutputs();
+            using Context = std::tuple<std::array<float, 2>>;
+            Context regCtx, openclCtx;
+            regularLayer.calculateOutputs<Context, 0>(regCtx);
+            openclLayer.calculateOutputs<Context, 0>(openclCtx);
             WHEN("The weights identical") {
                 THEN("The deltas of both layers are identical") {
                     regularLayer.calculateDeltas(prototype, momentum);
