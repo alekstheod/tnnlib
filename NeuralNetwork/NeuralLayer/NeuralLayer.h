@@ -15,7 +15,7 @@ namespace nn {
          * Represent the NeuralLayer in perceptron.
          */
         template< typename T >
-        struct NeuralLayer : private Layer< T > {
+        struct NeuralLayer : public Layer< T > {
             using Base = Layer< T >;
 
           public:
@@ -90,32 +90,44 @@ namespace nn {
                 });
             }
 
-            template< typename Layer >
-            void calculateOutputs(Layer& nextLayer) {
+            template< typename Context, std::size_t myIdx, std::size_t predecessorIdx >
+            void calculateOutputs(Context& ctx) {
+                auto& predecessorOutputs = std::get< predecessorIdx >(ctx);
+                auto& myOutputs = std::get< myIdx >(ctx);
+                for (std::size_t inputSlot = 0; inputSlot < inputs(); ++inputSlot) {
+                    auto value = predecessorOutputs[inputSlot];
+                    utils::for_< size() >([this, inputSlot, value](auto neuronIdx) {
+                        utils::get< neuronIdx.value >(m_neurons).setInput(inputSlot, value);
+                    });
+                }
+
                 std::array< Var, size() > dotProducts;
                 utils::for_< size() >([this, &dotProducts](auto i) {
                     dotProducts[i.value] =
                      utils::get< i.value >(m_neurons).calcDotProduct();
                 });
 
-                utils::for_< size() >([this, &dotProducts, &nextLayer](auto i) {
+                utils::for_< size() >([this, &dotProducts, &myOutputs](auto i) {
                     const auto output = utils::get< i.value >(m_neurons).calculateOutput(
                      dotProducts[i.value], std::cbegin(dotProducts), std::cend(dotProducts));
-                    nextLayer.setInput(i.value, output);
+                    myOutputs[i.value] = output;
                 });
             }
 
-            void calculateOutputs() {
+            template< typename Context, std::size_t myIdx >
+            void calculateOutputs(Context& ctx) {
+                auto& myOutputs = std::get< myIdx >(ctx);
+
                 std::array< Var, size() > dotProducts;
                 utils::for_< size() >([this, &dotProducts](auto i) {
                     dotProducts[i.value] =
                      utils::get< i.value >(m_neurons).calcDotProduct();
                 });
 
-                for_each([&dotProducts](auto, auto& neuron) {
-                    neuron.calculateOutput(neuron.calcDotProduct(),
-                                           std::cbegin(dotProducts),
-                                           std::cend(dotProducts));
+                utils::for_< size() >([this, &dotProducts, &myOutputs](auto i) {
+                    const auto output = utils::get< i.value >(m_neurons).calculateOutput(
+                     dotProducts[i.value], std::cbegin(dotProducts), std::cend(dotProducts));
+                    myOutputs[i.value] = output;
                 });
             }
 

@@ -42,15 +42,6 @@ namespace nn {
             using use = InputLayer< typename Internal::template use< VarType > >;
 
             using Input = InputData< Var, inputs() >;
-
-            void setInput(int neuronId, const Input& input) {
-                auto& self = *this;
-                for(const auto& featureId : ranges::views::indices(input.value.size())) {
-                    self[neuronId][featureId].weight = 1.f;
-                    self[neuronId].setBias({});
-                    self[neuronId][featureId].value = input.value[featureId];
-                }
-            }
         };
     } // namespace detail
 

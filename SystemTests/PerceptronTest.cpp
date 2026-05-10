@@ -112,9 +112,9 @@ namespace {
             WHEN(
              "Sum of distinct input values through sigmoid should be correct") {
                 std::array< Input, 3 > input;
-                input[0] = Input{{2.0f, 0.0f}};
-                input[1] = Input{{0.5f, 0.0f}};
-                input[2] = Input{{0.2f, 0.0f}};
+                input[0] = Input{{{2.0f, 0.0f}}};
+                input[1] = Input{{{0.5f, 0.0f}}};
+                input[2] = Input{{{0.2f, 0.0f}}};
 
                 std::array< float, 1 > output{0.f};
                 perceptron.calculate(input.begin(), input.end(), output.begin());
@@ -131,10 +131,10 @@ namespace {
             }
 
             WHEN("Each input contributes to its corresponding neuron") {
-                std::array< Input, 3 > input;
-                input[0] = Input{{5.0f, 5.0f}};
-                input[1] = Input{{1.0f, 1.0f}};
-                input[2] = Input{{0.1f, 0.1f}};
+                std::array< typename TestPerceptron::Input, 3 > input;
+                input[0] = typename TestPerceptron::Input{{{5.0f, 5.0f}}};
+                input[1] = typename TestPerceptron::Input{{{1.0f, 1.0f}}};
+                input[2] = typename TestPerceptron::Input{{{0.1f, 0.1f}}};
 
                 std::array< float, 1 > output{0.f};
                 perceptron.calculate(input.begin(), input.end(), output.begin());
