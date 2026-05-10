@@ -84,12 +84,41 @@ namespace nn {
             void calculateOutputs(Context& ctx) {
                 auto& predecessorOutputs = std::get< predecessorIdx >(ctx);
                 auto& myOutputs = std::get< myIdx >(ctx);
+                constexpr auto inputCount = inputs();
+                const auto predSize = predecessorOutputs.size();
 
                 std::array< Var, size() > dotProducts;
-                utils::for_< size() >([this, &predecessorOutputs, &dotProducts](auto i) {
+                utils::for_< size() >([this, &predecessorOutputs, &dotProducts, predSize](auto i) {
                     auto& neuron = utils::get< i.value >(m_neurons);
                     dotProducts[i.value] =
-                     neuron.calcDotProduct(predecessorOutputs.data(), predecessorOutputs.size());
+                     neuron.calcDotProduct(predecessorOutputs.data(),
+                                           predSize < inputCount ? predSize : inputCount);
+                });
+
+                utils::for_< size() >([this, &dotProducts, &myOutputs](auto i) {
+                    const auto output = utils::get< i.value >(m_neurons).calculateOutput(
+                     dotProducts[i.value], std::cbegin(dotProducts), std::cend(dotProducts));
+                    myOutputs[i.value] = output;
+                });
+            }
+
+            template< typename Context, std::size_t myIdx, std::size_t predecessorIdx, typename W >
+            void calculateOutputs(Context& ctx, const W& wctx) {
+                auto& predecessorOutputs = std::get< predecessorIdx >(ctx);
+                auto& myOutputs = std::get< myIdx >(ctx);
+                const auto& weights = std::get< myIdx >(wctx.weights);
+                const auto& biases = std::get< myIdx >(wctx.biases);
+                constexpr auto neuronInputs = inputs();
+                const auto inputSize = predecessorOutputs.size() < neuronInputs
+                                       ? predecessorOutputs.size() : neuronInputs;
+
+                std::array< Var, size() > dotProducts;
+                utils::for_< size() >([&](auto i) {
+                    Var dot = biases[i.value];
+                    for (std::size_t j = 0; j < inputSize; ++j) {
+                        dot += predecessorOutputs[j] * weights[i.value * neuronInputs + j];
+                    }
+                    dotProducts[i.value] = dot;
                 });
 
                 utils::for_< size() >([this, &dotProducts, &myOutputs](auto i) {

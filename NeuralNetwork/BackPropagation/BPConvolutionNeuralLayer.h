@@ -53,117 +53,86 @@ namespace nn::bp {
         using Base::getMemento;
         using Base::setMemento;
 
-        BPNeuralLayer() {
-            initializeBPState();
-        }
+        BPNeuralLayer() = default;
 
         template< typename... Args >
-        BPNeuralLayer(Args&&... args) : Base(std::forward< Args >(args)...) {
-            initializeBPState();
-        }
+        BPNeuralLayer(Args&&... args) : Base(std::forward< Args >(args)...) {}
 
-      private:
-        void initializeBPState() {
-            m_deltas.resize(size(), Var{});
-            m_accumulatedWeightGradients.resize(size());
-            m_accumulatedBiasGradient.resize(size(), Var{});
-
-            for(std::size_t i = 0; i < size(); ++i) {
-                m_accumulatedWeightGradients[i].resize(Grid::K::size, Var{});
-            }
-        }
-
-      public:
-        const Var& getDelta(std::size_t neuronId) const {
-            return m_deltas[neuronId];
-        }
-
-        void setDelta(std::size_t neuronId, const Var& delta) {
-            m_deltas[neuronId] = delta;
-        }
-
-        template< typename Prototype, typename MomentumFunc >
-        void calculateDeltas(const Prototype& prototype, MomentumFunc momentum) {
+        template< typename BPCtx, std::size_t myIdx, typename Prototype, typename MomentumFunc >
+        void calculateDeltas(BPCtx& ctx, const Prototype& prototype, MomentumFunc momentum) {
             auto& outputFunc = std::get< 0 >(m_activationFunctions);
+            auto& outputs = std::get< myIdx >(ctx.outputs);
+            auto& deltas = std::get< myIdx >(ctx.deltas);
             for(std::size_t neuronId = 0; neuronId < size(); ++neuronId) {
-                auto& neuron = (*this)[neuronId];
-                auto delta =
-                 momentum(m_deltas[neuronId],
-                          outputFunc.delta(neuron.getOutput(),
-                                           std::get< 1 >(prototype)[neuronId]));
-                m_deltas[neuronId] = delta;
+                deltas[neuronId] = momentum(deltas[neuronId],
+                                            outputFunc.delta(outputs[neuronId],
+                                                             std::get< 1 >(prototype)[neuronId]));
             }
         }
 
-        void calculateWeights(Var learningRate) {
+        template< typename BPCtx, std::size_t myIdx >
+        void calculateWeights(BPCtx& ctx, const Var& learningRate) {
+            auto& deltas = std::get< myIdx >(ctx.deltas);
+            auto& weights = std::get< myIdx >(ctx.weights);
+            auto& biases = std::get< myIdx >(ctx.biases);
             auto& self = *this;
             for(const auto neuronId : ranges::views::indices(size())) {
                 auto& neuron = self[neuronId];
-                const Var neuronDelta = m_deltas[neuronId];
+                const Var neuronDelta = deltas[neuronId];
 
                 for(const auto weightId : ranges::views::indices(Grid::K::size)) {
                     const Var inputValue = neuron[weightId].value;
                     const Var weightGradient = neuronDelta * inputValue;
-                    neuron[weightId].weight =
-                     neuron[weightId].weight - learningRate * weightGradient;
+                    weights[neuronId * Grid::K::size + weightId] -= learningRate * weightGradient;
                 }
 
-                Var bias = neuron.getBias();
-                Var newBias = bias - learningRate * neuronDelta;
-                neuron.setBias(newBias);
+                biases[neuronId] -= learningRate * neuronDelta;
             }
         }
 
-        void accumulateGradients() {
+        template< typename BPCtx, std::size_t myIdx >
+        void accumulateGradients(BPCtx& ctx) {
+            auto& deltas = std::get< myIdx >(ctx.deltas);
+            auto& weightGrads = std::get< myIdx >(ctx.weightGradients);
+            auto& biasGrads = std::get< myIdx >(ctx.biasGradients);
             auto& self = *this;
             for(std::size_t neuronId = 0; neuronId < size(); ++neuronId) {
                 auto& neuron = self[neuronId];
-                const Var delta = m_deltas[neuronId];
+                const Var delta = deltas[neuronId];
 
                 for(std::size_t weightId = 0; weightId < Grid::K::size; ++weightId) {
                     const Var inputValue = neuron[weightId].value;
-                    m_accumulatedWeightGradients[neuronId][weightId] += inputValue * delta;
+                    weightGrads[neuronId * Grid::K::size + weightId] += inputValue * delta;
                 }
-                m_accumulatedBiasGradient[neuronId] += delta;
+                biasGrads[neuronId] += delta;
             }
         }
 
-        void applyGradients(const Var& learningRate) {
+        template< typename BPCtx, std::size_t myIdx >
+        void applyGradients(BPCtx& ctx, const Var& learningRate) {
+            auto& weightGrads = std::get< myIdx >(ctx.weightGradients);
+            auto& biasGrads = std::get< myIdx >(ctx.biasGradients);
+            auto& weights = std::get< myIdx >(ctx.weights);
+            auto& biases = std::get< myIdx >(ctx.biases);
             auto& self = *this;
             for(std::size_t neuronId = 0; neuronId < size(); ++neuronId) {
-                auto& neuron = self[neuronId];
                 for(std::size_t weightId = 0; weightId < Grid::K::size; ++weightId) {
-                    neuron[weightId].weight -=
-                     learningRate * m_accumulatedWeightGradients[neuronId][weightId];
+                    weights[neuronId * Grid::K::size + weightId] -=
+                     learningRate * weightGrads[neuronId * Grid::K::size + weightId];
+                    weightGrads[neuronId * Grid::K::size + weightId] = Var{};
                 }
 
-                Var newBias = neuron.getBias() -
-                              learningRate * m_accumulatedBiasGradient[neuronId];
-                neuron.setBias(newBias);
-
-                m_accumulatedWeightGradients[neuronId].assign(Grid::K::size, Var{});
-                m_accumulatedBiasGradient[neuronId] = Var{};
+                biases[neuronId] -= learningRate * biasGrads[neuronId];
+                biasGrads[neuronId] = Var{};
             }
         }
 
-        template< typename AffectedLayer, typename MomentumFunc >
-        void calculateHiddenDeltas(AffectedLayer& affectedLayer, MomentumFunc momentum) {
-            detail::calculateHiddenDeltas(*this, affectedLayer, momentum);
+        template< typename BPCtx, std::size_t myIdx, std::size_t affIdx, typename AffectedLayer, typename MomentumFunc >
+        void calculateHiddenDeltas(BPCtx& ctx, AffectedLayer& affectedLayer, MomentumFunc momentum) {
+            detail::calculateHiddenDeltas< BPCtx, myIdx, affIdx >(*this, ctx, affectedLayer, momentum);
         }
 
         using Base::m_grid;
-
-        std::vector< Var >& deltas() {
-            return m_deltas;
-        }
-        const std::vector< Var >& deltas() const {
-            return m_deltas;
-        }
-
-      private:
-        std::vector< Var > m_deltas;
-        std::vector< std::vector< Var > > m_accumulatedWeightGradients;
-        std::vector< Var > m_accumulatedBiasGradient;
     };
 
 } // namespace nn::bp

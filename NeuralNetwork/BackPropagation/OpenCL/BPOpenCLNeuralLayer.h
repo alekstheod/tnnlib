@@ -53,22 +53,13 @@ namespace nn {
             using Base::size;
             using Base::operator[];
 
-            BPNeuralLayer() {
-                initializeBPState();
-            }
+            BPNeuralLayer() = default;
 
             template< typename... Args >
             BPNeuralLayer(Args&&... args)
              : Base(std::forward< Args >(args)...) {
-                initializeBPState();
             }
 
-          private:
-            void initializeBPState() {
-                m_deltas.resize(size(), Var{});
-            }
-
-          public:
             void setInput(unsigned int inputId, const Var& value) {
                 auto& self = *this;
                 utils::for_< size() >([&self, inputId, &value](const auto& i) mutable {
@@ -96,7 +87,22 @@ namespace nn {
                 }
             };
 
-            void calculateWeights(const Var& learningRate) {
+            template< typename BPCtx, std::size_t myIdx >
+            void calculateWeights(BPCtx& ctx, const Var& learningRate) {
+                auto& deltas = std::get< myIdx >(ctx.deltas);
+                auto& weights = std::get< myIdx >(ctx.weights);
+                auto& biases = std::get< myIdx >(ctx.biases);
+                constexpr auto inputsNum = inputs();
+                constexpr auto sz = size();
+
+                for(auto i = 0u; i < sz; ++i) {
+                    for(auto j = 0u; j < inputsNum; ++j) {
+                        m_weights[i * inputsNum + j] = weights[i * inputsNum + j];
+                    }
+                }
+
+                std::vector< Var > deltasVec(deltas.begin(), deltas.end());
+
                 try {
                     using namespace cl;
                     auto& ocl = OpenCLProgram::instance();
@@ -112,12 +118,12 @@ namespace nn {
                                   m_inputs.size() * sizeof(float),
                                   m_inputs.data());
 
-                    Buffer deltas(ocl.context,
+                    Buffer deltasBuf(ocl.context,
                                   inBufFlags,
-                                  m_deltas.size() * sizeof(float),
-                                  m_deltas.data());
+                                  deltasVec.size() * sizeof(float),
+                                  deltasVec.data());
 
-                    Buffer weights(ocl.context,
+                    Buffer oclWeights(ocl.context,
                                    outBufFlags,
                                    m_weights.size() * sizeof(float),
                                    m_weights.data());
@@ -125,75 +131,54 @@ namespace nn {
                     CommandQueue queue(ocl.context, defaultDevice);
                     cl::Kernel kernel{ocl.program, "calc_weights"};
 
-                    // Set arguments to kernel
                     kernel.setArg(0, values);
-                    kernel.setArg(1, deltas);
-                    kernel.setArg(2, weights);
+                    kernel.setArg(1, deltasBuf);
+                    kernel.setArg(2, oclWeights);
                     kernel.setArg(3, learningRate);
                     kernel.setArg(4, static_cast< unsigned int >(Internal::inputs()));
 
                     queue.enqueueNDRangeKernel(kernel,
                                                cl::NullRange,
-                                               cl::NDRange(size()),
+                                               cl::NDRange(sz),
                                                cl::NullRange);
 
-                    queue.enqueueReadBuffer(weights,
+                    queue.enqueueReadBuffer(oclWeights,
                                             CL_TRUE,
                                             0,
                                             m_weights.size() * sizeof(float),
                                             m_weights.data());
 
-                    for(auto i = 0u; i < size(); ++i) {
-                        for(auto j = 0u; j < inputs(); ++j) {
-                            (*this)[i][j].weight = m_weights[i * inputs() + j];
+                    for(auto i = 0u; i < sz; ++i) {
+                        for(auto j = 0u; j < inputsNum; ++j) {
+                            weights[i * inputsNum + j] = m_weights[i * inputsNum + j];
                         }
                     }
 
-                    for_each([this, &learningRate](auto i, auto& neuron) {
-                        Var weight = neuron.getBias();
-                        Var newWeight = weight - learningRate * m_deltas[i.value];
-                        neuron.setBias(newWeight);
-                    });
+                    for(auto i = 0u; i < sz; ++i) {
+                        biases[i] = biases[i] - learningRate * deltas[i];
+                    }
 
                 } catch(const cl::Error& e) {
                     std::cerr << "Calculation error" << e.what() << std::endl;
                 }
             }
 
-            template< typename Prototype, typename MomentumFunc >
-            void calculateDeltas(const Prototype& prototype, MomentumFunc momentum) {
-                auto& self = *this;
+            template< typename BPCtx, std::size_t myIdx, typename Prototype, typename MomentumFunc >
+            void calculateDeltas(BPCtx& ctx, const Prototype& prototype, MomentumFunc momentum) {
                 auto& outputFunc = std::get< 0 >(m_activationFunctions);
+                auto& outputs = std::get< myIdx >(ctx.outputs);
+                auto& deltas = std::get< myIdx >(ctx.deltas);
                 utils::for_< size() >([&](auto i) {
-                    auto& neuron = self[i.value];
-                    auto delta =
-                     momentum(m_deltas[i.value],
-                              outputFunc.delta(neuron.getOutput(),
-                                               std::get< 1 >(prototype)[i.value]));
-                    m_deltas[i.value] = delta;
+                    deltas[i.value] = momentum(deltas[i.value],
+                                               outputFunc.delta(outputs[i.value],
+                                                                std::get< 1 >(prototype)[i.value]));
                 });
-            }
-
-            const Var& getDelta(std::size_t neuronId) const {
-                return m_deltas[neuronId];
-            }
-
-            void setDelta(std::size_t neuronId, const Var& delta) {
-                m_deltas[neuronId] = delta;
-            }
-
-            std::vector< Var >& deltas() {
-                return m_deltas;
-            }
-            const std::vector< Var >& deltas() const {
-                return m_deltas;
             }
 
           private:
             using Base::bufferSize;
             using Base::m_inputs;
             using Base::m_weights;
-            std::vector< Var > m_deltas;
         };
 
     } // namespace bp
