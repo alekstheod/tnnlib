@@ -136,6 +136,20 @@ namespace nn {
                 });
             }
 
+            template< typename Context, std::size_t myIdx >
+            void calculateOutputs(Context& ctx) {
+                auto& myOutputs = std::get< myIdx >(ctx);
+                std::array< Var, size() > dotProducts;
+                Internal::for_each([&](auto i, auto& neuron) {
+                    dotProducts[i.value] = neuron.calcDotProduct();
+                });
+                Internal::for_each([&](auto i, auto& neuron) {
+                    const auto output = neuron.calculateOutput(
+                     dotProducts[i.value], std::cbegin(dotProducts), std::cend(dotProducts));
+                    myOutputs[i.value] = output;
+                });
+            }
+
             template< typename Context, std::size_t myIdx, std::size_t predecessorIdx >
             void calculateOutputs(Context& ctx) {
                 auto& predecessorOutputs = std::get< predecessorIdx >(ctx);

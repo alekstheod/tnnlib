@@ -1,9 +1,11 @@
 #pragma once
 
 #include "NeuralNetwork/BackPropagation/BPContext.h"
+#include "NeuralNetwork/BackPropagation/BpMemento.h"
 #include "NeuralNetwork/BackPropagation/BPNeuralLayer.h"
 #include "NeuralNetwork/BackPropagation/BPConvolutionNeuralLayer.h"
 #include "NeuralNetwork/BackPropagation/ErrorFunction.h"
+
 #include <System/Time.h>
 
 #include <algorithm>
@@ -27,29 +29,19 @@ namespace nn::bp {
       public:
         using Prototype =
          typename std::tuple< std::array< Input, inputsNumber >, std::array< Var, outputsNumber > >;
-        using Memento = typename Perceptron::Memento;
+        using Memento = BpMemento< Var, Layers >;
 
 
         static constexpr auto size() {
             return PerceptronType::size();
         }
 
-        /// @brief constructor will initialize the object with a learning
-        /// rate and maximum error limit.
-        /// @param varP the learning rate.
-        /// @param maxError the limit for the error. Algorithm will stop
-        /// when we reach the limit.
         BepAlgorithm(Var learningRate)
          : m_leariningRate(learningRate)
-         , m_bpContext{m_perceptron.context(), {}, {}, {}, {}, {}} {
-            copyWeightsToContext();
+         , m_bpContext{m_forwardOutputs, {}, {}, {}, {}, {}} {
+            initWeights();
         }
 
-        /// @brief execution of the single learning step in this algorithm.
-        /// @param prototype a prototype used for this step.
-        /// @param momentum a callback which will calculate a new delta,
-        /// used in order to introduce momentum.
-        /// @return error on this step.
         template< typename MomentumFunc >
         Var executeTrainingStep(const Prototype& prototype, MomentumFunc momentum) {
             forwardPass(std::get< 0 >(prototype).begin(),
@@ -59,7 +51,7 @@ namespace nn::bp {
             calculateDelta(m_bpContext, prototype, momentum);
 
             utils::for_< size() - 1 >([this](auto i) {
-                auto& hiddenLayer = std::get< i.value + 1 >(m_perceptron.layers());
+                auto& hiddenLayer = std::get< i.value + 1 >(m_layers);
                 hiddenLayer.template calculateWeights< BPCtx, i.value + 1 >(m_bpContext, m_leariningRate);
             });
 
@@ -77,7 +69,7 @@ namespace nn::bp {
             calculateDelta(m_bpContext, prototype, momentum);
 
             utils::for_< size() - 1 >([this](auto i) {
-                auto& hiddenLayer = std::get< i.value + 1 >(m_perceptron.layers());
+                auto& hiddenLayer = std::get< i.value + 1 >(m_layers);
                 hiddenLayer.template accumulateGradients< BPCtx, i.value + 1 >(m_bpContext);
             });
 
@@ -88,25 +80,25 @@ namespace nn::bp {
 
         void applyBatchGradients() {
             utils::for_< size() - 1 >([this](auto i) {
-                auto& hiddenLayer = std::get< i.value + 1 >(m_perceptron.layers());
+                auto& hiddenLayer = std::get< i.value + 1 >(m_layers);
                 hiddenLayer.template applyGradients< BPCtx, i.value + 1 >(m_bpContext, m_leariningRate);
             });
         }
 
         template< typename Iterator, typename BatchErrorFunc >
-        PerceptronType calculateWithBatchTraining(Iterator begin,
-                                                  Iterator end,
-                                                  std::size_t batchSize,
-                                                  BatchErrorFunc batchErrorFunc) {
-            return calculateWithBatchTraining(begin, end, batchSize, batchErrorFunc, DummyMomentum());
+        void calculateWithBatchTraining(Iterator begin,
+                                        Iterator end,
+                                        std::size_t batchSize,
+                                        BatchErrorFunc batchErrorFunc) {
+            calculateWithBatchTraining(begin, end, batchSize, batchErrorFunc, DummyMomentum());
         }
 
         template< typename Iterator, typename BatchErrorFunc, typename MomentumFunc >
-        PerceptronType calculateWithBatchTraining(Iterator begin,
-                                                  Iterator end,
-                                                  std::size_t batchSize,
-                                                  BatchErrorFunc batchErrorFunc,
-                                                  MomentumFunc momentum) {
+        void calculateWithBatchTraining(Iterator begin,
+                                        Iterator end,
+                                        std::size_t batchSize,
+                                        BatchErrorFunc batchErrorFunc,
+                                        MomentumFunc momentum) {
             unsigned int epochCounter = 0;
             typename std::vector< Prototype > prototypes(begin, end);
 
@@ -132,39 +124,41 @@ namespace nn::bp {
                 }
 
             } while(batchErrorFunc(++epochCounter, error / prototypes.size()));
-
-            copyWeightsFromContextToNeurons();
-            PerceptronType result;
-            utils::for_< PerceptronType::size() - 1 >([this, &result](auto i) {
-                auto& srcLayer = std::get< i.value + 1 >(m_perceptron.layers());
-                auto& dstLayer = utils::get< i.value + 1 >(result.layers());
-                dstLayer.setMemento(srcLayer.getMemento());
-            });
-
-            return result;
         }
 
         template< typename Iterator, typename ErrorFunc >
-        PerceptronType calculate(Iterator begin, Iterator end, ErrorFunc func) {
-            return calculate(begin, end, func, DummyMomentum());
+        void calculate(Iterator begin, Iterator end, ErrorFunc func) {
+            calculate(begin, end, func, DummyMomentum());
         }
 
-        void setMemento(Memento memento) {
-            m_perceptron.setMemento(memento);
-            copyWeightsToContext();
+        void setMemento(const Memento& memento) {
+            utils::for_< size() - 1 >([this, &memento](auto i) {
+                constexpr auto idx = i.value + 1;
+                std::get< idx >(m_bpContext.weights) = std::get< idx >(memento.weights);
+                std::get< idx >(m_bpContext.biases) = std::get< idx >(memento.biases);
+            });
         }
 
-        /// @brief will calculate a perceptron with appropriate weights.
-        /// @param begin iterator which points to the first input.
-        /// @param end iterator which points to the last input.
-        /// @param ReportFunc error report function (callback).
-        /// @param MomentumFunc function which will calculate a momentum.
-        /// @return a calculated perceptron.
+        Memento getMemento() const {
+            Memento m;
+            utils::for_< size() - 1 >([this, &m](auto i) {
+                constexpr auto idx = i.value + 1;
+                std::get< idx >(m.weights) = std::get< idx >(m_bpContext.weights);
+                std::get< idx >(m.biases) = std::get< idx >(m_bpContext.biases);
+            });
+            return m;
+        }
+
+        template< typename Iterator, typename OutputIterator >
+        void evaluate(Iterator begin, Iterator end, OutputIterator out) {
+            forwardPass(begin, end, out);
+        }
+
         template< typename Iterator, typename ErrorFunc, typename MomentumFunc >
-        PerceptronType calculate(Iterator begin,
-                                 Iterator end,
-                                 ErrorFunc errorFunc,
-                                 MomentumFunc momentum = DummyMomentum()) {
+        void calculate(Iterator begin,
+                       Iterator end,
+                       ErrorFunc errorFunc,
+                       MomentumFunc momentum = DummyMomentum()) {
             unsigned int epochCounter = 0;
             typename std::vector< Prototype > prototypes(begin, end);
 
@@ -184,52 +178,26 @@ namespace nn::bp {
                 }
 
             } while(errorFunc(++epochCounter, error / prototypes.size()));
-
-            copyWeightsFromContextToNeurons();
-            PerceptronType result;
-            utils::for_< PerceptronType::size() - 1 >([this, &result](auto i) {
-                auto& srcLayer = std::get< i.value + 1 >(m_perceptron.layers());
-                auto& dstLayer = utils::get< i.value + 1 >(result.layers());
-                dstLayer.setMemento(srcLayer.getMemento());
-            });
-
-            return result;
         }
 
       private:
-        void copyWeightsToContext() {
+        void initWeights() {
             utils::for_< size() - 1 >([this](auto i) {
                 constexpr auto idx = i.value + 1;
-                auto& layer = std::get< idx >(m_perceptron.layers());
                 auto& weights = std::get< idx >(m_bpContext.weights);
                 auto& biases = std::get< idx >(m_bpContext.biases);
-                layer.for_each([&](auto neuronIdx, auto& neuron) {
-                    biases[neuronIdx.value] = neuron.getBias();
-                    for (std::size_t j = 0; j < neuron.size(); ++j) {
-                        weights[neuronIdx.value * neuron.size() + j] = neuron[j].weight;
-                    }
-                });
-            });
-        }
-
-        void copyWeightsFromContextToNeurons() {
-            utils::for_< size() - 1 >([this](auto i) {
-                constexpr auto idx = i.value + 1;
-                auto& layer = std::get< idx >(m_perceptron.layers());
-                auto& weights = std::get< idx >(m_bpContext.weights);
-                auto& biases = std::get< idx >(m_bpContext.biases);
-                layer.for_each([&](auto neuronIdx, auto& neuron) {
-                    neuron.setBias(biases[neuronIdx.value]);
-                    for (std::size_t j = 0; j < neuron.size(); ++j) {
-                        neuron.setWeight(j, weights[neuronIdx.value * neuron.size() + j]);
-                    }
-                });
+                for (auto& w : weights) {
+                    w = utils::createRandom< Var >(1) / Var{100};
+                }
+                for (auto& b : biases) {
+                    b = utils::createRandom< Var >(1);
+                }
             });
         }
 
         template< typename Iterator, typename OutputIterator >
         void forwardPass(Iterator begin, Iterator end, OutputIterator out) {
-            auto& inputLayer = std::get< 0 >(m_perceptron.layers());
+            auto& inputLayer = std::get< 0 >(m_layers);
             unsigned int inputId = 0;
             while(begin != end) {
                 for(std::size_t featureIdx = 0; featureIdx < begin->value.size();
@@ -242,11 +210,11 @@ namespace nn::bp {
                 inputId++;
             }
 
-            auto& inputLayer0 = std::get< 0 >(m_perceptron.layers());
+            auto& inputLayer0 = std::get< 0 >(m_layers);
             inputLayer0.template calculateOutputs< typename BPCtx::Forward, 0 >(m_bpContext.outputs);
 
             utils::for_< size() - 1U >([this](auto i) {
-                auto& layer = std::get< i.value + 1 >(m_perceptron.layers());
+                auto& layer = std::get< i.value + 1 >(m_layers);
                 layer.template calculateOutputs< typename BPCtx::Forward, i.value + 1, i.value >(m_bpContext.outputs, m_bpContext);
             });
 
@@ -257,20 +225,12 @@ namespace nn::bp {
             }
         }
 
-        /// @brief current perceptron.
-        Perceptron m_perceptron;
-
-        /// @brief the learning rate.
+        typename BPCtx::Forward m_forwardOutputs{};
+        Layers m_layers{};
         Var m_leariningRate;
-
-        /// @brief outputs stored for each step.
         std::array< Var, outputsNumber > m_outputs;
-
-        /// @brief execution error calculator.
         ErrorCalculator< typename PerceptronType::VarType > m_errorCalculator;
-
-        /// @brief BP context holding forward outputs reference and delta/gradient storage.
-        BPCtx m_bpContext{m_perceptron.context(), {}, {}, {}, {}, {}};
+        BPCtx m_bpContext{m_forwardOutputs, {}, {}, {}, {}, {}};
 
         struct DummyMomentum {
             Var operator()(const Var& oldDelta, const Var& newDelta) {
@@ -280,7 +240,7 @@ namespace nn::bp {
 
         template< typename BPCtxT, typename MomentumFunc >
         void calculateDelta(BPCtxT& ctx, const Prototype& prototype, MomentumFunc momentum) {
-            auto& layers = m_perceptron.layers();
+            auto& layers = m_layers;
             utils::get< size() - 1 >(layers).template calculateDeltas< BPCtxT, size() - 1 >(ctx, prototype, momentum);
             utils::for_< size() - 1 >([&layers, &ctx, &momentum](auto i) {
                 constexpr auto idx = size() - i.value - 1;

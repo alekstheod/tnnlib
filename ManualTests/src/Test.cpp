@@ -1,4 +1,5 @@
 #include "NeuralNetwork//BackPropagation/BepAlgorithm.h"
+#include "NeuralNetwork/BackPropagation/BpCereal.h"
 #include "NeuralNetwork/NeuralLayer/NeuralLayer.h"
 #include "NeuralNetwork/NeuralLayer/InputLayer.h"
 #include "NeuralNetwork/ActivationFunction/SigmoidFunction.h"
@@ -7,7 +8,6 @@
 #include "NeuralNetwork/Neuron/Neuron.h"
 #include "NeuralNetwork/Perceptron/ComplexLayer.h"
 #include "NeuralNetwork/Perceptron/Perceptron.h"
-#include "NeuralNetwork/Serialization/Cereal.h"
 
 #include <Design/Factory.h>
 #include <Design/Singleton.h>
@@ -52,21 +52,19 @@ int main(int argc, char** argv) {
     unsigned int numOfEpochs =
      argc < 2 ? std::numeric_limits< unsigned int >::max() : std::atoi(argv[1]);
 
-    Perceptron perceptron =
-     algorithm.calculate(prototypes.begin(),
-                         prototypes.end(),
-                         [numOfEpochs](unsigned int epoch, float error) {
-                             std::cout << "Epoch: " << epoch
-                                       << " error: " << error << std::endl;
-                             return error > 0.001f && epoch < numOfEpochs;
-                         });
+    algorithm.calculate(prototypes.begin(),
+                        prototypes.end(),
+                        [numOfEpochs](unsigned int epoch, float error) {
+                            std::cout << "Epoch: " << epoch
+                                      << " error: " << error << std::endl;
+                            return error > 0.001f && epoch < numOfEpochs;
+                        });
 
-    using Memento = Perceptron::Memento;
     const auto store = [](const auto& memento) {
         std::stringstream strm;
         {
             cereal::JSONOutputArchive oa(strm);
-            oa << cereal::make_nvp("perceptron", memento);
+            oa(cereal::make_nvp("bp_state", memento));
             std::cout << strm.str() << std::endl;
         }
         return strm.str();
@@ -75,30 +73,31 @@ int main(int argc, char** argv) {
     const auto restore = [](const auto& str) {
         std::stringstream strm{str};
         cereal::JSONInputArchive ia(strm);
-        Memento memento;
-        ia >> memento;
+        Algo::Memento memento;
+        ia(memento);
         return memento;
     };
 
-    Perceptron perceptron2;
-    const auto mementoStr = store(perceptron.getMemento());
-    perceptron2.setMemento(restore(mementoStr));
+    Algo algorithm2(0.09f);
+    const auto mementoStr = store(algorithm.getMemento());
+    algorithm2.setMemento(restore(mementoStr));
+
 
     std::array< float, 2 > outputs{0};
     std::array< Input, 2 > input1{Input{0.f}, Input{0.f}};
-    perceptron2.calculate(input1.begin(), input1.end(), outputs.begin());
+    algorithm2.evaluate(input1.begin(), input1.end(), outputs.begin());
     std::cout << "0 0 " << outputs[0] << std::endl;
 
     std::array< Input, 2 > input2{Input{1}, Input{0}};
-    perceptron2.calculate(input2.begin(), input2.end(), outputs.begin());
+    algorithm2.evaluate(input2.begin(), input2.end(), outputs.begin());
     std::cout << "1 0 " << outputs[0] << std::endl;
 
     std::array< Input, 2 > input3{Input{1}, Input{1}};
-    perceptron2.calculate(input3.begin(), input3.end(), outputs.begin());
+    algorithm2.evaluate(input3.begin(), input3.end(), outputs.begin());
     std::cout << "1 1 " << outputs[0] << std::endl;
 
     std::array< Input, 2 > input4{Input{0}, Input{1}};
-    perceptron2.calculate(input4.begin(), input4.end(), outputs.begin());
+    algorithm2.evaluate(input4.begin(), input4.end(), outputs.begin());
     std::cout << "0 1 " << outputs[0] << std::endl;
 
     return 0;

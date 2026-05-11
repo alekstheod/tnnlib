@@ -1,11 +1,10 @@
 #include "NeuralNetwork/BackPropagation/BepAlgorithm.h"
+#include "NeuralNetwork/BackPropagation/BpCereal.h"
 #include "NeuralNetwork/ActivationFunction/SoftmaxFunction.h"
 #include "NeuralNetwork/Neuron/Neuron.h"
 #include "NeuralNetwork/Perceptron/Perceptron.h"
 #include "NeuralNetwork/Perceptron/PerceptronBuilder.h"
 #include "NeuralNetwork/Serialization/Cereal.h"
-
-#include <MPL/Tuple.h>
 
 #ifndef BOOST_SYSTEM_NO_DEPRECATED
 #define BOOST_SYSTEM_NO_DEPRECATED 1
@@ -133,15 +132,6 @@ void recognize(std::string perceptron, std::string image) {
     }
 }
 
-template< typename Perc >
-void save(const Perc& perc, std::string name) {
-    typename Perc::Memento memento = perc.getMemento();
-    std::ofstream strm(name);
-    cereal::JSONOutputArchive oa(strm);
-    oa << memento;
-    strm.flush();
-}
-
 void calculateWeights(std::string imagesPath) {
     using namespace boost::filesystem;
     path directory(imagesPath);
@@ -185,10 +175,14 @@ void calculateWeights(std::string imagesPath) {
         return error > 0.15f;
     };
 
-    static Perceptron perceptron =
-     algorithm.calculate(prototypes.begin(), prototypes.end(), errorFunc);
+    algorithm.calculate(prototypes.begin(), prototypes.end(), errorFunc);
 
-    save(perceptron, "perceptron.json");
+    {
+        std::ofstream strm("perceptron.json");
+        cereal::JSONOutputArchive oa(strm);
+        oa(cereal::make_nvp("bp_state", algorithm.getMemento()));
+        strm.flush();
+    }
 }
 
 int main(int argc, char** argv) {
