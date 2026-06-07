@@ -17,8 +17,13 @@ namespace {
          "regular layer with the same topology") {
             nn::NeuralLayer< nn::Neuron, nn::TanhFunction, 2, 2 > regularLayer;
             nn::AsyncNeuralLayer< nn::Neuron, nn::TanhFunction, 2, 2 > asyncLayer;
-            const auto memento = regularLayer.getMemento();
-            asyncLayer.setMemento(memento);
+
+            for (auto i : {0, 1}) {
+                asyncLayer[i].setBias(regularLayer[i].getBias());
+                for (auto j : {0, 1}) {
+                    asyncLayer[i].setWeight(j, regularLayer[i].getWeight(j));
+                }
+            }
 
             regularLayer[0].setInput(0, 0.1f);
             regularLayer[0].setInput(1, 0.2f);

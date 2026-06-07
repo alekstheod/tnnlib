@@ -21,7 +21,6 @@ namespace nn {
           public:
             using Container = typename Base::Container;
             using Var = typename Base::Var;
-            using Memento = typename Base::Memento;
             using ActivationFunctions = typename Base::ActivationFunctions;
 
             template< template< class > typename NewType >
@@ -62,21 +61,6 @@ namespace nn {
             void for_each(Func func) const {
                 utils::for_< size() >([this, &func](auto i) {
                     func(i, utils::get< i.value >(m_neurons));
-                });
-            }
-
-            const Memento getMemento() const {
-                Memento memento;
-                utils::for_< size() >([this, &memento](auto i) {
-                    memento.neurons[i.value] =
-                     utils::get< i.value >(m_neurons).getMemento();
-                });
-                return memento;
-            }
-
-            void setMemento(const Memento& memento) {
-                utils::for_< size() >([this, &memento](auto i) {
-                    utils::get< i.value >(m_neurons).setMemento(memento.neurons[i.value]);
                 });
             }
 

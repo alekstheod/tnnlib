@@ -39,7 +39,6 @@ namespace nn::bp {
         template< std::size_t inputs >
         using adjust = BPNeuralLayer;
 
-        using Memento = typename Base::Memento;
         using Base::begin;
         using Base::cbegin;
         using Base::cend;
@@ -50,8 +49,6 @@ namespace nn::bp {
         using Base::size;
         using Base::operator[];
         using Base::calculateOutputs;
-        using Base::getMemento;
-        using Base::setMemento;
 
         BPNeuralLayer() = default;
 

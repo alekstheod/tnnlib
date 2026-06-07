@@ -26,14 +26,11 @@ namespace nn {
             using adjust =
              BPNeuralLayer< typename NeuralLayerType::template adjust< inputs > >;
 
-            using Memento = typename Base::Memento;
             using Base::calculateDeltas;
             using Base::calculateHiddenDeltas;
             using Base::calculateOutputs;
             using Base::for_each;
-            using Base::getMemento;
             using Base::inputs;
-            using Base::setMemento;
             using Base::size;
             using Base::operator[];
 

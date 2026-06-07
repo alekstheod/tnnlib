@@ -38,7 +38,15 @@ namespace {
             regularLayer[1][1].value = 0.3f;
 
             nn::bp::BPNeuralLayer< nn::detail::OpenCLNeuralLayer< BasicLayer > > openclLayer;
-            openclLayer.setMemento(regularLayer.getMemento());
+
+            for (auto i : {0, 1}) {
+                openclLayer[i].setBias(regularLayer[i].getBias());
+                for (auto j : {0, 1}) {
+                    openclLayer[i].setWeight(j, regularLayer[i].getWeight(j));
+                }
+            }
+            openclLayer.syncWeights();
+
             openclLayer.setInput(0, 0.5f);
             openclLayer.setInput(1, 0.3f);
 

@@ -2,7 +2,6 @@
 
 #include "NeuralNetwork/Neuron/INeuron.h"
 #include "NeuralNetwork/Neuron/Input.h"
-#include "NeuralNetwork/Serialization/NeuronMemento.h"
 
 #include <System/Time.h>
 
@@ -20,7 +19,6 @@ namespace nn {
         struct Neuron : INeuron< typename OutputFunctionType::Var > {
             using OutputFunction = OutputFunctionType;
             using Var = typename OutputFunction::Var;
-            using Memento = NeuronMemento< Var, inputsNumber >;
             using Input = nn::Input< Var >;
 
             /// @brief a list of the inputs first is the weight, second is the
@@ -78,23 +76,6 @@ namespace nn {
 
             const Var& getWeight(std::size_t weightId) const {
                 return m_inputs[weightId].weight;
-            }
-
-            const Memento getMemento() const {
-                Memento result;
-                result.bias = m_bias;
-                for(const auto& idx : ranges::views::indices(m_inputs.size())) {
-                    result.weights[idx] = m_inputs[idx].weight;
-                }
-
-                return result;
-            }
-
-            void setMemento(const Memento& memento) {
-                for(const auto i : ranges::views::indices(m_inputs.size())) {
-                    m_inputs[i].weight = memento.weights[i];
-                }
-                m_bias = memento.bias;
             }
 
             void setInput(unsigned int inputId, const Var& value) {

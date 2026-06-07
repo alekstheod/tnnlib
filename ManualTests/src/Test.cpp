@@ -1,5 +1,4 @@
 #include "NeuralNetwork//BackPropagation/BepAlgorithm.h"
-#include "NeuralNetwork/BackPropagation/BpCereal.h"
 #include "NeuralNetwork/NeuralLayer/NeuralLayer.h"
 #include "NeuralNetwork/NeuralLayer/InputLayer.h"
 #include "NeuralNetwork/ActivationFunction/SigmoidFunction.h"
@@ -60,27 +59,19 @@ int main(int argc, char** argv) {
                             return error > 0.001f && epoch < numOfEpochs;
                         });
 
-    const auto store = [](const auto& memento) {
+    Algo algorithm2(0.09f);
+    {
         std::stringstream strm;
         {
             cereal::JSONOutputArchive oa(strm);
-            oa(cereal::make_nvp("bp_state", memento));
+            oa(cereal::make_nvp("context", algorithm.context()));
             std::cout << strm.str() << std::endl;
         }
-        return strm.str();
-    };
-
-    const auto restore = [](const auto& str) {
-        std::stringstream strm{str};
-        cereal::JSONInputArchive ia(strm);
-        Algo::Memento memento;
-        ia(memento);
-        return memento;
-    };
-
-    Algo algorithm2(0.09f);
-    const auto mementoStr = store(algorithm.getMemento());
-    algorithm2.setMemento(restore(mementoStr));
+        {
+            cereal::JSONInputArchive ia(strm);
+            ia(cereal::make_nvp("context", algorithm2.context()));
+        }
+    }
 
 
     std::array< float, 2 > outputs{0};

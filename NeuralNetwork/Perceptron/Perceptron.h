@@ -1,6 +1,5 @@
 #pragma once
 
-#include "NeuralNetwork/Serialization/PerceptronMemento.h"
 #include "NeuralNetwork/Utils/Utils.h"
 
 #include <MPL/Tuple.h>
@@ -22,10 +21,6 @@ namespace nn {
         template< template< class > class Wrapper, typename... Layers >
         constexpr auto wrap_layers(std::tuple< Layers... >)
          -> std::tuple< Wrapper< Layers >... >;
-
-        template< typename... Layers >
-        constexpr auto layers_memento(std::tuple< Layers... >)
-         -> std::tuple< typename Layers::Memento... >;
 
         template< typename Var, typename... L >
         struct Perceptron {
@@ -58,9 +53,6 @@ namespace nn {
             using wrap =
              decltype(perceptron< Var >(wrap_layers< Layer >(std::declval< Layers >())));
 
-            using LayersMemento = decltype(layers_memento(std::declval< Layers >()));
-            using Memento = PerceptronMemento< LayersMemento >;
-
             template< typename T >
             using use = decltype(perceptron< T >(std::declval< Layers >()));
 
@@ -86,23 +78,6 @@ namespace nn {
 
             const Context& context() const {
                 return m_context;
-            }
-
-            void setMemento(const Memento& memento) {
-                utils::for_< size() >([this, &memento](auto i) {
-                    auto& layer = utils::get< i.value >(m_layers);
-                    layer.setMemento(utils::get< i.value >(memento.layers));
-                });
-            }
-
-            Memento getMemento() const {
-                LayersMemento memento;
-                utils::for_< size() >([this, &memento](auto i) {
-                    auto& layer = utils::get< i.value >(m_layers);
-                    utils::get< i.value >(memento) = layer.getMemento();
-                });
-
-                return {memento};
             }
 
             /*!

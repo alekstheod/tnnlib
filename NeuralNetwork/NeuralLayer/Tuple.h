@@ -1,7 +1,6 @@
 #pragma once
 
 #include "NeuralNetwork/NeuralLayer/Container.h"
-#include "NeuralNetwork/Serialization/NeuralLayerMemento.h"
 #include "NeuralNetwork/Neuron/INeuron.h"
 
 #include <MPL/Algorithm.h>
@@ -36,9 +35,6 @@ namespace nn {
              Layer< Tuple< Var, inputsNumber, typename T::template replace< Neuron >... > >;
 
             using Container = std::tuple< T... >;
-
-            using Memento =
-             NeuralLayerMemento< NeuronMemento< Var, inputsNumber >, sizeof...(T) >;
 
             static constexpr auto inputs() {
                 return inputsNumber;

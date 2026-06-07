@@ -21,8 +21,13 @@ namespace {
          "regular layer with the same topology") {
             nn::NeuralLayer< nn::Neuron, nn::TanhFunction, 2, 2 > regularLayer;
             nn::OpenCLNeuralLayer< nn::Neuron, nn::TanhFunction, 2, 2 > openClLayer;
-            const auto memento = regularLayer.getMemento();
-            openClLayer.setMemento(memento);
+
+            for (auto i : {0, 1}) {
+                openClLayer[i].setBias(regularLayer[i].getBias());
+                for (auto j : {0, 1}) {
+                    openClLayer[i].setWeight(j, regularLayer[i].getWeight(j));
+                }
+            }
 
             regularLayer[0][0].value = 0.1f;
             regularLayer[0][1].value = 0.2f;

@@ -43,14 +43,12 @@ namespace nn {
             using adjust =
              BPNeuralLayer< typename NeuralLayerType::template adjust< inputs > >;
 
-            using Memento = typename Base::Memento;
             using Base::calculateOutputs;
             using Base::for_each;
-            using Base::getMemento;
             using Base::getWeight;
             using Base::inputs;
-            using Base::setMemento;
             using Base::size;
+            using Base::syncWeights;
             using Base::operator[];
 
             BPNeuralLayer() = default;

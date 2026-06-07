@@ -98,7 +98,6 @@ namespace nn {
         class ConvolutionLayer : private Internal {
           public:
             using Var = typename Internal::Var;
-            using Memento = typename Internal::Memento;
             using ActivationFunctions = typename Internal::ActivationFunctions;
             using Internal::begin;
             using Internal::cbegin;
@@ -107,9 +106,7 @@ namespace nn {
             using Internal::size;
             using Internal::operator[];
             using Internal::for_each;
-            using Internal::getMemento;
             using Internal::inputs;
-            using Internal::setMemento;
 
             // We can't adjust this layer as the
             // number of inputs and neurons depends

@@ -16,7 +16,6 @@ namespace nn {
         struct InputLayer : private Internal {
           public:
             using Var = typename Internal::Var;
-            using Memento = typename Internal::Memento;
             using ActivationFunctions = typename Internal::ActivationFunctions;
 
             using Internal::begin;
@@ -27,9 +26,7 @@ namespace nn {
             using Internal::operator[];
             using Internal::calculateOutputs;
             using Internal::for_each;
-            using Internal::getMemento;
             using Internal::inputs;
-            using Internal::setMemento;
 
             template< template< class > class NewType >
             using wrap = InputLayer< typename Internal::template wrap< NewType > >;

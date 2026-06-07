@@ -1,7 +1,6 @@
 #pragma once
 
 #include "NeuralNetwork/BackPropagation/BPContext.h"
-#include "NeuralNetwork/BackPropagation/BpMemento.h"
 #include "NeuralNetwork/BackPropagation/BPNeuralLayer.h"
 #include "NeuralNetwork/BackPropagation/BPConvolutionNeuralLayer.h"
 #include "NeuralNetwork/BackPropagation/ErrorFunction.h"
@@ -29,16 +28,13 @@ namespace nn::bp {
       public:
         using Prototype =
          typename std::tuple< std::array< Input, inputsNumber >, std::array< Var, outputsNumber > >;
-        using Memento = BpMemento< Var, Layers >;
-
 
         static constexpr auto size() {
             return PerceptronType::size();
         }
 
         BepAlgorithm(Var learningRate)
-         : m_leariningRate(learningRate)
-         , m_bpContext{m_forwardOutputs, {}, {}, {}, {}, {}} {
+         : m_leariningRate(learningRate) {
             initWeights();
         }
 
@@ -131,23 +127,8 @@ namespace nn::bp {
             calculate(begin, end, func, DummyMomentum());
         }
 
-        void setMemento(const Memento& memento) {
-            utils::for_< size() - 1 >([this, &memento](auto i) {
-                constexpr auto idx = i.value + 1;
-                std::get< idx >(m_bpContext.weights) = std::get< idx >(memento.weights);
-                std::get< idx >(m_bpContext.biases) = std::get< idx >(memento.biases);
-            });
-        }
-
-        Memento getMemento() const {
-            Memento m;
-            utils::for_< size() - 1 >([this, &m](auto i) {
-                constexpr auto idx = i.value + 1;
-                std::get< idx >(m.weights) = std::get< idx >(m_bpContext.weights);
-                std::get< idx >(m.biases) = std::get< idx >(m_bpContext.biases);
-            });
-            return m;
-        }
+        const BPCtx& context() const { return m_bpContext; }
+        BPCtx& context() { return m_bpContext; }
 
         template< typename Iterator, typename OutputIterator >
         void evaluate(Iterator begin, Iterator end, OutputIterator out) {
@@ -225,12 +206,11 @@ namespace nn::bp {
             }
         }
 
-        typename BPCtx::Forward m_forwardOutputs{};
         Layers m_layers{};
         Var m_leariningRate;
         std::array< Var, outputsNumber > m_outputs;
         ErrorCalculator< typename PerceptronType::VarType > m_errorCalculator;
-        BPCtx m_bpContext{m_forwardOutputs, {}, {}, {}, {}, {}};
+        BPCtx m_bpContext{};
 
         struct DummyMomentum {
             Var operator()(const Var& oldDelta, const Var& newDelta) {

@@ -18,9 +18,6 @@ namespace nn {
             using Internal::size;
             using Internal::operator[];
             using Internal::calculateOutputs;
-            using Memento = typename Internal::Memento;
-            using Internal::getMemento;
-            using Internal::setMemento;
             // We can't adjust this layer as the
             // number of inputs and neurons depends
             // on the convolution grid and frame sizes

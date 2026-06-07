@@ -32,7 +32,14 @@ namespace {
             regularLayer[1][1].value = 0.3f;
 
             nn::bp::BPNeuralLayer< nn::detail::AsyncNeuralLayer< BasicLayer > > asyncLayer;
-            asyncLayer.setMemento(regularLayer.getMemento());
+
+            for (auto i : {0, 1}) {
+                asyncLayer[i].setBias(regularLayer[i].getBias());
+                for (auto j : {0, 1}) {
+                    asyncLayer[i].setWeight(j, regularLayer[i].getWeight(j));
+                }
+            }
+
             asyncLayer[0][0].value = 0.5f;
             asyncLayer[0][1].value = 0.3f;
             asyncLayer[1][0].value = 0.5f;

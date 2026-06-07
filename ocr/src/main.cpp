@@ -1,5 +1,4 @@
 #include "NeuralNetwork/BackPropagation/BepAlgorithm.h"
-#include "NeuralNetwork/BackPropagation/BpCereal.h"
 #include "NeuralNetwork/ActivationFunction/SoftmaxFunction.h"
 #include "NeuralNetwork/Neuron/Neuron.h"
 #include "NeuralNetwork/Perceptron/Perceptron.h"
@@ -97,31 +96,23 @@ void readImage(std::string fileName, Iterator out) {
     }
 }
 
-Perceptron readPerceptron(std::string fileName) {
-    Perceptron perceptron;
-    if(boost::filesystem::exists(fileName.c_str())) {
-        std::ifstream file(fileName);
-        if(file.good()) {
-            Perceptron::Memento memento;
-            cereal::JSONInputArchive ia(file);
-            ia >> memento;
-
-            perceptron.setMemento(memento);
-        } else {
-            throw std::logic_error("Invalid perceptron file name");
-        }
-    }
-
-    return perceptron;
-}
-
-void recognize(std::string perceptron, std::string image) {
+void recognize(std::string perceptronFile, std::string image) {
     try {
         std::array< InputData, inputsNumber > inputs = {InputData{}};
         readImage(image, inputs.begin());
         std::vector< VarType > result(alphabet.length(), VarType(0.f));
-        Perceptron perc = readPerceptron(perceptron);
-        perc.calculate(inputs.begin(), inputs.end(), result.begin());
+
+        CNNAlgo algorithm(0.01f);
+        {
+            std::ifstream file(perceptronFile);
+            if(!file.good()) {
+                throw std::logic_error("Invalid perceptron file name");
+            }
+            cereal::JSONInputArchive ia(file);
+            ia(cereal::make_nvp("context", algorithm.context()));
+        }
+
+        algorithm.evaluate(inputs.begin(), inputs.end(), result.begin());
         for(unsigned int i = 0; i < result.size(); i++) {
             std::cout << "Symbol: " << alphabet[i] << " " << result[i] << std::endl;
         }
@@ -147,9 +138,7 @@ void calculateWeights(std::string imagesPath) {
 
 
     std::cout << "Perceptron calculation started" << std::endl;
-    // static CNNPerceptron tmp = readPerceptron("perceptron.json");
     static CNNAlgo algorithm(0.01f);
-    // algorithm.setMemento(tmp.getMemento());
 
     std::vector< CNNAlgo::Prototype > prototypes;
 
@@ -180,7 +169,7 @@ void calculateWeights(std::string imagesPath) {
     {
         std::ofstream strm("perceptron.json");
         cereal::JSONOutputArchive oa(strm);
-        oa(cereal::make_nvp("bp_state", algorithm.getMemento()));
+        oa(cereal::make_nvp("context", algorithm.context()));
         strm.flush();
     }
 }

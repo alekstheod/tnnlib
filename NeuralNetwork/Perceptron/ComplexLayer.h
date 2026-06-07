@@ -1,7 +1,5 @@
 #pragma once
 
-#include "NeuralNetwork/Serialization/ComplexLayerMemento.h"
-
 #include <array>
 
 namespace nn {
@@ -10,7 +8,6 @@ namespace nn {
     template< typename Perceptron >
     struct ComplexLayer {
         using Var = typename Perceptron::Var;
-        using Memento = ComplexLayerMemento< Var >;
         using OutputLayerType = typename Perceptron::OutputLayerType;
         using InputLayerType = typename Perceptron::InputLayerType;
         static constexpr std::size_t CONST_LAYERS_NUMBER = Perceptron::CONST_LAYERS_NUMBER;
@@ -29,14 +26,6 @@ namespace nn {
         }
 
         ComplexLayer(const Perceptron& perceptron) : m_perceptron(perceptron) {
-        }
-
-        Memento getMemento() {
-            return m_perceptron.getMemento();
-        }
-
-        void setMemento(const Memento& memento) {
-            m_perceptron.setMemento();
         }
 
         template< typename Layer >
