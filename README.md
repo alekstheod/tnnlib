@@ -22,6 +22,16 @@ Flexible compile time interface which allows to define a neural network with dif
     typedef nn::bp::BepAlgorithm< Perceptron, nn::bp::CrossEntropyError> Algo;
 ```
 
+or
+
+```
+using Perceptron = decltype(nn::build< VarType >()
+                             .input< 2 >()
+                             .dense< 20 >().with_neuron< nn::Neuron< nn::TanhFunction > >()
+                             .dense< 1 >())::type;
+
+```
+
 Calculating perceptron by using BEP algorithm:
 
 ```cpp
