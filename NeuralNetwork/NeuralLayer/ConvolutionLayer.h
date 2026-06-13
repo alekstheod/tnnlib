@@ -98,7 +98,6 @@ namespace nn {
         class ConvolutionLayer : private Internal {
           public:
             using Var = typename Internal::Var;
-            using Memento = typename Internal::Memento;
             using ActivationFunctions = typename Internal::ActivationFunctions;
             using Internal::begin;
             using Internal::cbegin;
@@ -106,11 +105,8 @@ namespace nn {
             using Internal::end;
             using Internal::size;
             using Internal::operator[];
-            using Internal::calculateOutputs;
             using Internal::for_each;
-            using Internal::getMemento;
             using Internal::inputs;
-            using Internal::setMemento;
 
             // We can't adjust this layer as the
             // number of inputs and neurons depends
@@ -134,6 +130,64 @@ namespace nn {
                         const auto localInputId = frame.area.localize(inputId);
                         neuron.setInput(localInputId, value);
                     }
+                });
+            }
+
+            template< typename Context, std::size_t myIdx >
+            void calculateOutputs(Context& ctx) {
+                auto& myOutputs = std::get< myIdx >(ctx);
+                std::array< Var, size() > dotProducts;
+                Internal::for_each([&](auto i, auto& neuron) {
+                    dotProducts[i.value] = neuron.calcDotProduct();
+                });
+                Internal::for_each([&](auto i, auto& neuron) {
+                    const auto output = neuron.calculateOutput(
+                     dotProducts[i.value], std::cbegin(dotProducts), std::cend(dotProducts));
+                    myOutputs[i.value] = output;
+                });
+            }
+
+            template< typename Context, std::size_t myIdx, std::size_t predecessorIdx >
+            void calculateOutputs(Context& ctx) {
+                auto& predecessorOutputs = std::get< predecessorIdx >(ctx);
+                auto& myOutputs = std::get< myIdx >(ctx);
+                for (std::size_t i = 0; i < predecessorOutputs.size(); ++i) {
+                    setInput(i, predecessorOutputs[i]);
+                }
+                std::array< Var, size() > dotProducts;
+                Internal::for_each([&](auto i, auto& neuron) {
+                    dotProducts[i.value] = neuron.calcDotProduct();
+                });
+                Internal::for_each([&](auto i, auto& neuron) {
+                    const auto output = neuron.calculateOutput(
+                     dotProducts[i.value], std::cbegin(dotProducts), std::cend(dotProducts));
+                    myOutputs[i.value] = output;
+                });
+            }
+
+            template< typename Context, std::size_t myIdx, std::size_t predecessorIdx, typename W >
+            void calculateOutputs(Context& ctx, const W& wctx) {
+                auto& predecessorOutputs = std::get< predecessorIdx >(ctx);
+                auto& myOutputs = std::get< myIdx >(ctx);
+                const auto& weights = std::get< myIdx >(wctx.weights);
+                const auto& biases = std::get< myIdx >(wctx.biases);
+                for (std::size_t i = 0; i < predecessorOutputs.size(); ++i) {
+                    setInput(i, predecessorOutputs[i]);
+                }
+                constexpr auto neuronInputs = Internal::inputs();
+                std::array< Var, size() > dotProducts;
+                auto& self = *this;
+                Internal::for_each([&](auto i, auto&) {
+                    Var dot = biases[i.value];
+                    for (std::size_t j = 0; j < neuronInputs; ++j) {
+                        dot += self[i.value][j].value * weights[i.value * neuronInputs + j];
+                    }
+                    dotProducts[i.value] = dot;
+                });
+                Internal::for_each([&](auto i, auto& neuron) {
+                    const auto output = neuron.calculateOutput(
+                     dotProducts[i.value], std::cbegin(dotProducts), std::cend(dotProducts));
+                    myOutputs[i.value] = output;
                 });
             }
 

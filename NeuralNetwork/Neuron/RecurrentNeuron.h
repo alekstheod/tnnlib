@@ -13,11 +13,9 @@ namespace nn {
         using Neuron::calcDotProduct;
         using Neuron::cbegin;
         using Neuron::cend;
-        using Neuron::getMemento;
         using Neuron::getOutput;
         using Neuron::setBias;
         using Neuron::setInput;
-        using Neuron::setMemento;
         using Neuron::size;
         using Neuron::use;
         using Neuron::operator[];

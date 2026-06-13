@@ -1,7 +1,5 @@
 #pragma once
 
-#include "NeuralNetwork/Serialization/NeuronMemento.h"
-
 #include <algorithm>
 #include <numeric>
 
@@ -25,14 +23,11 @@ namespace nn {
 
     namespace detail {
 
-        struct EmptyMemento {};
-
         template< typename VarType, typename PoolingAlgo, std::size_t inputsNumber >
         struct PoolingNeuron {
             using Var = VarType;
 
             using OutputFunction = PoolingAlgo;
-            using Memento = StaticNeuronMemento;
             using Input = Var;
             using Inputs = std::array< Var, inputsNumber >;
 
@@ -62,13 +57,6 @@ namespace nn {
 
             const Var& operator[](const ::size_t id) const {
                 return m_inputs[id];
-            }
-
-            const Memento getMemento() const {
-                return {};
-            }
-
-            void setMemento(const Memento& memento) {
             }
 
             void setInput(std::size_t inputId, const Var& value) {

@@ -10,10 +10,20 @@ namespace {
              "[layer][basic][sigmoid][forward]") {
         GIVEN("A neural layer with 2 neurons and 2 features (inputs)") {
             nn::InputLayer< nn::Neuron, nn::SigmoidFunction, 2, 2 > layer;
-            layer.setInput(0, {0.6f, 0.5});
-            layer.setInput(1, {0.3f, 0.4f});
+            layer[0][0].weight = 1.f;
+            layer[0][0].value = 0.6f;
+            layer[0][1].weight = 1.f;
+            layer[0][1].value = 0.5f;
+            layer[0].setBias(0.f);
+            layer[1][0].weight = 1.f;
+            layer[1][0].value = 0.3f;
+            layer[1][1].weight = 1.f;
+            layer[1][1].value = 0.4f;
+            layer[1].setBias(0.f);
             WHEN("calculateOutputs is called") {
-                layer.calculateOutputs();
+                using Context = std::tuple<std::array<float, 2>>;
+                Context ctx;
+                layer.calculateOutputs<Context, 0>(ctx);
                 THEN(
                  "Neurons outputs are equal with a result of the function 1 / "
                  "(1 + std::exp(-dot_pruduct))") {

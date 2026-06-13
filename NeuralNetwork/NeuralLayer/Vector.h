@@ -1,7 +1,6 @@
 #pragma once
 
 #include "NeuralNetwork/NeuralLayer/Container.h"
-#include "NeuralNetwork/Serialization/NeuralLayerMemento.h"
 
 #include <MPL/Algorithm.h>
 
@@ -26,8 +25,6 @@ namespace nn {
             using Var = typename Neuron::Var;
             using OutputFunction = typename Neuron::OutputFunction;
             using ActivationFunctions = std::tuple< OutputFunction >;
-            using NeuronMemento = typename Neuron::Memento;
-            using Memento = NeuralLayerMemento< NeuronMemento, sz >;
 
             static constexpr auto inputs() {
                 return Neuron::size();

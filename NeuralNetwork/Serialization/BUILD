@@ -7,24 +7,6 @@ cc_library(
         "//visibility:public",
     ],
     deps = [
-        ":Memento",
-        "@cereal",
-        "@range-v3",
-    ],
-)
-
-cc_library(
-    name = "Memento",
-    hdrs = glob(
-        ["*.h"],
-        exclude = [
-            "tests/**",
-            "Cereal.h",
-        ],
-    ),
-    copts = ["-Werror"],
-    includes = ["."],
-    visibility = [
-        "//visibility:public",
+        "//NeuralNetwork/BackPropagation",
     ],
 )

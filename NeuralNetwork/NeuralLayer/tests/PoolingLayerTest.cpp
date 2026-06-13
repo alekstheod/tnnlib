@@ -67,7 +67,9 @@ namespace {
                 WHEN("calculateOutputs is called") {
                     THEN(
                      "The outputs are the max of the inputs for each neuron") {
-                        layer.calculateOutputs();
+                        using Context = std::tuple<std::array<float, 4>>;
+                        Context ctx;
+                        layer.calculateOutputs<Context, 0>(ctx);
                         REQUIRE_THAT(15.0f, Catch::Matchers::WithinRel(layer[0].getOutput()));
                         REQUIRE_THAT(18.0f, Catch::Matchers::WithinRel(layer[1].getOutput()));
                         REQUIRE_THAT(33.0f, Catch::Matchers::WithinRel(layer[2].getOutput()));

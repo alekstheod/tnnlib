@@ -26,46 +26,36 @@ namespace nn {
             using adjust =
              BPNeuralLayer< typename NeuralLayerType::template adjust< inputs > >;
 
-            using Memento = typename Base::Memento;
             using Base::calculateDeltas;
+            using Base::calculateHiddenDeltas;
             using Base::calculateOutputs;
             using Base::for_each;
-            using Base::getDelta;
-            using Base::getMemento;
-            using Base::getOutput;
             using Base::inputs;
-            using Base::setInput;
-            using Base::setMemento;
             using Base::size;
             using Base::operator[];
 
-            void calculateWeights(const Var& learningRate) {
-                const auto calculateWeight = [&learningRate](auto& neuron, Var delta) {
-                    const std::size_t inputsNumber = neuron.size();
-                    for(std::size_t i = 0; i < inputsNumber; i++) {
-                        auto input = neuron[i].value;
-                        auto weight = neuron[i].weight;
-                        auto newWeight = weight - learningRate * input * delta;
-                        neuron.setWeight(i, newWeight);
-                    }
-
-                    Var weight = neuron.getBias();
-                    Var newWeight = weight - learningRate * delta;
-                    neuron.setBias(newWeight);
-                };
-
+            template< typename BPCtx, std::size_t myIdx >
+            void calculateWeights(BPCtx& ctx, const Var& learningRate) {
+                auto& deltas = std::get< myIdx >(ctx.deltas);
+                auto& weights = std::get< myIdx >(ctx.weights);
+                auto& biases = std::get< myIdx >(ctx.biases);
+                constexpr auto inputsNumber = inputs();
 
                 std::array< std::future< void >, size() > weightFutures;
 
                 utils::for_< size() >([&, this](const auto& i) {
-                    auto& self = *this;
-                    auto& neuron = self[i.value];
-                    auto delta = getDelta(i.value);
+                    auto delta = deltas[i.value];
+                    auto idx = i.value;
                     std::promise< void > promise;
-                    weightFutures[i.value] = promise.get_future();
+                    weightFutures[idx] = promise.get_future();
                     boost::asio::post(nn::detail::pool(),
-                                      [&neuron, delta, promise = std::move(promise), &calculateWeight]() mutable {
-                                          calculateWeight(neuron, delta);
+                                      [this, idx, delta, &weights, &biases, &learningRate, promise = std::move(promise)]() mutable {
+                                          for(std::size_t j = 0; j < inputsNumber; j++) {
+                                              auto input = (*this)[idx][j].value;
+                                              auto weight = weights[idx * inputsNumber + j];
+                                              weights[idx * inputsNumber + j] = weight - learningRate * input * delta;
+                                          }
+                                          biases[idx] = biases[idx] - learningRate * delta;
                                           promise.set_value();
                                       });
                 });

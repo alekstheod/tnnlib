@@ -15,13 +15,12 @@ namespace nn {
          * Represent the NeuralLayer in perceptron.
          */
         template< typename T >
-        struct NeuralLayer : private Layer< T > {
+        struct NeuralLayer : public Layer< T > {
             using Base = Layer< T >;
 
           public:
             using Container = typename Base::Container;
             using Var = typename Base::Var;
-            using Memento = typename Base::Memento;
             using ActivationFunctions = typename Base::ActivationFunctions;
 
             template< template< class > typename NewType >
@@ -51,10 +50,6 @@ namespace nn {
             static_assert(inputs() >= 1,
                           "Invalid template argument inputsNumber <= 1");
 
-            const Var& getOutput(unsigned int outputId) const {
-                return self[outputId].getOutput();
-            }
-
             template< typename Func >
             void for_each(Func func) {
                 utils::for_< size() >([this, &func](auto i) {
@@ -69,53 +64,68 @@ namespace nn {
                 });
             }
 
-            void setInput(unsigned int inputId, const Var& value) {
-                utils::for_< size() >([this, inputId, value](auto i) {
-                    utils::get< i.value >(m_neurons).setInput(inputId, value);
-                });
-            }
+            template< typename Context, std::size_t myIdx, std::size_t predecessorIdx >
+            void calculateOutputs(Context& ctx) {
+                auto& predecessorOutputs = std::get< predecessorIdx >(ctx);
+                auto& myOutputs = std::get< myIdx >(ctx);
+                constexpr auto inputCount = inputs();
+                const auto predSize = predecessorOutputs.size();
 
-            const Memento getMemento() const {
-                Memento memento;
-                utils::for_< size() >([this, &memento](auto i) {
-                    memento.neurons[i.value] =
-                     utils::get< i.value >(m_neurons).getMemento();
-                });
-                return memento;
-            }
-
-            void setMemento(const Memento& memento) {
-                utils::for_< size() >([this, &memento](auto i) {
-                    utils::get< i.value >(m_neurons).setMemento(memento.neurons[i.value]);
-                });
-            }
-
-            template< typename Layer >
-            void calculateOutputs(Layer& nextLayer) {
                 std::array< Var, size() > dotProducts;
-                utils::for_< size() >([this, &dotProducts](auto i) {
+                utils::for_< size() >([this, &predecessorOutputs, &dotProducts, predSize](auto i) {
+                    auto& neuron = utils::get< i.value >(m_neurons);
                     dotProducts[i.value] =
-                     utils::get< i.value >(m_neurons).calcDotProduct();
+                     neuron.calcDotProduct(predecessorOutputs.data(),
+                                           predSize < inputCount ? predSize : inputCount);
                 });
 
-                utils::for_< size() >([this, &dotProducts, &nextLayer](auto i) {
+                utils::for_< size() >([this, &dotProducts, &myOutputs](auto i) {
                     const auto output = utils::get< i.value >(m_neurons).calculateOutput(
                      dotProducts[i.value], std::cbegin(dotProducts), std::cend(dotProducts));
-                    nextLayer.setInput(i.value, output);
+                    myOutputs[i.value] = output;
                 });
             }
 
-            void calculateOutputs() {
+            template< typename Context, std::size_t myIdx, std::size_t predecessorIdx, typename W >
+            void calculateOutputs(Context& ctx, const W& wctx) {
+                auto& predecessorOutputs = std::get< predecessorIdx >(ctx);
+                auto& myOutputs = std::get< myIdx >(ctx);
+                const auto& weights = std::get< myIdx >(wctx.weights);
+                const auto& biases = std::get< myIdx >(wctx.biases);
+                constexpr auto neuronInputs = inputs();
+                const auto inputSize = predecessorOutputs.size() < neuronInputs
+                                       ? predecessorOutputs.size() : neuronInputs;
+
+                std::array< Var, size() > dotProducts;
+                utils::for_< size() >([&](auto i) {
+                    Var dot = biases[i.value];
+                    for (std::size_t j = 0; j < inputSize; ++j) {
+                        dot += predecessorOutputs[j] * weights[i.value * neuronInputs + j];
+                    }
+                    dotProducts[i.value] = dot;
+                });
+
+                utils::for_< size() >([this, &dotProducts, &myOutputs](auto i) {
+                    const auto output = utils::get< i.value >(m_neurons).calculateOutput(
+                     dotProducts[i.value], std::cbegin(dotProducts), std::cend(dotProducts));
+                    myOutputs[i.value] = output;
+                });
+            }
+
+            template< typename Context, std::size_t myIdx >
+            void calculateOutputs(Context& ctx) {
+                auto& myOutputs = std::get< myIdx >(ctx);
+
                 std::array< Var, size() > dotProducts;
                 utils::for_< size() >([this, &dotProducts](auto i) {
                     dotProducts[i.value] =
                      utils::get< i.value >(m_neurons).calcDotProduct();
                 });
 
-                for_each([&dotProducts](auto, auto& neuron) {
-                    neuron.calculateOutput(neuron.calcDotProduct(),
-                                           std::cbegin(dotProducts),
-                                           std::cend(dotProducts));
+                utils::for_< size() >([this, &dotProducts, &myOutputs](auto i) {
+                    const auto output = utils::get< i.value >(m_neurons).calculateOutput(
+                     dotProducts[i.value], std::cbegin(dotProducts), std::cend(dotProducts));
+                    myOutputs[i.value] = output;
                 });
             }
 

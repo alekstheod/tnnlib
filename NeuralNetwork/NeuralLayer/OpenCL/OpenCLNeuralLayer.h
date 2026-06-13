@@ -54,7 +54,6 @@ namespace nn {
             };
 
             using Var = typename Internal::Var;
-            using Memento = typename Internal::Memento;
             using ActivationFunctions = typename Internal::ActivationFunctions;
 
             template< template< class > class NewType >
@@ -79,15 +78,8 @@ namespace nn {
             using Internal::size;
             using Internal::operator[];
             using Internal::for_each;
-            using Internal::getMemento;
-            using Internal::getOutput;
+            using Internal::calculateOutputs;
             using Internal::inputs;
-
-
-            void setMemento(const Memento& memento) {
-                Internal::setMemento(memento);
-                syncWeights();
-            }
 
             const Var& getWeight(std::size_t neuronId, std::size_t inputId) const {
                 return m_weights[neuronId * inputs() + inputId];
@@ -189,7 +181,7 @@ namespace nn {
                 }
             }
 
-          private:
+          public:
             void syncWeights() {
                 auto& self = *this;
                 for(const auto i : ranges::views::indices(size())) {

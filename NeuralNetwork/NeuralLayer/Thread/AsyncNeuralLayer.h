@@ -23,14 +23,10 @@ namespace nn {
             using Internal::cend;
             using Internal::end;
             using Internal::for_each;
-            using Internal::getMemento;
-            using Internal::getOutput;
+            using Internal::calculateOutputs;
             using Internal::inputs;
-            using Memento = typename Internal::Memento;
             using Var = typename Internal::Var;
             using Internal::operator[];
-            using Internal::setInput;
-            using Internal::setMemento;
             using Internal::size;
 
             template< template< class > class NewType >

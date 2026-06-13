@@ -22,7 +22,6 @@ cc_library(
     deps = [
         "//:tnnlib_utils",
         "//NeuralNetwork/Neuron",
-        "//NeuralNetwork/Serialization:Memento",
         "@boost//:asio",
         "@cereal",
         "@range-v3",
