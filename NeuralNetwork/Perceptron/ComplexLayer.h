@@ -30,14 +30,14 @@ namespace nn {
 
         template< typename Layer >
         void calculateOutputs(Layer& nextLayer) {
-            m_perceptron.calculate(m_inputs.begin(), m_inputs.end(), m_outputs.begin());
+            m_perceptron.evaluate(m_inputs.begin(), m_inputs.end(), m_outputs.begin());
             for(std::size_t i = 0; i < m_outputs.size(); i++) {
                 nextLayer.setInput(i, m_outputs[i]);
             }
         }
 
         void calculateOutputs() {
-            m_perceptron.calculate(m_inputs.begin(), m_inputs.end(), m_outputs.begin());
+            m_perceptron.evaluate(m_inputs.begin(), m_inputs.end(), m_outputs.begin());
         }
 
         auto begin() const {
