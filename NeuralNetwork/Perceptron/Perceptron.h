@@ -57,7 +57,7 @@ namespace nn {
             using use = decltype(perceptron< T >(std::declval< Layers >()));
 
             using Input = typename InputLayerType::Input;
-            using Context = std::tuple<std::array<Var, L::size()>...>;
+            using Context = std::tuple< std::array< Var, L::size() >... >;
 
           private:
             Layers m_layers;
@@ -81,14 +81,14 @@ namespace nn {
             }
 
             /*!
-             * @brief this method will calculate the outputs of perceptron.
+             * @brief this method will evaluate the outputs of perceptron.
              * @param begin is the iterator which is pointing to the first input
              * @param end the iterator which is pointing to the last input
              * @param out the output iterator where the results of the
-             * calculation will be stored.
+             * evaluation will be stored.
              */
             template< typename Iterator, typename OutputIterator >
-            void calculate(Iterator begin, Iterator end, OutputIterator out) {
+            void evaluate(Iterator begin, Iterator end, OutputIterator out) {
                 auto& inputLayer = std::get< 0 >(m_layers);
                 unsigned int inputId = 0;
                 while(begin != end) {
@@ -107,7 +107,8 @@ namespace nn {
 
                 utils::for_< size() - 1U >([this](auto i) {
                     auto& layer = utils::get< i.value + 1 >(m_layers);
-                    layer.template calculateOutputs< decltype(m_context), i.value + 1, i.value >(m_context);
+                    layer.template calculateOutputs< decltype(m_context), i.value + 1, i.value >(
+                     m_context);
                 });
 
                 auto& outputCtx = std::get< size() - 1U >(m_context);

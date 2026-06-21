@@ -25,12 +25,8 @@ struct BPContext< Var, std::tuple< Layers... > > {
 
 template< typename Archive, typename Var, typename... Layers >
 void serialize(Archive& ar, BPContext< Var, std::tuple< Layers... > >& ctx) {
-    ar(cereal::make_nvp("outputs", ctx.outputs));
     ar(cereal::make_nvp("weights", ctx.weights));
     ar(cereal::make_nvp("biases", ctx.biases));
-    ar(cereal::make_nvp("deltas", ctx.deltas));
-    ar(cereal::make_nvp("biasGradients", ctx.biasGradients));
-    ar(cereal::make_nvp("weightGradients", ctx.weightGradients));
 }
 
 } // namespace nn::bp

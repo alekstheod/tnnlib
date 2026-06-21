@@ -44,7 +44,7 @@ namespace {
                 input[2] = Input{{{0.2f, 0.0f}}};
 
                 std::array< float, 1 > output{0.f};
-                perceptron.calculate(input.begin(), input.end(), output.begin());
+                perceptron.evaluate(input.begin(), input.end(), output.begin());
 
                 float n0 = 1.0f / (1.0f + std::exp(-2.0f));
                 float n1 = 1.0f / (1.0f + std::exp(-0.5f));
@@ -64,7 +64,7 @@ namespace {
                 input[2] = typename TestPerceptron::Input{{{0.1f, 0.1f}}};
 
                 std::array< float, 1 > output{0.f};
-                perceptron.calculate(input.begin(), input.end(), output.begin());
+                perceptron.evaluate(input.begin(), input.end(), output.begin());
 
                 THEN("Output should sum all input values through sigmoid") {
                     float n0 = 1.0f / (1.0f + std::exp(-10.0f));
