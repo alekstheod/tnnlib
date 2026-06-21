@@ -16,11 +16,11 @@ namespace {
     constexpr auto width = 5;
     constexpr auto height = 5;
 
-    using ConvolutionGrid =
-     typename nn::ConvolutionGrid< width, height, nn::Kernel< 3, 3, 2 > >::define;
+    using SlidingWindow =
+     nn::SlidingWindow< width, height, nn::Kernel< 3, 3, 2 > >;
 
     using ConvolutionLayer =
-     nn::ConvolutionLayer< nn::NeuralLayer, nn::Neuron, nn::TanhFunction, ConvolutionGrid >;
+     nn::ConvolutionLayer< nn::NeuralLayer, nn::Neuron, nn::TanhFunction, SlidingWindow >;
 
     using BPConvolutionNeuralLayer = nn::bp::BPNeuralLayer< ConvolutionLayer >;
     using BPCtx = nn::bp::BPContext< float, std::tuple< BPConvolutionNeuralLayer > >;

@@ -22,11 +22,11 @@ namespace {
             constexpr std::size_t width = 5;
             constexpr std::size_t height = 5;
             constexpr std::size_t stride = 2;
-            using ConvolutionGrid =
-             typename nn::ConvolutionGrid< width, height, nn::Kernel< 3, 3, stride > >::define;
+            using SlidingWindow =
+             nn::SlidingWindow< width, height, nn::Kernel< 3, 3, stride > >;
 
             using ConvolutionLayer =
-             nn::ConvolutionLayer< nn::NeuralLayer, nn::Neuron, nn::SigmoidFunction, ConvolutionGrid >;
+             nn::ConvolutionLayer< nn::NeuralLayer, nn::Neuron, nn::SigmoidFunction, SlidingWindow >;
             auto layer = ConvolutionLayer{};
             WHEN(
              "input is a grid filled with the increasing sequence of "
@@ -54,44 +54,5 @@ namespace {
         }
     }
 
-    SCENARIO("Convolution grid calculate frames", "[grid][convolution]") {
-        GIVEN(
-         "A convolution grid for an image 5*5, stride = 2 and Kernel -> 2*2 "
-         "1") {
-            constexpr std::size_t width = 5;
-            constexpr std::size_t height = 5;
-            constexpr std::size_t stride = 2;
-            using ConvolutionGrid =
-             nn::ConvolutionGrid< width, height, nn::Kernel< 2, 2, stride > >;
 
-            ConvolutionGrid grid;
-            WHEN("calcPoint is called it") {
-                THEN("It returns a first value of the frame") {
-                    REQUIRE(0 == grid.calcPoint(0));
-                    REQUIRE(2 == grid.calcPoint(1));
-                    REQUIRE(4 == grid.calcPoint(2));
-                    REQUIRE(10 == grid.calcPoint(3));
-                    REQUIRE(12 == grid.calcPoint(4));
-                    REQUIRE(14 == grid.calcPoint(5));
-                }
-            }
-        }
-        GIVEN("A grid for an image 6*6, stride = 3 and Kernel -> 3*3 ") {
-            constexpr std::size_t width = 6;
-            constexpr std::size_t height = 6;
-            constexpr std::size_t stride = 3;
-            using ConvolutionGrid =
-             nn::ConvolutionGrid< width, height, nn::Kernel< 3, 3, stride > >;
-
-            ConvolutionGrid grid;
-            WHEN("calcPoint is called it") {
-                THEN("It returns a first value of the frame") {
-                    REQUIRE(0 == grid.calcPoint(0));
-                    REQUIRE(3 == grid.calcPoint(1));
-                    REQUIRE(18 == grid.calcPoint(2));
-                    REQUIRE(21 == grid.calcPoint(3));
-                }
-            }
-        }
-    }
 } // namespace

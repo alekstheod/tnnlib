@@ -20,8 +20,8 @@ TEST_CASE("PerceptronBuilder with_neuron", "[PerceptronBuilder]") {
 }
 
 TEST_CASE("PerceptronBuilder conv", "[PerceptronBuilder]") {
-    using ConvGrid = typename nn::ConvolutionGrid< 8, 8, nn::Kernel< 3, 3, 1 > >::define;
-    REQUIRE(nn::build< float >().input< 64 >().conv< ConvGrid >().size() == 2);
+    using SlidingWindow = nn::SlidingWindow< 8, 8, nn::Kernel< 3, 3, 1 > >;
+    REQUIRE(nn::build< float >().input< 64 >().conv< SlidingWindow >().size() == 2);
 }
 
 TEST_CASE("PerceptronBuilder conv default", "[PerceptronBuilder]") {
@@ -59,24 +59,24 @@ TEST_CASE("PerceptronBuilder conv with_kernel and with_grid",
 }
 
 TEST_CASE("PerceptronBuilder pool max", "[PerceptronBuilder]") {
-    using PoolGrid = typename nn::ConvolutionGrid< 8, 8, nn::Kernel< 2, 2, 2 > >::define;
+    using SlidingWindow = nn::SlidingWindow< 8, 8, nn::Kernel< 2, 2, 2 > >;
     REQUIRE(
-     nn::build< float >().input< 64 >().template pool< nn::Max, PoolGrid >().size() == 2);
+     nn::build< float >().input< 64 >().template pool< nn::Max, SlidingWindow >().size() == 2);
 }
 
 TEST_CASE("PerceptronBuilder pool avg", "[PerceptronBuilder]") {
-    using PoolGrid = typename nn::ConvolutionGrid< 8, 8, nn::Kernel< 2, 2, 2 > >::define;
+    using SlidingWindow = nn::SlidingWindow< 8, 8, nn::Kernel< 2, 2, 2 > >;
     REQUIRE(
-     nn::build< float >().input< 64 >().template pool< nn::Avg, PoolGrid >().size() == 2);
+     nn::build< float >().input< 64 >().template pool< nn::Avg, SlidingWindow >().size() == 2);
 }
 
 TEST_CASE("PerceptronBuilder pool after conv", "[PerceptronBuilder]") {
-    using ConvGrid = typename nn::ConvolutionGrid< 8, 8, nn::Kernel< 3, 3, 1 > >::define;
-    using PoolGrid = typename nn::ConvolutionGrid< 6, 6, nn::Kernel< 2, 2, 2 > >::define;
+    using SlidingWindow = nn::SlidingWindow< 8, 8, nn::Kernel< 3, 3, 1 > >;
+    using SlidingWindow2 = nn::SlidingWindow< 6, 6, nn::Kernel< 2, 2, 2 > >;
     REQUIRE(nn::build< float >()
              .input< 64 >()
-             .conv< ConvGrid >()
-             .template pool< nn::Max, PoolGrid >()
+             .conv< SlidingWindow >()
+             .template pool< nn::Max, SlidingWindow2 >()
              .dense< 10 >()
              .size() == 4);
 }
