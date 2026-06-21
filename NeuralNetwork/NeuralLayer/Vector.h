@@ -45,7 +45,8 @@ namespace nn {
             using use_var = L< Vector< typename Neuron::template use< V >, sz > >;
 
             template< typename NewNeuron >
-            using with_neuron = detail::NeuralLayer< Vector< NewNeuron, sz > >;
+            using with_neuron =
+             detail::NeuralLayer< Vector< typename NewNeuron::template resize< Neuron::size() >, sz > >;
 
             const auto& operator[](unsigned int id) const {
                 return m_neurons[id];
