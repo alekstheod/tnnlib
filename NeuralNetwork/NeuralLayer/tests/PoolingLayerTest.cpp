@@ -34,7 +34,7 @@ namespace {
             constexpr std::size_t stride = 3;
 
             using Grid =
-             typename nn::ConvolutionGrid< width, height, nn::Kernel< 3, 3, stride > >::define;
+             nn::SlidingWindow< width, height, nn::Kernel< 3, 3, stride > >;
             using PoolingLayer = nn::PoolingLayer< nn::NeuralLayer, nn::Max, Grid >;
 
             auto layer = PoolingLayer{};

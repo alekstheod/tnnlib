@@ -129,7 +129,7 @@ namespace nn::bp {
             detail::calculateHiddenDeltas< BPCtx, myIdx, affIdx >(*this, ctx, affectedLayer, momentum);
         }
 
-        using Base::m_grid;
+
     };
 
 } // namespace nn::bp
