@@ -25,6 +25,7 @@ namespace nn::bp {
             auto& currentOutputs = std::get< currentIdx >(ctx.outputs);
             auto& affectedDeltas = std::get< affectedIdx >(ctx.deltas);
             const auto& affectedWeights = std::get< affectedIdx >(ctx.weights);
+            const auto& affectedConnections = std::get< affectedIdx >(ctx.connections);
             constexpr auto affectedInputs = affectedLayer.inputs();
             constexpr auto affectedSize = affectedLayer.size();
 
@@ -32,7 +33,14 @@ namespace nn::bp {
                 Var sum{};
                 if (i.value < affectedInputs) {
                     for (std::size_t j = 0; j < affectedSize; ++j) {
-                        sum += affectedDeltas[j] * affectedWeights[j * affectedInputs + i.value];
+                        const auto& neuronConn = affectedConnections[j];
+                        for(auto inputId : neuronConn) {
+                            if(inputId == connectionSentinel) break;
+                            if(inputId == i.value) {
+                                sum += affectedDeltas[j] * affectedWeights[j * affectedInputs + i.value];
+                                break;
+                            }
+                        }
                     }
                 }
                 currentDeltas[i.value] =
@@ -105,6 +113,7 @@ namespace nn::bp {
             auto& deltas = std::get< myIdx >(ctx.deltas);
             auto& weights = std::get< myIdx >(ctx.weights);
             auto& biases = std::get< myIdx >(ctx.biases);
+            const auto& connections = std::get< myIdx >(ctx.connections);
             constexpr auto inputsNumber = inputs();
 
             if constexpr (myIdx > 0) {
@@ -113,20 +122,28 @@ namespace nn::bp {
                                         ? predecessorOutputs.size() : inputsNumber;
                 for_each([&](auto i, auto&) {
                     auto delta = deltas[i.value];
-                    for(std::size_t j = 0; j < inputSize; j++) {
-                        auto input = predecessorOutputs[j];
-                        auto weight = weights[i.value * inputsNumber + j];
-                        weights[i.value * inputsNumber + j] = weight - learningRate * input * delta;
+                    const auto& neuronConn = connections[i.value];
+                    for(auto j : neuronConn) {
+                        if(j == connectionSentinel) break;
+                        if(j < inputSize) {
+                            auto input = predecessorOutputs[j];
+                            auto weight = weights[i.value * inputsNumber + j];
+                            weights[i.value * inputsNumber + j] = weight - learningRate * input * delta;
+                        }
                     }
                     biases[i.value] = biases[i.value] - learningRate * delta;
                 });
             } else {
                 for_each([&](auto i, auto& neuron) {
                     auto delta = deltas[i.value];
-                    for(std::size_t j = 0; j < inputsNumber; j++) {
-                        auto input = neuron[j].value;
-                        auto weight = weights[i.value * inputsNumber + j];
-                        weights[i.value * inputsNumber + j] = weight - learningRate * input * delta;
+                    const auto& neuronConn = connections[i.value];
+                    for(auto j : neuronConn) {
+                        if(j == connectionSentinel) break;
+                        if(j < inputsNumber) {
+                            auto input = neuron[j].value;
+                            auto weight = weights[i.value * inputsNumber + j];
+                            weights[i.value * inputsNumber + j] = weight - learningRate * input * delta;
+                        }
                     }
                     biases[i.value] = biases[i.value] - learningRate * delta;
                 });
@@ -138,6 +155,7 @@ namespace nn::bp {
             auto& deltas = std::get< myIdx >(ctx.deltas);
             auto& weightGrads = std::get< myIdx >(ctx.weightGradients);
             auto& biasGrads = std::get< myIdx >(ctx.biasGradients);
+            const auto& connections = std::get< myIdx >(ctx.connections);
             constexpr auto inputsNumber = inputs();
 
             if constexpr (myIdx > 0) {
@@ -146,17 +164,24 @@ namespace nn::bp {
                                         ? predecessorOutputs.size() : inputsNumber;
                 for_each([&](auto i, auto&) {
                     auto delta = deltas[i.value];
-                    for(std::size_t j = 0; j < inputSize; j++) {
-                        weightGrads[i.value * inputsNumber + j] += predecessorOutputs[j] * delta;
+                    const auto& neuronConn = connections[i.value];
+                    for(auto j : neuronConn) {
+                        if(j == connectionSentinel) break;
+                        if(j < inputSize) {
+                            weightGrads[i.value * inputsNumber + j] += predecessorOutputs[j] * delta;
+                        }
                     }
                     biasGrads[i.value] += delta;
                 });
             } else {
                 for_each([&](auto i, auto& neuron) {
                     auto delta = deltas[i.value];
-                    for(std::size_t j = 0; j < inputsNumber; j++) {
-                        auto input = neuron[j].value;
-                        weightGrads[i.value * inputsNumber + j] += input * delta;
+                    const auto& neuronConn = connections[i.value];
+                    for(auto j : neuronConn) {
+                        if(j == connectionSentinel) break;
+                        if(j < inputsNumber) {
+                            weightGrads[i.value * inputsNumber + j] += neuron[j].value * delta;
+                        }
                     }
                     biasGrads[i.value] += delta;
                 });
@@ -169,13 +194,20 @@ namespace nn::bp {
             auto& biasGrads = std::get< myIdx >(ctx.biasGradients);
             auto& weights = std::get< myIdx >(ctx.weights);
             auto& biases = std::get< myIdx >(ctx.biases);
+            const auto& connections = std::get< myIdx >(ctx.connections);
             constexpr auto inputsNumber = inputs();
 
             for_each([&](auto i, auto&) {
+                const auto& neuronConn = connections[i.value];
                 for(std::size_t j = 0; j < inputsNumber; j++) {
-                    weights[i.value * inputsNumber + j] -=
-                     learningRate * weightGrads[i.value * inputsNumber + j];
                     weightGrads[i.value * inputsNumber + j] = Var{};
+                }
+                for(auto j : neuronConn) {
+                    if(j == connectionSentinel) break;
+                    if(j < inputsNumber) {
+                        weights[i.value * inputsNumber + j] -=
+                         learningRate * weightGrads[i.value * inputsNumber + j];
+                    }
                 }
 
                 biases[i.value] -= learningRate * biasGrads[i.value];

@@ -39,6 +39,7 @@ namespace nn {
                 auto& deltas = std::get< myIdx >(ctx.deltas);
                 auto& weights = std::get< myIdx >(ctx.weights);
                 auto& biases = std::get< myIdx >(ctx.biases);
+                const auto& connections = std::get< myIdx >(ctx.connections);
                 constexpr auto inputsNumber = inputs();
 
                 std::array< std::future< void >, size() > weightFutures;
@@ -46,14 +47,18 @@ namespace nn {
                 utils::for_< size() >([&, this](const auto& i) {
                     auto delta = deltas[i.value];
                     auto idx = i.value;
+                    const auto& neuronConn = connections[idx];
                     std::promise< void > promise;
                     weightFutures[idx] = promise.get_future();
                     boost::asio::post(nn::detail::pool(),
-                                      [this, idx, delta, &weights, &biases, &learningRate, promise = std::move(promise)]() mutable {
-                                          for(std::size_t j = 0; j < inputsNumber; j++) {
-                                              auto input = (*this)[idx][j].value;
-                                              auto weight = weights[idx * inputsNumber + j];
-                                              weights[idx * inputsNumber + j] = weight - learningRate * input * delta;
+                                      [this, idx, delta, &weights, &biases, &neuronConn, &learningRate, promise = std::move(promise)]() mutable {
+                                          for(auto j : neuronConn) {
+                                              if(j == connectionSentinel) break;
+                                              if(j < inputsNumber) {
+                                                  auto input = (*this)[idx][j].value;
+                                                  auto weight = weights[idx * inputsNumber + j];
+                                                  weights[idx * inputsNumber + j] = weight - learningRate * input * delta;
+                                              }
                                           }
                                           biases[idx] = biases[idx] - learningRate * delta;
                                           promise.set_value();

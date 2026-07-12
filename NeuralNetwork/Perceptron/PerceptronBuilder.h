@@ -9,6 +9,7 @@
 #include "NeuralNetwork/Neuron/Neuron.h"
 #include "NeuralNetwork/Neuron/PoolingNeuron.h"
 #include "NeuralNetwork/ActivationFunction/SigmoidFunction.h"
+#include <ConnectionData.h>
 
 #include "Utilities/MPL/Tuple.h"
 
@@ -28,6 +29,9 @@ namespace nn {
 
     template< typename VarType, typename CurrentLayer, typename... PrevLayers >
     struct PerceptronBuilder;
+
+    template< typename VarType, typename InnerBuilder >
+    struct ConnectionMatrixBuilder;
 
     template< typename VarType, typename ConvConfig, typename CurrentLayer, typename... PrevLayers >
     struct ConvBuilder {
@@ -98,11 +102,85 @@ namespace nn {
             return PerceptronBuilder< VarType, L, PrevLayers... >{};
         }
 
+        template< std::size_t NeuronId, typename... InputIds >
+        auto with_connection_matrix(InputIds... inputIds) const {
+            bp::ConnectionData connData;
+            connData.template add< NeuronId >(sizeof...(PrevLayers), inputIds...);
+            return ConnectionMatrixBuilder< VarType, PerceptronBuilder >{*this, std::move(connData)};
+        }
+
         static constexpr std::size_t size() {
             return nn::Perceptron< VarType, PrevLayers..., CurrentLayer >::size();
         }
 
         using type = nn::Perceptron< VarType, PrevLayers..., CurrentLayer >;
+    };
+
+    template< typename VarType, typename InnerBuilder >
+    struct ConnectionMatrixBuilder {
+        InnerBuilder m_inner;
+        bp::ConnectionData m_connections;
+
+        ConnectionMatrixBuilder() = default;
+        ConnectionMatrixBuilder(const InnerBuilder& inner, bp::ConnectionData&& conn)
+         : m_inner(inner), m_connections(std::move(conn)) {}
+
+        template< std::size_t NeuronId, typename... InputIds >
+        auto with_connection_matrix(InputIds... inputIds) const {
+            auto newConn = m_connections;
+            newConn.template add< NeuronId >(numPrevLayers(), inputIds...);
+            return ConnectionMatrixBuilder< VarType, InnerBuilder >{m_inner, std::move(newConn)};
+        }
+
+        template< std::size_t sz >
+        auto dense() const {
+            return ConnectionMatrixBuilder< VarType, decltype(m_inner.template dense< sz >()) >{
+                m_inner.template dense< sz >(), bp::ConnectionData(m_connections)};
+        }
+
+        template< typename SlidingWindow >
+        auto conv() const {
+            return ConnectionMatrixBuilder< VarType, decltype(m_inner.template conv< SlidingWindow >()) >{
+                m_inner.template conv< SlidingWindow >(), bp::ConnectionData(m_connections)};
+        }
+
+        auto conv() const {
+            return ConnectionMatrixBuilder< VarType, decltype(m_inner.conv()) >{
+                m_inner.conv(), bp::ConnectionData(m_connections)};
+        }
+
+        template< template< class > class PoolingAlgo, typename SlidingWindow >
+        auto pool() const {
+            return ConnectionMatrixBuilder< VarType, decltype(m_inner.template pool< PoolingAlgo, SlidingWindow >()) >{
+                m_inner.template pool< PoolingAlgo, SlidingWindow >(), bp::ConnectionData(m_connections)};
+        }
+
+        template< std::size_t sz >
+        auto async() const {
+            return ConnectionMatrixBuilder< VarType, decltype(m_inner.template async< sz >()) >{
+                m_inner.template async< sz >(), bp::ConnectionData(m_connections)};
+        }
+
+        template< typename N >
+        auto with_neuron() const {
+            return ConnectionMatrixBuilder< VarType, decltype(m_inner.template with_neuron< N >()) >{
+                m_inner.template with_neuron< N >(), bp::ConnectionData(m_connections)};
+        }
+
+        static constexpr std::size_t size() {
+            return InnerBuilder::size();
+        }
+
+        using type = typename InnerBuilder::type;
+
+        const bp::ConnectionData& connections() const {
+            return m_connections;
+        }
+
+      private:
+        static constexpr std::size_t numPrevLayers() {
+            return InnerBuilder::type::size() - 1;
+        }
     };
 
     template< typename VarType >
