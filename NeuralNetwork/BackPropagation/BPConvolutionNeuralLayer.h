@@ -72,15 +72,20 @@ namespace nn::bp {
             auto& deltas = std::get< myIdx >(ctx.deltas);
             auto& weights = std::get< myIdx >(ctx.weights);
             auto& biases = std::get< myIdx >(ctx.biases);
+            const auto& connections = std::get< myIdx >(ctx.connections);
             auto& self = *this;
             for(const auto neuronId : ranges::views::indices(size())) {
                 auto& neuron = self[neuronId];
                 const Var neuronDelta = deltas[neuronId];
+                const auto& neuronConn = connections[neuronId];
 
-                for(const auto weightId : ranges::views::indices(Grid::K::size)) {
-                    const Var inputValue = neuron[weightId].value;
-                    const Var weightGradient = neuronDelta * inputValue;
-                    weights[neuronId * Grid::K::size + weightId] -= learningRate * weightGradient;
+                for(auto weightId : neuronConn) {
+                    if(weightId == connectionSentinel) break;
+                    if(weightId < Grid::K::size) {
+                        const Var inputValue = neuron[weightId].value;
+                        const Var weightGradient = neuronDelta * inputValue;
+                        weights[neuronId * Grid::K::size + weightId] -= learningRate * weightGradient;
+                    }
                 }
 
                 biases[neuronId] -= learningRate * neuronDelta;
@@ -92,14 +97,19 @@ namespace nn::bp {
             auto& deltas = std::get< myIdx >(ctx.deltas);
             auto& weightGrads = std::get< myIdx >(ctx.weightGradients);
             auto& biasGrads = std::get< myIdx >(ctx.biasGradients);
+            const auto& connections = std::get< myIdx >(ctx.connections);
             auto& self = *this;
             for(std::size_t neuronId = 0; neuronId < size(); ++neuronId) {
                 auto& neuron = self[neuronId];
                 const Var delta = deltas[neuronId];
+                const auto& neuronConn = connections[neuronId];
 
-                for(std::size_t weightId = 0; weightId < Grid::K::size; ++weightId) {
-                    const Var inputValue = neuron[weightId].value;
-                    weightGrads[neuronId * Grid::K::size + weightId] += inputValue * delta;
+                for(auto weightId : neuronConn) {
+                    if(weightId == connectionSentinel) break;
+                    if(weightId < Grid::K::size) {
+                        const Var inputValue = neuron[weightId].value;
+                        weightGrads[neuronId * Grid::K::size + weightId] += inputValue * delta;
+                    }
                 }
                 biasGrads[neuronId] += delta;
             }
@@ -111,12 +121,19 @@ namespace nn::bp {
             auto& biasGrads = std::get< myIdx >(ctx.biasGradients);
             auto& weights = std::get< myIdx >(ctx.weights);
             auto& biases = std::get< myIdx >(ctx.biases);
+            const auto& connections = std::get< myIdx >(ctx.connections);
             auto& self = *this;
             for(std::size_t neuronId = 0; neuronId < size(); ++neuronId) {
+                const auto& neuronConn = connections[neuronId];
                 for(std::size_t weightId = 0; weightId < Grid::K::size; ++weightId) {
-                    weights[neuronId * Grid::K::size + weightId] -=
-                     learningRate * weightGrads[neuronId * Grid::K::size + weightId];
                     weightGrads[neuronId * Grid::K::size + weightId] = Var{};
+                }
+                for(auto weightId : neuronConn) {
+                    if(weightId == connectionSentinel) break;
+                    if(weightId < Grid::K::size) {
+                        weights[neuronId * Grid::K::size + weightId] -=
+                         learningRate * weightGrads[neuronId * Grid::K::size + weightId];
+                    }
                 }
 
                 biases[neuronId] -= learningRate * biasGrads[neuronId];
@@ -128,8 +145,6 @@ namespace nn::bp {
         void calculateHiddenDeltas(BPCtx& ctx, AffectedLayer& affectedLayer, MomentumFunc momentum) {
             detail::calculateHiddenDeltas< BPCtx, myIdx, affIdx >(*this, ctx, affectedLayer, momentum);
         }
-
-
     };
 
 } // namespace nn::bp

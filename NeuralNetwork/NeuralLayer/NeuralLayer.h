@@ -7,8 +7,11 @@
 #include <MPL/Algorithm.h>
 
 #include <array>
+#include <limits>
 
 namespace nn {
+
+    static constexpr std::size_t connectionSentinel = std::numeric_limits< std::size_t >::max();
 
     namespace detail {
         /**
@@ -92,6 +95,7 @@ namespace nn {
                 auto& myOutputs = std::get< myIdx >(ctx);
                 const auto& weights = std::get< myIdx >(wctx.weights);
                 const auto& biases = std::get< myIdx >(wctx.biases);
+                const auto& connections = std::get< myIdx >(wctx.connections);
                 constexpr auto neuronInputs = inputs();
                 const auto inputSize = predecessorOutputs.size() < neuronInputs
                                        ? predecessorOutputs.size() : neuronInputs;
@@ -99,8 +103,12 @@ namespace nn {
                 std::array< Var, size() > dotProducts;
                 utils::for_< size() >([&](auto i) {
                     Var dot = biases[i.value];
-                    for (std::size_t j = 0; j < inputSize; ++j) {
-                        dot += predecessorOutputs[j] * weights[i.value * neuronInputs + j];
+                    const auto& neuronConn = connections[i.value];
+                    for(auto j : neuronConn) {
+                        if(j == connectionSentinel) break;
+                        if(j < inputSize) {
+                            dot += predecessorOutputs[j] * weights[i.value * neuronInputs + j];
+                        }
                     }
                     dotProducts[i.value] = dot;
                 });

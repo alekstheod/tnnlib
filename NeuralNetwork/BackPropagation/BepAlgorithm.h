@@ -4,6 +4,7 @@
 #include "NeuralNetwork/BackPropagation/BPNeuralLayer.h"
 #include "NeuralNetwork/BackPropagation/BPConvolutionNeuralLayer.h"
 #include "NeuralNetwork/BackPropagation/ErrorFunction.h"
+#include <ConnectionData.h>
 
 #include <System/Time.h>
 
@@ -36,6 +37,12 @@ namespace nn::bp {
         BepAlgorithm(Var learningRate)
          : m_leariningRate(learningRate) {
             initWeights();
+        }
+
+        BepAlgorithm(Var learningRate, const ConnectionData& connData)
+         : m_leariningRate(learningRate) {
+            initWeights();
+            overrideConnections(connData);
         }
 
         template< typename MomentumFunc >
@@ -172,6 +179,32 @@ namespace nn::bp {
                 }
                 for (auto& b : biases) {
                     b = utils::createRandom< Var >(1);
+                }
+            });
+        }
+
+        void overrideConnections(const ConnectionData& connData) {
+            if(connData.empty()) {
+                return;
+            }
+            utils::for_< size() >([this, &connData](auto i) {
+                constexpr auto layerIdx = i.value;
+                if(layerIdx < connData.layers.size()) {
+                    const auto& layer = connData.layers[layerIdx];
+                    auto& contextLayer = std::get< layerIdx >(m_bpContext.connections);
+                    constexpr auto numInputs = std::tuple_element_t< layerIdx, Layers >::inputs();
+                    for(std::size_t neuronId = 0; neuronId < layer.size(); ++neuronId) {
+                        if(!layer[neuronId].empty() && neuronId < contextLayer.size()) {
+                            const auto& src = layer[neuronId];
+                            for(std::size_t k = 0; k < numInputs; ++k) {
+                                if(k < src.size()) {
+                                    contextLayer[neuronId][k] = src[k];
+                                } else {
+                                    contextLayer[neuronId][k] = connectionSentinel;
+                                }
+                            }
+                        }
+                    }
                 }
             });
         }
