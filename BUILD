@@ -1,5 +1,10 @@
 load("@hedron_compile_commands//:refresh_compile_commands.bzl", "refresh_compile_commands")
 
+config_setting(
+    name = "using_rocm",
+    values = {"define": "using_rocm=true"},
+)
+
 cc_library(
     name = "tnnlib_utils",
     srcs = glob(["Utilities/**/*.cpp"]),

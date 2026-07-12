@@ -31,6 +31,35 @@ use_repo(
     "boost",
 )
 
+# rules_ml_toolchain provides hermetic LLVM and ROCm toolchains
+# Using git_override to get ROCm support from main branch
+# Patch adds missing sysroot repos to use_repo list for Bzlmod compatibility
+bazel_dep(name = "rules_ml_toolchain")
+git_override(
+    module_name = "rules_ml_toolchain",
+    commit = "f4aabf8dd5c6f89192b52d4e648d96d4c44bce40",
+    remote = "https://github.com/google-ml-infra/rules_ml_toolchain.git",
+    patches = [
+        "//third_party/rules_ml_toolchain:add_missing_use_repos.patch",
+        "//third_party/rules_ml_toolchain:condition_rocm_download.patch",
+        "//third_party/rules_ml_toolchain:rocm_compiler_rt_fix.patch",
+        "//third_party/rules_ml_toolchain:hipcc_wrapper_cxx20.patch",
+    ],
+    patch_strip = 1,
+)
+
+# Hermetic LLVM/ROCm toolchain (sysroot + LLVM repos)
+toolchain_ext = use_extension("@rules_ml_toolchain//extensions:toolchain.bzl", "toolchain_ext")
+use_repo(toolchain_ext, "llvm_linux_x86_64", "sysroot_linux_x86_64")
+
+# ROCm hermetic download and HIPCC configuration
+rocm_hermetic = use_extension("@rules_ml_toolchain//extensions:rocm_hermetic_download.bzl", "rocm_hermetic_download_ext")
+use_repo(rocm_hermetic, "rocm_hermetic_dist")
+
+hipcc_configure = use_extension("@rules_ml_toolchain//extensions:hipcc_configure.bzl", "hipcc_configure_ext")
+hipcc_configure.configure(rocm_dist = "@rocm_hermetic_dist//:rocm_root")
+use_repo(hipcc_configure, "config_rocm_hipcc")
+
 # Development tools
 # Hedron's Compile Commands Extractor for Bazel
 # https://github.com/hedronvision/bazel-compile-commands-extractor

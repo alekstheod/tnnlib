@@ -11,6 +11,7 @@
 #undef BOOST_SYSTEM_NO_DEPRECATED
 #endif
 
+#define BOOST_NO_CXX17_HDR_MEMORY_RESOURCE
 #include <boost/gil/channel_algorithm.hpp>
 #include <boost/gil/channel.hpp>
 #include <boost/gil.hpp>
@@ -27,6 +28,8 @@
 #include <cereal/types/array.hpp>
 #include <cereal/types/tuple.hpp>
 #include <cereal/types/vector.hpp>
+
+#include "ocr/src/gpu/train.h"
 
 #include <fstream>
 #include <iostream>
@@ -164,7 +167,7 @@ void calculateWeights(std::string imagesPath) {
         return error > 0.15f;
     };
 
-    algorithm.calculate(prototypes.begin(), prototypes.end(), errorFunc);
+    nn::gpu::calculate(algorithm, prototypes.data(), prototypes.size(), errorFunc);
 
     {
         std::ofstream strm("perceptron.json");

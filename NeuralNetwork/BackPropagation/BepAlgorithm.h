@@ -15,6 +15,7 @@ namespace nn::bp {
 
     template< typename PerceptronType, template< class > class ErrorCalculator = SquaredError >
     class BepAlgorithm {
+      public:
         using Var = typename PerceptronType::VarType;
         using Input = typename PerceptronType::Input;
 
@@ -25,7 +26,6 @@ namespace nn::bp {
         using Layers = typename Perceptron::Layers;
         using BPCtx = BPContext< Var, Layers >;
 
-      public:
         using Prototype =
          typename std::tuple< std::array< Input, inputsNumber >, std::array< Var, outputsNumber > >;
 
@@ -37,6 +37,11 @@ namespace nn::bp {
          : m_leariningRate(learningRate) {
             initWeights();
         }
+
+        void setLearningRate(Var lr) { m_leariningRate = lr; }
+        Var learningRate() const { return m_leariningRate; }
+        Layers& layers() { return m_layers; }
+        const Layers& layers() const { return m_layers; }
 
         template< typename MomentumFunc >
         Var executeTrainingStep(const Prototype& prototype, MomentumFunc momentum) {

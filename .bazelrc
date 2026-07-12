@@ -1,4 +1,14 @@
+startup --output_base=/mnt/ssd3/bazel_out
+build --repository_cache=/mnt/ssd3/bazel_cache
+
 build -c opt --cxxopt='-std=c++23'
+
+# Enable platform-based C++ toolchain resolution (required for hermetic toolchains)
+common --incompatible_enable_cc_toolchain_resolution
+
+# Use hermetic LLVM toolchain (and ROCm) from rules_ml_toolchain
+# The hermetic CC is enabled by default via @rules_ml_toolchain//common:enable_hermetic_cc
+common --platforms=@rules_ml_toolchain//common:linux_x86_64
 
 # OpenCL configuration
 # Use --config=opencl to enable OpenCL features
@@ -13,6 +23,20 @@ build:asan --copt -O1
 build:asan --copt -g
 build:asan --copt -fno-omit-frame-pointer
 build:asan --linkopt -fsanitize=address
+
+# ROCm/HIP configuration (hermetic via rules_ml_toolchain)
+# Use --config=rocm to build with AMD ROCm GPU support.
+# Downloads hermetic ROCm + LLVM + sysroot; no system install needed.
+# The hermetic ROCm toolchain from rules_ml_toolchain handles hipcc and includes.
+build:rocm --repo_env TF_NEED_ROCM=1
+build:rocm --@rules_ml_toolchain//common:enable_rocm=True
+build:rocm --@rules_ml_toolchain//common:enable_hermetic_libraries=True
+build:rocm --define=using_rocm=true
+build:rocm --extra_toolchains=@rules_ml_toolchain//cc:linux_x86_64_linux_x86_64_rocm
+build:rocm --copt=-DTNNLIB_HIP
+build:rocm --cxxopt='-std=c++23'
+build:rocm --dynamic_mode=off
+build:rocm --platforms=@rules_ml_toolchain//common:linux_x86_64
 
 # Common configurations
 build --verbose_failures

@@ -12,7 +12,9 @@
     "https://bcr.bazel.build/modules/abseil-cpp/20240116.2/MODULE.bazel": "73939767a4686cd9a520d16af5ab440071ed75cec1a876bf2fcfaf1f71987a16",
     "https://bcr.bazel.build/modules/abseil-cpp/20250127.1/MODULE.bazel": "c4a89e7ceb9bf1e25cf84a9f830ff6b817b72874088bf5141b314726e46a57c1",
     "https://bcr.bazel.build/modules/abseil-cpp/20250512.1/MODULE.bazel": "d209fdb6f36ffaf61c509fcc81b19e81b411a999a934a032e10cd009a0226215",
-    "https://bcr.bazel.build/modules/abseil-cpp/20250512.1/source.json": "d725d73707d01bb46ab3ca59ba408b8e9bd336642ca77a2269d4bfb8bbfd413d",
+    "https://bcr.bazel.build/modules/abseil-cpp/20250814.1/MODULE.bazel": "51f2312901470cdab0dbdf3b88c40cd21c62a7ed58a3de45b365ddc5b11bcab2",
+    "https://bcr.bazel.build/modules/abseil-cpp/20250814.1/source.json": "cea3901d7e299da7320700abbaafe57a65d039f10d0d7ea601c4a66938ea4b0c",
+    "https://bcr.bazel.build/modules/apple_support/1.11.1/MODULE.bazel": "1843d7cd8a58369a444fc6000e7304425fba600ff641592161d9f15b179fb896",
     "https://bcr.bazel.build/modules/apple_support/1.15.1/MODULE.bazel": "a0556fefca0b1bb2de8567b8827518f94db6a6e7e7d632b4c48dc5f865bc7c85",
     "https://bcr.bazel.build/modules/apple_support/1.22.1/MODULE.bazel": "90bd1a660590f3ceffbdf524e37483094b29352d85317060b2327fff8f3f4458",
     "https://bcr.bazel.build/modules/apple_support/1.22.1/source.json": "2bc34da8d0ebc4c4132c8b26db766ca1b86bbcf26dea94b94aa1cd73e2623aeb",
@@ -26,7 +28,9 @@
     "https://bcr.bazel.build/modules/bazel_features/1.21.0/MODULE.bazel": "675642261665d8eea09989aa3b8afb5c37627f1be178382c320d1b46afba5e3b",
     "https://bcr.bazel.build/modules/bazel_features/1.27.0/MODULE.bazel": "621eeee06c4458a9121d1f104efb80f39d34deff4984e778359c60eaf1a8cb65",
     "https://bcr.bazel.build/modules/bazel_features/1.28.0/MODULE.bazel": "4b4200e6cbf8fa335b2c3f43e1d6ef3e240319c33d43d60cc0fbd4b87ece299d",
-    "https://bcr.bazel.build/modules/bazel_features/1.28.0/source.json": "16a3fc5b4483cb307643791f5a4b7365fa98d2e70da7c378cdbde55f0c0b32cf",
+    "https://bcr.bazel.build/modules/bazel_features/1.3.0/MODULE.bazel": "cdcafe83ec318cda34e02948e81d790aab8df7a929cec6f6969f13a489ccecd9",
+    "https://bcr.bazel.build/modules/bazel_features/1.33.0/MODULE.bazel": "8b8dc9d2a4c88609409c3191165bccec0e4cb044cd7a72ccbe826583303459f6",
+    "https://bcr.bazel.build/modules/bazel_features/1.33.0/source.json": "13617db3930328c2cd2807a0f13d52ca870ac05f96db9668655113265147b2a6",
     "https://bcr.bazel.build/modules/bazel_features/1.4.1/MODULE.bazel": "e45b6bb2350aff3e442ae1111c555e27eac1d915e77775f6fdc4b351b758b5d7",
     "https://bcr.bazel.build/modules/bazel_features/1.9.1/MODULE.bazel": "8f679097876a9b609ad1f60249c49d68bfab783dd9be012faf9d82547b14815a",
     "https://bcr.bazel.build/modules/bazel_skylib/1.0.3/MODULE.bazel": "bcb0fd896384802d1ad283b4e4eb4d718eebd8cb820b0a2c3a347fb971afd9d8",
@@ -40,6 +44,7 @@
     "https://bcr.bazel.build/modules/bazel_skylib/1.6.1/MODULE.bazel": "8fdee2dbaace6c252131c00e1de4b165dc65af02ea278476187765e1a617b917",
     "https://bcr.bazel.build/modules/bazel_skylib/1.7.0/MODULE.bazel": "0db596f4563de7938de764cc8deeabec291f55e8ec15299718b93c4423e9796d",
     "https://bcr.bazel.build/modules/bazel_skylib/1.7.1/MODULE.bazel": "3120d80c5861aa616222ec015332e5f8d3171e062e3e804a2a0253e1be26e59b",
+    "https://bcr.bazel.build/modules/bazel_skylib/1.8.1/MODULE.bazel": "88ade7293becda963e0e3ea33e7d54d3425127e0a326e0d17da085a5f1f03ff6",
     "https://bcr.bazel.build/modules/bazel_skylib/1.8.2/MODULE.bazel": "69ad6927098316848b34a9142bcc975e018ba27f08c4ff403f50c1b6e646ca67",
     "https://bcr.bazel.build/modules/bazel_skylib/1.9.0/MODULE.bazel": "72997b29dfd95c3fa0d0c48322d05590418edef451f8db8db5509c57875fb4b7",
     "https://bcr.bazel.build/modules/bazel_skylib/1.9.0/source.json": "7ad77c1e8c1b84222d9b3f3cae016a76639435744c19330b0b37c0a3c9da7dc0",
@@ -62,10 +67,13 @@
     "https://bcr.bazel.build/modules/googletest/1.17.0.bcr.2/source.json": "3664514073a819992320ffbce5825e4238459df344d8b01748af2208f8d2e1eb",
     "https://bcr.bazel.build/modules/googletest/1.17.0/MODULE.bazel": "dbec758171594a705933a29fcf69293d2468c49ec1f2ebca65c36f504d72df46",
     "https://bcr.bazel.build/modules/jsoncpp/1.9.5/MODULE.bazel": "31271aedc59e815656f5736f282bb7509a97c7ecb43e927ac1a37966e0578075",
-    "https://bcr.bazel.build/modules/jsoncpp/1.9.5/source.json": "4108ee5085dd2885a341c7fab149429db457b3169b86eb081fa245eadf69169d",
+    "https://bcr.bazel.build/modules/jsoncpp/1.9.6/MODULE.bazel": "2f8d20d3b7d54143213c4dfc3d98225c42de7d666011528dc8fe91591e2e17b0",
+    "https://bcr.bazel.build/modules/jsoncpp/1.9.6/source.json": "a04756d367a2126c3541682864ecec52f92cdee80a35735a3cb249ce015ca000",
     "https://bcr.bazel.build/modules/libpfm/4.11.0/MODULE.bazel": "45061ff025b301940f1e30d2c16bea596c25b176c8b6b3087e92615adbd52902",
     "https://bcr.bazel.build/modules/libpng/1.6.47.bcr.1/MODULE.bazel": "27742ed29804d0ad3d4ae850bec97e57411a03223d40d0dbd1a49f9a536f648c",
     "https://bcr.bazel.build/modules/libpng/1.6.47.bcr.1/source.json": "dbce4d09a34352eedc61e192f24ec47e8fcce811cb9c26f17c05f7a2eb8e878e",
+    "https://bcr.bazel.build/modules/nlohmann_json/3.6.1/MODULE.bazel": "6f7b417dcc794d9add9e556673ad25cb3ba835224290f4f848f8e2db1e1fca74",
+    "https://bcr.bazel.build/modules/nlohmann_json/3.6.1/source.json": "f448c6e8963fdfa7eb831457df83ad63d3d6355018f6574fb017e8169deb43a9",
     "https://bcr.bazel.build/modules/platforms/0.0.10/MODULE.bazel": "8cb8efaf200bdeb2150d93e162c40f388529a25852b332cec879373771e48ed5",
     "https://bcr.bazel.build/modules/platforms/0.0.11/MODULE.bazel": "0daefc49732e227caa8bfa834d65dc52e8cc18a2faf80df25e8caea151a9413f",
     "https://bcr.bazel.build/modules/platforms/0.0.4/MODULE.bazel": "9b328e31ee156f53f3c416a64f8491f7eb731742655a47c9eec4703a71644aee",
@@ -82,9 +90,11 @@
     "https://bcr.bazel.build/modules/protobuf/27.0/MODULE.bazel": "7873b60be88844a0a1d8f80b9d5d20cfbd8495a689b8763e76c6372998d3f64c",
     "https://bcr.bazel.build/modules/protobuf/29.0-rc2/MODULE.bazel": "6241d35983510143049943fc0d57937937122baf1b287862f9dc8590fc4c37df",
     "https://bcr.bazel.build/modules/protobuf/29.0-rc3/MODULE.bazel": "33c2dfa286578573afc55a7acaea3cada4122b9631007c594bf0729f41c8de92",
-    "https://bcr.bazel.build/modules/protobuf/29.0-rc3/source.json": "c16a6488fb279ef578da7098e605082d72ed85fc8d843eaae81e7d27d0f4625d",
+    "https://bcr.bazel.build/modules/protobuf/29.1/MODULE.bazel": "557c3457560ff49e122ed76c0bc3397a64af9574691cb8201b4e46d4ab2ecb95",
     "https://bcr.bazel.build/modules/protobuf/3.19.0/MODULE.bazel": "6b5fbb433f760a99a22b18b6850ed5784ef0e9928a72668b66e4d7ccd47db9b0",
     "https://bcr.bazel.build/modules/protobuf/3.19.6/MODULE.bazel": "9233edc5e1f2ee276a60de3eaa47ac4132302ef9643238f23128fea53ea12858",
+    "https://bcr.bazel.build/modules/protobuf/33.0/MODULE.bazel": "c5270efb4aad37a2f893536076518793f409ea7df07a06df995d848d1690f21c",
+    "https://bcr.bazel.build/modules/protobuf/33.0/source.json": "cd7ac80ad863190b9151281a85acc11d77b5bde2ba56443a7215da2d4ace6da3",
     "https://bcr.bazel.build/modules/pybind11_bazel/2.11.1/MODULE.bazel": "88af1c246226d87e65be78ed49ecd1e6f5e98648558c14ce99176da041dc378e",
     "https://bcr.bazel.build/modules/pybind11_bazel/2.12.0/MODULE.bazel": "e6f4c20442eaa7c90d7190d8dc539d0ab422f95c65a57cc59562170c58ae3d34",
     "https://bcr.bazel.build/modules/pybind11_bazel/2.13.6/MODULE.bazel": "2d746fda559464b253b2b2e6073cb51643a2ac79009ca02100ebbc44b4548656",
@@ -98,6 +108,8 @@
     "https://bcr.bazel.build/modules/re2/2025-08-12.bcr.1/source.json": "a8ae7c09533bf67f9f6e5122d884d5741600b09d78dca6fc0f2f8d2ee0c2d957",
     "https://bcr.bazel.build/modules/rules_android/0.1.1/MODULE.bazel": "48809ab0091b07ad0182defb787c4c5328bd3a278938415c00a7b69b50c4d3a8",
     "https://bcr.bazel.build/modules/rules_android/0.1.1/source.json": "e6986b41626ee10bdc864937ffb6d6bf275bb5b9c65120e6137d56e6331f089e",
+    "https://bcr.bazel.build/modules/rules_apple/3.16.0/MODULE.bazel": "0d1caf0b8375942ce98ea944be754a18874041e4e0459401d925577624d3a54a",
+    "https://bcr.bazel.build/modules/rules_apple/3.16.0/source.json": "d8b5fe461272018cc07cfafce11fe369c7525330804c37eec5a82f84cd475366",
     "https://bcr.bazel.build/modules/rules_cc/0.0.1/MODULE.bazel": "cb2aa0747f84c6c3a78dad4e2049c154f08ab9d166b1273835a8174940365647",
     "https://bcr.bazel.build/modules/rules_cc/0.0.10/MODULE.bazel": "ec1705118f7eaedd6e118508d3d26deba2a4e76476ada7e0e3965211be012002",
     "https://bcr.bazel.build/modules/rules_cc/0.0.13/MODULE.bazel": "0e8529ed7b323dad0775ff924d2ae5af7640b23553dfcd4d34344c7e7a867191",
@@ -110,14 +122,16 @@
     "https://bcr.bazel.build/modules/rules_cc/0.0.9/MODULE.bazel": "836e76439f354b89afe6a911a7adf59a6b2518fafb174483ad78a2a2fde7b1c5",
     "https://bcr.bazel.build/modules/rules_cc/0.1.1/MODULE.bazel": "2f0222a6f229f0bf44cd711dc13c858dad98c62d52bd51d8fc3a764a83125513",
     "https://bcr.bazel.build/modules/rules_cc/0.1.4/MODULE.bazel": "bb03a452a7527ac25a7518fb86a946ef63df860b9657d8323a0c50f8504fb0b9",
+    "https://bcr.bazel.build/modules/rules_cc/0.1.5/MODULE.bazel": "88dfc9361e8b5ae1008ac38f7cdfd45ad738e4fa676a3ad67d19204f045a1fd8",
+    "https://bcr.bazel.build/modules/rules_cc/0.2.0/MODULE.bazel": "b5c17f90458caae90d2ccd114c81970062946f49f355610ed89bebf954f5783c",
     "https://bcr.bazel.build/modules/rules_cc/0.2.13/MODULE.bazel": "eecdd666eda6be16a8d9dc15e44b5c75133405e820f620a234acc4b1fdc5aa37",
     "https://bcr.bazel.build/modules/rules_cc/0.2.14/MODULE.bazel": "353c99ed148887ee89c54a17d4100ae7e7e436593d104b668476019023b58df8",
     "https://bcr.bazel.build/modules/rules_cc/0.2.16/MODULE.bazel": "9242fa89f950c6ef7702801ab53922e99c69b02310c39fb6e62b2bd30df2a1d4",
-    "https://bcr.bazel.build/modules/rules_cc/0.2.16/source.json": "d03d5cde49376d87e14ec14b666c56075e5e3926930327fd5d0484a1ff2ac1cc",
+    "https://bcr.bazel.build/modules/rules_cc/0.2.17/MODULE.bazel": "1849602c86cb60da8613d2de887f9566a6d354a6df6d7009f9d04a14402f9a84",
+    "https://bcr.bazel.build/modules/rules_cc/0.2.17/source.json": "3832f45d145354049137c0090df04629d9c2b5493dc5c2bf46f1834040133a07",
     "https://bcr.bazel.build/modules/rules_cc/0.2.8/MODULE.bazel": "f1df20f0bf22c28192a794f29b501ee2018fa37a3862a1a2132ae2940a23a642",
     "https://bcr.bazel.build/modules/rules_foreign_cc/0.9.0/MODULE.bazel": "c9e8c682bf75b0e7c704166d79b599f93b72cfca5ad7477df596947891feeef6",
     "https://bcr.bazel.build/modules/rules_fuzzing/0.5.2/MODULE.bazel": "40c97d1144356f52905566c55811f13b299453a14ac7769dfba2ac38192337a8",
-    "https://bcr.bazel.build/modules/rules_fuzzing/0.5.2/source.json": "c8b1e2c717646f1702290959a3302a178fb639d987ab61d548105019f11e527e",
     "https://bcr.bazel.build/modules/rules_java/4.0.0/MODULE.bazel": "5a78a7ae82cd1a33cef56dc578c7d2a46ed0dca12643ee45edbb8417899e6f74",
     "https://bcr.bazel.build/modules/rules_java/5.3.5/MODULE.bazel": "a4ec4f2db570171e3e5eb753276ee4b389bae16b96207e9d3230895c99644b86",
     "https://bcr.bazel.build/modules/rules_java/6.5.2/MODULE.bazel": "1d440d262d0e08453fa0c4d8f699ba81609ed0e9a9a0f02cd10b3e7942e61e31",
@@ -129,12 +143,14 @@
     "https://bcr.bazel.build/modules/rules_java/7.6.5/MODULE.bazel": "481164be5e02e4cab6e77a36927683263be56b7e36fef918b458d7a8a1ebadb1",
     "https://bcr.bazel.build/modules/rules_java/8.3.2/MODULE.bazel": "7336d5511ad5af0b8615fdc7477535a2e4e723a357b6713af439fe8cf0195017",
     "https://bcr.bazel.build/modules/rules_java/8.5.1/MODULE.bazel": "d8a9e38cc5228881f7055a6079f6f7821a073df3744d441978e7a43e20226939",
-    "https://bcr.bazel.build/modules/rules_java/8.5.1/source.json": "db1a77d81b059e0f84985db67a22f3f579a529a86b7997605be3d214a0abe38e",
+    "https://bcr.bazel.build/modules/rules_java/8.6.1/MODULE.bazel": "f4808e2ab5b0197f094cabce9f4b006a27766beb6a9975931da07099560ca9c2",
+    "https://bcr.bazel.build/modules/rules_java/8.6.1/source.json": "f18d9ad3c4c54945bf422ad584fa6c5ca5b3116ff55a5b1bc77e5c1210be5960",
     "https://bcr.bazel.build/modules/rules_jvm_external/4.4.2/MODULE.bazel": "a56b85e418c83eb1839819f0b515c431010160383306d13ec21959ac412d2fe7",
     "https://bcr.bazel.build/modules/rules_jvm_external/5.1/MODULE.bazel": "33f6f999e03183f7d088c9be518a63467dfd0be94a11d0055fe2d210f89aa909",
     "https://bcr.bazel.build/modules/rules_jvm_external/5.2/MODULE.bazel": "d9351ba35217ad0de03816ef3ed63f89d411349353077348a45348b096615036",
     "https://bcr.bazel.build/modules/rules_jvm_external/6.3/MODULE.bazel": "c998e060b85f71e00de5ec552019347c8bca255062c990ac02d051bb80a38df0",
-    "https://bcr.bazel.build/modules/rules_jvm_external/6.3/source.json": "6f5f5a5a4419ae4e37c35a5bb0a6ae657ed40b7abc5a5189111b47fcebe43197",
+    "https://bcr.bazel.build/modules/rules_jvm_external/6.7/MODULE.bazel": "e717beabc4d091ecb2c803c2d341b88590e9116b8bf7947915eeb33aab4f96dd",
+    "https://bcr.bazel.build/modules/rules_jvm_external/6.7/source.json": "5426f412d0a7fc6b611643376c7e4a82dec991491b9ce5cb1cfdd25fe2e92be4",
     "https://bcr.bazel.build/modules/rules_kotlin/1.9.6/MODULE.bazel": "d269a01a18ee74d0335450b10f62c9ed81f2321d7958a2934e44272fe82dcef3",
     "https://bcr.bazel.build/modules/rules_kotlin/1.9.6/source.json": "2faa4794364282db7c06600b7e5e34867a564ae91bda7cae7c29c64e9466b7d5",
     "https://bcr.bazel.build/modules/rules_license/0.0.3/MODULE.bazel": "627e9ab0247f7d1e05736b59dbb1b6871373de5ad31c3011880b4133cafd4bd0",
@@ -148,7 +164,8 @@
     "https://bcr.bazel.build/modules/rules_proto/5.3.0-21.7/MODULE.bazel": "e8dff86b0971688790ae75528fe1813f71809b5afd57facb44dad9e8eca631b7",
     "https://bcr.bazel.build/modules/rules_proto/6.0.0-rc1/MODULE.bazel": "1e5b502e2e1a9e825eef74476a5a1ee524a92297085015a052510b09a1a09483",
     "https://bcr.bazel.build/modules/rules_proto/6.0.2/MODULE.bazel": "ce916b775a62b90b61888052a416ccdda405212b6aaeb39522f7dc53431a5e73",
-    "https://bcr.bazel.build/modules/rules_proto/6.0.2/source.json": "17a2e195f56cb28d6bbf763e49973d13890487c6945311ed141e196fb660426d",
+    "https://bcr.bazel.build/modules/rules_proto/7.1.0/MODULE.bazel": "002d62d9108f75bb807cd56245d45648f38275cb3a99dcd45dfb864c5d74cb96",
+    "https://bcr.bazel.build/modules/rules_proto/7.1.0/source.json": "39f89066c12c24097854e8f57ab8558929f9c8d474d34b2c00ac04630ad8940e",
     "https://bcr.bazel.build/modules/rules_python/0.10.2/MODULE.bazel": "cc82bc96f2997baa545ab3ce73f196d040ffb8756fd2d66125a530031cd90e5f",
     "https://bcr.bazel.build/modules/rules_python/0.22.1/MODULE.bazel": "26114f0c0b5e93018c0c066d6673f1a2c3737c7e90af95eff30cfee38d0bbac7",
     "https://bcr.bazel.build/modules/rules_python/0.23.1/MODULE.bazel": "49ffccf0511cb8414de28321f5fcf2a31312b47c40cc21577144b7447f2bf300",
@@ -159,14 +176,22 @@
     "https://bcr.bazel.build/modules/rules_python/0.34.0/MODULE.bazel": "1d623d026e075b78c9fde483a889cda7996f5da4f36dffb24c246ab30f06513a",
     "https://bcr.bazel.build/modules/rules_python/0.4.0/MODULE.bazel": "9208ee05fd48bf09ac60ed269791cf17fb343db56c8226a720fbb1cdf467166c",
     "https://bcr.bazel.build/modules/rules_python/1.5.1/MODULE.bazel": "acfe65880942d44a69129d4c5c3122d57baaf3edf58ae5a6bd4edea114906bf5",
-    "https://bcr.bazel.build/modules/rules_python/1.5.1/source.json": "aa903e1bcbdfa1580f2b8e2d55100b7c18bc92d779ebb507fec896c75635f7bd",
+    "https://bcr.bazel.build/modules/rules_python/1.6.0/MODULE.bazel": "7e04ad8f8d5bea40451cf80b1bd8262552aa73f841415d20db96b7241bd027d8",
+    "https://bcr.bazel.build/modules/rules_python/1.8.5/MODULE.bazel": "28b2d79ed8368d7d45b34bacc220e3c0b99cbcd9392641961b849e4c3f55dd30",
+    "https://bcr.bazel.build/modules/rules_python/1.8.5/source.json": "e261b03c8804f2582c9536013f987e1ea105a2b38c238aa2ac8f98fc34c8b18a",
     "https://bcr.bazel.build/modules/rules_shell/0.2.0/MODULE.bazel": "fda8a652ab3c7d8fee214de05e7a9916d8b28082234e8d2c0094505c5268ed3c",
-    "https://bcr.bazel.build/modules/rules_shell/0.2.0/source.json": "7f27af3c28037d9701487c4744b5448d26537cc66cdef0d8df7ae85411f8de95",
+    "https://bcr.bazel.build/modules/rules_shell/0.3.0/MODULE.bazel": "de4402cd12f4cc8fda2354fce179fdb068c0b9ca1ec2d2b17b3e21b24c1a937b",
+    "https://bcr.bazel.build/modules/rules_shell/0.3.0/source.json": "c55ed591aa5009401ddf80ded9762ac32c358d2517ee7820be981e2de9756cf3",
+    "https://bcr.bazel.build/modules/rules_swift/1.16.0/MODULE.bazel": "4a09f199545a60d09895e8281362b1ff3bb08bbde69c6fc87aff5b92fcc916ca",
+    "https://bcr.bazel.build/modules/rules_swift/2.1.1/MODULE.bazel": "494900a80f944fc7aa61500c2073d9729dff0b764f0e89b824eb746959bc1046",
+    "https://bcr.bazel.build/modules/rules_swift/2.1.1/source.json": "40fc69dfaac64deddbb75bd99cdac55f4427d9ca0afbe408576a65428427a186",
     "https://bcr.bazel.build/modules/stardoc/0.5.1/MODULE.bazel": "1a05d92974d0c122f5ccf09291442580317cdd859f07a8655f1db9a60374f9f8",
     "https://bcr.bazel.build/modules/stardoc/0.5.3/MODULE.bazel": "c7f6948dae6999bf0db32c1858ae345f112cacf98f174c7a8bb707e41b974f1c",
     "https://bcr.bazel.build/modules/stardoc/0.7.0/MODULE.bazel": "05e3d6d30c099b6770e97da986c53bd31844d7f13d41412480ea265ac9e8079c",
     "https://bcr.bazel.build/modules/stardoc/0.7.2/MODULE.bazel": "fc152419aa2ea0f51c29583fab1e8c99ddefd5b3778421845606ee628629e0e5",
     "https://bcr.bazel.build/modules/stardoc/0.7.2/source.json": "58b029e5e901d6802967754adf0a9056747e8176f017cfe3607c0851f4d42216",
+    "https://bcr.bazel.build/modules/swift_argument_parser/1.3.1.1/MODULE.bazel": "5e463fbfba7b1701d957555ed45097d7f984211330106ccd1352c6e0af0dcf91",
+    "https://bcr.bazel.build/modules/swift_argument_parser/1.3.1.1/source.json": "32bd87e5f4d7acc57c5b2ff7c325ae3061d5e242c0c4c214ae87e0f1c13e54cb",
     "https://bcr.bazel.build/modules/upb/0.0.0-20220923-a547704/MODULE.bazel": "7298990c00040a0e2f121f6c32544bab27d4452f80d9ce51349b1a28f3005c43",
     "https://bcr.bazel.build/modules/upb/0.0.0-20230516-61a97ef/MODULE.bazel": "c0df5e35ad55e264160417fd0875932ee3c9dda63d9fccace35ac62f45e1b6f9",
     "https://bcr.bazel.build/modules/xz/5.4.5.bcr.6/MODULE.bazel": "644e9a02e652d4dd109c4b71d27664c031b221c6c592091591108141a9bc9a15",
@@ -186,7 +211,7 @@
     "@@apple_support~//crosstool:setup.bzl%apple_cc_configure_extension": {
       "general": {
         "bzlTransitiveDigest": "Z3yAd66IJL0GAZUTSeMOjoHiE1SZPPwiIs/XQui5BvE=",
-        "usagesDigest": "1RWxCfdNgtkZfomZ1NCyglSCI9bBN6rSSfaM1ukwBBw=",
+        "usagesDigest": "yxVWk5xcMOlf8+U4SMLZORc9Hz2g7sIaOY89vNMOv2E=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {},
@@ -268,8 +293,8 @@
     },
     "@@rules_java~//java:rules_java_deps.bzl%compatibility_proxy": {
       "general": {
-        "bzlTransitiveDigest": "aCY0T5Vf/Lm9vuonhqDvUaTQgF2P8+kxLOlUvwwvenY=",
-        "usagesDigest": "tFFhJ2thEWEDkgVOlEtPI9yCYpkyWhtltWZpX55rU9c=",
+        "bzlTransitiveDigest": "EW1o1NLut/v+DxtklTKhTM2zjuMm3UAwWrsHl/bxK9A=",
+        "usagesDigest": "Hd225wtE9fBzwSIO+uOBHGmgn4V9s44F4ZPvoc0DuK4=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {},
@@ -358,10 +383,2662 @@
         ]
       }
     },
+    "@@rules_ml_toolchain~//extensions:cuda_configure.bzl%cuda_configure_ext": {
+      "general": {
+        "bzlTransitiveDigest": "n5l22E64kbgIbFceYEduobP/tzGn4RAx43GvM+zcLkc=",
+        "usagesDigest": "rOJV9xu3FZhYOBt3Kp+UAYVXiUHYKiTk6nF03lff9mI=",
+        "recordedFileInputs": {},
+        "recordedDirentsInputs": {},
+        "envVariables": {},
+        "generatedRepoSpecs": {
+          "local_config_cuda": {
+            "bzlFile": "@@rules_ml_toolchain~//gpu/cuda:cuda_configure.bzl",
+            "ruleClassName": "cuda_configure",
+            "attributes": {}
+          }
+        },
+        "recordedRepoMappingEntries": [
+          [
+            "rules_ml_toolchain~",
+            "cuda_cccl",
+            "rules_ml_toolchain~~cuda_redist_init_ext~cuda_cccl"
+          ],
+          [
+            "rules_ml_toolchain~",
+            "cuda_crt",
+            "rules_ml_toolchain~~cuda_redist_init_ext~cuda_crt"
+          ],
+          [
+            "rules_ml_toolchain~",
+            "cuda_cublas",
+            "rules_ml_toolchain~~cuda_redist_init_ext~cuda_cublas"
+          ],
+          [
+            "rules_ml_toolchain~",
+            "cuda_cudart",
+            "rules_ml_toolchain~~cuda_redist_init_ext~cuda_cudart"
+          ],
+          [
+            "rules_ml_toolchain~",
+            "cuda_cudnn",
+            "rules_ml_toolchain~~cuda_redist_init_ext~cuda_cudnn"
+          ],
+          [
+            "rules_ml_toolchain~",
+            "cuda_cufft",
+            "rules_ml_toolchain~~cuda_redist_init_ext~cuda_cufft"
+          ],
+          [
+            "rules_ml_toolchain~",
+            "cuda_cupti",
+            "rules_ml_toolchain~~cuda_redist_init_ext~cuda_cupti"
+          ],
+          [
+            "rules_ml_toolchain~",
+            "cuda_curand",
+            "rules_ml_toolchain~~cuda_redist_init_ext~cuda_curand"
+          ],
+          [
+            "rules_ml_toolchain~",
+            "cuda_cusolver",
+            "rules_ml_toolchain~~cuda_redist_init_ext~cuda_cusolver"
+          ],
+          [
+            "rules_ml_toolchain~",
+            "cuda_cusparse",
+            "rules_ml_toolchain~~cuda_redist_init_ext~cuda_cusparse"
+          ],
+          [
+            "rules_ml_toolchain~",
+            "cuda_nvcc",
+            "rules_ml_toolchain~~cuda_redist_init_ext~cuda_nvcc"
+          ],
+          [
+            "rules_ml_toolchain~",
+            "cuda_nvdisasm",
+            "rules_ml_toolchain~~cuda_redist_init_ext~cuda_nvdisasm"
+          ],
+          [
+            "rules_ml_toolchain~",
+            "cuda_nvjitlink",
+            "rules_ml_toolchain~~cuda_redist_init_ext~cuda_nvjitlink"
+          ],
+          [
+            "rules_ml_toolchain~",
+            "cuda_nvml",
+            "rules_ml_toolchain~~cuda_redist_init_ext~cuda_nvml"
+          ],
+          [
+            "rules_ml_toolchain~",
+            "cuda_nvptxcompiler",
+            "rules_ml_toolchain~~cuda_redist_init_ext~cuda_nvptxcompiler"
+          ],
+          [
+            "rules_ml_toolchain~",
+            "cuda_nvtx",
+            "rules_ml_toolchain~~cuda_redist_init_ext~cuda_nvtx"
+          ],
+          [
+            "rules_ml_toolchain~",
+            "cuda_nvvm",
+            "rules_ml_toolchain~~cuda_redist_init_ext~cuda_nvvm"
+          ],
+          [
+            "rules_ml_toolchain~",
+            "cuda_profiler_api",
+            "rules_ml_toolchain~~cuda_redist_init_ext~cuda_profiler_api"
+          ],
+          [
+            "rules_ml_toolchain~",
+            "llvm_linux_aarch64",
+            "rules_ml_toolchain~~toolchain_ext~llvm_linux_aarch64"
+          ],
+          [
+            "rules_ml_toolchain~",
+            "llvm_linux_x86_64",
+            "rules_ml_toolchain~~toolchain_ext~llvm_linux_x86_64"
+          ]
+        ]
+      }
+    },
+    "@@rules_ml_toolchain~//extensions:cuda_json.bzl%cuda_json_ext": {
+      "general": {
+        "bzlTransitiveDigest": "GnQ309ilmnOunH+imIXXrecMZg6vxodgVc6KrMPRBFI=",
+        "usagesDigest": "6b3lgcMPlwS3OQbP/eve7q8IO9EPLUEHJm89dHoaaL0=",
+        "recordedFileInputs": {},
+        "recordedDirentsInputs": {},
+        "envVariables": {},
+        "generatedRepoSpecs": {
+          "cuda_redist_json": {
+            "bzlFile": "@@rules_ml_toolchain~//gpu/cuda:cuda_json_init_repository.bzl",
+            "ruleClassName": "_combined_redist_json",
+            "attributes": {}
+          },
+          "cudnn_redist_json": {
+            "bzlFile": "@@rules_ml_toolchain~//gpu:nvidia_common_rules.bzl",
+            "ruleClassName": "_redist_json",
+            "attributes": {
+              "toolkit_name": "CUDNN",
+              "json_dict": {
+                "8.9.4.25": [
+                  "https://developer.download.nvidia.com/compute/cudnn/redist/redistrib_8.9.4.25.json",
+                  "02258dba8384860c9230fe3c78522e7bd8e350e461ccd37a8d932cb64127ba57"
+                ],
+                "8.9.6": [
+                  "https://developer.download.nvidia.com/compute/cudnn/redist/redistrib_8.9.6.json",
+                  "6069ef92a2b9bb18cebfbc944964bd2b024b76f2c2c35a43812982e0bc45cf0c"
+                ],
+                "8.9.7.29": [
+                  "https://developer.download.nvidia.com/compute/cudnn/redist/redistrib_8.9.7.29.json",
+                  "a0734f26f068522464fa09b2f2c186dfbe6ad7407a88ea0c50dd331f0c3389ec"
+                ],
+                "9.1.1": [
+                  "https://developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.1.1.json",
+                  "d22d569405e5683ff8e563d00d6e8c27e5e6a902c564c23d752b22a8b8b3fe20"
+                ],
+                "9.2.0": [
+                  "https://developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.2.0.json",
+                  "6852eb279b95d2b5775f7a7737ec133bed059107f863cdd8588f3ae6f13eadd7"
+                ],
+                "9.2.1": [
+                  "https://developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.2.1.json",
+                  "9a4198c59b2e66b2b115a736ebe4dc8f3dc6d78161bb494702f824da8fc77b99"
+                ],
+                "9.3.0": [
+                  "https://developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.3.0.json",
+                  "d17d9a7878365736758550294f03e633a0b023bec879bf173349bfb34781972e"
+                ],
+                "9.4.0": [
+                  "https://developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.4.0.json",
+                  "6eeaafc5cc3d4bb2f283e6298e4c55d4c59d7c83c5d9fd8721a2c0e55aee4e54"
+                ],
+                "9.5.0": [
+                  "https://developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.5.0.json",
+                  "3939f0533fdd0d3aa7edd1ac358d43da18e438e5d8f39c3c15bb72519bad7fb5"
+                ],
+                "9.5.1": [
+                  "https://developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.5.1.json",
+                  "a5484eef575bbb1fd4f96136cf12244ebc194b661f5ae9ed3b8aaa07e06434b1"
+                ],
+                "9.6.0": [
+                  "https://developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.6.0.json",
+                  "6dd9a931d981fe5afc7e7ed0c422a4035b1411db4e28a39cf2429e62e3efcd3e"
+                ],
+                "9.7.0": [
+                  "https://developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.7.0.json",
+                  "e715c1d028585d228c4678c2cdc5ad9a34fde54515a1c52aa60e36021a90dd90"
+                ],
+                "9.7.1": [
+                  "https://developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.7.1.json",
+                  "f9bc411a4908f0931e7323f89049e3a38453632c4ac5f4aa3220af69ddded9dc"
+                ],
+                "9.8.0": [
+                  "https://developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.8.0.json",
+                  "a1599fa1f8dcb81235157be5de5ab7d3936e75dfc4e1e442d07970afad3c4843"
+                ],
+                "9.9.0": [
+                  "https://developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.9.0.json",
+                  "614d3c5ceb02e1eb1508f0bc9231c3c03c113bb514b950a1108adb9fde801c77"
+                ],
+                "9.10.0": [
+                  "https://developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.10.0.json",
+                  "d06b8df4d305dd7021838ffb2a26c2a861d522f2a129c6a372fad72ca009b1f1"
+                ],
+                "9.10.1": [
+                  "https://developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.10.1.json",
+                  "2ac8d48d3ab4de1acdce65fa3e8ecfb14750d4e101b05fe3307d2f95f2740563"
+                ],
+                "9.10.2": [
+                  "https://developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.10.2.json",
+                  "73a33a12bbb8eb12b105a515b5921db2e328b3ca679f92b6184c7f32fe94a8b0"
+                ],
+                "9.11.0": [
+                  "https://developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.11.0.json",
+                  "7a16458ea21573e18d190df0c8d68ea1e8c82faf1bcfad4a39ceb600c26639cc"
+                ],
+                "9.11.1": [
+                  "https://developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.11.1.json",
+                  "ace81583a37b8fe238324b73087e32f290099cbd6d012772b9f14ec4efac1f21"
+                ],
+                "9.12.0": [
+                  "https://developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.12.0.json",
+                  "39bb68f0ca6abdbf9bab3ecb1cb18f458d635f72d72ede98a308216fd22efab3"
+                ],
+                "9.13.0": [
+                  "https://developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.13.0.json",
+                  "55e3eb3ccb1ca543a7811312466f44841d630d3b2252f5763ad53509d2c09fbf"
+                ],
+                "9.13.1": [
+                  "https://developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.13.1.json",
+                  "13d6a68bf4069a51fe653a769c41f9b0e3003e7f93ccf0f6cb89f642d10e2ccf"
+                ],
+                "9.14.0": [
+                  "https://developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.14.0.json",
+                  "fe58e8e9559ef5c61ab7a9954472d16acdcbad3b099004296ae410d25982830d"
+                ],
+                "9.15.0": [
+                  "https://developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.15.0.json",
+                  "2396ed88435a0f6b400db53ac229f49aa2425282994a186e867ea367c20fd352"
+                ],
+                "9.15.1": [
+                  "https://developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.15.1.json",
+                  "8c9897222c644528a25e0bd4d04d5ee9b9cb57995307c176d4dce28c25e415ef"
+                ],
+                "9.16.0": [
+                  "https://developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.16.0.json",
+                  "c95167877ac0ded30a29accc9d337a5e60cd70d1a01a3492de56624b39eab868"
+                ],
+                "9.17.0": [
+                  "https://developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.17.0.json",
+                  "5c2fe21bd5626f1078caf030c569d894df44a844bfe3b0475ae5f55a4b64c395"
+                ],
+                "9.17.1": [
+                  "https://developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.17.1.json",
+                  "f7583aa8652b5434ecd85bdc735ee2b5f1171e6841bf626b70e4937d4b2a2c88"
+                ],
+                "9.18.0": [
+                  "https://developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.18.0.json",
+                  "f625c2704c7411ab35e02956a5937346e61f375dbf8bdf375a1061975b6b224b"
+                ],
+                "9.18.1": [
+                  "https://developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.18.1.json",
+                  "f1967c08554f07d1a85638e44debaa4ad75696fc170cf1f1f1718ae13d3c64da"
+                ],
+                "9.19.0": [
+                  "https://developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.19.0.json",
+                  "6ad4f2c047ee03131d1efb95db56f78c24953cb30880a2edcf99407ff9362a04"
+                ],
+                "9.19.1": [
+                  "https://developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.19.1.json",
+                  "ee7bd6872b8611017bfc9ac99a4a71932652d1851b5917aa2c66bf29a12f8fd4"
+                ],
+                "9.20.0": [
+                  "https://developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.20.0.json",
+                  "488be2657edfaaa9eada30247de95e81e3ce767f504dccb847d422cd358226a0"
+                ],
+                "9.21.0": [
+                  "https://developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.21.0.json",
+                  "946dfcb95f1d5552546190eb68e72c2090a9a3849a46378c202b3a74c55da505"
+                ],
+                "9.21.1": [
+                  "https://developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.21.1.json",
+                  "3c51347afefe8bf2a051a1a3160fee48c46182b019435e7805f3c1126d0ee330"
+                ],
+                "9.22.0": [
+                  "https://developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.22.0.json",
+                  "3dbb9002d52112ef69aa09187f523ef1ff07f8baf3892ee01e540af639d8f55f"
+                ]
+              },
+              "mirrored_tars_json_dict": {
+                "8.9.4.25": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cudnn/redist/redistrib_8.9.4.25_tar.json",
+                  "cf2642a1db2b564065232277f061e89f1b20435f88164fa783855ac69f33d3c2"
+                ],
+                "8.9.6": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cudnn/redist/redistrib_8.9.6_tar.json",
+                  "dab3ead7f79bf0378e2e9037a9f6a87f249c581aa75d1e2f352ffa3df56d5356"
+                ],
+                "8.9.7.29": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cudnn/redist/redistrib_8.9.7.29_tar.json",
+                  "7e305dc19b8a273645078bb3a37faaa54256a59ac9137934979983d9ce481717"
+                ],
+                "9.1.1": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.1.1_tar.json",
+                  "6960bc9e472b21c4ffae0a75309f41f48eb3d943a553ad70273927fb170fa99f"
+                ],
+                "9.2.0": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.2.0_tar.json",
+                  "35469a1494c8f95d81774fd7750c6cd2def3919e83b0fa8e0285edd42bcead20"
+                ],
+                "9.2.1": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.2.1_tar.json",
+                  "de77cb78dd620f1c1f8d1a07e167ba6d6cfa1be5769172a09c5315a1463811c1"
+                ],
+                "9.3.0": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.3.0_tar.json",
+                  "50aadf1e10b0988bb74497331953f1afbd9c596c27c6014f4d3f370cec2713aa"
+                ],
+                "9.4.0": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.4.0_tar.json",
+                  "114a6ad4152ea014cc07fec1fa63a029c6eec6a5dc4463c8dc83ad6d5f809795"
+                ],
+                "9.5.0": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.5.0_tar.json",
+                  "f224f5a875129eeb5b3c7e18d8a5f2e7bb5498f0e3095a8ae5fb863ebc450c52"
+                ],
+                "9.5.1": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.5.1_tar.json",
+                  "28ce996b3f4171f6a3873152470e14753788cddd089261513c18c773fe2a2b73"
+                ],
+                "9.6.0": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.6.0_tar.json",
+                  "084cc250593cfbc962f7942a4871aa13a179ce5beb1aea236b74080cc23e29f0"
+                ],
+                "9.7.0": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.7.0_tar.json",
+                  "402906b09b7b2624e6a5c6937a41cc3330d6e588f2f211504ad3fb8a5823fa01"
+                ],
+                "9.7.1": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.7.1_tar.json",
+                  "2eaa4594c1ab188c939026d90245d3ffca2a83d41aba1be903f644cc1215c23d"
+                ],
+                "9.8.0": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.8.0_tar.json",
+                  "030378782b94597855cdf7d3068968f88460cd9c4ce9d73c77cfad64dfdea070"
+                ],
+                "9.9.0": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.9.0_tar.json",
+                  "43a331efcd54041c1a0c752e7451708097d9b35cff87e594e7d45e1123435d49"
+                ],
+                "9.10.0": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.10.0_tar.json",
+                  "a12f12c38b8e4db4c1f305661072f3bed07f25a84b9a65016925aebd5238989e"
+                ],
+                "9.10.1": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.10.1_tar.json",
+                  "3f6f8c5474ffa4cc95a1d114298472c475d8cadea04acb2e00ce3ad0aabd6783"
+                ],
+                "9.10.2": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.10.2_tar.json",
+                  "10241f263ee24b57265a3c9e057c0a79a6a47ea4234ac87ba04cf228c5fdf31c"
+                ],
+                "9.11.0": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.11.0_tar.json",
+                  "fa8d0fc0fdb6d2e3f5d208f8eef93826122a91d9deec8f501c4966323dcad745"
+                ],
+                "9.12.0": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.12.0_tar.json",
+                  "3c0865952243f58513cf8dd853d5ef631db78f778a4f742cc9196bd2de429f1d"
+                ],
+                "9.13.0": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.13.0_tar.json",
+                  "b2fe96612070231275461fc84bceccc094d193546a107c8a2cda4fa322628a1f"
+                ],
+                "9.14.0": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.14.0_tar.json",
+                  "a08067b3dabdd3066640a8189f63260a4fb1b8eddce893e8a484188ab4ec4ebf"
+                ],
+                "9.15.0": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.15.0_tar.json",
+                  "3aff088e0c0d16aabd1fba093c67695ba5cba8f876e49c4ada6a03354da82b3b"
+                ],
+                "9.15.1": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.15.1_tar.json",
+                  "c652651dcf4d119b56a55da6748b89b100f1dfda167444e1767e738159998fd1"
+                ],
+                "9.16.0": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.16.0_tar.json",
+                  "184c817d487dcdc01ab233edcfb247ba5e95667b4e68a3266d26f6bedcf3bd05"
+                ],
+                "9.17.0": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.17.0_tar.json",
+                  "e4209e72955406efa168ad0cd0d75e55d820d0fe53b46262a8e0211860f57439"
+                ],
+                "9.17.1": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.17.1_tar.json",
+                  "94fb7b6ab87cba95e09faa00569eec98ee4f0507f9cb6fa169fa28e6563bacff"
+                ],
+                "9.18.0": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.18.0_tar.json",
+                  "9836f4f35e89a830b956153470378c19305ede882c541fa6f8874f3b1cf22ebd"
+                ],
+                "9.18.1": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.18.1_tar.json",
+                  "b98600b58cf2cb89e6e1f22c46a5d5fc4eed37dcea8548c1677a728efa160f47"
+                ],
+                "9.19.0": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.19.0_tar.json",
+                  "4a090cb6f2d38845fd97f1661f96ff03c8a6bccdc7bd0625225dc3c523bb3118"
+                ],
+                "9.19.1": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cudnn/redist/redistrib_9.19.1_tar.json",
+                  "2963e717fb14a318dbbab62eaea94b072954dd04a4b0a947c32633f9133d8728"
+                ]
+              },
+              "redist_version_env_vars": [
+                "HERMETIC_CUDNN_VERSION",
+                "TF_CUDNN_VERSION"
+              ],
+              "local_path_env_var": "LOCAL_CUDNN_PATH",
+              "use_tar_file_env_var": "USE_CUDA_TAR_ARCHIVE_FILES"
+            }
+          },
+          "standalone_cuda_redist_json": {
+            "bzlFile": "@@rules_ml_toolchain~//gpu:nvidia_common_rules.bzl",
+            "ruleClassName": "_redist_json",
+            "attributes": {
+              "toolkit_name": "CUDA",
+              "json_dict": {
+                "11.8": [
+                  "https://developer.download.nvidia.com/compute/cuda/redist/redistrib_11.8.0.json",
+                  "941a950a4ab3b95311c50df7b3c8bca973e0cdda76fc2f4b456d2d5e4dac0281"
+                ],
+                "12.1.1": [
+                  "https://developer.download.nvidia.com/compute/cuda/redist/redistrib_12.1.1.json",
+                  "bafea3cb83a4cf5c764eeedcaac0040d0d3c5db3f9a74550da0e7b6ac24d378c"
+                ],
+                "12.2.0": [
+                  "https://developer.download.nvidia.com/compute/cuda/redist/redistrib_12.2.0.json",
+                  "d883762c6339c8ebb3ffb072facc8f7265cd257d2db16a475fff9a9306ecea89"
+                ],
+                "12.3.1": [
+                  "https://developer.download.nvidia.com/compute/cuda/redist/redistrib_12.3.1.json",
+                  "b3cc4181d711cf9b6e3718f323b23813c24f9478119911d7b4bceec9b437dbc3"
+                ],
+                "12.3.2": [
+                  "https://developer.download.nvidia.com/compute/cuda/redist/redistrib_12.3.2.json",
+                  "1b6eacf335dd49803633fed53ef261d62c193e5a56eee5019e7d2f634e39e7ef"
+                ],
+                "12.4.0": [
+                  "https://developer.download.nvidia.com/compute/cuda/redist/redistrib_12.4.0.json",
+                  "a4f496b8d5299939b34c9ef88dc4274821f8c9451b2d7c9bcee53166932da067"
+                ],
+                "12.4.1": [
+                  "https://developer.download.nvidia.com/compute/cuda/redist/redistrib_12.4.1.json",
+                  "9cd815f3b71c2e3686ef2219b7794b81044f9dcefaa8e21dacfcb5bc4d931892"
+                ],
+                "12.5.0": [
+                  "https://developer.download.nvidia.com/compute/cuda/redist/redistrib_12.5.0.json",
+                  "166664b520bfe51f27abcc8c7a934f4cb6ea287f8c399b5f8255f6f4d214569a"
+                ],
+                "12.5.1": [
+                  "https://developer.download.nvidia.com/compute/cuda/redist/redistrib_12.5.1.json",
+                  "7ab9c76014ae4907fa1b51738af599607a5fd8ca3a5c4bb4c3b31338cc642a93"
+                ],
+                "12.6.0": [
+                  "https://developer.download.nvidia.com/compute/cuda/redist/redistrib_12.6.0.json",
+                  "87740b01676b3d18982982ab96ec7fa1a626d03a96df070a6b0f258d01ff5fab"
+                ],
+                "12.6.1": [
+                  "https://developer.download.nvidia.com/compute/cuda/redist/redistrib_12.6.1.json",
+                  "22ddfeb81a6f9cee4a708a2e3b4db1c36c7db0a1daa1f33f9c7f2f12a1e790de"
+                ],
+                "12.6.2": [
+                  "https://developer.download.nvidia.com/compute/cuda/redist/redistrib_12.6.2.json",
+                  "8056da1f5acca8e613da1349d9b8782b774ad0254e3eddcc95734ded4d33f2df"
+                ],
+                "12.6.3": [
+                  "https://developer.download.nvidia.com/compute/cuda/redist/redistrib_12.6.3.json",
+                  "9c598598457a6463eb92889080c16b2b9dc04150e501b8bfc1536d403ba70aaf"
+                ],
+                "12.8.0": [
+                  "https://developer.download.nvidia.com/compute/cuda/redist/redistrib_12.8.0.json",
+                  "daa0d766b36feaa933592162c27be5fb63b68fc547ca6886c160a35d96ee8891"
+                ],
+                "12.8.1": [
+                  "https://developer.download.nvidia.com/compute/cuda/redist/redistrib_12.8.1.json",
+                  "249e28a83008d711d5f72880541c8be6253f6d61608461de4fcb715554a6cf17"
+                ],
+                "12.8.2": [
+                  "https://developer.download.nvidia.com/compute/cuda/redist/redistrib_12.8.2.json",
+                  "bbf0798e9aabdd6887b429f0d1ff27412bca2ead081f898a18f0381cd8cb7359"
+                ],
+                "12.9.0": [
+                  "https://developer.download.nvidia.com/compute/cuda/redist/redistrib_12.9.0.json",
+                  "4e4e17a12adcf8cac40b990e1618406cd7ad52da1817819166af28a9dfe21d4a"
+                ],
+                "12.9.1": [
+                  "https://developer.download.nvidia.com/compute/cuda/redist/redistrib_12.9.1.json",
+                  "8335301010b0023ee1ff61eb11e2600ca62002d76780de4089011ad77e0c7630"
+                ],
+                "12.9.2": [
+                  "https://developer.download.nvidia.com/compute/cuda/redist/redistrib_12.9.2.json",
+                  "236b051e6c7915a31ed9da369ea74ddb5b0fbf77eb1dffc10640e7ce6ed10257"
+                ],
+                "13.0.0": [
+                  "https://developer.download.nvidia.com/compute/cuda/redist/redistrib_13.0.0.json",
+                  "fe6a86b54450d03ae709123a52717870c49046d65d45303ce585c7aa8a83a217"
+                ],
+                "13.0.1": [
+                  "https://developer.download.nvidia.com/compute/cuda/redist/redistrib_13.0.1.json",
+                  "9c494bc13b34e8fbcad083a6486d185b0906068b821722502edf9d0e3bd14096"
+                ],
+                "13.0.2": [
+                  "https://developer.download.nvidia.com/compute/cuda/redist/redistrib_13.0.2.json",
+                  "fce66717a81c510ffeb89ecc3e79849ab34af3b80139f750876d9033e31d71c2"
+                ],
+                "13.0.3": [
+                  "https://developer.download.nvidia.com/compute/cuda/redist/redistrib_13.0.3.json",
+                  "d73344990be5d826cf6eedc5495c858eb5923e5ffe7ede7fd6ebdd7be928ffc9"
+                ],
+                "13.1.0": [
+                  "https://developer.download.nvidia.com/compute/cuda/redist/redistrib_13.1.0.json",
+                  "55304d9d831bb095d9594aab276f96d2f0e30919f4cc1b3f6ca78cdb5f643e11"
+                ],
+                "13.1.1": [
+                  "https://developer.download.nvidia.com/compute/cuda/redist/redistrib_13.1.1.json",
+                  "97cf605ccc4751825b1865f4af571c9b50dd29ffd13e9a38b296a9ecb1f0d422"
+                ],
+                "13.1.2": [
+                  "https://developer.download.nvidia.com/compute/cuda/redist/redistrib_13.1.2.json",
+                  "33001778b29e0ad294d97eed123f2aec99a15403e8505eef43a86cdcdd6ef583"
+                ],
+                "13.2.0": [
+                  "https://developer.download.nvidia.com/compute/cuda/redist/redistrib_13.2.0.json",
+                  "8ce26ee1cb7ff13286f20dd2c6efbe268776bb13d71108c69cd04453b9d85d2b"
+                ],
+                "13.2.1": [
+                  "https://developer.download.nvidia.com/compute/cuda/redist/redistrib_13.2.1.json",
+                  "a4cd46534f04a2be56e57a0300012b584276e8783333663ee56c9e8457a02783"
+                ],
+                "13.3.0": [
+                  "https://developer.download.nvidia.com/compute/cuda/redist/redistrib_13.3.0.json",
+                  "507eddaab1360336bc0fe17b77552e0b7dfe1e74da888671c3a2f5fad7775db1"
+                ]
+              },
+              "mirrored_tars_json_dict": {
+                "11.8": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cuda/redist/redistrib_11.8.0_tar.json",
+                  "a325b9dfba60c88f71b681e2f58b790b09afd9cb476fe620fabcb50be6f30add"
+                ],
+                "12.1.1": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cuda/redist/redistrib_12.1.1_tar.json",
+                  "f4c6679ebf3dedbeff329d5ee0c8bfec3f32c4976f5d9cdc238ac9faa0109502"
+                ],
+                "12.2.0": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cuda/redist/redistrib_12.2.0_tar.json",
+                  "69db566d620fbc5ecb8ee367d60b7e1d23f0ee64a11eca4cad97b037d9850819"
+                ],
+                "12.3.1": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cuda/redist/redistrib_12.3.1_tar.json",
+                  "d2d6331166117ca6889899245071903b1b01127713e934f8a91850f52862644c"
+                ],
+                "12.3.2": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cuda/redist/redistrib_12.3.2_tar.json",
+                  "796b019c6d707a656544ef007ad180d2e57dbf5c018683464166e2c512c1ec68"
+                ],
+                "12.4.0": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cuda/redist/redistrib_12.4.0_tar.json",
+                  "3b5066efdfe8072997ca8f3bbb9bf8c4bb869f25461d22887247be4d16101ba7"
+                ],
+                "12.4.1": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cuda/redist/redistrib_12.4.1_tar.json",
+                  "ff6cf5d43fd65e65bf1380f295adcc77b1c7598feff5b782912885ee5ac242e8"
+                ],
+                "12.5.0": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cuda/redist/redistrib_12.5.0_tar.json",
+                  "32a8d4ce1b31d15f02ac6a9cc7c5b060bd329a2a754906b1485752d9c9da59b5"
+                ],
+                "12.5.1": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cuda/redist/redistrib_12.5.1_tar.json",
+                  "b1d50589900b5b50d01d1f741448802020835b5135fcbb969c6bf7b831372a7f"
+                ],
+                "12.6.0": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cuda/redist/redistrib_12.6.0_tar.json",
+                  "a5de3ae3f01ab25dec442fa133ca1d3eb0001fab6de14490b2f314b03dd3c0e4"
+                ],
+                "12.6.1": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cuda/redist/redistrib_12.6.1_tar.json",
+                  "8da05eb613d2d71b4814fde25de0a418b1dc04c0a409209dfce82b5ca8b15dec"
+                ],
+                "12.6.2": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cuda/redist/redistrib_12.6.2_tar.json",
+                  "cb18f8464212e71c364f6d8c9bf6b70c0908e2e069d75c90fc65e0b07981bb53"
+                ],
+                "12.6.3": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cuda/redist/redistrib_12.6.3_tar.json",
+                  "e1b558de79fe2da21cac80c498e4175a48087677627eacb915dd78f42833b5b3"
+                ],
+                "12.8.0": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cuda/redist/redistrib_12.8.0_tar.json",
+                  "c9790b289d654844d9dd2ec07f30383220dac1320f7d7d686722e946f9a55e44"
+                ],
+                "12.8.1": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cuda/redist/redistrib_12.8.1_tar.json",
+                  "30a1b8ace0d38237f4ab3ab28d89dbc77ae2c4ebabe27ba08b3c0961cc6cc7fa"
+                ],
+                "12.9.0": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cuda/redist/redistrib_12.9.0_tar.json",
+                  "c614ee6171763d0a5bb4997f7004409d2b9621833ac6eccfa72ecfc411701f9d"
+                ],
+                "12.9.1": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cuda/redist/redistrib_12.9.1_tar.json",
+                  "a6b09fa5048ca1ea206ea5a0a287f28f7eaae7cd3e08ab20d2c4d47d53ec39f5"
+                ],
+                "13.0.0": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cuda/redist/redistrib_13.0.0_tar.json",
+                  "0beef25312491a2c5fff36470be82d68adc870a250f59a647389b7ebcf275722"
+                ],
+                "13.0.1": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cuda/redist/redistrib_13.0.1_tar.json",
+                  "8d99db1a7c2d3ad35d5b62f3615426f25dd57ff3e812bbf71eb5c311cdf64011"
+                ],
+                "13.0.2": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cuda/redist/redistrib_13.0.2_tar.json",
+                  "d2e8795f61d900f0ba68699494b0ae58d009d83f0b8eed294d960ed4f635bd89"
+                ],
+                "13.1.0": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cuda/redist/redistrib_13.1.0_tar.json",
+                  "95319985da926247db85703aef2f39a178e47a8f5d149513af7995a325361c87"
+                ],
+                "13.1.1": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cuda/redist/redistrib_13.1.1_tar.json",
+                  "df0f5bf00389b0338d7c67fbe236f1700dbea2f7ea3d2f81f2b1fad759e0a331"
+                ]
+              },
+              "redist_version_env_vars": [
+                "HERMETIC_CUDA_VERSION",
+                "TF_CUDA_VERSION"
+              ],
+              "local_path_env_var": "LOCAL_CUDA_PATH",
+              "use_tar_file_env_var": "USE_CUDA_TAR_ARCHIVE_FILES"
+            }
+          },
+          "cuda_umd_redist_json": {
+            "bzlFile": "@@rules_ml_toolchain~//gpu:nvidia_common_rules.bzl",
+            "ruleClassName": "_redist_json",
+            "attributes": {
+              "toolkit_name": "CUDA_UMD",
+              "json_dict": {
+                "11.8": [
+                  "https://developer.download.nvidia.com/compute/cuda/redist/redistrib_11.8.0.json",
+                  "941a950a4ab3b95311c50df7b3c8bca973e0cdda76fc2f4b456d2d5e4dac0281"
+                ],
+                "12.1.1": [
+                  "https://developer.download.nvidia.com/compute/cuda/redist/redistrib_12.1.1.json",
+                  "bafea3cb83a4cf5c764eeedcaac0040d0d3c5db3f9a74550da0e7b6ac24d378c"
+                ],
+                "12.2.0": [
+                  "https://developer.download.nvidia.com/compute/cuda/redist/redistrib_12.2.0.json",
+                  "d883762c6339c8ebb3ffb072facc8f7265cd257d2db16a475fff9a9306ecea89"
+                ],
+                "12.3.1": [
+                  "https://developer.download.nvidia.com/compute/cuda/redist/redistrib_12.3.1.json",
+                  "b3cc4181d711cf9b6e3718f323b23813c24f9478119911d7b4bceec9b437dbc3"
+                ],
+                "12.3.2": [
+                  "https://developer.download.nvidia.com/compute/cuda/redist/redistrib_12.3.2.json",
+                  "1b6eacf335dd49803633fed53ef261d62c193e5a56eee5019e7d2f634e39e7ef"
+                ],
+                "12.4.0": [
+                  "https://developer.download.nvidia.com/compute/cuda/redist/redistrib_12.4.0.json",
+                  "a4f496b8d5299939b34c9ef88dc4274821f8c9451b2d7c9bcee53166932da067"
+                ],
+                "12.4.1": [
+                  "https://developer.download.nvidia.com/compute/cuda/redist/redistrib_12.4.1.json",
+                  "9cd815f3b71c2e3686ef2219b7794b81044f9dcefaa8e21dacfcb5bc4d931892"
+                ],
+                "12.5.0": [
+                  "https://developer.download.nvidia.com/compute/cuda/redist/redistrib_12.5.0.json",
+                  "166664b520bfe51f27abcc8c7a934f4cb6ea287f8c399b5f8255f6f4d214569a"
+                ],
+                "12.5.1": [
+                  "https://developer.download.nvidia.com/compute/cuda/redist/redistrib_12.5.1.json",
+                  "7ab9c76014ae4907fa1b51738af599607a5fd8ca3a5c4bb4c3b31338cc642a93"
+                ],
+                "12.6.0": [
+                  "https://developer.download.nvidia.com/compute/cuda/redist/redistrib_12.6.0.json",
+                  "87740b01676b3d18982982ab96ec7fa1a626d03a96df070a6b0f258d01ff5fab"
+                ],
+                "12.6.1": [
+                  "https://developer.download.nvidia.com/compute/cuda/redist/redistrib_12.6.1.json",
+                  "22ddfeb81a6f9cee4a708a2e3b4db1c36c7db0a1daa1f33f9c7f2f12a1e790de"
+                ],
+                "12.6.2": [
+                  "https://developer.download.nvidia.com/compute/cuda/redist/redistrib_12.6.2.json",
+                  "8056da1f5acca8e613da1349d9b8782b774ad0254e3eddcc95734ded4d33f2df"
+                ],
+                "12.6.3": [
+                  "https://developer.download.nvidia.com/compute/cuda/redist/redistrib_12.6.3.json",
+                  "9c598598457a6463eb92889080c16b2b9dc04150e501b8bfc1536d403ba70aaf"
+                ],
+                "12.8.0": [
+                  "https://developer.download.nvidia.com/compute/cuda/redist/redistrib_12.8.0.json",
+                  "daa0d766b36feaa933592162c27be5fb63b68fc547ca6886c160a35d96ee8891"
+                ],
+                "12.8.1": [
+                  "https://developer.download.nvidia.com/compute/cuda/redist/redistrib_12.8.1.json",
+                  "249e28a83008d711d5f72880541c8be6253f6d61608461de4fcb715554a6cf17"
+                ],
+                "12.8.2": [
+                  "https://developer.download.nvidia.com/compute/cuda/redist/redistrib_12.8.2.json",
+                  "bbf0798e9aabdd6887b429f0d1ff27412bca2ead081f898a18f0381cd8cb7359"
+                ],
+                "12.9.0": [
+                  "https://developer.download.nvidia.com/compute/cuda/redist/redistrib_12.9.0.json",
+                  "4e4e17a12adcf8cac40b990e1618406cd7ad52da1817819166af28a9dfe21d4a"
+                ],
+                "12.9.1": [
+                  "https://developer.download.nvidia.com/compute/cuda/redist/redistrib_12.9.1.json",
+                  "8335301010b0023ee1ff61eb11e2600ca62002d76780de4089011ad77e0c7630"
+                ],
+                "12.9.2": [
+                  "https://developer.download.nvidia.com/compute/cuda/redist/redistrib_12.9.2.json",
+                  "236b051e6c7915a31ed9da369ea74ddb5b0fbf77eb1dffc10640e7ce6ed10257"
+                ],
+                "13.0.0": [
+                  "https://developer.download.nvidia.com/compute/cuda/redist/redistrib_13.0.0.json",
+                  "fe6a86b54450d03ae709123a52717870c49046d65d45303ce585c7aa8a83a217"
+                ],
+                "13.0.1": [
+                  "https://developer.download.nvidia.com/compute/cuda/redist/redistrib_13.0.1.json",
+                  "9c494bc13b34e8fbcad083a6486d185b0906068b821722502edf9d0e3bd14096"
+                ],
+                "13.0.2": [
+                  "https://developer.download.nvidia.com/compute/cuda/redist/redistrib_13.0.2.json",
+                  "fce66717a81c510ffeb89ecc3e79849ab34af3b80139f750876d9033e31d71c2"
+                ],
+                "13.0.3": [
+                  "https://developer.download.nvidia.com/compute/cuda/redist/redistrib_13.0.3.json",
+                  "d73344990be5d826cf6eedc5495c858eb5923e5ffe7ede7fd6ebdd7be928ffc9"
+                ],
+                "13.1.0": [
+                  "https://developer.download.nvidia.com/compute/cuda/redist/redistrib_13.1.0.json",
+                  "55304d9d831bb095d9594aab276f96d2f0e30919f4cc1b3f6ca78cdb5f643e11"
+                ],
+                "13.1.1": [
+                  "https://developer.download.nvidia.com/compute/cuda/redist/redistrib_13.1.1.json",
+                  "97cf605ccc4751825b1865f4af571c9b50dd29ffd13e9a38b296a9ecb1f0d422"
+                ],
+                "13.1.2": [
+                  "https://developer.download.nvidia.com/compute/cuda/redist/redistrib_13.1.2.json",
+                  "33001778b29e0ad294d97eed123f2aec99a15403e8505eef43a86cdcdd6ef583"
+                ],
+                "13.2.0": [
+                  "https://developer.download.nvidia.com/compute/cuda/redist/redistrib_13.2.0.json",
+                  "8ce26ee1cb7ff13286f20dd2c6efbe268776bb13d71108c69cd04453b9d85d2b"
+                ],
+                "13.2.1": [
+                  "https://developer.download.nvidia.com/compute/cuda/redist/redistrib_13.2.1.json",
+                  "a4cd46534f04a2be56e57a0300012b584276e8783333663ee56c9e8457a02783"
+                ],
+                "13.3.0": [
+                  "https://developer.download.nvidia.com/compute/cuda/redist/redistrib_13.3.0.json",
+                  "507eddaab1360336bc0fe17b77552e0b7dfe1e74da888671c3a2f5fad7775db1"
+                ]
+              },
+              "mirrored_tars_json_dict": {
+                "11.8": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cuda/redist/redistrib_11.8.0_tar.json",
+                  "a325b9dfba60c88f71b681e2f58b790b09afd9cb476fe620fabcb50be6f30add"
+                ],
+                "12.1.1": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cuda/redist/redistrib_12.1.1_tar.json",
+                  "f4c6679ebf3dedbeff329d5ee0c8bfec3f32c4976f5d9cdc238ac9faa0109502"
+                ],
+                "12.2.0": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cuda/redist/redistrib_12.2.0_tar.json",
+                  "69db566d620fbc5ecb8ee367d60b7e1d23f0ee64a11eca4cad97b037d9850819"
+                ],
+                "12.3.1": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cuda/redist/redistrib_12.3.1_tar.json",
+                  "d2d6331166117ca6889899245071903b1b01127713e934f8a91850f52862644c"
+                ],
+                "12.3.2": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cuda/redist/redistrib_12.3.2_tar.json",
+                  "796b019c6d707a656544ef007ad180d2e57dbf5c018683464166e2c512c1ec68"
+                ],
+                "12.4.0": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cuda/redist/redistrib_12.4.0_tar.json",
+                  "3b5066efdfe8072997ca8f3bbb9bf8c4bb869f25461d22887247be4d16101ba7"
+                ],
+                "12.4.1": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cuda/redist/redistrib_12.4.1_tar.json",
+                  "ff6cf5d43fd65e65bf1380f295adcc77b1c7598feff5b782912885ee5ac242e8"
+                ],
+                "12.5.0": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cuda/redist/redistrib_12.5.0_tar.json",
+                  "32a8d4ce1b31d15f02ac6a9cc7c5b060bd329a2a754906b1485752d9c9da59b5"
+                ],
+                "12.5.1": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cuda/redist/redistrib_12.5.1_tar.json",
+                  "b1d50589900b5b50d01d1f741448802020835b5135fcbb969c6bf7b831372a7f"
+                ],
+                "12.6.0": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cuda/redist/redistrib_12.6.0_tar.json",
+                  "a5de3ae3f01ab25dec442fa133ca1d3eb0001fab6de14490b2f314b03dd3c0e4"
+                ],
+                "12.6.1": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cuda/redist/redistrib_12.6.1_tar.json",
+                  "8da05eb613d2d71b4814fde25de0a418b1dc04c0a409209dfce82b5ca8b15dec"
+                ],
+                "12.6.2": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cuda/redist/redistrib_12.6.2_tar.json",
+                  "cb18f8464212e71c364f6d8c9bf6b70c0908e2e069d75c90fc65e0b07981bb53"
+                ],
+                "12.6.3": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cuda/redist/redistrib_12.6.3_tar.json",
+                  "e1b558de79fe2da21cac80c498e4175a48087677627eacb915dd78f42833b5b3"
+                ],
+                "12.8.0": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cuda/redist/redistrib_12.8.0_tar.json",
+                  "c9790b289d654844d9dd2ec07f30383220dac1320f7d7d686722e946f9a55e44"
+                ],
+                "12.8.1": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cuda/redist/redistrib_12.8.1_tar.json",
+                  "30a1b8ace0d38237f4ab3ab28d89dbc77ae2c4ebabe27ba08b3c0961cc6cc7fa"
+                ],
+                "12.9.0": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cuda/redist/redistrib_12.9.0_tar.json",
+                  "c614ee6171763d0a5bb4997f7004409d2b9621833ac6eccfa72ecfc411701f9d"
+                ],
+                "12.9.1": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cuda/redist/redistrib_12.9.1_tar.json",
+                  "a6b09fa5048ca1ea206ea5a0a287f28f7eaae7cd3e08ab20d2c4d47d53ec39f5"
+                ],
+                "13.0.0": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cuda/redist/redistrib_13.0.0_tar.json",
+                  "0beef25312491a2c5fff36470be82d68adc870a250f59a647389b7ebcf275722"
+                ],
+                "13.0.1": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cuda/redist/redistrib_13.0.1_tar.json",
+                  "8d99db1a7c2d3ad35d5b62f3615426f25dd57ff3e812bbf71eb5c311cdf64011"
+                ],
+                "13.0.2": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cuda/redist/redistrib_13.0.2_tar.json",
+                  "d2e8795f61d900f0ba68699494b0ae58d009d83f0b8eed294d960ed4f635bd89"
+                ],
+                "13.1.0": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cuda/redist/redistrib_13.1.0_tar.json",
+                  "95319985da926247db85703aef2f39a178e47a8f5d149513af7995a325361c87"
+                ],
+                "13.1.1": [
+                  "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cuda/redist/redistrib_13.1.1_tar.json",
+                  "df0f5bf00389b0338d7c67fbe236f1700dbea2f7ea3d2f81f2b1fad759e0a331"
+                ]
+              },
+              "redist_version_env_vars": [
+                "HERMETIC_CUDA_UMD_VERSION",
+                "HERMETIC_CUDA_VERSION",
+                "TF_CUDA_VERSION"
+              ],
+              "local_path_env_var": "LOCAL_CUDA_PATH",
+              "use_tar_file_env_var": "USE_CUDA_TAR_ARCHIVE_FILES"
+            }
+          }
+        },
+        "recordedRepoMappingEntries": [
+          [
+            "rules_ml_toolchain~",
+            "tar",
+            "rules_ml_toolchain~~toolchain_ext~tar"
+          ],
+          [
+            "rules_ml_toolchain~",
+            "xz",
+            "rules_ml_toolchain~~toolchain_ext~xz"
+          ]
+        ]
+      }
+    },
+    "@@rules_ml_toolchain~//extensions:cuda_redist_init.bzl%cuda_redist_init_ext": {
+      "general": {
+        "bzlTransitiveDigest": "oqF8OJGcRuRKuSDkR2IJz8BhpLQRBLC0GD7yEvZXr88=",
+        "usagesDigest": "wqRn5maBFflW8WRjk7yp38G/aA6DiiFxOwYEqrmBInU=",
+        "recordedFileInputs": {},
+        "recordedDirentsInputs": {},
+        "envVariables": {},
+        "generatedRepoSpecs": {
+          "cuda_crt": {
+            "bzlFile": "@@rules_ml_toolchain~//gpu:nvidia_common_rules.bzl",
+            "ruleClassName": "_redist_repo",
+            "attributes": {
+              "url_dict": {},
+              "versions": [
+                "any"
+              ],
+              "build_templates": [
+                "@@rules_ml_toolchain~//gpu/cuda/build_templates:cuda_crt.BUILD.tpl"
+              ],
+              "local_build_templates": [
+                "@@rules_ml_toolchain~//gpu/cuda/build_templates:cuda_crt.BUILD.tpl"
+              ],
+              "redist_path_prefix": "https://developer.download.nvidia.com/compute/cuda/redist/",
+              "mirrored_tar_redist_path_prefix": "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cuda/redist/",
+              "redist_version_env_vars": [
+                "HERMETIC_CUDA_VERSION",
+                "TF_CUDA_VERSION"
+              ],
+              "local_path_env_var": "LOCAL_CUDA_PATH",
+              "use_tar_file_env_var": "USE_CUDA_TAR_ARCHIVE_FILES",
+              "target_arch_env_var": "CUDA_REDIST_TARGET_PLATFORM",
+              "local_source_dirs": [
+                "include"
+              ],
+              "repository_symlinks": {}
+            }
+          },
+          "cuda_driver": {
+            "bzlFile": "@@rules_ml_toolchain~//gpu:nvidia_common_rules.bzl",
+            "ruleClassName": "_redist_repo",
+            "attributes": {
+              "url_dict": {},
+              "versions": [
+                "610,595,590,580,575,570,560,555,550,545,530,520"
+              ],
+              "build_templates": [
+                "@@rules_ml_toolchain~//gpu/cuda/build_templates:cuda_driver.BUILD.tpl"
+              ],
+              "local_build_templates": [
+                "@@rules_ml_toolchain~//gpu/cuda/build_templates:cuda_driver.BUILD.tpl"
+              ],
+              "redist_path_prefix": "https://developer.download.nvidia.com/compute/cuda/redist/",
+              "mirrored_tar_redist_path_prefix": "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cuda/redist/",
+              "redist_version_env_vars": [
+                "HERMETIC_CUDA_VERSION",
+                "TF_CUDA_VERSION"
+              ],
+              "local_path_env_var": "LOCAL_CUDA_PATH",
+              "use_tar_file_env_var": "USE_CUDA_TAR_ARCHIVE_FILES",
+              "target_arch_env_var": "CUDA_REDIST_TARGET_PLATFORM",
+              "local_source_dirs": [
+                "bin",
+                "lib"
+              ],
+              "repository_symlinks": {}
+            }
+          },
+          "cuda_cupti": {
+            "bzlFile": "@@rules_ml_toolchain~//gpu:nvidia_common_rules.bzl",
+            "ruleClassName": "_redist_repo",
+            "attributes": {
+              "url_dict": {},
+              "versions": [
+                "13,12,11"
+              ],
+              "build_templates": [
+                "@@rules_ml_toolchain~//gpu/cuda/build_templates:cuda_cupti.BUILD.tpl"
+              ],
+              "local_build_templates": [
+                "@@rules_ml_toolchain~//gpu/cuda/build_templates:cuda_cupti.BUILD.tpl"
+              ],
+              "redist_path_prefix": "https://developer.download.nvidia.com/compute/cuda/redist/",
+              "mirrored_tar_redist_path_prefix": "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cuda/redist/",
+              "redist_version_env_vars": [
+                "HERMETIC_CUDA_VERSION",
+                "TF_CUDA_VERSION"
+              ],
+              "local_path_env_var": "LOCAL_CUDA_PATH",
+              "use_tar_file_env_var": "USE_CUDA_TAR_ARCHIVE_FILES",
+              "target_arch_env_var": "CUDA_REDIST_TARGET_PLATFORM",
+              "local_source_dirs": [
+                "include",
+                "lib"
+              ],
+              "repository_symlinks": {}
+            }
+          },
+          "cuda_cccl": {
+            "bzlFile": "@@rules_ml_toolchain~//gpu:nvidia_common_rules.bzl",
+            "ruleClassName": "_redist_repo",
+            "attributes": {
+              "url_dict": {},
+              "versions": [
+                "any"
+              ],
+              "build_templates": [
+                "@@rules_ml_toolchain~//gpu/cuda/build_templates:cuda_cccl.BUILD.tpl"
+              ],
+              "local_build_templates": [
+                "@@rules_ml_toolchain~//gpu/cuda/build_templates:cuda_cccl.BUILD.tpl"
+              ],
+              "redist_path_prefix": "https://developer.download.nvidia.com/compute/cuda/redist/",
+              "mirrored_tar_redist_path_prefix": "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cuda/redist/",
+              "redist_version_env_vars": [
+                "HERMETIC_CUDA_VERSION",
+                "TF_CUDA_VERSION"
+              ],
+              "local_path_env_var": "LOCAL_CUDA_PATH",
+              "use_tar_file_env_var": "USE_CUDA_TAR_ARCHIVE_FILES",
+              "target_arch_env_var": "CUDA_REDIST_TARGET_PLATFORM",
+              "local_source_dirs": [
+                "include",
+                "lib"
+              ],
+              "repository_symlinks": {}
+            }
+          },
+          "cuda_cudnn": {
+            "bzlFile": "@@rules_ml_toolchain~//gpu:nvidia_common_rules.bzl",
+            "ruleClassName": "_redist_repo",
+            "attributes": {
+              "url_dict": {},
+              "versions": [
+                "10,9",
+                "8"
+              ],
+              "build_templates": [
+                "@@rules_ml_toolchain~//gpu/cuda/build_templates:cuda_cudnn.BUILD.tpl",
+                "@@rules_ml_toolchain~//gpu/cuda/build_templates:cuda_cudnn8.BUILD.tpl"
+              ],
+              "local_build_templates": [
+                "@@rules_ml_toolchain~//gpu/cuda/build_templates:cuda_cudnn.BUILD.tpl",
+                "@@rules_ml_toolchain~//gpu/cuda/build_templates:cuda_cudnn8.BUILD.tpl"
+              ],
+              "redist_path_prefix": "https://developer.download.nvidia.com/compute/cudnn/redist/",
+              "mirrored_tar_redist_path_prefix": "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cudnn/redist/",
+              "redist_version_env_vars": [
+                "HERMETIC_CUDNN_VERSION",
+                "TF_CUDNN_VERSION"
+              ],
+              "local_path_env_var": "LOCAL_CUDNN_PATH",
+              "use_tar_file_env_var": "USE_CUDA_TAR_ARCHIVE_FILES",
+              "target_arch_env_var": "CUDA_REDIST_TARGET_PLATFORM",
+              "local_source_dirs": [
+                "include",
+                "lib"
+              ],
+              "repository_symlinks": {}
+            }
+          },
+          "cuda_nvrtc": {
+            "bzlFile": "@@rules_ml_toolchain~//gpu:nvidia_common_rules.bzl",
+            "ruleClassName": "_redist_repo",
+            "attributes": {
+              "url_dict": {},
+              "versions": [
+                "13,12,11"
+              ],
+              "build_templates": [
+                "@@rules_ml_toolchain~//gpu/cuda/build_templates:cuda_nvrtc.BUILD.tpl"
+              ],
+              "local_build_templates": [
+                "@@rules_ml_toolchain~//gpu/cuda/build_templates:cuda_nvrtc.BUILD.tpl"
+              ],
+              "redist_path_prefix": "https://developer.download.nvidia.com/compute/cuda/redist/",
+              "mirrored_tar_redist_path_prefix": "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cuda/redist/",
+              "redist_version_env_vars": [
+                "HERMETIC_CUDA_VERSION",
+                "TF_CUDA_VERSION"
+              ],
+              "local_path_env_var": "LOCAL_CUDA_PATH",
+              "use_tar_file_env_var": "USE_CUDA_TAR_ARCHIVE_FILES",
+              "target_arch_env_var": "CUDA_REDIST_TARGET_PLATFORM",
+              "local_source_dirs": [
+                "include",
+                "lib"
+              ],
+              "repository_symlinks": {}
+            }
+          },
+          "cuda_nvdisasm": {
+            "bzlFile": "@@rules_ml_toolchain~//gpu:nvidia_common_rules.bzl",
+            "ruleClassName": "_redist_repo",
+            "attributes": {
+              "url_dict": {},
+              "versions": [
+                "any"
+              ],
+              "build_templates": [
+                "@@rules_ml_toolchain~//gpu/cuda/build_templates:cuda_nvdisasm.BUILD"
+              ],
+              "local_build_templates": [
+                "@@rules_ml_toolchain~//gpu/cuda/build_templates:cuda_nvdisasm.BUILD"
+              ],
+              "redist_path_prefix": "https://developer.download.nvidia.com/compute/cuda/redist/",
+              "mirrored_tar_redist_path_prefix": "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cuda/redist/",
+              "redist_version_env_vars": [
+                "HERMETIC_CUDA_VERSION",
+                "TF_CUDA_VERSION"
+              ],
+              "local_path_env_var": "LOCAL_CUDA_PATH",
+              "use_tar_file_env_var": "USE_CUDA_TAR_ARCHIVE_FILES",
+              "target_arch_env_var": "CUDA_REDIST_TARGET_PLATFORM",
+              "local_source_dirs": [
+                "bin"
+              ],
+              "repository_symlinks": {}
+            }
+          },
+          "cuda_nvjitlink": {
+            "bzlFile": "@@rules_ml_toolchain~//gpu:nvidia_common_rules.bzl",
+            "ruleClassName": "_redist_repo",
+            "attributes": {
+              "url_dict": {},
+              "versions": [
+                "13,12"
+              ],
+              "build_templates": [
+                "@@rules_ml_toolchain~//gpu/cuda/build_templates:cuda_nvjitlink.BUILD.tpl"
+              ],
+              "local_build_templates": [
+                "@@rules_ml_toolchain~//gpu/cuda/build_templates:cuda_nvjitlink.BUILD.tpl"
+              ],
+              "redist_path_prefix": "https://developer.download.nvidia.com/compute/cuda/redist/",
+              "mirrored_tar_redist_path_prefix": "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cuda/redist/",
+              "redist_version_env_vars": [
+                "HERMETIC_CUDA_VERSION",
+                "TF_CUDA_VERSION"
+              ],
+              "local_path_env_var": "LOCAL_CUDA_PATH",
+              "use_tar_file_env_var": "USE_CUDA_TAR_ARCHIVE_FILES",
+              "target_arch_env_var": "CUDA_REDIST_TARGET_PLATFORM",
+              "local_source_dirs": [
+                "include",
+                "lib"
+              ],
+              "repository_symlinks": {}
+            }
+          },
+          "cuda_nvvm": {
+            "bzlFile": "@@rules_ml_toolchain~//gpu:nvidia_common_rules.bzl",
+            "ruleClassName": "_redist_repo",
+            "attributes": {
+              "url_dict": {},
+              "versions": [
+                "any"
+              ],
+              "build_templates": [
+                "@@rules_ml_toolchain~//gpu/cuda/build_templates:cuda_nvvm.BUILD"
+              ],
+              "local_build_templates": [
+                "@@rules_ml_toolchain~//gpu/cuda/build_templates:cuda_nvvm.BUILD"
+              ],
+              "redist_path_prefix": "https://developer.download.nvidia.com/compute/cuda/redist/",
+              "mirrored_tar_redist_path_prefix": "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cuda/redist/",
+              "redist_version_env_vars": [
+                "HERMETIC_CUDA_VERSION",
+                "TF_CUDA_VERSION"
+              ],
+              "local_path_env_var": "LOCAL_CUDA_PATH",
+              "use_tar_file_env_var": "USE_CUDA_TAR_ARCHIVE_FILES",
+              "target_arch_env_var": "CUDA_REDIST_TARGET_PLATFORM",
+              "local_source_dirs": [
+                "nvvm"
+              ],
+              "repository_symlinks": {}
+            }
+          },
+          "cuda_nvptxcompiler": {
+            "bzlFile": "@@rules_ml_toolchain~//gpu:nvidia_common_rules.bzl",
+            "ruleClassName": "_redist_repo",
+            "attributes": {
+              "url_dict": {},
+              "versions": [
+                "any"
+              ],
+              "build_templates": [
+                "@@rules_ml_toolchain~//gpu/cuda/build_templates:cuda_nvptxcompiler.BUILD.tpl"
+              ],
+              "local_build_templates": [
+                "@@rules_ml_toolchain~//gpu/cuda/build_templates:cuda_nvptxcompiler.BUILD.tpl"
+              ],
+              "redist_path_prefix": "https://developer.download.nvidia.com/compute/cuda/redist/",
+              "mirrored_tar_redist_path_prefix": "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cuda/redist/",
+              "redist_version_env_vars": [
+                "HERMETIC_CUDA_VERSION",
+                "TF_CUDA_VERSION"
+              ],
+              "local_path_env_var": "LOCAL_CUDA_PATH",
+              "use_tar_file_env_var": "USE_CUDA_TAR_ARCHIVE_FILES",
+              "target_arch_env_var": "CUDA_REDIST_TARGET_PLATFORM",
+              "local_source_dirs": [
+                "include",
+                "lib"
+              ],
+              "repository_symlinks": {}
+            }
+          },
+          "cuda_cudart": {
+            "bzlFile": "@@rules_ml_toolchain~//gpu:nvidia_common_rules.bzl",
+            "ruleClassName": "_redist_repo",
+            "attributes": {
+              "url_dict": {},
+              "versions": [
+                "13,12,11"
+              ],
+              "build_templates": [
+                "@@rules_ml_toolchain~//gpu/cuda/build_templates:cuda_cudart.BUILD.tpl"
+              ],
+              "local_build_templates": [
+                "@@rules_ml_toolchain~//gpu/cuda/build_templates:cuda_cudart.BUILD.tpl"
+              ],
+              "redist_path_prefix": "https://developer.download.nvidia.com/compute/cuda/redist/",
+              "mirrored_tar_redist_path_prefix": "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cuda/redist/",
+              "redist_version_env_vars": [
+                "HERMETIC_CUDA_VERSION",
+                "TF_CUDA_VERSION"
+              ],
+              "local_path_env_var": "LOCAL_CUDA_PATH",
+              "use_tar_file_env_var": "USE_CUDA_TAR_ARCHIVE_FILES",
+              "target_arch_env_var": "CUDA_REDIST_TARGET_PLATFORM",
+              "local_source_dirs": [
+                "include",
+                "lib"
+              ],
+              "repository_symlinks": {}
+            }
+          },
+          "cuda_cusparse": {
+            "bzlFile": "@@rules_ml_toolchain~//gpu:nvidia_common_rules.bzl",
+            "ruleClassName": "_redist_repo",
+            "attributes": {
+              "url_dict": {},
+              "versions": [
+                "13,12,11"
+              ],
+              "build_templates": [
+                "@@rules_ml_toolchain~//gpu/cuda/build_templates:cuda_cusparse.BUILD.tpl"
+              ],
+              "local_build_templates": [
+                "@@rules_ml_toolchain~//gpu/cuda/build_templates:cuda_cusparse.BUILD.tpl"
+              ],
+              "redist_path_prefix": "https://developer.download.nvidia.com/compute/cuda/redist/",
+              "mirrored_tar_redist_path_prefix": "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cuda/redist/",
+              "redist_version_env_vars": [
+                "HERMETIC_CUDA_VERSION",
+                "TF_CUDA_VERSION"
+              ],
+              "local_path_env_var": "LOCAL_CUDA_PATH",
+              "use_tar_file_env_var": "USE_CUDA_TAR_ARCHIVE_FILES",
+              "target_arch_env_var": "CUDA_REDIST_TARGET_PLATFORM",
+              "local_source_dirs": [
+                "include",
+                "lib"
+              ],
+              "repository_symlinks": {}
+            }
+          },
+          "cuda_cusolver": {
+            "bzlFile": "@@rules_ml_toolchain~//gpu:nvidia_common_rules.bzl",
+            "ruleClassName": "_redist_repo",
+            "attributes": {
+              "url_dict": {},
+              "versions": [
+                "12,11"
+              ],
+              "build_templates": [
+                "@@rules_ml_toolchain~//gpu/cuda/build_templates:cuda_cusolver.BUILD.tpl"
+              ],
+              "local_build_templates": [
+                "@@rules_ml_toolchain~//gpu/cuda/build_templates:cuda_cusolver.BUILD.tpl"
+              ],
+              "redist_path_prefix": "https://developer.download.nvidia.com/compute/cuda/redist/",
+              "mirrored_tar_redist_path_prefix": "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cuda/redist/",
+              "redist_version_env_vars": [
+                "HERMETIC_CUDA_VERSION",
+                "TF_CUDA_VERSION"
+              ],
+              "local_path_env_var": "LOCAL_CUDA_PATH",
+              "use_tar_file_env_var": "USE_CUDA_TAR_ARCHIVE_FILES",
+              "target_arch_env_var": "CUDA_REDIST_TARGET_PLATFORM",
+              "local_source_dirs": [
+                "include",
+                "lib"
+              ],
+              "repository_symlinks": {}
+            }
+          },
+          "cuda_cublas": {
+            "bzlFile": "@@rules_ml_toolchain~//gpu:nvidia_common_rules.bzl",
+            "ruleClassName": "_redist_repo",
+            "attributes": {
+              "url_dict": {},
+              "versions": [
+                "13,12,11"
+              ],
+              "build_templates": [
+                "@@rules_ml_toolchain~//gpu/cuda/build_templates:cuda_cublas.BUILD.tpl"
+              ],
+              "local_build_templates": [
+                "@@rules_ml_toolchain~//gpu/cuda/build_templates:cuda_cublas.BUILD.tpl"
+              ],
+              "redist_path_prefix": "https://developer.download.nvidia.com/compute/cuda/redist/",
+              "mirrored_tar_redist_path_prefix": "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cuda/redist/",
+              "redist_version_env_vars": [
+                "HERMETIC_CUDA_VERSION",
+                "TF_CUDA_VERSION"
+              ],
+              "local_path_env_var": "LOCAL_CUDA_PATH",
+              "use_tar_file_env_var": "USE_CUDA_TAR_ARCHIVE_FILES",
+              "target_arch_env_var": "CUDA_REDIST_TARGET_PLATFORM",
+              "local_source_dirs": [
+                "include",
+                "lib"
+              ],
+              "repository_symlinks": {}
+            }
+          },
+          "cuda_curand": {
+            "bzlFile": "@@rules_ml_toolchain~//gpu:nvidia_common_rules.bzl",
+            "ruleClassName": "_redist_repo",
+            "attributes": {
+              "url_dict": {},
+              "versions": [
+                "10"
+              ],
+              "build_templates": [
+                "@@rules_ml_toolchain~//gpu/cuda/build_templates:cuda_curand.BUILD.tpl"
+              ],
+              "local_build_templates": [
+                "@@rules_ml_toolchain~//gpu/cuda/build_templates:cuda_curand.BUILD.tpl"
+              ],
+              "redist_path_prefix": "https://developer.download.nvidia.com/compute/cuda/redist/",
+              "mirrored_tar_redist_path_prefix": "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cuda/redist/",
+              "redist_version_env_vars": [
+                "HERMETIC_CUDA_VERSION",
+                "TF_CUDA_VERSION"
+              ],
+              "local_path_env_var": "LOCAL_CUDA_PATH",
+              "use_tar_file_env_var": "USE_CUDA_TAR_ARCHIVE_FILES",
+              "target_arch_env_var": "CUDA_REDIST_TARGET_PLATFORM",
+              "local_source_dirs": [
+                "include",
+                "lib"
+              ],
+              "repository_symlinks": {}
+            }
+          },
+          "cuda_nvml": {
+            "bzlFile": "@@rules_ml_toolchain~//gpu:nvidia_common_rules.bzl",
+            "ruleClassName": "_redist_repo",
+            "attributes": {
+              "url_dict": {},
+              "versions": [
+                "13,12,11"
+              ],
+              "build_templates": [
+                "@@rules_ml_toolchain~//gpu/cuda/build_templates:cuda_nvml.BUILD.tpl"
+              ],
+              "local_build_templates": [
+                "@@rules_ml_toolchain~//gpu/cuda/build_templates:cuda_nvml.BUILD.tpl"
+              ],
+              "redist_path_prefix": "https://developer.download.nvidia.com/compute/cuda/redist/",
+              "mirrored_tar_redist_path_prefix": "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cuda/redist/",
+              "redist_version_env_vars": [
+                "HERMETIC_CUDA_VERSION",
+                "TF_CUDA_VERSION"
+              ],
+              "local_path_env_var": "LOCAL_CUDA_PATH",
+              "use_tar_file_env_var": "USE_CUDA_TAR_ARCHIVE_FILES",
+              "target_arch_env_var": "CUDA_REDIST_TARGET_PLATFORM",
+              "local_source_dirs": [
+                "include",
+                "lib",
+                "nvml"
+              ],
+              "repository_symlinks": {}
+            }
+          },
+          "cuda_cufft": {
+            "bzlFile": "@@rules_ml_toolchain~//gpu:nvidia_common_rules.bzl",
+            "ruleClassName": "_redist_repo",
+            "attributes": {
+              "url_dict": {},
+              "versions": [
+                "13,12,11,10"
+              ],
+              "build_templates": [
+                "@@rules_ml_toolchain~//gpu/cuda/build_templates:cuda_cufft.BUILD.tpl"
+              ],
+              "local_build_templates": [
+                "@@rules_ml_toolchain~//gpu/cuda/build_templates:cuda_cufft.BUILD.tpl"
+              ],
+              "redist_path_prefix": "https://developer.download.nvidia.com/compute/cuda/redist/",
+              "mirrored_tar_redist_path_prefix": "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cuda/redist/",
+              "redist_version_env_vars": [
+                "HERMETIC_CUDA_VERSION",
+                "TF_CUDA_VERSION"
+              ],
+              "local_path_env_var": "LOCAL_CUDA_PATH",
+              "use_tar_file_env_var": "USE_CUDA_TAR_ARCHIVE_FILES",
+              "target_arch_env_var": "CUDA_REDIST_TARGET_PLATFORM",
+              "local_source_dirs": [
+                "include",
+                "lib"
+              ],
+              "repository_symlinks": {}
+            }
+          },
+          "cuda_nvtx": {
+            "bzlFile": "@@rules_ml_toolchain~//gpu:nvidia_common_rules.bzl",
+            "ruleClassName": "_redist_repo",
+            "attributes": {
+              "url_dict": {},
+              "versions": [
+                "any"
+              ],
+              "build_templates": [
+                "@@rules_ml_toolchain~//gpu/cuda/build_templates:cuda_nvtx.BUILD.tpl"
+              ],
+              "local_build_templates": [
+                "@@rules_ml_toolchain~//gpu/cuda/build_templates:cuda_nvtx.BUILD.tpl"
+              ],
+              "redist_path_prefix": "https://developer.download.nvidia.com/compute/cuda/redist/",
+              "mirrored_tar_redist_path_prefix": "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cuda/redist/",
+              "redist_version_env_vars": [
+                "HERMETIC_CUDA_VERSION",
+                "TF_CUDA_VERSION"
+              ],
+              "local_path_env_var": "LOCAL_CUDA_PATH",
+              "use_tar_file_env_var": "USE_CUDA_TAR_ARCHIVE_FILES",
+              "target_arch_env_var": "CUDA_REDIST_TARGET_PLATFORM",
+              "local_source_dirs": [
+                "include",
+                "lib"
+              ],
+              "repository_symlinks": {}
+            }
+          },
+          "cuda_profiler_api": {
+            "bzlFile": "@@rules_ml_toolchain~//gpu:nvidia_common_rules.bzl",
+            "ruleClassName": "_redist_repo",
+            "attributes": {
+              "url_dict": {},
+              "versions": [
+                "any"
+              ],
+              "build_templates": [
+                "@@rules_ml_toolchain~//gpu/cuda/build_templates:cuda_profiler.BUILD.tpl"
+              ],
+              "local_build_templates": [
+                "@@rules_ml_toolchain~//gpu/cuda/build_templates:cuda_profiler.BUILD.tpl"
+              ],
+              "redist_path_prefix": "https://developer.download.nvidia.com/compute/cuda/redist/",
+              "mirrored_tar_redist_path_prefix": "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cuda/redist/",
+              "redist_version_env_vars": [
+                "HERMETIC_CUDA_VERSION",
+                "TF_CUDA_VERSION"
+              ],
+              "local_path_env_var": "LOCAL_CUDA_PATH",
+              "use_tar_file_env_var": "USE_CUDA_TAR_ARCHIVE_FILES",
+              "target_arch_env_var": "CUDA_REDIST_TARGET_PLATFORM",
+              "local_source_dirs": [
+                "include"
+              ],
+              "repository_symlinks": {}
+            }
+          },
+          "cuda_nvcc": {
+            "bzlFile": "@@rules_ml_toolchain~//gpu:nvidia_common_rules.bzl",
+            "ruleClassName": "_redist_repo",
+            "attributes": {
+              "url_dict": {},
+              "versions": [
+                "any"
+              ],
+              "build_templates": [
+                "@@rules_ml_toolchain~//gpu/cuda/build_templates:cuda_nvcc.BUILD.tpl"
+              ],
+              "local_build_templates": [
+                "@@rules_ml_toolchain~//gpu/cuda/build_templates:cuda_nvcc.BUILD.tpl"
+              ],
+              "redist_path_prefix": "https://developer.download.nvidia.com/compute/cuda/redist/",
+              "mirrored_tar_redist_path_prefix": "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cuda/redist/",
+              "redist_version_env_vars": [
+                "HERMETIC_CUDA_VERSION",
+                "TF_CUDA_VERSION"
+              ],
+              "local_path_env_var": "LOCAL_CUDA_PATH",
+              "use_tar_file_env_var": "USE_CUDA_TAR_ARCHIVE_FILES",
+              "target_arch_env_var": "CUDA_REDIST_TARGET_PLATFORM",
+              "local_source_dirs": [
+                "include",
+                "bin",
+                "nvvm"
+              ],
+              "repository_symlinks": {
+                "@@rules_ml_toolchain~~cuda_redist_init_ext~cuda_cudart//:include/cuda.h": "include/cuda.h",
+                "@@rules_ml_toolchain~~cuda_redist_init_ext~cuda_nvdisasm//:bin/nvdisasm": "bin/nvdisasm",
+                "@@rules_ml_toolchain~~cuda_redist_init_ext~cuda_nvvm//:nvvm/bin/cicc": "nvvm/bin/cicc",
+                "@@rules_ml_toolchain~~cuda_redist_init_ext~cuda_nvvm//:nvvm/libdevice/libdevice.10.bc": "nvvm/libdevice/libdevice.10.bc"
+              }
+            }
+          },
+          "cuda_nvprune": {
+            "bzlFile": "@@rules_ml_toolchain~//gpu:nvidia_common_rules.bzl",
+            "ruleClassName": "_redist_repo",
+            "attributes": {
+              "url_dict": {},
+              "versions": [
+                "any"
+              ],
+              "build_templates": [
+                "@@rules_ml_toolchain~//gpu/cuda/build_templates:cuda_nvprune.BUILD"
+              ],
+              "local_build_templates": [
+                "@@rules_ml_toolchain~//gpu/cuda/build_templates:cuda_nvprune.BUILD"
+              ],
+              "redist_path_prefix": "https://developer.download.nvidia.com/compute/cuda/redist/",
+              "mirrored_tar_redist_path_prefix": "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cuda/redist/",
+              "redist_version_env_vars": [
+                "HERMETIC_CUDA_VERSION",
+                "TF_CUDA_VERSION"
+              ],
+              "local_path_env_var": "LOCAL_CUDA_PATH",
+              "use_tar_file_env_var": "USE_CUDA_TAR_ARCHIVE_FILES",
+              "target_arch_env_var": "CUDA_REDIST_TARGET_PLATFORM",
+              "local_source_dirs": [
+                "bin"
+              ],
+              "repository_symlinks": {}
+            }
+          },
+          "cuda_culibos": {
+            "bzlFile": "@@rules_ml_toolchain~//gpu:nvidia_common_rules.bzl",
+            "ruleClassName": "_redist_repo",
+            "attributes": {
+              "url_dict": {},
+              "versions": [
+                "13"
+              ],
+              "build_templates": [
+                "@@rules_ml_toolchain~//gpu/cuda/build_templates:cuda_culibos.BUILD.tpl"
+              ],
+              "local_build_templates": [
+                "@@rules_ml_toolchain~//gpu/cuda/build_templates:cuda_culibos.BUILD.tpl"
+              ],
+              "redist_path_prefix": "https://developer.download.nvidia.com/compute/cuda/redist/",
+              "mirrored_tar_redist_path_prefix": "https://storage.googleapis.com/mirror.tensorflow.org/developer.download.nvidia.com/compute/cuda/redist/",
+              "redist_version_env_vars": [
+                "HERMETIC_CUDA_VERSION",
+                "TF_CUDA_VERSION"
+              ],
+              "local_path_env_var": "LOCAL_CUDA_PATH",
+              "use_tar_file_env_var": "USE_CUDA_TAR_ARCHIVE_FILES",
+              "target_arch_env_var": "CUDA_REDIST_TARGET_PLATFORM",
+              "local_source_dirs": [
+                "include",
+                "lib"
+              ],
+              "repository_symlinks": {}
+            }
+          }
+        },
+        "recordedRepoMappingEntries": [
+          [
+            "rules_ml_toolchain~",
+            "cuda_cudart",
+            "rules_ml_toolchain~~cuda_redist_init_ext~cuda_cudart"
+          ],
+          [
+            "rules_ml_toolchain~",
+            "cuda_nvdisasm",
+            "rules_ml_toolchain~~cuda_redist_init_ext~cuda_nvdisasm"
+          ],
+          [
+            "rules_ml_toolchain~",
+            "cuda_nvvm",
+            "rules_ml_toolchain~~cuda_redist_init_ext~cuda_nvvm"
+          ],
+          [
+            "rules_ml_toolchain~",
+            "cuda_redist_json",
+            "rules_ml_toolchain~~cuda_json_ext~cuda_redist_json"
+          ],
+          [
+            "rules_ml_toolchain~",
+            "tar",
+            "rules_ml_toolchain~~toolchain_ext~tar"
+          ],
+          [
+            "rules_ml_toolchain~",
+            "xz",
+            "rules_ml_toolchain~~toolchain_ext~xz"
+          ],
+          [
+            "rules_ml_toolchain~~cuda_json_ext~cuda_redist_json",
+            "cuda_umd_redist_json",
+            "rules_ml_toolchain~~cuda_json_ext~cuda_umd_redist_json"
+          ],
+          [
+            "rules_ml_toolchain~~cuda_json_ext~cuda_redist_json",
+            "cudnn_redist_json",
+            "rules_ml_toolchain~~cuda_json_ext~cudnn_redist_json"
+          ],
+          [
+            "rules_ml_toolchain~~cuda_json_ext~cuda_redist_json",
+            "standalone_cuda_redist_json",
+            "rules_ml_toolchain~~cuda_json_ext~standalone_cuda_redist_json"
+          ]
+        ]
+      }
+    },
+    "@@rules_ml_toolchain~//extensions:hipcc_configure.bzl%hipcc_configure_ext": {
+      "general": {
+        "bzlTransitiveDigest": "KGa3BfAOaullI5ogAcu8Zxr+oTwE9suFtamihpAn9aQ=",
+        "usagesDigest": "z7ZZ2V0XYIWKcxpkhVAmuTSO/gQlN1Dqo4S392hVZKQ=",
+        "recordedFileInputs": {},
+        "recordedDirentsInputs": {},
+        "envVariables": {},
+        "generatedRepoSpecs": {
+          "config_rocm_hipcc": {
+            "bzlFile": "@@rules_ml_toolchain~//gpu/rocm:hipcc_configure.bzl",
+            "ruleClassName": "hipcc_configure",
+            "attributes": {
+              "rocm_dist": "@@rules_ml_toolchain~~rocm_hermetic_download_ext~rocm_hermetic_dist//:rocm_root"
+            }
+          }
+        },
+        "recordedRepoMappingEntries": [
+          [
+            "rules_ml_toolchain~",
+            "bazel_skylib",
+            "bazel_skylib~"
+          ]
+        ]
+      }
+    },
+    "@@rules_ml_toolchain~//extensions:rocm_hermetic_download.bzl%rocm_hermetic_download_ext": {
+      "general": {
+        "bzlTransitiveDigest": "nVR79MbXQe54Adg5ohWyA/VipVsNUQBVf3fM9nPK400=",
+        "usagesDigest": "5fdeHZ5ud8bElnx+wX+jov3oCszYOQ5FgyTS0Tcy3zQ=",
+        "recordedFileInputs": {},
+        "recordedDirentsInputs": {},
+        "envVariables": {},
+        "generatedRepoSpecs": {
+          "rocm_hermetic_dist": {
+            "bzlFile": "@@rules_ml_toolchain~//gpu/rocm:rocm_hermetic_download.bzl",
+            "ruleClassName": "rocm_hermetic_download",
+            "attributes": {
+              "url": "https://repo.amd.com/rocm/tarball/therock-dist-linux-gfx908-7.12.0.tar.gz",
+              "sha256": "8645100bd43761253114f175a6b5e5e928a72a437094e9e35d750ea089d41d6c"
+            }
+          }
+        },
+        "recordedRepoMappingEntries": []
+      }
+    },
+    "@@rules_ml_toolchain~//extensions:sycl_configure.bzl%sycl_configure_ext": {
+      "general": {
+        "bzlTransitiveDigest": "vWcTUlfoDSc1ff+7MUG6GKOT45u0J6+RYDD7Ugki5Uo=",
+        "usagesDigest": "RvWtjkKDu2J9jNL/TB5mpIu1dAa0kL+l5FGHARv4MEo=",
+        "recordedFileInputs": {},
+        "recordedDirentsInputs": {},
+        "envVariables": {},
+        "generatedRepoSpecs": {
+          "local_config_sycl": {
+            "bzlFile": "@@rules_ml_toolchain~//gpu/sycl:sycl_configure.bzl",
+            "ruleClassName": "sycl_configure",
+            "attributes": {}
+          },
+          "oneapi": {
+            "bzlFile": "@@rules_ml_toolchain~//gpu/sycl:dist_repo.bzl",
+            "ruleClassName": "dist_repo",
+            "attributes": {
+              "distrs": {
+                "ubuntu_24.10_2025.1": [
+                  "https://d3q76yfpnzmnjx.cloudfront.net/intel-oneapi-base-toolkit-2025.1.3.7.tar.gz",
+                  "2213104bd122336551aa144512e7ab99e4a84220e77980b5f346edc14ebd458a",
+                  "oneapi"
+                ],
+                "ubuntu_24.04_2025.1": [
+                  "https://d3q76yfpnzmnjx.cloudfront.net/intel-oneapi-base-toolkit-2025.1.3.7.tar.gz",
+                  "2213104bd122336551aa144512e7ab99e4a84220e77980b5f346edc14ebd458a",
+                  "oneapi"
+                ],
+                "ubuntu_22.04_2025.1": [
+                  "https://d3q76yfpnzmnjx.cloudfront.net/intel-oneapi-base-toolkit-2025.1.3.7.tar.gz",
+                  "2213104bd122336551aa144512e7ab99e4a84220e77980b5f346edc14ebd458a",
+                  "oneapi"
+                ],
+                "ubuntu_24.10_2026.0": [
+                  "https://d3q76yfpnzmnjx.cloudfront.net/intel-oneapi-base-toolkit-2026.0.0.tar.gz",
+                  "1d8633ef69020ecb8f495979c56c6a9db0a3d1343a0697863dcf7fba097a369b",
+                  "oneapi"
+                ]
+              },
+              "build_templates": {
+                "ubuntu_24.10_2025.1": "//gpu/sycl:oneapi.BUILD.tpl",
+                "ubuntu_24.04_2025.1": "//gpu/sycl:oneapi.BUILD.tpl",
+                "ubuntu_22.04_2025.1": "//gpu/sycl:oneapi.BUILD.tpl",
+                "ubuntu_24.10_2026.0": "//gpu/sycl:oneapi.BUILD.tpl"
+              },
+              "is_level_zero": false
+            }
+          },
+          "level_zero": {
+            "bzlFile": "@@rules_ml_toolchain~//gpu/sycl:dist_repo.bzl",
+            "ruleClassName": "dist_repo",
+            "attributes": {
+              "distrs": {
+                "ubuntu_24.10_2025.1": [
+                  "https://d3q76yfpnzmnjx.cloudfront.net/level-zero-1.21.10.tar.gz",
+                  "e0ff1c6cb9b551019579a2dd35c3a611240c1b60918c75345faf9514142b9c34",
+                  "level-zero-1.21.10"
+                ],
+                "ubuntu_24.10_2026.0": [
+                  "https://d3q76yfpnzmnjx.cloudfront.net/level-zero-1.21.10.tar.gz",
+                  "e0ff1c6cb9b551019579a2dd35c3a611240c1b60918c75345faf9514142b9c34",
+                  "level-zero-1.21.10"
+                ]
+              },
+              "build_templates": {
+                "ubuntu_24.10_2025.1": "//gpu/sycl:level_zero.BUILD",
+                "ubuntu_24.10_2026.0": "//gpu/sycl:level_zero.BUILD"
+              },
+              "is_level_zero": true
+            }
+          },
+          "zero_loader": {
+            "bzlFile": "@@rules_ml_toolchain~//gpu/sycl:dist_repo.bzl",
+            "ruleClassName": "dist_repo",
+            "attributes": {
+              "distrs": {
+                "ubuntu_24.10_2025.1": [
+                  "https://d3q76yfpnzmnjx.cloudfront.net/ze_loader_libs.tar.gz",
+                  "71cbfd8ac59e1231f013e827ea8efe6cf5da36fad771da2e75e202423bd6b82e",
+                  ""
+                ],
+                "ubuntu_24.10_2026.0": [
+                  "https://d3q76yfpnzmnjx.cloudfront.net/ze_loader_libs.tar.gz",
+                  "71cbfd8ac59e1231f013e827ea8efe6cf5da36fad771da2e75e202423bd6b82e",
+                  ""
+                ]
+              },
+              "build_templates": {
+                "ubuntu_24.10_2025.1": "//gpu/sycl:zero_loader.BUILD",
+                "ubuntu_24.10_2026.0": "//gpu/sycl:zero_loader.BUILD"
+              },
+              "is_level_zero": false
+            }
+          }
+        },
+        "recordedRepoMappingEntries": [
+          [
+            "rules_ml_toolchain~",
+            "bazel_tools",
+            "bazel_tools"
+          ],
+          [
+            "rules_ml_toolchain~",
+            "tar",
+            "rules_ml_toolchain~~toolchain_ext~tar"
+          ],
+          [
+            "rules_ml_toolchain~",
+            "xz",
+            "rules_ml_toolchain~~toolchain_ext~xz"
+          ]
+        ]
+      }
+    },
+    "@@rules_ml_toolchain~//extensions:toolchain.bzl%toolchain_ext": {
+      "general": {
+        "bzlTransitiveDigest": "dXTZ3ZXsMa18TxRiaktuw58QCKB/GZY7kUqOASz+BHE=",
+        "usagesDigest": "h9tT4c9KG1aX1d/q0J9OdyGBoL1idlA4U0NrUW5teNM=",
+        "recordedFileInputs": {},
+        "recordedDirentsInputs": {},
+        "envVariables": {},
+        "generatedRepoSpecs": {
+          "xz": {
+            "bzlFile": "@@rules_ml_toolchain~//common:tar_extraction_utils.bzl",
+            "ruleClassName": "tool_archive",
+            "attributes": {
+              "linux_x86_64_sha256": "59b9f6681b2aa395a07908d6875ce47eae8e2a5af496449b827bd0370947d355",
+              "linux_x86_64_urls": [
+                "https://storage.googleapis.com/ml-sysroot-testing/xz_x86_64-5.8.1.tar.xz"
+              ],
+              "linux_x86_64_strip_prefix": "xz_x86_64-5.8.1",
+              "linux_aarch64_sha256": "0ac42974d1bd31c1e10d9c8cdbf98885bdee563b3db11de9ae1e236da02281f7",
+              "linux_aarch64_urls": [
+                "https://storage.googleapis.com/ml-sysroot-testing/xz_aarch64_5.8.1-0.1.0.tar.xz"
+              ],
+              "linux_aarch64_strip_prefix": "xz_aarch64_5.8.1-0.1.0"
+            }
+          },
+          "sysroot_darwin_aarch64": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:local.bzl",
+            "ruleClassName": "new_local_repository",
+            "attributes": {
+              "build_file": "@@rules_ml_toolchain~//cc/config:sysroot_darwin_aarch64.BUILD",
+              "path": "cc/sysroots/darwin_aarch64/MacOSX.sdk"
+            }
+          },
+          "llvm18_linux_aarch64": {
+            "bzlFile": "@@rules_ml_toolchain~//common:mirrored_http_archive.bzl",
+            "ruleClassName": "mirrored_http_archive",
+            "attributes": {
+              "urls": [
+                "https://storage.googleapis.com/mirror.tensorflow.org/github.com/llvm/llvm-project/releases/download/llvmorg-18.1.8/clang+llvm-18.1.8-aarch64-linux-gnu.tar.xz",
+                "https://github.com/llvm/llvm-project/releases/download/llvmorg-18.1.8/clang+llvm-18.1.8-aarch64-linux-gnu.tar.xz"
+              ],
+              "sha256": "dcaa1bebbfbb86953fdfbdc7f938800229f75ad26c5c9375ef242edad737d999",
+              "mirrored_tar_sha256": "26a52cc6c658736f822546f220216178ac50d75ac1809bf8608395c8edd7c2c1",
+              "build_file": "@@rules_ml_toolchain~//cc/config:llvm18_linux_aarch64.BUILD",
+              "strip_prefix": "clang+llvm-18.1.8-aarch64-linux-gnu",
+              "remote_file_urls": {
+                "lib/libz.so.1": [
+                  "https://storage.googleapis.com/ml-sysroot-testing/llvm/aarch64-linux/v2/libz.so.1"
+                ],
+                "lib/libz-copyright.txt": [
+                  "https://storage.googleapis.com/ml-sysroot-testing/llvm/aarch64-linux/v2/libz-copyright.txt"
+                ],
+                "lib/liblzma.so.5": [
+                  "https://storage.googleapis.com/ml-sysroot-testing/llvm/aarch64-linux/v2/liblzma.so.5"
+                ],
+                "lib/liblzma-copying.GPLv2.txt": [
+                  "https://storage.googleapis.com/ml-sysroot-testing/llvm/aarch64-linux/v2/liblzma-copying.GPLv2.txt"
+                ],
+                "lib/liblzma-copying.GPLv3.txt": [
+                  "https://storage.googleapis.com/ml-sysroot-testing/llvm/aarch64-linux/v2/liblzma-copying.GPLv3.txt"
+                ],
+                "lib/liblzma-copying.LGPLv2.1.txt": [
+                  "https://storage.googleapis.com/ml-sysroot-testing/llvm/aarch64-linux/v2/liblzma-copying.LGPLv2.1.txt"
+                ],
+                "lib/liblzma-copying.txt": [
+                  "https://storage.googleapis.com/ml-sysroot-testing/llvm/aarch64-linux/v2/liblzma-copying.txt"
+                ],
+                "lib/libxml2.so.2": [
+                  "https://storage.googleapis.com/ml-sysroot-testing/llvm/aarch64-linux/v2/libxml2.so.2"
+                ],
+                "lib/libxml2-copyright.txt": [
+                  "https://storage.googleapis.com/ml-sysroot-testing/llvm/aarch64-linux/v2/libxml2-copyright.txt"
+                ]
+              },
+              "remote_file_integrity": {
+                "lib/libz.so.1": "sha256-rV8Qd2EfXMqm3NRHq71bROnQrI8CR/8dtEGj7VJHAFg=",
+                "lib/libz-copyright.txt": "sha256-xLXv1S2NZl8XVG5po6j8G5AyOG3JaS2cei2cgBy63+Q=",
+                "lib/liblzma.so.5": "sha256-xnKtiQ6N5HGZ4/LZwFnXAV4tFdsp3N4m03jnEmsXEtU=",
+                "lib/liblzma-copying.GPLv2.txt": "sha256-qxX9UmvY3Rip5368E5ZWv00z6X/HI4zRG/YOK5uGZsY=",
+                "lib/liblzma-copying.GPLv3.txt": "sha256-jOtLnuWt7d5Hsx6XXB2QxzrSe2sWWh3NgMfFRetluQM=",
+                "lib/liblzma-copying.LGPLv2.1.txt": "sha256-4jf6VmaAMOkoVR3dYPBd9f6Vf3XquHS70Bfghe1yLnw=",
+                "lib/liblzma-copying.txt": "sha256-SDmAFuIPkWdsEeUNUGbSZor9o8Fhp13P1HMR9S8iDxQ=",
+                "lib/libxml2.so.2": "sha256-9ckknFripHulRXSH/sHWYkczPD/oRFjbVrapESa8n+I=",
+                "lib/libxml2-copyright.txt": "sha256-XUhziEqJASKkubIK1WrG99odeWpb/PBKQnlwrJYhdiY="
+              }
+            }
+          },
+          "llvm20_darwin_aarch64": {
+            "bzlFile": "@@rules_ml_toolchain~//common:mirrored_http_archive.bzl",
+            "ruleClassName": "mirrored_http_archive",
+            "attributes": {
+              "urls": [
+                "https://storage.googleapis.com/mirror.tensorflow.org/github.com/llvm/llvm-project/releases/download/llvmorg-20.1.8/LLVM-20.1.8-macOS-ARM64.tar.xz",
+                "https://github.com/llvm/llvm-project/releases/download/llvmorg-20.1.8/LLVM-20.1.8-macOS-ARM64.tar.xz"
+              ],
+              "sha256": "a9a22f450d35f1f73cd61ab6a17c6f27d8f6051d56197395c1eb397f0c9bbec4",
+              "mirrored_tar_sha256": "19f015fd93ef0a9963e4cebe02b051e6d357b4ab86bb060ca8ad5141d7284289",
+              "build_file": "@@rules_ml_toolchain~//cc/config:llvm20_darwin_aarch64.BUILD",
+              "strip_prefix": "LLVM-20.1.8-macOS-ARM64"
+            }
+          },
+          "sysroot_linux_x86_64_glibc_2_27": {
+            "bzlFile": "@@rules_ml_toolchain~//common:mirrored_http_archive.bzl",
+            "ruleClassName": "mirrored_http_archive",
+            "attributes": {
+              "sha256": "9a06397f9dc4fe2237d126f964f1a3c942ce0036ba51976ea0d7fce0bc3e2fb7",
+              "mirrored_tar_sha256": "114a7d09078c6a2d29b506033e07442346099847ce6107c78ec3da86388ea4a5",
+              "urls": [
+                "https://storage.googleapis.com/mirror.tensorflow.org/storage.googleapis.com/ml-sysroot-testing/x86_64/x86_64_ubuntu18_gcc8.4-0.2.1.tar.xz",
+                "https://storage.googleapis.com/ml-sysroot-testing/x86_64/x86_64_ubuntu18_gcc8.4-0.2.1.tar.xz"
+              ],
+              "build_file": "@@rules_ml_toolchain~//cc/config/x86_64_ubuntu18_gcc8.4:sysroot.BUILD",
+              "strip_prefix": "x86_64_ubuntu18_gcc8.4-0.2.1"
+            }
+          },
+          "llvm18_darwin_aarch64": {
+            "bzlFile": "@@rules_ml_toolchain~//common:mirrored_http_archive.bzl",
+            "ruleClassName": "mirrored_http_archive",
+            "attributes": {
+              "urls": [
+                "https://storage.googleapis.com/mirror.tensorflow.org/github.com/llvm/llvm-project/releases/download/llvmorg-18.1.8/clang+llvm-18.1.8-arm64-apple-macos11.tar.xz",
+                "https://github.com/llvm/llvm-project/releases/download/llvmorg-18.1.8/clang+llvm-18.1.8-arm64-apple-macos11.tar.xz"
+              ],
+              "sha256": "4573b7f25f46d2a9c8882993f091c52f416c83271db6f5b213c93f0bd0346a10",
+              "mirrored_tar_sha256": "abf9636295730364bfe4cfa6b491dc8476587bd6d7271e3011dafdb5e382bcdf",
+              "build_file": "@@rules_ml_toolchain~//cc/config:llvm18_darwin_aarch64.BUILD",
+              "strip_prefix": "clang+llvm-18.1.8-arm64-apple-macos11"
+            }
+          },
+          "llvm22_linux_aarch64": {
+            "bzlFile": "@@rules_ml_toolchain~//common:mirrored_http_archive.bzl",
+            "ruleClassName": "mirrored_http_archive",
+            "attributes": {
+              "urls": [
+                "https://storage.googleapis.com/mirror.tensorflow.org/github.com/llvm/llvm-project/releases/download/llvmorg-22.1.4/LLVM-22.1.4-Linux-ARM64.tar.xz",
+                "https://github.com/llvm/llvm-project/releases/download/llvmorg-22.1.4/LLVM-22.1.4-Linux-ARM64.tar.xz"
+              ],
+              "sha256": "ac8bed48a6481ccc0e14af18f64d44fc1ca8c0ccf630c1d4dc5e97027e87e6fa",
+              "mirrored_tar_sha256": "fdd6aec41abd24c031ec309065fee660bcb6b93b83b49960aaf879bd61b7d88b",
+              "build_file": "@@rules_ml_toolchain~//cc/config:llvm22_linux_aarch64.BUILD",
+              "strip_prefix": "LLVM-22.1.4-Linux-ARM64",
+              "remote_file_urls": {
+                "lib/libz.so.1": [
+                  "https://storage.googleapis.com/ml-sysroot-testing/llvm/aarch64-linux/v2/libz.so.1"
+                ],
+                "lib/libz-copyright.txt": [
+                  "https://storage.googleapis.com/ml-sysroot-testing/llvm/aarch64-linux/v2/libz-copyright.txt"
+                ],
+                "lib/liblzma.so.5": [
+                  "https://storage.googleapis.com/ml-sysroot-testing/llvm/aarch64-linux/v2/liblzma.so.5"
+                ],
+                "lib/liblzma-copying.GPLv2.txt": [
+                  "https://storage.googleapis.com/ml-sysroot-testing/llvm/aarch64-linux/v2/liblzma-copying.GPLv2.txt"
+                ],
+                "lib/liblzma-copying.GPLv3.txt": [
+                  "https://storage.googleapis.com/ml-sysroot-testing/llvm/aarch64-linux/v2/liblzma-copying.GPLv3.txt"
+                ],
+                "lib/liblzma-copying.LGPLv2.1.txt": [
+                  "https://storage.googleapis.com/ml-sysroot-testing/llvm/aarch64-linux/v2/liblzma-copying.LGPLv2.1.txt"
+                ],
+                "lib/liblzma-copying.txt": [
+                  "https://storage.googleapis.com/ml-sysroot-testing/llvm/aarch64-linux/v2/liblzma-copying.txt"
+                ],
+                "lib/libxml2.so.2": [
+                  "https://storage.googleapis.com/ml-sysroot-testing/llvm/aarch64-linux/v2/libxml2.so.2"
+                ],
+                "lib/libxml2-copyright.txt": [
+                  "https://storage.googleapis.com/ml-sysroot-testing/llvm/aarch64-linux/v2/libxml2-copyright.txt"
+                ]
+              },
+              "remote_file_integrity": {
+                "lib/libz.so.1": "sha256-rV8Qd2EfXMqm3NRHq71bROnQrI8CR/8dtEGj7VJHAFg=",
+                "lib/libz-copyright.txt": "sha256-xLXv1S2NZl8XVG5po6j8G5AyOG3JaS2cei2cgBy63+Q=",
+                "lib/liblzma.so.5": "sha256-xnKtiQ6N5HGZ4/LZwFnXAV4tFdsp3N4m03jnEmsXEtU=",
+                "lib/liblzma-copying.GPLv2.txt": "sha256-qxX9UmvY3Rip5368E5ZWv00z6X/HI4zRG/YOK5uGZsY=",
+                "lib/liblzma-copying.GPLv3.txt": "sha256-jOtLnuWt7d5Hsx6XXB2QxzrSe2sWWh3NgMfFRetluQM=",
+                "lib/liblzma-copying.LGPLv2.1.txt": "sha256-4jf6VmaAMOkoVR3dYPBd9f6Vf3XquHS70Bfghe1yLnw=",
+                "lib/liblzma-copying.txt": "sha256-SDmAFuIPkWdsEeUNUGbSZor9o8Fhp13P1HMR9S8iDxQ=",
+                "lib/libxml2.so.2": "sha256-9ckknFripHulRXSH/sHWYkczPD/oRFjbVrapESa8n+I=",
+                "lib/libxml2-copyright.txt": "sha256-XUhziEqJASKkubIK1WrG99odeWpb/PBKQnlwrJYhdiY="
+              }
+            }
+          },
+          "sysroot_linux_x86_64": {
+            "bzlFile": "@@rules_ml_toolchain~//cc/sysroots:sysroot.bzl",
+            "ruleClassName": "sysroot",
+            "attributes": {
+              "default_dist": "linux_glibc_2_27",
+              "dists": {
+                "@@rules_ml_toolchain~~toolchain_ext~sysroot_linux_x86_64_glibc_2_27//:startup_libs": "linux_glibc_2_27",
+                "@@rules_ml_toolchain~~toolchain_ext~sysroot_linux_x86_64_glibc_2_31//:startup_libs": "linux_glibc_2_31",
+                "@@rules_ml_toolchain~~toolchain_ext~sysroot_linux_x86_64_glibc_2_35//:startup_libs": "linux_glibc_2_35",
+                "@@rules_ml_toolchain~~toolchain_ext~sysroot_linux_x86_64_glibc_2_39//:startup_libs": "linux_glibc_2_39"
+              },
+              "build_file_tpl": "@@rules_ml_toolchain~//cc/sysroots:sysroot_linux.BUILD.tpl"
+            }
+          },
+          "llvm20_linux_aarch64": {
+            "bzlFile": "@@rules_ml_toolchain~//common:mirrored_http_archive.bzl",
+            "ruleClassName": "mirrored_http_archive",
+            "attributes": {
+              "urls": [
+                "https://storage.googleapis.com/mirror.tensorflow.org/github.com/llvm/llvm-project/releases/download/llvmorg-20.1.8/LLVM-20.1.8-Linux-ARM64.tar.xz",
+                "https://github.com/llvm/llvm-project/releases/download/llvmorg-20.1.8/LLVM-20.1.8-Linux-ARM64.tar.xz"
+              ],
+              "sha256": "b855cc17d935fdd83da82206b7a7cfc680095efd1e9e8182c4a05e761958bef8",
+              "mirrored_tar_sha256": "3c932449de47078a5a5c39499e1d741da6df29e767502803c1c7194022720a07",
+              "build_file": "@@rules_ml_toolchain~//cc/config:llvm20_linux_aarch64.BUILD",
+              "strip_prefix": "LLVM-20.1.8-Linux-ARM64",
+              "remote_file_urls": {
+                "lib/libz.so.1": [
+                  "https://storage.googleapis.com/ml-sysroot-testing/llvm/aarch64-linux/v2/libz.so.1"
+                ],
+                "lib/libz-copyright.txt": [
+                  "https://storage.googleapis.com/ml-sysroot-testing/llvm/aarch64-linux/v2/libz-copyright.txt"
+                ],
+                "lib/liblzma.so.5": [
+                  "https://storage.googleapis.com/ml-sysroot-testing/llvm/aarch64-linux/v2/liblzma.so.5"
+                ],
+                "lib/liblzma-copying.GPLv2.txt": [
+                  "https://storage.googleapis.com/ml-sysroot-testing/llvm/aarch64-linux/v2/liblzma-copying.GPLv2.txt"
+                ],
+                "lib/liblzma-copying.GPLv3.txt": [
+                  "https://storage.googleapis.com/ml-sysroot-testing/llvm/aarch64-linux/v2/liblzma-copying.GPLv3.txt"
+                ],
+                "lib/liblzma-copying.LGPLv2.1.txt": [
+                  "https://storage.googleapis.com/ml-sysroot-testing/llvm/aarch64-linux/v2/liblzma-copying.LGPLv2.1.txt"
+                ],
+                "lib/liblzma-copying.txt": [
+                  "https://storage.googleapis.com/ml-sysroot-testing/llvm/aarch64-linux/v2/liblzma-copying.txt"
+                ],
+                "lib/libxml2.so.2": [
+                  "https://storage.googleapis.com/ml-sysroot-testing/llvm/aarch64-linux/v2/libxml2.so.2"
+                ],
+                "lib/libxml2-copyright.txt": [
+                  "https://storage.googleapis.com/ml-sysroot-testing/llvm/aarch64-linux/v2/libxml2-copyright.txt"
+                ]
+              },
+              "remote_file_integrity": {
+                "lib/libz.so.1": "sha256-rV8Qd2EfXMqm3NRHq71bROnQrI8CR/8dtEGj7VJHAFg=",
+                "lib/libz-copyright.txt": "sha256-xLXv1S2NZl8XVG5po6j8G5AyOG3JaS2cei2cgBy63+Q=",
+                "lib/liblzma.so.5": "sha256-xnKtiQ6N5HGZ4/LZwFnXAV4tFdsp3N4m03jnEmsXEtU=",
+                "lib/liblzma-copying.GPLv2.txt": "sha256-qxX9UmvY3Rip5368E5ZWv00z6X/HI4zRG/YOK5uGZsY=",
+                "lib/liblzma-copying.GPLv3.txt": "sha256-jOtLnuWt7d5Hsx6XXB2QxzrSe2sWWh3NgMfFRetluQM=",
+                "lib/liblzma-copying.LGPLv2.1.txt": "sha256-4jf6VmaAMOkoVR3dYPBd9f6Vf3XquHS70Bfghe1yLnw=",
+                "lib/liblzma-copying.txt": "sha256-SDmAFuIPkWdsEeUNUGbSZor9o8Fhp13P1HMR9S8iDxQ=",
+                "lib/libxml2.so.2": "sha256-9ckknFripHulRXSH/sHWYkczPD/oRFjbVrapESa8n+I=",
+                "lib/libxml2-copyright.txt": "sha256-XUhziEqJASKkubIK1WrG99odeWpb/PBKQnlwrJYhdiY="
+              }
+            }
+          },
+          "sysroot_linux_aarch64_glibc_2_27": {
+            "bzlFile": "@@rules_ml_toolchain~//common:mirrored_http_archive.bzl",
+            "ruleClassName": "mirrored_http_archive",
+            "attributes": {
+              "sha256": "ef657b4fc199500d0b0208352b3a821a4d5b9c3900367c4dc02627548b4f85f3",
+              "mirrored_tar_sha256": "345e7973f2a1298e13620d13f5bee94ce08afe504892ce5117d59d23a0182a2a",
+              "urls": [
+                "https://storage.googleapis.com/mirror.tensorflow.org/storage.googleapis.com/ml-sysroot-testing/aarch64/aarch64_ubuntu18_gcc8.4-0.2.1.tar.xz",
+                "https://storage.googleapis.com/ml-sysroot-testing/aarch64/aarch64_ubuntu18_gcc8.4-0.2.1.tar.xz"
+              ],
+              "build_file": "@@rules_ml_toolchain~//cc/config/aarch64_ubuntu18_gcc8.4:sysroot.BUILD",
+              "strip_prefix": "aarch64_ubuntu18_gcc8.4-0.2.1"
+            }
+          },
+          "llvm_linux_aarch64": {
+            "bzlFile": "@@rules_ml_toolchain~//cc/llvms:llvm.bzl",
+            "ruleClassName": "llvm",
+            "attributes": {
+              "default_version": "18",
+              "versions": {
+                "@@rules_ml_toolchain~~toolchain_ext~llvm18_linux_aarch64//:all": "18",
+                "@@rules_ml_toolchain~~toolchain_ext~llvm20_linux_aarch64//:all": "20",
+                "@@rules_ml_toolchain~~toolchain_ext~llvm21_linux_aarch64//:all": "21",
+                "@@rules_ml_toolchain~~toolchain_ext~llvm22_linux_aarch64//:all": "22"
+              },
+              "build_file_tpl": "@@rules_ml_toolchain~//cc/llvms:llvm_linux.BUILD.tpl"
+            }
+          },
+          "tar": {
+            "bzlFile": "@@rules_ml_toolchain~//common:tar_extraction_utils.bzl",
+            "ruleClassName": "tool_archive",
+            "attributes": {
+              "linux_x86_64_sha256": "d3be6744685d7a90adc16e3d5342ba9b28fc388422629a1bea146b3798229af6",
+              "linux_x86_64_urls": [
+                "https://storage.googleapis.com/ml-sysroot-testing/tar_x86_64-1.35.tar.xz"
+              ],
+              "linux_x86_64_strip_prefix": "tar_x86_64-1.35",
+              "linux_aarch64_sha256": "f75b274fdec81fa3563dff722c7cc93403c8d155abdf637f745b44b2ccaeb5d7",
+              "linux_aarch64_urls": [
+                "https://storage.googleapis.com/ml-sysroot-testing/tar_aarch64_1.35-0.1.0.tar.xz"
+              ],
+              "linux_aarch64_strip_prefix": "tar_aarch64_1.35-0.1.0"
+            }
+          },
+          "sysroot_linux_aarch64_glibc_2_31": {
+            "bzlFile": "@@rules_ml_toolchain~//common:mirrored_http_archive.bzl",
+            "ruleClassName": "mirrored_http_archive",
+            "attributes": {
+              "sha256": "a6011ddc4629c5fb56642474321a48cd05a28c7569418c8bdb9c5494379cf197",
+              "mirrored_tar_sha256": "f4ad4a301f88ab0e2772f5d7c94db5c4c5656fac4c4b901c1b37d01a5742223f",
+              "urls": [
+                "https://storage.googleapis.com/mirror.tensorflow.org/storage.googleapis.com/ml-sysroot-testing/aarch64/aarch64_ubuntu20_gcc10-0.2.0.tar.xz",
+                "https://storage.googleapis.com/ml-sysroot-testing/aarch64/aarch64_ubuntu20_gcc10-0.2.0.tar.xz"
+              ],
+              "build_file": "@@rules_ml_toolchain~//cc/config/aarch64_ubuntu20_gcc10:sysroot.BUILD",
+              "strip_prefix": "aarch64_ubuntu20_gcc10-0.2.0"
+            }
+          },
+          "llvm_darwin_aarch64": {
+            "bzlFile": "@@rules_ml_toolchain~//cc/llvms:llvm.bzl",
+            "ruleClassName": "llvm",
+            "attributes": {
+              "default_version": "18",
+              "versions": {
+                "@@rules_ml_toolchain~~toolchain_ext~llvm18_darwin_aarch64//:all": "18",
+                "@@rules_ml_toolchain~~toolchain_ext~llvm20_darwin_aarch64//:all": "20"
+              },
+              "build_file_tpl": "@@rules_ml_toolchain~//cc/llvms:llvm_darwin.BUILD.tpl"
+            }
+          },
+          "llvm19_linux_x86_64": {
+            "bzlFile": "@@rules_ml_toolchain~//common:mirrored_http_archive.bzl",
+            "ruleClassName": "mirrored_http_archive",
+            "attributes": {
+              "urls": [
+                "https://storage.googleapis.com/mirror.tensorflow.org/github.com/llvm/llvm-project/releases/download/llvmorg-19.1.7/LLVM-19.1.7-Linux-X64.tar.xz",
+                "https://github.com/llvm/llvm-project/releases/download/llvmorg-19.1.7/LLVM-19.1.7-Linux-X64.tar.xz"
+              ],
+              "sha256": "4a5ec53951a584ed36f80240f6fbf8fdd46b4cf6c7ee87cc2d5018dc37caf679",
+              "mirrored_tar_sha256": "ecb0a20f3976ccb6f20fe98baeef45cd80c59d7aec971098094518283f1157ff",
+              "build_file": "@@rules_ml_toolchain~//cc/config:llvm19_linux_x86_64.BUILD",
+              "strip_prefix": "LLVM-19.1.7-Linux-X64",
+              "remote_file_urls": {
+                "lib/libicudata.so.66": [
+                  "https://storage.googleapis.com/ml-sysroot-testing/llvm/x86_64-linux/libicudata.so.66"
+                ],
+                "lib/libicuuc.so.66": [
+                  "https://storage.googleapis.com/ml-sysroot-testing/llvm/x86_64-linux/libicuuc.so.66"
+                ],
+                "lib/libicu-copyright.txt": [
+                  "https://storage.googleapis.com/ml-sysroot-testing/llvm/x86_64-linux/libicu-copyright.txt"
+                ],
+                "lib/libxml2.so.2": [
+                  "https://storage.googleapis.com/ml-sysroot-testing/llvm/x86_64-linux/libxml2.so.2"
+                ],
+                "lib/libxml2-copyright.txt": [
+                  "https://storage.googleapis.com/ml-sysroot-testing/llvm/x86_64-linux/libxml2-copyright.txt"
+                ]
+              },
+              "remote_file_integrity": {
+                "lib/libicudata.so.66": "sha256-ULA52oarQP7Zc5VIkqpSsLgzEnuUED7GK3HB4Ikc5e0=",
+                "lib/libicuuc.so.66": "sha256-ym++YXsGTEkVzYUT8XGxrd7fgknGmgsvNo+Ph8jFMhs=",
+                "lib/libicu-copyright.txt": "sha256-5VUi2B7caHo0GkQR4HduVMplTpAUfzVKkEWKrO1BFq8=",
+                "lib/libxml2.so.2": "sha256-tMhjAAaQTQYKwvGKlP4mdtb70gD/8/LtfvOrZnL0Msw=",
+                "lib/libxml2-copyright.txt": "sha256-XUhziEqJASKkubIK1WrG99odeWpb/PBKQnlwrJYhdiY="
+              }
+            }
+          },
+          "llvm18_linux_x86_64": {
+            "bzlFile": "@@rules_ml_toolchain~//common:mirrored_http_archive.bzl",
+            "ruleClassName": "mirrored_http_archive",
+            "attributes": {
+              "urls": [
+                "https://storage.googleapis.com/mirror.tensorflow.org/github.com/llvm/llvm-project/releases/download/llvmorg-18.1.8/clang+llvm-18.1.8-x86_64-linux-gnu-ubuntu-18.04.tar.xz",
+                "https://github.com/llvm/llvm-project/releases/download/llvmorg-18.1.8/clang+llvm-18.1.8-x86_64-linux-gnu-ubuntu-18.04.tar.xz"
+              ],
+              "sha256": "54ec30358afcc9fb8aa74307db3046f5187f9fb89fb37064cdde906e062ebf36",
+              "mirrored_tar_sha256": "01b8e95e34e7d0117edd085577529b375ec422130ed212d2911727545314e6c2",
+              "build_file": "@@rules_ml_toolchain~//cc/config:llvm18_linux_x86_64.BUILD",
+              "strip_prefix": "clang+llvm-18.1.8-x86_64-linux-gnu-ubuntu-18.04",
+              "remote_file_urls": {
+                "lib/libtinfo.so.5": [
+                  "https://storage.googleapis.com/ml-sysroot-testing/libtinfo/libtinfo.so.5"
+                ],
+                "lib/libtinfo5-copyright.txt": [
+                  "https://storage.googleapis.com/ml-sysroot-testing/libtinfo/copyright.txt"
+                ]
+              },
+              "remote_file_integrity": {
+                "lib/libtinfo.so.5": "sha256-Es/8cnQZDKFpOlLM2DA+cZQH5wfIVX3ft+74HyCO+qs=",
+                "lib/libtinfo5-copyright.txt": "sha256-Xo7pAsiQbdt3ef023Jl5ywi1H76/fAsamut4rzgq9ZA="
+              }
+            }
+          },
+          "llvm_linux_x86_64": {
+            "bzlFile": "@@rules_ml_toolchain~//cc/llvms:llvm.bzl",
+            "ruleClassName": "llvm",
+            "attributes": {
+              "default_version": "18",
+              "versions": {
+                "@@rules_ml_toolchain~~toolchain_ext~llvm18_linux_x86_64//:all": "18",
+                "@@rules_ml_toolchain~~toolchain_ext~llvm19_linux_x86_64//:all": "19",
+                "@@rules_ml_toolchain~~toolchain_ext~llvm20_linux_x86_64//:all": "20",
+                "@@rules_ml_toolchain~~toolchain_ext~llvm21_linux_x86_64//:all": "21",
+                "@@rules_ml_toolchain~~toolchain_ext~llvm22_linux_x86_64//:all": "22"
+              },
+              "build_file_tpl": "@@rules_ml_toolchain~//cc/llvms:llvm_linux.BUILD.tpl"
+            }
+          },
+          "sysroot_linux_x86_64_glibc_2_39": {
+            "bzlFile": "@@rules_ml_toolchain~//common:mirrored_http_archive.bzl",
+            "ruleClassName": "mirrored_http_archive",
+            "attributes": {
+              "sha256": "0b106bb2c63afab88207b0ab5d9232cd2e2b9e7097fb205fb255909f936f92b3",
+              "mirrored_tar_sha256": "9372d5cd905f425cf78b17f546039aae2c4c2826e600d185b931f78155b32325",
+              "urls": [
+                "https://storage.googleapis.com/mirror.tensorflow.org/storage.googleapis.com/ml-sysroot-testing/x86_64/x86_64_ubuntu24_gcc14-0.1.0.tar.xz",
+                "https://storage.googleapis.com/ml-sysroot-testing/x86_64/x86_64_ubuntu24_gcc14-0.1.0.tar.xz"
+              ],
+              "build_file": "@@rules_ml_toolchain~//cc/config/x86_64_ubuntu24_gcc14:sysroot.BUILD",
+              "strip_prefix": "x86_64_ubuntu24_gcc14-0.1.0"
+            }
+          },
+          "sysroot_linux_aarch64": {
+            "bzlFile": "@@rules_ml_toolchain~//cc/sysroots:sysroot.bzl",
+            "ruleClassName": "sysroot",
+            "attributes": {
+              "default_dist": "linux_glibc_2_27",
+              "dists": {
+                "@@rules_ml_toolchain~~toolchain_ext~sysroot_linux_aarch64_glibc_2_27//:startup_libs": "linux_glibc_2_27",
+                "@@rules_ml_toolchain~~toolchain_ext~sysroot_linux_aarch64_glibc_2_31//:startup_libs": "linux_glibc_2_31"
+              },
+              "build_file_tpl": "@@rules_ml_toolchain~//cc/sysroots:sysroot_linux.BUILD.tpl"
+            }
+          },
+          "llvm21_linux_x86_64": {
+            "bzlFile": "@@rules_ml_toolchain~//common:mirrored_http_archive.bzl",
+            "ruleClassName": "mirrored_http_archive",
+            "attributes": {
+              "urls": [
+                "https://storage.googleapis.com/mirror.tensorflow.org/github.com/llvm/llvm-project/releases/download/llvmorg-21.1.8/LLVM-21.1.8-Linux-X64.tar.xz",
+                "https://github.com/llvm/llvm-project/releases/download/llvmorg-21.1.8/LLVM-21.1.8-Linux-X64.tar.xz"
+              ],
+              "sha256": "b3b7f2801d15d50736acea3c73982994d025b01c2f035b91ae3b49d1b575732b",
+              "mirrored_tar_sha256": "319687348c74aeee915e82a83dd6f6d6b98bc61d8cb7b6b4ac471703ab10b517",
+              "build_file": "@@rules_ml_toolchain~//cc/config:llvm21_linux_x86_64.BUILD",
+              "strip_prefix": "LLVM-21.1.8-Linux-X64",
+              "remote_file_urls": {
+                "lib/libicudata.so.66": [
+                  "https://storage.googleapis.com/ml-sysroot-testing/llvm/x86_64-linux/libicudata.so.66"
+                ],
+                "lib/libicuuc.so.66": [
+                  "https://storage.googleapis.com/ml-sysroot-testing/llvm/x86_64-linux/libicuuc.so.66"
+                ],
+                "lib/libicu-copyright.txt": [
+                  "https://storage.googleapis.com/ml-sysroot-testing/llvm/x86_64-linux/libicu-copyright.txt"
+                ],
+                "lib/libxml2.so.2": [
+                  "https://storage.googleapis.com/ml-sysroot-testing/llvm/x86_64-linux/libxml2.so.2"
+                ],
+                "lib/libxml2-copyright.txt": [
+                  "https://storage.googleapis.com/ml-sysroot-testing/llvm/x86_64-linux/libxml2-copyright.txt"
+                ]
+              },
+              "remote_file_integrity": {
+                "lib/libicudata.so.66": "sha256-ULA52oarQP7Zc5VIkqpSsLgzEnuUED7GK3HB4Ikc5e0=",
+                "lib/libicuuc.so.66": "sha256-ym++YXsGTEkVzYUT8XGxrd7fgknGmgsvNo+Ph8jFMhs=",
+                "lib/libicu-copyright.txt": "sha256-5VUi2B7caHo0GkQR4HduVMplTpAUfzVKkEWKrO1BFq8=",
+                "lib/libxml2.so.2": "sha256-tMhjAAaQTQYKwvGKlP4mdtb70gD/8/LtfvOrZnL0Msw=",
+                "lib/libxml2-copyright.txt": "sha256-XUhziEqJASKkubIK1WrG99odeWpb/PBKQnlwrJYhdiY="
+              }
+            }
+          },
+          "llvm20_linux_x86_64": {
+            "bzlFile": "@@rules_ml_toolchain~//common:mirrored_http_archive.bzl",
+            "ruleClassName": "mirrored_http_archive",
+            "attributes": {
+              "urls": [
+                "https://storage.googleapis.com/mirror.tensorflow.org/github.com/llvm/llvm-project/releases/download/llvmorg-20.1.8/LLVM-20.1.8-Linux-X64.tar.xz",
+                "https://github.com/llvm/llvm-project/releases/download/llvmorg-20.1.8/LLVM-20.1.8-Linux-X64.tar.xz"
+              ],
+              "sha256": "1ead36b3dfcb774b57be530df42bec70ab2d239fbce9889447c7a29a4ddc1ae6",
+              "mirrored_tar_sha256": "57152ed2a054a06dc3fc7abe35da02696fe80d07884de94621726e1ae8d9a53f",
+              "build_file": "@@rules_ml_toolchain~//cc/config:llvm20_linux_x86_64.BUILD",
+              "strip_prefix": "LLVM-20.1.8-Linux-X64",
+              "remote_file_urls": {
+                "lib/libicudata.so.66": [
+                  "https://storage.googleapis.com/ml-sysroot-testing/llvm/x86_64-linux/libicudata.so.66"
+                ],
+                "lib/libicuuc.so.66": [
+                  "https://storage.googleapis.com/ml-sysroot-testing/llvm/x86_64-linux/libicuuc.so.66"
+                ],
+                "lib/libicu-copyright.txt": [
+                  "https://storage.googleapis.com/ml-sysroot-testing/llvm/x86_64-linux/libicu-copyright.txt"
+                ],
+                "lib/libxml2.so.2": [
+                  "https://storage.googleapis.com/ml-sysroot-testing/llvm/x86_64-linux/libxml2.so.2"
+                ],
+                "lib/libxml2-copyright.txt": [
+                  "https://storage.googleapis.com/ml-sysroot-testing/llvm/x86_64-linux/libxml2-copyright.txt"
+                ]
+              },
+              "remote_file_integrity": {
+                "lib/libicudata.so.66": "sha256-ULA52oarQP7Zc5VIkqpSsLgzEnuUED7GK3HB4Ikc5e0=",
+                "lib/libicuuc.so.66": "sha256-ym++YXsGTEkVzYUT8XGxrd7fgknGmgsvNo+Ph8jFMhs=",
+                "lib/libicu-copyright.txt": "sha256-5VUi2B7caHo0GkQR4HduVMplTpAUfzVKkEWKrO1BFq8=",
+                "lib/libxml2.so.2": "sha256-tMhjAAaQTQYKwvGKlP4mdtb70gD/8/LtfvOrZnL0Msw=",
+                "lib/libxml2-copyright.txt": "sha256-XUhziEqJASKkubIK1WrG99odeWpb/PBKQnlwrJYhdiY="
+              }
+            }
+          },
+          "llvm21_linux_aarch64": {
+            "bzlFile": "@@rules_ml_toolchain~//common:mirrored_http_archive.bzl",
+            "ruleClassName": "mirrored_http_archive",
+            "attributes": {
+              "urls": [
+                "https://storage.googleapis.com/mirror.tensorflow.org/github.com/llvm/llvm-project/releases/download/llvmorg-21.1.8/LLVM-21.1.8-Linux-ARM64.tar.xz",
+                "https://github.com/llvm/llvm-project/releases/download/llvmorg-21.1.8/LLVM-21.1.8-Linux-ARM64.tar.xz"
+              ],
+              "sha256": "65ce0b329514e5643407db2d02a5bd34bf33d159055dafa82825c8385bd01993",
+              "mirrored_tar_sha256": "34f87a8f2b755b0c34bf0df682dda78f5d69071dd14b7ac9db2a6ed6bc02fb60",
+              "build_file": "@@rules_ml_toolchain~//cc/config:llvm21_linux_aarch64.BUILD",
+              "strip_prefix": "LLVM-21.1.8-Linux-ARM64",
+              "remote_file_urls": {
+                "lib/libz.so.1": [
+                  "https://storage.googleapis.com/ml-sysroot-testing/llvm/aarch64-linux/v2/libz.so.1"
+                ],
+                "lib/libz-copyright.txt": [
+                  "https://storage.googleapis.com/ml-sysroot-testing/llvm/aarch64-linux/v2/libz-copyright.txt"
+                ],
+                "lib/liblzma.so.5": [
+                  "https://storage.googleapis.com/ml-sysroot-testing/llvm/aarch64-linux/v2/liblzma.so.5"
+                ],
+                "lib/liblzma-copying.GPLv2.txt": [
+                  "https://storage.googleapis.com/ml-sysroot-testing/llvm/aarch64-linux/v2/liblzma-copying.GPLv2.txt"
+                ],
+                "lib/liblzma-copying.GPLv3.txt": [
+                  "https://storage.googleapis.com/ml-sysroot-testing/llvm/aarch64-linux/v2/liblzma-copying.GPLv3.txt"
+                ],
+                "lib/liblzma-copying.LGPLv2.1.txt": [
+                  "https://storage.googleapis.com/ml-sysroot-testing/llvm/aarch64-linux/v2/liblzma-copying.LGPLv2.1.txt"
+                ],
+                "lib/liblzma-copying.txt": [
+                  "https://storage.googleapis.com/ml-sysroot-testing/llvm/aarch64-linux/v2/liblzma-copying.txt"
+                ],
+                "lib/libxml2.so.2": [
+                  "https://storage.googleapis.com/ml-sysroot-testing/llvm/aarch64-linux/v2/libxml2.so.2"
+                ],
+                "lib/libxml2-copyright.txt": [
+                  "https://storage.googleapis.com/ml-sysroot-testing/llvm/aarch64-linux/v2/libxml2-copyright.txt"
+                ]
+              },
+              "remote_file_integrity": {
+                "lib/libz.so.1": "sha256-rV8Qd2EfXMqm3NRHq71bROnQrI8CR/8dtEGj7VJHAFg=",
+                "lib/libz-copyright.txt": "sha256-xLXv1S2NZl8XVG5po6j8G5AyOG3JaS2cei2cgBy63+Q=",
+                "lib/liblzma.so.5": "sha256-xnKtiQ6N5HGZ4/LZwFnXAV4tFdsp3N4m03jnEmsXEtU=",
+                "lib/liblzma-copying.GPLv2.txt": "sha256-qxX9UmvY3Rip5368E5ZWv00z6X/HI4zRG/YOK5uGZsY=",
+                "lib/liblzma-copying.GPLv3.txt": "sha256-jOtLnuWt7d5Hsx6XXB2QxzrSe2sWWh3NgMfFRetluQM=",
+                "lib/liblzma-copying.LGPLv2.1.txt": "sha256-4jf6VmaAMOkoVR3dYPBd9f6Vf3XquHS70Bfghe1yLnw=",
+                "lib/liblzma-copying.txt": "sha256-SDmAFuIPkWdsEeUNUGbSZor9o8Fhp13P1HMR9S8iDxQ=",
+                "lib/libxml2.so.2": "sha256-9ckknFripHulRXSH/sHWYkczPD/oRFjbVrapESa8n+I=",
+                "lib/libxml2-copyright.txt": "sha256-XUhziEqJASKkubIK1WrG99odeWpb/PBKQnlwrJYhdiY="
+              }
+            }
+          },
+          "sysroot_linux_x86_64_glibc_2_31": {
+            "bzlFile": "@@rules_ml_toolchain~//common:mirrored_http_archive.bzl",
+            "ruleClassName": "mirrored_http_archive",
+            "attributes": {
+              "sha256": "a26dc443b20bff6b46324a77fcc112aab484364d39125daff345e142bbdea74c",
+              "mirrored_tar_sha256": "fc66481ff952118e2c25f85c6a1fdbad840234fec9971ff5c44b3bd818178aa2",
+              "urls": [
+                "https://storage.googleapis.com/mirror.tensorflow.org/storage.googleapis.com/ml-sysroot-testing/x86_64/x86_64_ubuntu20_gcc10-0.2.0.tar.xz",
+                "https://storage.googleapis.com/ml-sysroot-testing/x86_64/x86_64_ubuntu20_gcc10-0.2.0.tar.xz"
+              ],
+              "build_file": "@@rules_ml_toolchain~//cc/config/x86_64_ubuntu20_gcc10:sysroot.BUILD",
+              "strip_prefix": "x86_64_ubuntu20_gcc10-0.2.0"
+            }
+          },
+          "llvm22_linux_x86_64": {
+            "bzlFile": "@@rules_ml_toolchain~//common:mirrored_http_archive.bzl",
+            "ruleClassName": "mirrored_http_archive",
+            "attributes": {
+              "urls": [
+                "https://storage.googleapis.com/mirror.tensorflow.org/github.com/llvm/llvm-project/releases/download/llvmorg-22.1.4/LLVM-22.1.4-Linux-X64.tar.xz",
+                "https://github.com/llvm/llvm-project/releases/download/llvmorg-22.1.4/LLVM-22.1.4-Linux-X64.tar.xz"
+              ],
+              "sha256": "cdf232e3bc5d9909ddcf8cb7016802c6745a01e69a596747c684caa894a11567",
+              "mirrored_tar_sha256": "b9b94ef829f1d410e0a458b4c140ee8c0999312b7733cd1375e61736078c1aa2",
+              "build_file": "@@rules_ml_toolchain~//cc/config:llvm22_linux_x86_64.BUILD",
+              "strip_prefix": "LLVM-22.1.4-Linux-X64",
+              "remote_file_urls": {
+                "lib/libicudata.so.66": [
+                  "https://storage.googleapis.com/ml-sysroot-testing/llvm/x86_64-linux/libicudata.so.66"
+                ],
+                "lib/libicuuc.so.66": [
+                  "https://storage.googleapis.com/ml-sysroot-testing/llvm/x86_64-linux/libicuuc.so.66"
+                ],
+                "lib/libicu-copyright.txt": [
+                  "https://storage.googleapis.com/ml-sysroot-testing/llvm/x86_64-linux/libicu-copyright.txt"
+                ],
+                "lib/libxml2.so.2": [
+                  "https://storage.googleapis.com/ml-sysroot-testing/llvm/x86_64-linux/libxml2.so.2"
+                ],
+                "lib/libxml2-copyright.txt": [
+                  "https://storage.googleapis.com/ml-sysroot-testing/llvm/x86_64-linux/libxml2-copyright.txt"
+                ]
+              },
+              "remote_file_integrity": {
+                "lib/libicudata.so.66": "sha256-ULA52oarQP7Zc5VIkqpSsLgzEnuUED7GK3HB4Ikc5e0=",
+                "lib/libicuuc.so.66": "sha256-ym++YXsGTEkVzYUT8XGxrd7fgknGmgsvNo+Ph8jFMhs=",
+                "lib/libicu-copyright.txt": "sha256-5VUi2B7caHo0GkQR4HduVMplTpAUfzVKkEWKrO1BFq8=",
+                "lib/libxml2.so.2": "sha256-tMhjAAaQTQYKwvGKlP4mdtb70gD/8/LtfvOrZnL0Msw=",
+                "lib/libxml2-copyright.txt": "sha256-XUhziEqJASKkubIK1WrG99odeWpb/PBKQnlwrJYhdiY="
+              }
+            }
+          },
+          "sysroot_linux_x86_64_glibc_2_35": {
+            "bzlFile": "@@rules_ml_toolchain~//common:mirrored_http_archive.bzl",
+            "ruleClassName": "mirrored_http_archive",
+            "attributes": {
+              "sha256": "cfbb04651bebe18ec949a5df16bde26d4f138344eff1e5bb345c33d428be190e",
+              "mirrored_tar_sha256": "4516c5f043360adb9317f513a27a0e4a0d5d93bfeaca4ef039c234612bcf1df9",
+              "urls": [
+                "https://storage.googleapis.com/mirror.tensorflow.org/storage.googleapis.com/ml-sysroot-testing/x86_64/x86_64_ubuntu22_gcc12-0.2.0.tar.xz",
+                "https://storage.googleapis.com/ml-sysroot-testing/x86_64/x86_64_ubuntu22_gcc12-0.2.0.tar.xz"
+              ],
+              "build_file": "@@rules_ml_toolchain~//cc/config/x86_64_ubuntu22_gcc12:sysroot.BUILD",
+              "strip_prefix": "x86_64_ubuntu22_gcc12-0.2.0"
+            }
+          }
+        },
+        "recordedRepoMappingEntries": [
+          [
+            "rules_ml_toolchain~",
+            "bazel_tools",
+            "bazel_tools"
+          ],
+          [
+            "rules_ml_toolchain~",
+            "tar",
+            "rules_ml_toolchain~~toolchain_ext~tar"
+          ],
+          [
+            "rules_ml_toolchain~",
+            "xz",
+            "rules_ml_toolchain~~toolchain_ext~xz"
+          ]
+        ]
+      }
+    },
+    "@@rules_python~//python/extensions:config.bzl%config": {
+      "general": {
+        "bzlTransitiveDigest": "ositimIfXKmSpmKGjIZ+ljEPaKyPYDAf/Ozx41HPxwY=",
+        "usagesDigest": "Z12UrRk2xL6+LROqLvInxNZIm7LKnflmEB1eL0wFdwo=",
+        "recordedFileInputs": {},
+        "recordedDirentsInputs": {},
+        "envVariables": {},
+        "generatedRepoSpecs": {
+          "pypi__wheel": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "url": "https://files.pythonhosted.org/packages/7d/cd/d7460c9a869b16c3dd4e1e403cce337df165368c71d6af229a74699622ce/wheel-0.43.0-py3-none-any.whl",
+              "sha256": "55c570405f142630c6b9f72fe09d9b67cf1477fcf543ae5b8dcb1f5b7377da81",
+              "type": "zip",
+              "build_file_content": "package(default_visibility = [\"//visibility:public\"])\n\nload(\"@rules_python//python:py_library.bzl\", \"py_library\")\n\npy_library(\n    name = \"lib\",\n    srcs = glob([\"**/*.py\"]),\n    data = glob([\"**/*\"], exclude=[\n        # These entries include those put into user-installed dependencies by\n        # data_exclude to avoid non-determinism.\n        \"**/*.py\",\n        \"**/*.pyc\",\n        \"**/*.pyc.*\",  # During pyc creation, temp files named *.pyc.NNN are created\n        \"**/*.dist-info/RECORD\",\n        \"BUILD\",\n        \"WORKSPACE\",\n    ]),\n    # This makes this directory a top-level in the python import\n    # search path for anything that depends on this.\n    imports = [\".\"],\n)\n"
+            }
+          },
+          "pypi__click": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "url": "https://files.pythonhosted.org/packages/00/2e/d53fa4befbf2cfa713304affc7ca780ce4fc1fd8710527771b58311a3229/click-8.1.7-py3-none-any.whl",
+              "sha256": "ae74fb96c20a0277a1d615f1e4d73c8414f5a98db8b799a7931d1582f3390c28",
+              "type": "zip",
+              "build_file_content": "package(default_visibility = [\"//visibility:public\"])\n\nload(\"@rules_python//python:py_library.bzl\", \"py_library\")\n\npy_library(\n    name = \"lib\",\n    srcs = glob([\"**/*.py\"]),\n    data = glob([\"**/*\"], exclude=[\n        # These entries include those put into user-installed dependencies by\n        # data_exclude to avoid non-determinism.\n        \"**/*.py\",\n        \"**/*.pyc\",\n        \"**/*.pyc.*\",  # During pyc creation, temp files named *.pyc.NNN are created\n        \"**/*.dist-info/RECORD\",\n        \"BUILD\",\n        \"WORKSPACE\",\n    ]),\n    # This makes this directory a top-level in the python import\n    # search path for anything that depends on this.\n    imports = [\".\"],\n)\n"
+            }
+          },
+          "pypi__importlib_metadata": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "url": "https://files.pythonhosted.org/packages/2d/0a/679461c511447ffaf176567d5c496d1de27cbe34a87df6677d7171b2fbd4/importlib_metadata-7.1.0-py3-none-any.whl",
+              "sha256": "30962b96c0c223483ed6cc7280e7f0199feb01a0e40cfae4d4450fc6fab1f570",
+              "type": "zip",
+              "build_file_content": "package(default_visibility = [\"//visibility:public\"])\n\nload(\"@rules_python//python:py_library.bzl\", \"py_library\")\n\npy_library(\n    name = \"lib\",\n    srcs = glob([\"**/*.py\"]),\n    data = glob([\"**/*\"], exclude=[\n        # These entries include those put into user-installed dependencies by\n        # data_exclude to avoid non-determinism.\n        \"**/*.py\",\n        \"**/*.pyc\",\n        \"**/*.pyc.*\",  # During pyc creation, temp files named *.pyc.NNN are created\n        \"**/*.dist-info/RECORD\",\n        \"BUILD\",\n        \"WORKSPACE\",\n    ]),\n    # This makes this directory a top-level in the python import\n    # search path for anything that depends on this.\n    imports = [\".\"],\n)\n"
+            }
+          },
+          "pypi__pyproject_hooks": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "url": "https://files.pythonhosted.org/packages/ae/f3/431b9d5fe7d14af7a32340792ef43b8a714e7726f1d7b69cc4e8e7a3f1d7/pyproject_hooks-1.1.0-py3-none-any.whl",
+              "sha256": "7ceeefe9aec63a1064c18d939bdc3adf2d8aa1988a510afec15151578b232aa2",
+              "type": "zip",
+              "build_file_content": "package(default_visibility = [\"//visibility:public\"])\n\nload(\"@rules_python//python:py_library.bzl\", \"py_library\")\n\npy_library(\n    name = \"lib\",\n    srcs = glob([\"**/*.py\"]),\n    data = glob([\"**/*\"], exclude=[\n        # These entries include those put into user-installed dependencies by\n        # data_exclude to avoid non-determinism.\n        \"**/*.py\",\n        \"**/*.pyc\",\n        \"**/*.pyc.*\",  # During pyc creation, temp files named *.pyc.NNN are created\n        \"**/*.dist-info/RECORD\",\n        \"BUILD\",\n        \"WORKSPACE\",\n    ]),\n    # This makes this directory a top-level in the python import\n    # search path for anything that depends on this.\n    imports = [\".\"],\n)\n"
+            }
+          },
+          "pypi__pep517": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "url": "https://files.pythonhosted.org/packages/25/6e/ca4a5434eb0e502210f591b97537d322546e4833dcb4d470a48c375c5540/pep517-0.13.1-py3-none-any.whl",
+              "sha256": "31b206f67165b3536dd577c5c3f1518e8fbaf38cbc57efff8369a392feff1721",
+              "type": "zip",
+              "build_file_content": "package(default_visibility = [\"//visibility:public\"])\n\nload(\"@rules_python//python:py_library.bzl\", \"py_library\")\n\npy_library(\n    name = \"lib\",\n    srcs = glob([\"**/*.py\"]),\n    data = glob([\"**/*\"], exclude=[\n        # These entries include those put into user-installed dependencies by\n        # data_exclude to avoid non-determinism.\n        \"**/*.py\",\n        \"**/*.pyc\",\n        \"**/*.pyc.*\",  # During pyc creation, temp files named *.pyc.NNN are created\n        \"**/*.dist-info/RECORD\",\n        \"BUILD\",\n        \"WORKSPACE\",\n    ]),\n    # This makes this directory a top-level in the python import\n    # search path for anything that depends on this.\n    imports = [\".\"],\n)\n"
+            }
+          },
+          "pypi__packaging": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "url": "https://files.pythonhosted.org/packages/49/df/1fceb2f8900f8639e278b056416d49134fb8d84c5942ffaa01ad34782422/packaging-24.0-py3-none-any.whl",
+              "sha256": "2ddfb553fdf02fb784c234c7ba6ccc288296ceabec964ad2eae3777778130bc5",
+              "type": "zip",
+              "build_file_content": "package(default_visibility = [\"//visibility:public\"])\n\nload(\"@rules_python//python:py_library.bzl\", \"py_library\")\n\npy_library(\n    name = \"lib\",\n    srcs = glob([\"**/*.py\"]),\n    data = glob([\"**/*\"], exclude=[\n        # These entries include those put into user-installed dependencies by\n        # data_exclude to avoid non-determinism.\n        \"**/*.py\",\n        \"**/*.pyc\",\n        \"**/*.pyc.*\",  # During pyc creation, temp files named *.pyc.NNN are created\n        \"**/*.dist-info/RECORD\",\n        \"BUILD\",\n        \"WORKSPACE\",\n    ]),\n    # This makes this directory a top-level in the python import\n    # search path for anything that depends on this.\n    imports = [\".\"],\n)\n"
+            }
+          },
+          "pypi__pip_tools": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "url": "https://files.pythonhosted.org/packages/0d/dc/38f4ce065e92c66f058ea7a368a9c5de4e702272b479c0992059f7693941/pip_tools-7.4.1-py3-none-any.whl",
+              "sha256": "4c690e5fbae2f21e87843e89c26191f0d9454f362d8acdbd695716493ec8b3a9",
+              "type": "zip",
+              "build_file_content": "package(default_visibility = [\"//visibility:public\"])\n\nload(\"@rules_python//python:py_library.bzl\", \"py_library\")\n\npy_library(\n    name = \"lib\",\n    srcs = glob([\"**/*.py\"]),\n    data = glob([\"**/*\"], exclude=[\n        # These entries include those put into user-installed dependencies by\n        # data_exclude to avoid non-determinism.\n        \"**/*.py\",\n        \"**/*.pyc\",\n        \"**/*.pyc.*\",  # During pyc creation, temp files named *.pyc.NNN are created\n        \"**/*.dist-info/RECORD\",\n        \"BUILD\",\n        \"WORKSPACE\",\n    ]),\n    # This makes this directory a top-level in the python import\n    # search path for anything that depends on this.\n    imports = [\".\"],\n)\n"
+            }
+          },
+          "pypi__setuptools": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "url": "https://files.pythonhosted.org/packages/90/99/158ad0609729111163fc1f674a5a42f2605371a4cf036d0441070e2f7455/setuptools-78.1.1-py3-none-any.whl",
+              "sha256": "c3a9c4211ff4c309edb8b8c4f1cbfa7ae324c4ba9f91ff254e3d305b9fd54561",
+              "type": "zip",
+              "build_file_content": "package(default_visibility = [\"//visibility:public\"])\n\nload(\"@rules_python//python:py_library.bzl\", \"py_library\")\n\npy_library(\n    name = \"lib\",\n    srcs = glob([\"**/*.py\"]),\n    data = glob([\"**/*\"], exclude=[\n        # These entries include those put into user-installed dependencies by\n        # data_exclude to avoid non-determinism.\n        \"**/*.py\",\n        \"**/*.pyc\",\n        \"**/*.pyc.*\",  # During pyc creation, temp files named *.pyc.NNN are created\n        \"**/*.dist-info/RECORD\",\n        \"BUILD\",\n        \"WORKSPACE\",\n    ]),\n    # This makes this directory a top-level in the python import\n    # search path for anything that depends on this.\n    imports = [\".\"],\n)\n"
+            }
+          },
+          "pypi__zipp": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "url": "https://files.pythonhosted.org/packages/da/55/a03fd7240714916507e1fcf7ae355bd9d9ed2e6db492595f1a67f61681be/zipp-3.18.2-py3-none-any.whl",
+              "sha256": "dce197b859eb796242b0622af1b8beb0a722d52aa2f57133ead08edd5bf5374e",
+              "type": "zip",
+              "build_file_content": "package(default_visibility = [\"//visibility:public\"])\n\nload(\"@rules_python//python:py_library.bzl\", \"py_library\")\n\npy_library(\n    name = \"lib\",\n    srcs = glob([\"**/*.py\"]),\n    data = glob([\"**/*\"], exclude=[\n        # These entries include those put into user-installed dependencies by\n        # data_exclude to avoid non-determinism.\n        \"**/*.py\",\n        \"**/*.pyc\",\n        \"**/*.pyc.*\",  # During pyc creation, temp files named *.pyc.NNN are created\n        \"**/*.dist-info/RECORD\",\n        \"BUILD\",\n        \"WORKSPACE\",\n    ]),\n    # This makes this directory a top-level in the python import\n    # search path for anything that depends on this.\n    imports = [\".\"],\n)\n"
+            }
+          },
+          "pypi__colorama": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "url": "https://files.pythonhosted.org/packages/d1/d6/3965ed04c63042e047cb6a3e6ed1a63a35087b6a609aa3a15ed8ac56c221/colorama-0.4.6-py2.py3-none-any.whl",
+              "sha256": "4f1d9991f5acc0ca119f9d443620b77f9d6b33703e51011c16baf57afb285fc6",
+              "type": "zip",
+              "build_file_content": "package(default_visibility = [\"//visibility:public\"])\n\nload(\"@rules_python//python:py_library.bzl\", \"py_library\")\n\npy_library(\n    name = \"lib\",\n    srcs = glob([\"**/*.py\"]),\n    data = glob([\"**/*\"], exclude=[\n        # These entries include those put into user-installed dependencies by\n        # data_exclude to avoid non-determinism.\n        \"**/*.py\",\n        \"**/*.pyc\",\n        \"**/*.pyc.*\",  # During pyc creation, temp files named *.pyc.NNN are created\n        \"**/*.dist-info/RECORD\",\n        \"BUILD\",\n        \"WORKSPACE\",\n    ]),\n    # This makes this directory a top-level in the python import\n    # search path for anything that depends on this.\n    imports = [\".\"],\n)\n"
+            }
+          },
+          "pypi__build": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "url": "https://files.pythonhosted.org/packages/e2/03/f3c8ba0a6b6e30d7d18c40faab90807c9bb5e9a1e3b2fe2008af624a9c97/build-1.2.1-py3-none-any.whl",
+              "sha256": "75e10f767a433d9a86e50d83f418e83efc18ede923ee5ff7df93b6cb0306c5d4",
+              "type": "zip",
+              "build_file_content": "package(default_visibility = [\"//visibility:public\"])\n\nload(\"@rules_python//python:py_library.bzl\", \"py_library\")\n\npy_library(\n    name = \"lib\",\n    srcs = glob([\"**/*.py\"]),\n    data = glob([\"**/*\"], exclude=[\n        # These entries include those put into user-installed dependencies by\n        # data_exclude to avoid non-determinism.\n        \"**/*.py\",\n        \"**/*.pyc\",\n        \"**/*.pyc.*\",  # During pyc creation, temp files named *.pyc.NNN are created\n        \"**/*.dist-info/RECORD\",\n        \"BUILD\",\n        \"WORKSPACE\",\n    ]),\n    # This makes this directory a top-level in the python import\n    # search path for anything that depends on this.\n    imports = [\".\"],\n)\n"
+            }
+          },
+          "rules_python_internal": {
+            "bzlFile": "@@rules_python~//python/private:internal_config_repo.bzl",
+            "ruleClassName": "internal_config_repo",
+            "attributes": {
+              "transition_setting_generators": {},
+              "transition_settings": []
+            }
+          },
+          "pypi__pip": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "url": "https://files.pythonhosted.org/packages/8a/6a/19e9fe04fca059ccf770861c7d5721ab4c2aebc539889e97c7977528a53b/pip-24.0-py3-none-any.whl",
+              "sha256": "ba0d021a166865d2265246961bec0152ff124de910c5cc39f1156ce3fa7c69dc",
+              "type": "zip",
+              "build_file_content": "package(default_visibility = [\"//visibility:public\"])\n\nload(\"@rules_python//python:py_library.bzl\", \"py_library\")\n\npy_library(\n    name = \"lib\",\n    srcs = glob([\"**/*.py\"]),\n    data = glob([\"**/*\"], exclude=[\n        # These entries include those put into user-installed dependencies by\n        # data_exclude to avoid non-determinism.\n        \"**/*.py\",\n        \"**/*.pyc\",\n        \"**/*.pyc.*\",  # During pyc creation, temp files named *.pyc.NNN are created\n        \"**/*.dist-info/RECORD\",\n        \"BUILD\",\n        \"WORKSPACE\",\n    ]),\n    # This makes this directory a top-level in the python import\n    # search path for anything that depends on this.\n    imports = [\".\"],\n)\n"
+            }
+          },
+          "pypi__installer": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "url": "https://files.pythonhosted.org/packages/e5/ca/1172b6638d52f2d6caa2dd262ec4c811ba59eee96d54a7701930726bce18/installer-0.7.0-py3-none-any.whl",
+              "sha256": "05d1933f0a5ba7d8d6296bb6d5018e7c94fa473ceb10cf198a92ccea19c27b53",
+              "type": "zip",
+              "build_file_content": "package(default_visibility = [\"//visibility:public\"])\n\nload(\"@rules_python//python:py_library.bzl\", \"py_library\")\n\npy_library(\n    name = \"lib\",\n    srcs = glob([\"**/*.py\"]),\n    data = glob([\"**/*\"], exclude=[\n        # These entries include those put into user-installed dependencies by\n        # data_exclude to avoid non-determinism.\n        \"**/*.py\",\n        \"**/*.pyc\",\n        \"**/*.pyc.*\",  # During pyc creation, temp files named *.pyc.NNN are created\n        \"**/*.dist-info/RECORD\",\n        \"BUILD\",\n        \"WORKSPACE\",\n    ]),\n    # This makes this directory a top-level in the python import\n    # search path for anything that depends on this.\n    imports = [\".\"],\n)\n"
+            }
+          },
+          "pypi__more_itertools": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "url": "https://files.pythonhosted.org/packages/50/e2/8e10e465ee3987bb7c9ab69efb91d867d93959095f4807db102d07995d94/more_itertools-10.2.0-py3-none-any.whl",
+              "sha256": "686b06abe565edfab151cb8fd385a05651e1fdf8f0a14191e4439283421f8684",
+              "type": "zip",
+              "build_file_content": "package(default_visibility = [\"//visibility:public\"])\n\nload(\"@rules_python//python:py_library.bzl\", \"py_library\")\n\npy_library(\n    name = \"lib\",\n    srcs = glob([\"**/*.py\"]),\n    data = glob([\"**/*\"], exclude=[\n        # These entries include those put into user-installed dependencies by\n        # data_exclude to avoid non-determinism.\n        \"**/*.py\",\n        \"**/*.pyc\",\n        \"**/*.pyc.*\",  # During pyc creation, temp files named *.pyc.NNN are created\n        \"**/*.dist-info/RECORD\",\n        \"BUILD\",\n        \"WORKSPACE\",\n    ]),\n    # This makes this directory a top-level in the python import\n    # search path for anything that depends on this.\n    imports = [\".\"],\n)\n"
+            }
+          },
+          "pypi__tomli": {
+            "bzlFile": "@@bazel_tools//tools/build_defs/repo:http.bzl",
+            "ruleClassName": "http_archive",
+            "attributes": {
+              "url": "https://files.pythonhosted.org/packages/97/75/10a9ebee3fd790d20926a90a2547f0bf78f371b2f13aa822c759680ca7b9/tomli-2.0.1-py3-none-any.whl",
+              "sha256": "939de3e7a6161af0c887ef91b7d41a53e7c5a1ca976325f429cb46ea9bc30ecc",
+              "type": "zip",
+              "build_file_content": "package(default_visibility = [\"//visibility:public\"])\n\nload(\"@rules_python//python:py_library.bzl\", \"py_library\")\n\npy_library(\n    name = \"lib\",\n    srcs = glob([\"**/*.py\"]),\n    data = glob([\"**/*\"], exclude=[\n        # These entries include those put into user-installed dependencies by\n        # data_exclude to avoid non-determinism.\n        \"**/*.py\",\n        \"**/*.pyc\",\n        \"**/*.pyc.*\",  # During pyc creation, temp files named *.pyc.NNN are created\n        \"**/*.dist-info/RECORD\",\n        \"BUILD\",\n        \"WORKSPACE\",\n    ]),\n    # This makes this directory a top-level in the python import\n    # search path for anything that depends on this.\n    imports = [\".\"],\n)\n"
+            }
+          }
+        },
+        "recordedRepoMappingEntries": [
+          [
+            "rules_python~",
+            "bazel_tools",
+            "bazel_tools"
+          ],
+          [
+            "rules_python~",
+            "pypi__build",
+            "rules_python~~config~pypi__build"
+          ],
+          [
+            "rules_python~",
+            "pypi__click",
+            "rules_python~~config~pypi__click"
+          ],
+          [
+            "rules_python~",
+            "pypi__colorama",
+            "rules_python~~config~pypi__colorama"
+          ],
+          [
+            "rules_python~",
+            "pypi__importlib_metadata",
+            "rules_python~~config~pypi__importlib_metadata"
+          ],
+          [
+            "rules_python~",
+            "pypi__installer",
+            "rules_python~~config~pypi__installer"
+          ],
+          [
+            "rules_python~",
+            "pypi__more_itertools",
+            "rules_python~~config~pypi__more_itertools"
+          ],
+          [
+            "rules_python~",
+            "pypi__packaging",
+            "rules_python~~config~pypi__packaging"
+          ],
+          [
+            "rules_python~",
+            "pypi__pep517",
+            "rules_python~~config~pypi__pep517"
+          ],
+          [
+            "rules_python~",
+            "pypi__pip",
+            "rules_python~~config~pypi__pip"
+          ],
+          [
+            "rules_python~",
+            "pypi__pip_tools",
+            "rules_python~~config~pypi__pip_tools"
+          ],
+          [
+            "rules_python~",
+            "pypi__pyproject_hooks",
+            "rules_python~~config~pypi__pyproject_hooks"
+          ],
+          [
+            "rules_python~",
+            "pypi__setuptools",
+            "rules_python~~config~pypi__setuptools"
+          ],
+          [
+            "rules_python~",
+            "pypi__tomli",
+            "rules_python~~config~pypi__tomli"
+          ],
+          [
+            "rules_python~",
+            "pypi__wheel",
+            "rules_python~~config~pypi__wheel"
+          ],
+          [
+            "rules_python~",
+            "pypi__zipp",
+            "rules_python~~config~pypi__zipp"
+          ]
+        ]
+      }
+    },
     "@@rules_python~//python/uv:uv.bzl%uv": {
       "general": {
-        "bzlTransitiveDigest": "mxPY/VBQrSC9LvYeRrlxD+0IkDTQ4+36NGMnGWlN/Vw=",
-        "usagesDigest": "SrQ1aawuemdMSfZCyfGo/T2YbNIqOTETploW1Yq9A74=",
+        "bzlTransitiveDigest": "K6zoA/u57+d21o50BApale3BrKDIB1vWM6q455k772s=",
+        "usagesDigest": "Go/fVHKUvjJgOs2YEDmA0Z8KzkJmx51bS2ZsHEeftXE=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {},

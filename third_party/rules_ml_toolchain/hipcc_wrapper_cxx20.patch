@@ -1,0 +1,14 @@
+--- a/cc/impls/linux_x86_64_linux_x86_64_rocm/wrappers/hipcc_wrapper
++++ b/cc/impls/linux_x86_64_linux_x86_64_rocm/wrappers/hipcc_wrapper
+@@ -263,8 +263,8 @@ def InvokeHipcc(argv, log=False):
+     # Force HIP runtime header to be included first (from non-hermetic wrapper)
+     # This ensures proper macro setup before other headers
+     cmd.extend(["--include=hip/hip_runtime.h"])
+ 
+-    # Force C++17 dialect
+-    cmd.extend(["--std=c++17"])
++    # Force C++20 dialect (for explicit template lambdas, etc.)
++    cmd.extend(["--std=c++20"])
+ 
+     # Use -fno-gpu-rdc by default
+     cmd.extend(["-fno-gpu-rdc", "-fcuda-flush-denormals-to-zero"])

@@ -1,0 +1,22 @@
+--- a/gpu/rocm/rocm_hermetic_download.bzl
++++ b/gpu/rocm/rocm_hermetic_download.bzl
+@@ -19,12 +19,18 @@ def _get_file_name(url):
+ 
+ def _rocm_hermetic_download_impl(repository_ctx):
+     """Downloads and extracts ROCm hermetic distribution."""
++    # Only download when TF_NEED_ROCM is set to 1
++    tf_need_rocm = repository_ctx.os.environ.get("TF_NEED_ROCM", "")
++    if tf_need_rocm != "1":
++        repository_ctx.file("BUILD", "# ROCm disabled, empty package\n")
++        return
++
+     url = repository_ctx.attr.url
+     sha256 = repository_ctx.attr.sha256
+ 
+     repository_ctx.file(".index")
+ 
+     file_name = _get_file_name(url)
+     print("Downloading {}".format(url))
+     repository_ctx.report_progress("Downloading and extracting {}, expected hash is {}".format(url, sha256))
+ 
+     repository_ctx.download_and_extract(
