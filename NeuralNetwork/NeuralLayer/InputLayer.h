@@ -25,6 +25,7 @@ namespace nn {
             using Internal::size;
             using Internal::operator[];
             using Internal::calculateOutputs;
+            using Internal::defaultConnection;
             using Internal::for_each;
             using Internal::inputs;
 
