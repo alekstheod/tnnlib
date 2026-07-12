@@ -33,9 +33,7 @@ namespace {
             WHEN(
              "calculateWeights is called with learning rate 1, delta = 0.5, "
              "inputs = 1.0 and weights = 0.5") {
-                using Context = std::tuple<std::array<float, 9>>;
-                Context ctx;
-                BPCtx bpCtx{ctx, {}, {}, {}, {}, {}};
+                BPCtx bpCtx;
                 auto& deltas = std::get< 0 >(bpCtx.deltas);
                 auto& weights = std::get< 0 >(bpCtx.weights);
                 auto& biases = std::get< 0 >(bpCtx.biases);

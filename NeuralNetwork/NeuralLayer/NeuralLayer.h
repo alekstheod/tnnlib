@@ -4,6 +4,8 @@
 #include "NeuralNetwork/NeuralLayer/Vector.h"
 #include "NeuralNetwork/NeuralLayer/Tuple.h"
 
+#include <ConnectionData.h>
+
 #include <MPL/Algorithm.h>
 
 #include <array>
@@ -50,6 +52,16 @@ namespace nn {
             static_assert(inputs() >= 1,
                           "Invalid template argument inputsNumber <= 1");
 
+            /// Default source of input slot `slot` of neuron `neuron` when
+            /// this layer sits at `layerIdx` in a perceptron: the matching
+            /// neuron of the predecessor layer (no source for layer 0).
+            static constexpr Connection defaultConnection(std::size_t layerIdx,
+                                                          std::size_t neuron,
+                                                          std::size_t slot) {
+                (void)neuron;
+                return layerIdx > 0 ? Connection{layerIdx - 1, slot} : Connection{};
+            }
+
             template< typename Func >
             void for_each(Func func) {
                 utils::for_< size() >([this, &func](auto i) {
@@ -88,19 +100,20 @@ namespace nn {
 
             template< typename Context, std::size_t myIdx, std::size_t predecessorIdx, typename W >
             void calculateOutputs(Context& ctx, const W& wctx) {
-                auto& predecessorOutputs = std::get< predecessorIdx >(ctx);
                 auto& myOutputs = std::get< myIdx >(ctx);
                 const auto& weights = std::get< myIdx >(wctx.weights);
                 const auto& biases = std::get< myIdx >(wctx.biases);
+                const auto& connections = std::get< myIdx >(wctx.connections);
                 constexpr auto neuronInputs = inputs();
-                const auto inputSize = predecessorOutputs.size() < neuronInputs
-                                       ? predecessorOutputs.size() : neuronInputs;
 
                 std::array< Var, size() > dotProducts;
                 utils::for_< size() >([&](auto i) {
                     Var dot = biases[i.value];
-                    for (std::size_t j = 0; j < inputSize; ++j) {
-                        dot += predecessorOutputs[j] * weights[i.value * neuronInputs + j];
+                    const auto& neuronConn = connections[i.value];
+                    for(std::size_t s = 0; s < neuronInputs; ++s) {
+                        if(const Var* input = outputOf< Var >(ctx, neuronConn[s])) {
+                            dot += *input * weights[i.value * neuronInputs + s];
+                        }
                     }
                     dotProducts[i.value] = dot;
                 });

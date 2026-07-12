@@ -29,6 +29,7 @@ namespace nn {
             using Base::calculateDeltas;
             using Base::calculateHiddenDeltas;
             using Base::calculateOutputs;
+            using Base::defaultConnection;
             using Base::for_each;
             using Base::inputs;
             using Base::size;
@@ -39,23 +40,33 @@ namespace nn {
                 auto& deltas = std::get< myIdx >(ctx.deltas);
                 auto& weights = std::get< myIdx >(ctx.weights);
                 auto& biases = std::get< myIdx >(ctx.biases);
+                const auto& connections = std::get< myIdx >(ctx.connections);
+                const auto& outputs = ctx.outputs;
                 constexpr auto inputsNumber = inputs();
 
                 std::array< std::future< void >, size() > weightFutures;
 
                 utils::for_< size() >([&, this](const auto& i) {
-                    auto delta = deltas[i.value];
-                    auto idx = i.value;
+                    const Var delta = deltas[i.value];
+                    const auto idx = i.value;
                     std::promise< void > promise;
                     weightFutures[idx] = promise.get_future();
                     boost::asio::post(nn::detail::pool(),
-                                      [this, idx, delta, &weights, &biases, &learningRate, promise = std::move(promise)]() mutable {
-                                          for(std::size_t j = 0; j < inputsNumber; j++) {
-                                              auto input = (*this)[idx][j].value;
-                                              auto weight = weights[idx * inputsNumber + j];
-                                              weights[idx * inputsNumber + j] = weight - learningRate * input * delta;
+                                      [this, idx, delta, &outputs, &connections, &weights, &biases, &learningRate, promise = std::move(promise)]() mutable {
+                                          const auto& neuronConn = connections[idx];
+                                          for(std::size_t s = 0; s < inputsNumber; ++s) {
+                                              if constexpr (myIdx > 0) {
+                                                  if(const Var* input = outputOf< Var >(outputs, neuronConn[s])) {
+                                                      weights[idx * inputsNumber + s] -=
+                                                       learningRate * (*input) * delta;
+                                                  }
+                                              } else {
+                                                  const Var input = (*this)[idx][s].value;
+                                                  weights[idx * inputsNumber + s] -=
+                                                   learningRate * input * delta;
+                                              }
                                           }
-                                          biases[idx] = biases[idx] - learningRate * delta;
+                                          biases[idx] -= learningRate * delta;
                                           promise.set_value();
                                       });
                 });
