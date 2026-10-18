@@ -13,31 +13,46 @@ namespace nn::bp {
 
     namespace detail {
 
-        template< typename BPCtx, std::size_t currentIdx, std::size_t affectedIdx, typename CurrentLayer, typename AffectedLayer, typename MomentumFunc >
+        /// Computes the deltas of layer `currentIdx` by collecting, for every
+        /// neuron of that layer, the contributions of all later layers that
+        /// read its outputs through the connection matrix. Connections from
+        /// the same or earlier layers read values from a previous evaluation
+        /// and are treated as constants (no gradient flows through them).
+        template< typename BPCtx, std::size_t currentIdx, typename CurrentLayer, typename MomentumFunc >
         void calculateHiddenDeltas(CurrentLayer& currentLayer,
                                    BPCtx& ctx,
-                                   AffectedLayer& affectedLayer,
                                    MomentumFunc momentum) {
-            using Var = typename AffectedLayer::Var;
+            using Var = typename CurrentLayer::Var;
             auto& funcs = currentLayer.activationFunctions();
             auto& outputFunc = std::get< 0 >(funcs);
             auto& currentDeltas = std::get< currentIdx >(ctx.deltas);
             auto& currentOutputs = std::get< currentIdx >(ctx.outputs);
-            auto& affectedDeltas = std::get< affectedIdx >(ctx.deltas);
-            const auto& affectedWeights = std::get< affectedIdx >(ctx.weights);
-            constexpr auto affectedInputs = affectedLayer.inputs();
-            constexpr auto affectedSize = affectedLayer.size();
+            constexpr auto numLayers = std::tuple_size< std::decay_t< decltype(ctx.deltas) > >::value;
+            constexpr auto currentSize = CurrentLayer::size();
 
-            currentLayer.for_each([&](auto i, auto&) {
-                Var sum{};
-                if (i.value < affectedInputs) {
-                    for (std::size_t j = 0; j < affectedSize; ++j) {
-                        sum += affectedDeltas[j] * affectedWeights[j * affectedInputs + i.value];
+            std::array< Var, currentSize > sums{};
+            utils::for_< numLayers >([&](auto src) {
+                constexpr auto srcIdx = src.value;
+                if constexpr (srcIdx > currentIdx) {
+                    const auto& srcConnections = std::get< srcIdx >(ctx.connections);
+                    const auto& srcDeltas = std::get< srcIdx >(ctx.deltas);
+                    const auto& srcWeights = std::get< srcIdx >(ctx.weights);
+                    const auto srcInputs = srcWeights.size() / srcDeltas.size();
+                    for(std::size_t j = 0; j < srcDeltas.size(); ++j) {
+                        for(std::size_t s = 0; s < srcConnections[j].size(); ++s) {
+                            const auto& conn = srcConnections[j][s];
+                            if(conn.layer == currentIdx && conn.neuron < currentSize) {
+                                sums[conn.neuron] += srcDeltas[j] * srcWeights[j * srcInputs + s];
+                            }
+                        }
                     }
                 }
+            });
+
+            currentLayer.for_each([&](auto i, auto&) {
                 currentDeltas[i.value] =
                  momentum(currentDeltas[i.value],
-                          sum * outputFunc.derivate(currentOutputs[i.value]));
+                          sums[i.value] * outputFunc.derivate(currentOutputs[i.value]));
             });
         }
 
@@ -95,9 +110,9 @@ namespace nn::bp {
             }
         }
 
-        template< typename BPCtx, std::size_t myIdx, std::size_t affIdx, typename AffectedLayer, typename MomentumFunc >
-        void calculateHiddenDeltas(BPCtx& ctx, AffectedLayer& affectedLayer, MomentumFunc momentum) {
-            detail::calculateHiddenDeltas< BPCtx, myIdx, affIdx >(*this, ctx, affectedLayer, momentum);
+        template< typename BPCtx, std::size_t myIdx, typename MomentumFunc >
+        void calculateHiddenDeltas(BPCtx& ctx, MomentumFunc momentum) {
+            detail::calculateHiddenDeltas< BPCtx, myIdx >(*this, ctx, momentum);
         }
 
         template< typename BPCtx, std::size_t myIdx >
@@ -105,30 +120,29 @@ namespace nn::bp {
             auto& deltas = std::get< myIdx >(ctx.deltas);
             auto& weights = std::get< myIdx >(ctx.weights);
             auto& biases = std::get< myIdx >(ctx.biases);
+            const auto& connections = std::get< myIdx >(ctx.connections);
             constexpr auto inputsNumber = inputs();
 
             if constexpr (myIdx > 0) {
-                auto& predecessorOutputs = std::get< myIdx - 1 >(ctx.outputs);
-                const auto inputSize = predecessorOutputs.size() < inputsNumber
-                                        ? predecessorOutputs.size() : inputsNumber;
+                const auto& outputs = ctx.outputs;
                 for_each([&](auto i, auto&) {
-                    auto delta = deltas[i.value];
-                    for(std::size_t j = 0; j < inputSize; j++) {
-                        auto input = predecessorOutputs[j];
-                        auto weight = weights[i.value * inputsNumber + j];
-                        weights[i.value * inputsNumber + j] = weight - learningRate * input * delta;
+                    const Var delta = deltas[i.value];
+                    const auto& neuronConn = connections[i.value];
+                    for(std::size_t s = 0; s < inputsNumber; ++s) {
+                        if(const Var* input = outputOf< Var >(outputs, neuronConn[s])) {
+                            weights[i.value * inputsNumber + s] -= learningRate * (*input) * delta;
+                        }
                     }
-                    biases[i.value] = biases[i.value] - learningRate * delta;
+                    biases[i.value] -= learningRate * delta;
                 });
             } else {
                 for_each([&](auto i, auto& neuron) {
-                    auto delta = deltas[i.value];
-                    for(std::size_t j = 0; j < inputsNumber; j++) {
-                        auto input = neuron[j].value;
-                        auto weight = weights[i.value * inputsNumber + j];
-                        weights[i.value * inputsNumber + j] = weight - learningRate * input * delta;
+                    const Var delta = deltas[i.value];
+                    for(std::size_t s = 0; s < inputsNumber; ++s) {
+                        const Var input = neuron[s].value;
+                        weights[i.value * inputsNumber + s] -= learningRate * input * delta;
                     }
-                    biases[i.value] = biases[i.value] - learningRate * delta;
+                    biases[i.value] -= learningRate * delta;
                 });
             }
         }
@@ -138,25 +152,27 @@ namespace nn::bp {
             auto& deltas = std::get< myIdx >(ctx.deltas);
             auto& weightGrads = std::get< myIdx >(ctx.weightGradients);
             auto& biasGrads = std::get< myIdx >(ctx.biasGradients);
+            const auto& connections = std::get< myIdx >(ctx.connections);
             constexpr auto inputsNumber = inputs();
 
             if constexpr (myIdx > 0) {
-                auto& predecessorOutputs = std::get< myIdx - 1 >(ctx.outputs);
-                const auto inputSize = predecessorOutputs.size() < inputsNumber
-                                        ? predecessorOutputs.size() : inputsNumber;
+                const auto& outputs = ctx.outputs;
                 for_each([&](auto i, auto&) {
-                    auto delta = deltas[i.value];
-                    for(std::size_t j = 0; j < inputSize; j++) {
-                        weightGrads[i.value * inputsNumber + j] += predecessorOutputs[j] * delta;
+                    const Var delta = deltas[i.value];
+                    const auto& neuronConn = connections[i.value];
+                    for(std::size_t s = 0; s < inputsNumber; ++s) {
+                        if(const Var* input = outputOf< Var >(outputs, neuronConn[s])) {
+                            weightGrads[i.value * inputsNumber + s] += (*input) * delta;
+                        }
                     }
                     biasGrads[i.value] += delta;
                 });
             } else {
                 for_each([&](auto i, auto& neuron) {
-                    auto delta = deltas[i.value];
-                    for(std::size_t j = 0; j < inputsNumber; j++) {
-                        auto input = neuron[j].value;
-                        weightGrads[i.value * inputsNumber + j] += input * delta;
+                    const Var delta = deltas[i.value];
+                    for(std::size_t s = 0; s < inputsNumber; ++s) {
+                        const Var input = neuron[s].value;
+                        weightGrads[i.value * inputsNumber + s] += input * delta;
                     }
                     biasGrads[i.value] += delta;
                 });
@@ -172,10 +188,10 @@ namespace nn::bp {
             constexpr auto inputsNumber = inputs();
 
             for_each([&](auto i, auto&) {
-                for(std::size_t j = 0; j < inputsNumber; j++) {
-                    weights[i.value * inputsNumber + j] -=
-                     learningRate * weightGrads[i.value * inputsNumber + j];
-                    weightGrads[i.value * inputsNumber + j] = Var{};
+                for(std::size_t s = 0; s < inputsNumber; ++s) {
+                    weights[i.value * inputsNumber + s] -=
+                     learningRate * weightGrads[i.value * inputsNumber + s];
+                    weightGrads[i.value * inputsNumber + s] = Var{};
                 }
 
                 biases[i.value] -= learningRate * biasGrads[i.value];

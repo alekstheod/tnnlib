@@ -1,5 +1,7 @@
 #pragma once
 
+#include <ConnectionData.h>
+
 #include <MPL/Tuple.h>
 
 #include <cstddef>
@@ -73,6 +75,22 @@ namespace nn {
             using use =
              ConvolutionLayer< typename Internal::template use< VarType >, Grid >;
 
+            /// Default source of input slot `slot` of neuron `neuron`: by
+            /// default a kernel slot reads the predecessor output located at
+            /// the position this slot covers in the sliding window.
+            static constexpr Connection defaultConnection(std::size_t layerIdx,
+                                                          std::size_t neuron,
+                                                          std::size_t slot) {
+                if(layerIdx == 0) {
+                    return {};
+                }
+                const std::size_t winX = (neuron % Grid::windowsPerRow) * Grid::K::stride;
+                const std::size_t winY = (neuron / Grid::windowsPerRow) * Grid::K::stride;
+                const std::size_t inX = winX + (slot % Grid::K::width);
+                const std::size_t inY = winY + (slot / Grid::K::width);
+                return Connection{layerIdx - 1, inY * Grid::width + inX};
+            }
+
             template< template< class > typename NewType >
             using wrap =
              ConvolutionLayer< typename Internal::template wrap< NewType >, Grid >;
@@ -121,20 +139,22 @@ namespace nn {
 
             template< typename Context, std::size_t myIdx, std::size_t predecessorIdx, typename W >
             void calculateOutputs(Context& ctx, const W& wctx) {
-                auto& predecessorOutputs = std::get< predecessorIdx >(ctx);
                 auto& myOutputs = std::get< myIdx >(ctx);
                 const auto& weights = std::get< myIdx >(wctx.weights);
                 const auto& biases = std::get< myIdx >(wctx.biases);
-                for (std::size_t i = 0; i < predecessorOutputs.size(); ++i) {
-                    setInput(i, predecessorOutputs[i]);
-                }
+                const auto& connections = std::get< myIdx >(wctx.connections);
                 constexpr auto neuronInputs = Internal::inputs();
                 std::array< Var, size() > dotProducts;
                 auto& self = *this;
                 Internal::for_each([&](auto i, auto&) {
                     Var dot = biases[i.value];
-                    for (std::size_t j = 0; j < neuronInputs; ++j) {
-                        dot += self[i.value][j].value * weights[i.value * neuronInputs + j];
+                    const auto& neuronConn = connections[i.value];
+                    for(std::size_t s = 0; s < neuronInputs; ++s) {
+                        const Var* input = outputOf< Var >(ctx, neuronConn[s]);
+                        self[i.value].setInput(s, input ? *input : Var{});
+                        if(input) {
+                            dot += *input * weights[i.value * neuronInputs + s];
+                        }
                     }
                     dotProducts[i.value] = dot;
                 });

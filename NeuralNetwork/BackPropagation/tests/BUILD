@@ -9,6 +9,8 @@ cc_test(
         "//NeuralNetwork/ActivationFunction",
         "//NeuralNetwork/BackPropagation",
         "//NeuralNetwork/NeuralLayer",
+        "//NeuralNetwork/Neuron",
+        "//NeuralNetwork/Perceptron",
         "@catch2//:catch2_main",
     ],
 )

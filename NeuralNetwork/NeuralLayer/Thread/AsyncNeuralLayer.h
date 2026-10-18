@@ -24,6 +24,7 @@ namespace nn {
             using Internal::end;
             using Internal::for_each;
             using Internal::calculateOutputs;
+            using Internal::defaultConnection;
             using Internal::inputs;
             using Var = typename Internal::Var;
             using Internal::operator[];
