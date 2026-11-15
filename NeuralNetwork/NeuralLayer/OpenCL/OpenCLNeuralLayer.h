@@ -108,6 +108,75 @@ namespace nn {
                 calculate();
             }
 
+            template< typename Context, std::size_t myIdx >
+            void calculateOutputs(Context& ctx) {
+                calculate();
+                auto& myOutputs = std::get< myIdx >(ctx);
+                auto& self = *this;
+                for(std::size_t i = 0; i < size(); ++i) {
+                    myOutputs[i] = self[i].getOutput();
+                }
+            }
+
+            template< typename Context, std::size_t myIdx, std::size_t predecessorIdx >
+            void calculateOutputs(Context& ctx) {
+                auto& predecessorOutputs = std::get< predecessorIdx >(ctx);
+                auto& myOutputs = std::get< myIdx >(ctx);
+                auto& self = *this;
+
+                const auto predSize = predecessorOutputs.size();
+                for(std::size_t j = 0; j < inputs(); ++j) {
+                    Var value{};
+                    if(j < predSize) {
+                        value = static_cast< Var >(predecessorOutputs[j]);
+                    }
+                    for(std::size_t i = 0; i < size(); ++i) {
+                        const auto idx = i * inputs() + j;
+                        self.m_inputs[idx] = value;
+                    }
+                }
+
+                calculate();
+
+                for(std::size_t i = 0; i < size(); ++i) {
+                    myOutputs[i] = self[i].getOutput();
+                }
+            }
+
+            template< typename Context, std::size_t myIdx, std::size_t predecessorIdx, typename W >
+            void calculateOutputs(Context& ctx, const W& wctx) {
+                auto& predecessorOutputs = std::get< predecessorIdx >(ctx);
+                auto& myOutputs = std::get< myIdx >(ctx);
+                const auto& weights = std::get< myIdx >(wctx.weights);
+                const auto& biases = std::get< myIdx >(wctx.biases);
+                auto& self = *this;
+
+                const auto predSize = predecessorOutputs.size();
+                for(std::size_t j = 0; j < inputs(); ++j) {
+                    Var value{};
+                    if(j < predSize) {
+                        value = static_cast< Var >(predecessorOutputs[j]);
+                    }
+                    for(std::size_t i = 0; i < size(); ++i) {
+                        const auto idx = i * inputs() + j;
+                        self.m_inputs[idx] = value;
+                    }
+                }
+
+                for(std::size_t i = 0; i < size(); ++i) {
+                    for(std::size_t j = 0; j < inputs(); ++j) {
+                        self.m_weights[i * inputs() + j] = weights[i * inputs() + j];
+                    }
+                    self[i].setBias(biases[i]);
+                }
+
+                calculate();
+
+                for(std::size_t i = 0; i < size(); ++i) {
+                    myOutputs[i] = self[i].getOutput();
+                }
+            }
+
           private:
             void calculate() {
                 try {
