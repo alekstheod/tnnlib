@@ -76,6 +76,89 @@ namespace nn {
                                            std::cend(dotProducts));
                 });
             }
+
+            template< typename Context, std::size_t myIdx, std::size_t predecessorIdx >
+            void calculateOutputs(Context& ctx) {
+                auto& predecessorOutputs = std::get< predecessorIdx >(ctx);
+                auto& myOutputs = std::get< myIdx >(ctx);
+                constexpr auto inputCount = inputs();
+                const auto predSize = predecessorOutputs.size();
+                const auto effectiveInputs = predSize < inputCount ? predSize : inputCount;
+
+                std::array< std::future< Var >, size() > dotFuture;
+                utils::for_< size() >([this, &predecessorOutputs, &dotFuture, effectiveInputs](auto i) {
+                    std::promise< Var > promise;
+                    dotFuture[i.value] = promise.get_future();
+                    auto& neuron = (*this)[i.value];
+                    auto* data = predecessorOutputs.data();
+                    boost::asio::post(pool(), [&neuron, data, effectiveInputs, promise = std::move(promise)]() mutable {
+                        promise.set_value(neuron.calcDotProduct(data, effectiveInputs));
+                    });
+                });
+
+                std::array< Var, size() > dotProducts;
+                utils::for_< size() >([&dotFuture, &dotProducts](auto i) {
+                    dotProducts[i.value] = dotFuture[i.value].get();
+                });
+
+                utils::for_< size() >([this, &dotProducts, &myOutputs](auto i) {
+                    auto& neuron = (*this)[i.value];
+                    myOutputs[i.value] = neuron.calculateOutput(
+                     dotProducts[i.value], std::cbegin(dotProducts), std::cend(dotProducts));
+                });
+            }
+
+            template< typename Context, std::size_t myIdx, std::size_t predecessorIdx, typename W >
+            void calculateOutputs(Context& ctx, const W& wctx) {
+                auto& predecessorOutputs = std::get< predecessorIdx >(ctx);
+                auto& myOutputs = std::get< myIdx >(ctx);
+                const auto& weights = std::get< myIdx >(wctx.weights);
+                const auto& biases = std::get< myIdx >(wctx.biases);
+                constexpr auto neuronInputs = inputs();
+                const auto inputSize = predecessorOutputs.size() < neuronInputs
+                                       ? predecessorOutputs.size() : neuronInputs;
+
+                std::array< Var, size() > dotProducts;
+                utils::for_< size() >([&](auto i) {
+                    Var dot = biases[i.value];
+                    for(std::size_t j = 0; j < inputSize; ++j) {
+                        dot += predecessorOutputs[j] * weights[i.value * neuronInputs + j];
+                    }
+                    dotProducts[i.value] = dot;
+                });
+
+                utils::for_< size() >([this, &dotProducts, &myOutputs](auto i) {
+                    auto& neuron = (*this)[i.value];
+                    myOutputs[i.value] = neuron.calculateOutput(
+                     dotProducts[i.value], std::cbegin(dotProducts), std::cend(dotProducts));
+                });
+            }
+
+            template< typename Context, std::size_t myIdx >
+            void calculateOutputs(Context& ctx) {
+                auto& myOutputs = std::get< myIdx >(ctx);
+
+                std::array< std::future< Var >, size() > dotFuture;
+                utils::for_< size() >([this, &dotFuture](auto i) {
+                    std::promise< Var > promise;
+                    dotFuture[i.value] = promise.get_future();
+                    auto& neuron = (*this)[i.value];
+                    boost::asio::post(pool(), [&neuron, promise = std::move(promise)]() mutable {
+                        promise.set_value(neuron.calcDotProduct());
+                    });
+                });
+
+                std::array< Var, size() > dotProducts;
+                utils::for_< size() >([&dotFuture, &dotProducts](auto i) {
+                    dotProducts[i.value] = dotFuture[i.value].get();
+                });
+
+                utils::for_< size() >([this, &dotProducts, &myOutputs](auto i) {
+                    auto& neuron = (*this)[i.value];
+                    myOutputs[i.value] = neuron.calculateOutput(
+                     dotProducts[i.value], std::cbegin(dotProducts), std::cend(dotProducts));
+                });
+            }
         };
     } // namespace detail
 
