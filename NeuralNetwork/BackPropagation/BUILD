@@ -1,12 +1,5 @@
 cc_library(
     name = "BackPropagation",
-    srcs = glob(
-        ["**/*.cpp"],
-        exclude = [
-            "tests/**",
-            "OpenCL/**",
-        ],
-    ),
     hdrs = glob(
         ["*.h"],
         exclude = [
@@ -28,12 +21,6 @@ cc_library(
 
 cc_library(
     name = "OpenCLNeuralLayer",
-    srcs = glob(
-        ["OpenCL/*.cpp"],
-        exclude = [
-            "tests/**",
-        ],
-    ),
     hdrs = glob(
         ["OpenCL/*.h"],
         exclude = [

@@ -17,3 +17,11 @@ build:asan --linkopt -fsanitize=address
 # Common configurations
 build --verbose_failures
 
+build --repo_env=LLVM_VERSION=22
+build --repo_env=SYSROOT_DIST=linux_glibc_2_27
+build --@rules_ml_toolchain//common:enable_rocm=False
+build --@rules_ml_toolchain//common:enable_cuda=False
+build --@rules_ml_toolchain//common:enable_sycl=False
+build --@rules_ml_toolchain//common:enable_hermetic_cc=True
+build --@rules_ml_toolchain//common:enable_hermetic_libraries=True
+
