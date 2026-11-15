@@ -1,4 +1,4 @@
-![Build result](https://app.travis-ci.com/alekstheod/tnnlib.svg?branch=master)
+![CI](https://github.com/alekstheod/tnnlib/actions/workflows/ci.yml/badge.svg?branch=master)
 
 ```
  _               _ _ _
