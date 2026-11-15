@@ -79,6 +79,7 @@ namespace nn {
             using Internal::operator[];
             using Internal::for_each;
             using Internal::calculateOutputs;
+            using Internal::defaultConnection;
             using Internal::inputs;
 
             const Var& getWeight(std::size_t neuronId, std::size_t inputId) const {

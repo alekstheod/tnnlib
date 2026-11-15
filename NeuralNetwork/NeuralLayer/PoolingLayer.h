@@ -18,6 +18,7 @@ namespace nn {
             using Internal::size;
             using Internal::operator[];
             using Internal::calculateOutputs;
+            using Internal::defaultConnection;
             // We can't adjust this layer as the
             // number of inputs and neurons depends
             // on the convolution grid and frame sizes

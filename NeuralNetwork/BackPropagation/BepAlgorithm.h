@@ -4,6 +4,7 @@
 #include "NeuralNetwork/BackPropagation/BPNeuralLayer.h"
 #include "NeuralNetwork/BackPropagation/BPConvolutionNeuralLayer.h"
 #include "NeuralNetwork/BackPropagation/ErrorFunction.h"
+#include <ConnectionData.h>
 
 #include <System/Time.h>
 
@@ -36,6 +37,12 @@ namespace nn::bp {
         BepAlgorithm(Var learningRate)
          : m_leariningRate(learningRate) {
             initWeights();
+        }
+
+        BepAlgorithm(Var learningRate, const ConnectionData& connData)
+         : m_leariningRate(learningRate) {
+            initWeights();
+            m_bpContext.applyConnections(connData);
         }
 
         template< typename MomentumFunc >
@@ -223,10 +230,9 @@ namespace nn::bp {
             auto& layers = m_layers;
             utils::get< size() - 1 >(layers).template calculateDeltas< BPCtxT, size() - 1 >(ctx, prototype, momentum);
             utils::for_< size() - 1 >([&layers, &ctx, &momentum](auto i) {
-                constexpr auto idx = size() - i.value - 1;
-                auto& frontLayer = std::get< idx >(layers);
-                auto& backLayer = std::get< idx - 1 >(layers);
-                backLayer.template calculateHiddenDeltas< BPCtxT, idx - 1, idx >(ctx, frontLayer, momentum);
+                constexpr auto idx = size() - i.value - 2;
+                auto& layer = std::get< idx >(layers);
+                layer.template calculateHiddenDeltas< BPCtxT, idx >(ctx, momentum);
             });
         }
     };
