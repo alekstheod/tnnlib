@@ -42,6 +42,7 @@ namespace nn::bp {
         using Base::begin;
         using Base::cbegin;
         using Base::cend;
+        using Base::defaultConnection;
         using Base::end;
         using Base::for_each;
         using Base::inputs;
@@ -72,15 +73,26 @@ namespace nn::bp {
             auto& deltas = std::get< myIdx >(ctx.deltas);
             auto& weights = std::get< myIdx >(ctx.weights);
             auto& biases = std::get< myIdx >(ctx.biases);
-            auto& self = *this;
+            const auto& connections = std::get< myIdx >(ctx.connections);
             for(const auto neuronId : ranges::views::indices(size())) {
-                auto& neuron = self[neuronId];
                 const Var neuronDelta = deltas[neuronId];
 
-                for(const auto weightId : ranges::views::indices(Grid::K::size)) {
-                    const Var inputValue = neuron[weightId].value;
-                    const Var weightGradient = neuronDelta * inputValue;
-                    weights[neuronId * Grid::K::size + weightId] -= learningRate * weightGradient;
+                if constexpr (myIdx > 0) {
+                    const auto& outputs = ctx.outputs;
+                    for(std::size_t s = 0; s < Grid::K::size; ++s) {
+                        const auto& connection = connections[neuronId * Grid::K::size + s];
+                        if(const Var* input = outputOf< Var >(outputs, connection)) {
+                            weights[neuronId * Grid::K::size + s] -=
+                             learningRate * (*input) * neuronDelta;
+                        }
+                    }
+                } else {
+                    auto& neuron = (*this)[neuronId];
+                    for(std::size_t s = 0; s < Grid::K::size; ++s) {
+                        const Var inputValue = neuron[s].value;
+                        weights[neuronId * Grid::K::size + s] -=
+                         learningRate * inputValue * neuronDelta;
+                    }
                 }
 
                 biases[neuronId] -= learningRate * neuronDelta;
@@ -92,14 +104,24 @@ namespace nn::bp {
             auto& deltas = std::get< myIdx >(ctx.deltas);
             auto& weightGrads = std::get< myIdx >(ctx.weightGradients);
             auto& biasGrads = std::get< myIdx >(ctx.biasGradients);
-            auto& self = *this;
+            const auto& connections = std::get< myIdx >(ctx.connections);
             for(std::size_t neuronId = 0; neuronId < size(); ++neuronId) {
-                auto& neuron = self[neuronId];
                 const Var delta = deltas[neuronId];
 
-                for(std::size_t weightId = 0; weightId < Grid::K::size; ++weightId) {
-                    const Var inputValue = neuron[weightId].value;
-                    weightGrads[neuronId * Grid::K::size + weightId] += inputValue * delta;
+                if constexpr (myIdx > 0) {
+                    const auto& outputs = ctx.outputs;
+                    for(std::size_t s = 0; s < Grid::K::size; ++s) {
+                        const auto& connection = connections[neuronId * Grid::K::size + s];
+                        if(const Var* input = outputOf< Var >(outputs, connection)) {
+                            weightGrads[neuronId * Grid::K::size + s] += (*input) * delta;
+                        }
+                    }
+                } else {
+                    auto& neuron = (*this)[neuronId];
+                    for(std::size_t s = 0; s < Grid::K::size; ++s) {
+                        const Var inputValue = neuron[s].value;
+                        weightGrads[neuronId * Grid::K::size + s] += inputValue * delta;
+                    }
                 }
                 biasGrads[neuronId] += delta;
             }
@@ -111,7 +133,6 @@ namespace nn::bp {
             auto& biasGrads = std::get< myIdx >(ctx.biasGradients);
             auto& weights = std::get< myIdx >(ctx.weights);
             auto& biases = std::get< myIdx >(ctx.biases);
-            auto& self = *this;
             for(std::size_t neuronId = 0; neuronId < size(); ++neuronId) {
                 for(std::size_t weightId = 0; weightId < Grid::K::size; ++weightId) {
                     weights[neuronId * Grid::K::size + weightId] -=
@@ -124,12 +145,10 @@ namespace nn::bp {
             }
         }
 
-        template< typename BPCtx, std::size_t myIdx, std::size_t affIdx, typename AffectedLayer, typename MomentumFunc >
-        void calculateHiddenDeltas(BPCtx& ctx, AffectedLayer& affectedLayer, MomentumFunc momentum) {
-            detail::calculateHiddenDeltas< BPCtx, myIdx, affIdx >(*this, ctx, affectedLayer, momentum);
+        template< typename BPCtx, std::size_t myIdx, typename MomentumFunc >
+        void calculateHiddenDeltas(BPCtx& ctx, MomentumFunc momentum) {
+            detail::calculateHiddenDeltas< BPCtx, myIdx >(*this, ctx, momentum);
         }
-
-
     };
 
 } // namespace nn::bp
