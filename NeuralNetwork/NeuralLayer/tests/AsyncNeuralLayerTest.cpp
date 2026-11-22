@@ -18,9 +18,9 @@ namespace {
             nn::NeuralLayer< nn::Neuron, nn::TanhFunction, 2, 2 > regularLayer;
             nn::AsyncNeuralLayer< nn::Neuron, nn::TanhFunction, 2, 2 > asyncLayer;
 
-            for (auto i : {0, 1}) {
+            for(auto i : {0, 1}) {
                 asyncLayer[i].setBias(regularLayer[i].getBias());
-                for (auto j : {0, 1}) {
+                for(auto j : {0, 1}) {
                     asyncLayer[i].setWeight(j, regularLayer[i].getWeight(j));
                 }
             }
@@ -37,12 +37,12 @@ namespace {
 
             WHEN("The weights and the inputs of both layers are identical") {
                 THEN("The output is of both layers identical") {
-                    using Context = std::tuple<std::array<float, 2>>;
+                    using Context = std::tuple< std::array< float, 2 > >;
                     Context regCtx, asyncCtx;
-                    regularLayer.calculateOutputs<Context, 0>(regCtx);
-                    asyncLayer.calculateOutputs<Context, 0>(asyncCtx);
-                    const auto expected_output = std::get<0>(regCtx)[0];
-                    const auto actual_output = std::get<0>(asyncCtx)[0];
+                    regularLayer.calculateOutputs< Context, 0 >(regCtx);
+                    asyncLayer.calculateOutputs< Context, 0 >(asyncCtx);
+                    const auto expected_output = std::get< 0 >(regCtx)[0];
+                    const auto actual_output = std::get< 0 >(asyncCtx)[0];
                     REQUIRE_THAT(expected_output, Catch::Matchers::WithinRel(actual_output));
                 }
             }
