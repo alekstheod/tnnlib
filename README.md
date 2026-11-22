@@ -1,166 +1,120 @@
 ![CI](https://github.com/alekstheod/tnnlib/actions/workflows/ci.yml/badge.svg?branch=master)
 
-```
- _               _ _ _
-| |_ _ __  _ __ | (_) |__
-| __| '_ \| '_ \| | | '_ \
-| |_| | | | | | | | | |_) |
- \__|_| |_|_| |_|_|_|_.__/
-```
+# tnnlib
 
-template neural network library v3
+`tnnlib` is a modern C++23, template-based neural network library focused on compile-time composition. It provides a type-safe API for building perceptrons from layers, neurons, activation functions, and training components with minimal runtime overhead.
 
-Flexible compile time interface which allows to define a neural network with different types of layers, Neurons and Activation functions:
+## Core Features
 
-```cpp
-    typedef nn::Perceptron<float,
-                           nn::InputLayer<nn::Neuron, nn::SigmoidFunction, 2>,
-                           nn::NeuralLayer<nn::Neuron, nn::TanhFunction, 20>,
-                           nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, 1>
-                           > Perceptron;
+- **Compile-time network composition**: Define perceptrons with template-based layers and neurons.
+- **Fluent builder API**: Construct networks with `nn::build<VarType>()` using `input`, `dense`, `conv`, `pool`, `async`, and `with_neuron`.
+- **Layer support**: Input, dense/neural, complex/heterogeneous, convolution, pooling, async, and OpenCL-accelerated layers.
+- **Neuron and activation options**: Includes `Neuron`, `PoolingNeuron`, `RecurrentNeuron`, and activation functions such as Sigmoid, Tanh, Softmax, LogScaleSoftmax, BiopolarSigmoid, ReLU, Binary, and Threshold.
+- **Backpropagation training**: `BepAlgorithm` supports configurable error functions, momentum, batch training, and evaluation.
+- **Connection matrix support**: Sparse/custom connections can be defined for non-standard wiring, including recurrent or cross-layer connections.
+- **Serialization**: Cereal-based serialization for saving and loading trained contexts/models.
+- **Bazel/Bazelisk build**: Reproducible builds and tests with Bazel, including AddressSanitizer configuration.
 
-    typedef nn::bp::BepAlgorithm< Perceptron, nn::bp::CrossEntropyError> Algo;
-```
+## Quick Start
 
-or
-
-```
-using Perceptron = decltype(nn::build< VarType >()
-                             .input< 2 >()
-                             .dense< 20 >().with_neuron< nn::Neuron< nn::TanhFunction > >()
-                             .dense< 1 >())::type;
-
-```
-
-Calculating perceptron by using BEP algorithm:
+### Define a network with templates
 
 ```cpp
-    typedef BepAlgorithm< Perceptron > Algo;
-    Algo algorithm (0.09f );
+#include "NeuralNetwork/Perceptron/Perceptron.h"
+#include "NeuralNetwork/NeuralLayer/InputLayer.h"
+#include "NeuralNetwork/NeuralLayer/NeuralLayer.h"
+#include "NeuralNetwork/Neuron/Neuron.h"
+#include "NeuralNetwork/ActivationFunction/SigmoidFunction.h"
+#include "NeuralNetwork/ActivationFunction/TanhFunction.h"
 
-    std::array< Algo::Prototype, 4> prototypes= { Algo::Prototype{{0.f, 1.f}, {1.f}} ,
-        Algo::Prototype{{Input{1.f}, Input{0.f}}, {1.f}} ,
-        Algo::Prototype{{Input{1.f}, Input{1.f}}, {0.f}} ,
-        Algo::Prototype{{Input{0.f}, Input{0.f}}, {0.f}}
-    };
-
-    unsigned int numOfEpochs = std::numeric_limits< unsigned int >::max();
-    if( argc == 2 ){
-      numOfEpochs = utils::lexical_cast< unsigned int >(argv[1]);
-    }
-
-    Perceptron perceptron = algorithm.calculate ( prototypes.begin(), prototypes.end(),
-                                                  [] ( unsigned int epoch, float error, ) {
-                                                        std::cout << error << std::endl;
-                                                        return error >= 0.01.f
-                                                  },
-                                                  numOfEpochs);
+using Perceptron = nn::Perceptron<
+    float,
+    nn::InputLayer<nn::Neuron, nn::SigmoidFunction, 2>,
+    nn::NeuralLayer<nn::Neuron, nn::TanhFunction, 20>,
+    nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, 1>
+>;
 ```
 
-- [Key features](#Features)
-- [How to build](#Build)
-- [Example ocr](#OCR)
-- [Work in progress](#WIP)
-
-### Features
-The main idea of tnnlib is to provide a simple and intuitive DSL (lego like) which can
-be used to define a neural network (Perceptron) in a modern c++ envirnoment.
-
-### Define simple perceptron
+### Define a network with the builder API
 
 ```cpp
-    typedef nn::Perceptron<float,
-                           nn::InputLayer<nn::Neuron, nn::SigmoidFunction, 2>,
-                           nn::NeuralLayer<nn::Neuron, nn::TanhFunction, 20>,
-                           nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, 1>
-                           > Perceptron;
+#include "NeuralNetwork/Perceptron/PerceptronBuilder.h"
+#include "NeuralNetwork/Neuron/Neuron.h"
+#include "NeuralNetwork/ActivationFunction/TanhFunction.h"
+
+using Perceptron = decltype(
+    nn::build<float>()
+        .input<2>()
+        .dense<20>().with_neuron<nn::Neuron<nn::TanhFunction>>()
+        .dense<1>()
+)::type;
 ```
 
-### Activation functions
-
-There is a set of activation functions implemented that can be used in perceptron
-
-Some of them and the most frequently used are:
-
-- SigmoidFunction
-- TanhFunction
-- SoftmaxFunction
-
-As defined in the #Define simple perceptron we can pass an activation
-function type as an argument to the NeuralLayer interface or to the
-Neuron interface directly when constructing a complex NeuralLayer.
-
-### NeuralLayer
-
-A simplest NeuralLayer instarface. This interface accepts
-a type of the neuron used in a layer the activation function
-which suppose to be the same for a whole layer and the number
-of neurons available in that layer.
+### Train with backpropagation
 
 ```cpp
-nn::NeuralLayer<nn::Neuron, nn::SigmoidFunction, 2>
+#include "NeuralNetwork/BackPropagation/BepAlgorithm.h"
+#include "NeuralNetwork/BackPropagation/ErrorFunction.h"
+
+using Algo = nn::bp::BepAlgorithm<Perceptron, nn::bp::CrossEntropyError>;
+using Input = typename Perceptron::Input;
+
+Algo algorithm(0.09f);
+std::array<Algo::Prototype, 4> prototypes = {
+    Algo::Prototype{{Input{0.f}, Input{1.f}}, {1.f}},
+    Algo::Prototype{{Input{1.f}, Input{0.f}}, {1.f}},
+    Algo::Prototype{{Input{1.f}, Input{1.f}}, {0.f}},
+    Algo::Prototype{{Input{0.f}, Input{0.f}}, {0.f}}
+};
+
+algorithm.calculate(
+    prototypes.begin(),
+    prototypes.end(),
+    [](unsigned int /*epoch*/, float error) { return error >= 0.01f; }
+);
 ```
 
-### ComplexNeuralLayer
+## Build and Test
 
-With complex layer we can define a layer which consists of heterogenic neuron types. That means
-that we even can construct a layer in which a neuron can be anyting which fulfills the interface
-of the neuron. Consider having a full perceptron acting as a neuron or a NeuralLayer which acts as
-an individual neuron.
-
-```cpp
-nn::ComplexNeuralInputLayer< 2U, float, nn::Neuron< nn::SigmoidFunction, float >, nn::Neuron< nn::SoftmaxFunction, float > > layer;
-```
-
-### OpenCLNeuralLayer
-
-OpenCL neural layer is meant to speedup a back propagation algorithm by calculating the dot products of
-neurons inputs in parallel through the GPU or CPU OpenCL layer. Keep in mind that it only works if your system
-contains a proper OpenCL installation and all modules and include files are located in a correct directory.
-See the local_repository definition in the projects WORKSPACE file for more details.
-
-### Build
-
-The tnnlib library is using bazels (bazelisk) as a its build system.
-Please use starndard bazelisk (bazel) commands to build the library.
+The project uses [Bazelisk](https://github.com/bazelbuild/bazelisk) as the Bazel launcher.
 
 ```bash
-bazel build --config=asan //... --test_tag_filters=-openCL
+# Run tests (ASan, as used in CI)
+bazelisk --host_jvm_args=-Xmx3g --host_jvm_args=-Xms512m test --jobs=2 --config=asan //...
 ```
 
-OpenCL targets are marked with the tag openCL and you have to exclude
-these targets from building if openCL is not available on your system.
-`--config=asan` stays for address sanetizer configuration.
+OpenCL targets are tagged with `openCL`. On systems without OpenCL, exclude them:
 
-### OCR
+```bash
+bazelisk test --config=asan //... --test_tag_filters=-openCL
+```
 
-There is a small subproject which implements a simple ocr application which can recognize
-handwritten digits by using the tnnlib code. Running this project is as simple as executing
-the following command in your terminal:
+## OCR Example
+
+The repository includes a small OCR example that trains a CNN-style perceptron on handwritten digit samples.
+
+Train a model:
 
 ```bash
 bazel run //ocr:ocr -- external/OcrSamples/samples
 ```
 
-This command will start the learning procedure through the back error propagation
-algorithm for the set of samples in the ocr/samples directory. The result
-of the process (when converged) will be stored in the file.
+This produces `perceptron.json` in the working directory. Run recognition against an image:
 
 ```bash
-bazel-bin/ocr/ocr.runfiles/__main__/perceptron.json
+bazel run //ocr:ocr -- perceptron.json external/OcrSamples/samples/0_4.png
 ```
 
-This file describes a perceptron with the calculated weights which can be used to recognize the digits.
-Trying it out is as simple as going to the directory where the json file is stored and executing the following
-command:
+## Documentation
 
-```bash
-./ocr/ocr perceptron.json external/OcrSamples/samples/0_4.png
-```
+- [Detailed documentation](doc/documentation.md)
 
-This command will calculate the probabilities of all the digits (0-9) in the image 2.png.
+## Work in Progress
 
-### WIP
+- Windows build support
+- Expanded documentation and API examples
+- Additional performance and OpenCL workflow improvements
 
-- Pooling layer
-- Build on windows
+## License
+
+This project is licensed under the BSD 3-Clause License. See [license.txt](license.txt).
